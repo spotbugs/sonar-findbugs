@@ -11,11 +11,12 @@
   <artifactId>sonar-findbugs-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
 
-  <name>SonarQube Java :: Findbugs Plugin</name>
+  <name>SonarQube Findbugs Plugin</name>
   <description>FindBugs is a program that uses static analysis to look for bugs in Java code. It can detect a variety of common coding mistakes, including thread synchronization problems, misuse of API methods.</description>
   <url>http://docs.codehaus.org/display/SONAR/FindBugs+Plugin</url>
   <properties>
     <findbugs.version>2.0.3</findbugs.version>
+    <sonar-java.version>2.4-SNAPSHOT</sonar-java.version>
   </properties>
 
   <dependencies>
@@ -166,10 +167,10 @@
         <artifactId>sonar-packaging-maven-plugin</artifactId>
         <configuration>
           <pluginName>Findbugs</pluginName>
-          <pluginParent>java</pluginParent>
           <pluginDescription><![CDATA[Analyze Java code with <a href="http://findbugs.sourceforge.net/">Findbugs</a>.]]></pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>true</useChildFirstClassLoader>
+	  <requirePlugins>java:${sonar-java.version}</requirePlugins>
         </configuration>
       </plugin>
       <plugin>
