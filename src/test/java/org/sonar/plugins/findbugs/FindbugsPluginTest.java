@@ -1,5 +1,5 @@
 /*
- * SonarQube Java
+ * SonarQube Findbugs Plugin
  * Copyright (C) 2012 SonarSource
  * dev@sonar.codehaus.org
  *
