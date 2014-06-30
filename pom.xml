@@ -9,6 +9,7 @@
   </parent>
 
   <artifactId>sonar-findbugs-plugin</artifactId>
+  <version>2.4-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Findbugs Plugin</name>
