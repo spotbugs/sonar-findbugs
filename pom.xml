@@ -51,8 +51,7 @@
     <findbugs.version>2.0.3</findbugs.version>
     <sonar.version>4.2</sonar.version>
     <!-- once java 2.4 is released only one property is required -->
-    <sonar-java-required.version>2.4</sonar-java-required.version>
-    <sonar-java-api.version>2.4-SNAPSHOT</sonar-java-api.version>
+    <sonar-java.version>2.3</sonar-java.version>
   </properties>
 
   <dependencies>
@@ -126,7 +125,7 @@
       <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-java-plugin</artifactId>
       <type>sonar-plugin</type>
-      <version>${sonar-java-api.version}</version>
+      <version>${sonar-java.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -211,7 +210,7 @@
           <pluginDescription><![CDATA[Analyze Java code with <a href="http://findbugs.sourceforge.net/">Findbugs</a>.]]></pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>true</useChildFirstClassLoader>
-	        <requirePlugins>java:${sonar-java-required.version}</requirePlugins>
+	        <requirePlugins>java:${sonar-java.version}</requirePlugins>
         </configuration>
       </plugin>
       <plugin>
