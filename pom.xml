@@ -8,6 +8,7 @@
     <version>18</version>
   </parent>
 
+  <groupId>org.codehaus.sonar-plugins.java</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
   <version>2.4-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
