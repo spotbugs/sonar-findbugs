@@ -37,7 +37,7 @@ public class FindbugsPlugin extends SonarPlugin {
       FindbugsRuleRepository.class,
       FindbugsProfileExporter.class,
       FindbugsProfileImporter.class,
-      SonarWayWithFindbugsProfile.class,
+      FindbugsProfile.class,
       FindbugsMavenInitializer.class);
     return extensions.build();
   }

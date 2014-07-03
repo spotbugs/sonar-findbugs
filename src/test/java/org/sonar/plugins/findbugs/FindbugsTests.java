@@ -19,21 +19,21 @@
  */
 package org.sonar.plugins.findbugs;
 
-import static org.mockito.Mockito.mock;
+import org.sonar.api.platform.ServerFileSystem;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.rules.ActiveRule;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RulePriority;
+import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.plugins.java.Java;
+import org.sonar.test.TestUtils;
+import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sonar.api.platform.ServerFileSystem;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Java;
-import org.sonar.api.rules.ActiveRule;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RulePriority;
-import org.sonar.api.rules.XMLRuleParser;
-import org.sonar.test.TestUtils;
-import org.xml.sax.SAXException;
+import static org.mockito.Mockito.mock;
 
 public abstract class FindbugsTests {
 
@@ -65,7 +65,7 @@ public abstract class FindbugsTests {
 
   protected RulesProfile createRulesProfileWithActiveRules() {
     RulesProfile profile = RulesProfile.create();
-    profile.setName("Sonar way with Findbugs");
+    profile.setName("FindBugs");
     profile.setLanguage(Java.KEY);
     ServerFileSystem sfs = mock(ServerFileSystem.class);
     for (Rule rule : new FindbugsRuleRepository(sfs, new XMLRuleParser()).createRules()) {

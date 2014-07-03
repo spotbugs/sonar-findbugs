@@ -25,14 +25,14 @@ import org.sonar.api.utils.ValidationMessages;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class SonarWayWithFindbugsProfileTest {
+public class FindbugsProfileTest {
 
   @Test
   public void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.create());
-    SonarWayWithFindbugsProfile sonarWayWithFindbugs = new SonarWayWithFindbugsProfile(importer);
+    FindbugsProfile findbugsProfile = new FindbugsProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = sonarWayWithFindbugs.createProfile(validation);
+    RulesProfile profile = findbugsProfile.createProfile(validation);
     assertThat(profile.getActiveRulesByRepository(FindbugsConstants.REPOSITORY_KEY))
       .hasSize(380);
     assertThat(validation.hasErrors()).isFalse();
