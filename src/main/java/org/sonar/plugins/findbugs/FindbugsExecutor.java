@@ -105,11 +105,11 @@ public class FindbugsExecutor implements BatchExtension {
     try {
       final FindBugs2 engine = new FindBugs2();
 
+      Project project = configuration.getFindbugsProject();
       customPlugins = loadFindbugsPlugins();
 
       disableUpdateChecksOnEveryPlugin();
 
-      Project project = configuration.getFindbugsProject();
       engine.setProject(project);
 
       XMLBugReporter xmlBugReporter = new XMLBugReporter(project);
@@ -218,15 +218,20 @@ public class FindbugsExecutor implements BatchExtension {
       Enumeration<URL> urls = contextClassLoader.getResources("findbugs.xml");
       while (urls.hasMoreElements()) {
         URL url = urls.nextElement();
-        pluginJarPathList.add(StringUtils.removeStart(StringUtils.substringBefore(url.toURI().getSchemeSpecificPart(), "!"), "file:"));
+        pluginJarPathList.add(normalizeUrl(url));
+      }
+      //Add fb-contrib plugin.
+      if (configuration.getFbContribJar() != null) {
+        // fb-contrib plugin is packaged by Maven. It is not available during execution of unit tests.
+        pluginJarPathList.add(configuration.getFbContribJar().getAbsolutePath());
       }
     } catch (IOException e) {
       throw new SonarException(e);
     } catch (URISyntaxException e) {
       throw new SonarException(e);
     }
-
     List<Plugin> customPluginList = Lists.newArrayList();
+
     for (String path : pluginJarPathList) {
       try {
         Plugin plugin = Plugin.addCustomPlugin(new File(path).toURI(), contextClassLoader);
@@ -246,6 +251,10 @@ public class FindbugsExecutor implements BatchExtension {
     }
 
     return customPluginList;
+  }
+
+  private String normalizeUrl(URL url) throws URISyntaxException {
+    return StringUtils.removeStart(StringUtils.substringBefore(url.toURI().getSchemeSpecificPart(), "!"), "file:");
   }
 
   /**

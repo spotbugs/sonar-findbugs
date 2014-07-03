@@ -1,0 +1,2416 @@
+<!-- fb-contrib 4.8.5 -->
+<rules>
+
+  <rule key="ISB_INEFFICIENT_STRING_BUFFERING" priority="INFO">
+    <name><![CDATA[Performance - Method passes simple concatenating string in StringBuffer or StringBuilder append [fb-contrib]]]></name>
+    <configKey><![CDATA[ISB_INEFFICIENT_STRING_BUFFERING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses StringBuffer or StringBuilder's append method to concatenate strings. However, it passes the result
+of doing a simple String concatenation to one of these append calls, thus removing any performance gains
+of using the StringBuffer or StringBuilder class.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ISB_EMPTY_STRING_APPENDING" priority="INFO">
+    <name><![CDATA[Performance - Method concatenates an empty string to effect type conversion [fb-contrib]]]></name>
+    <configKey><![CDATA[ISB_EMPTY_STRING_APPENDING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method concatenates an empty string with a literal value, in order to convert
+the literal value into a string. It is more efficient to use String.valueOf() to do the same
+thing as you do not incur the cost of creating a StringBuffer/Builder and calling methods on it
+to accomplish this.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ISB_TOSTRING_APPENDING" priority="INFO">
+     <name><![CDATA[Correctness - Method concatenates the result of a toString() call [fb-contrib]]]></name>
+     <configKey><![CDATA[ISB_TOSTRING_APPENDING]]></configKey>
+     <description>
+<![CDATA[
+<p>This method concatenates the output of a toString() call into a StringBuffer/Builder.
+It is simpler just pass the object you want to append to the to append call, as that form
+does not suffer the potential for NullPointerExceptions, and is easier to read.</p>
+]]>
+     </description>
+  </rule>
+
+  <rule key="SCI_SYNCHRONIZED_COLLECTION_ITERATORS" priority="INFO">
+    <name><![CDATA[Correctness - Method creates iterators on synchronized collections [fb-contrib]]]></name>
+    <configKey><![CDATA[SCI_SYNCHRONIZED_COLLECTION_ITERATORS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses a synchronized collection, built from Collections.synchronizedXXXX, but accesses it
+through an iterator. Since an iterator is by definition, multithreaded unsafe, this is a conflict in
+concept. When using iterators, you should do the synchronization manually.</p>
+]]>
+    </description>
+  </rule>
+
+  <!--<rule key="CC_CYCLOMATIC_COMPLEXITY" priority="INFO">-->
+    <!--<name><![CDATA[Style - Method is excessively complex [fb-contrib]]]></name>-->
+    <!--<configKey><![CDATA[CC_CYCLOMATIC_COMPLEXITY]]></configKey>-->
+    <!--<description>-->
+<!--<![CDATA[-->
+<!--<p>This method has a high cyclomatic complexity figure, which calculates the number of branch-->
+<!--points. It is likely difficult to test, and is brittle to change. Consider refactoring this -->
+<!--method into several to reduce the risk.</p>-->
+<!--]]>-->
+    <!--</description>-->
+  <!--</rule>-->
+
+  <rule key="OCP_OVERLY_CONCRETE_PARAMETER" priority="INFO">
+    <name><![CDATA[Style - Method needlessly defines parameter with concrete classes [fb-contrib]]]></name>
+    <configKey><![CDATA[OCP_OVERLY_CONCRETE_PARAMETER]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses concrete classes for parameters when only methods defined in an implemented
+interface or super class are used. Consider increasing the abstraction of the interface to
+make low impact changes easier to accomplish in the future.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="LII_LIST_INDEXED_ITERATING" priority="INFO">
+    <name><![CDATA[Style - Method uses integer based for loops to iterate over a List [fb-contrib]]]></name>
+    <configKey><![CDATA[LII_LIST_INDEXED_ITERATING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses an integer based for loop to iterator over a java.util.List, by calling
+List.get(i) each time thru the loop. The integer is not used for other reasons. It is better
+to use an Iterator instead, as depending on List implementation, iterators can perform better, 
+and they also allow for exchanging of other collection types without issue.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UCC_UNRELATED_COLLECTION_CONTENTS" priority="INFO">
+    <name><![CDATA[Style - Method adds unrelated types to collection or array [fb-contrib]]]></name>
+    <configKey><![CDATA[UCC_UNRELATED_COLLECTION_CONTENTS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method adds unrelated objects to a collection or array, requiring careful and brittle
+data access to that collection. Create a separate class with properties needed, and add
+an instance of this class to the collection or array, if possible.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="DRE_DECLARED_RUNTIME_EXCEPTION" priority="INFO">
+    <name><![CDATA[Style - Method declares RuntimeException in throws clause [fb-contrib]]]></name>
+    <configKey><![CDATA[DRE_DECLARED_RUNTIME_EXCEPTION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method declares a RuntimeException derived class in it's throws clause.
+This may indicate a misunderstanding as to how unchecked exceptions are handled.
+If is felt that a RuntimeException is so prevalent that it should be declared, it 
+is probably a better idea to prevent the occurance in code.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CE_CLASS_ENVY" priority="INFO">
+    <name><![CDATA[Style - Method excessively uses methods of another class [fb-contrib]]]></name>
+    <configKey><![CDATA[CE_CLASS_ENVY]]></configKey>
+    <description>
+<![CDATA[
+<p><em>THIS DETECTOR IS HIGHLY EXPERIMENTAL AND IS LIKELY TO CREATE A LOT OF FUD</em></p>
+<p>This method makes extensive use of methods from another class over methods of it's own
+class. Typically this means that the functionality that is accomplished by this method
+most likely belongs with the class that is being used so liberally. Consider refactoring this
+method to be contained in that class, and to accept all the parameters needed in the method signature.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="LSC_LITERAL_STRING_COMPARISON" priority="INFO">
+    <name><![CDATA[Style - Method makes literal string comparisons passing the literal as an argument [fb-contrib]]]></name>
+    <configKey><![CDATA[LSC_LITERAL_STRING_COMPARISON]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the equals or compareTo methods on a String variable passing in a String literal.
+A NullPointerException may occur if the string variable is null. If instead the method was called on
+the string literal, and the variable was passed as an argument, this exception could never happen.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS" priority="INFO">
+    <name><![CDATA[Correctness - Constructor makes call to non-final method [fb-contrib]]]></name>
+    <configKey><![CDATA[PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS]]></configKey>
+    <description>
+<![CDATA[
+<p>This constructor makes a call to a non-final method. Since this method can be overriden, a subclasses
+implementation will be executing against an object that has not been initialized at the subclass level.
+You should mark all methods called from the constructor as final to avoid this problem.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="DLC_DUBIOUS_LIST_COLLECTION" priority="INFO">
+    <name><![CDATA[Performance - Class defines List based fields but uses them like Sets [fb-contrib]]]></name>
+    <configKey><![CDATA[DLC_DUBIOUS_LIST_COLLECTION]]></configKey>
+    <description>
+<![CDATA[
+<p>This class defines a field based on java.util.List, but uses it to some extent like a Set. Since
+lookup type operations are performed using a linear search for Lists, the performance for large
+Lists will be poor. Consider changing this fields implementation to a set based one. If order of
+iteration is important to maintain insert order, perhaps consider a LinkedHashSet.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PL_PARALLEL_LISTS" priority="INFO">
+    <name><![CDATA[Style - Class defines two or more one for one associated lists or arrays [fb-contrib]]]></name>
+    <configKey><![CDATA[PL_PARALLEL_LISTS]]></configKey>
+    <description>
+<![CDATA[
+<p>This class appears to maintain two or more lists or arrays who's contains is related one-for-one
+through the index of the list or array. Consider creating a separate class to hold all the related 
+pieces of information, and adding instances of this class to just one list or array, or if just two values, use
+a Map to associate one value with the other.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="FP_FINAL_PARAMETERS" priority="INFO">
+    <name><![CDATA[Style - Method does not define a parameter as final, but could [fb-contrib]]]></name>
+    <configKey><![CDATA[FP_FINAL_PARAMETERS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method correctly does not write to a parameter. To help document this, and to perhaps
+help the jvm optimize the invocation of this method, you should consider defining these parameters
+as final.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ACEM_ABSTRACT_CLASS_EMPTY_METHODS" priority="INFO">
+    <name><![CDATA[Style - Empty method could be declared abstract [fb-contrib]]]></name>
+    <configKey><![CDATA[ACEM_ABSTRACT_CLASS_EMPTY_METHODS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method is empty or merely throws an exception. Since the class it is defined in is 
+abstract, it may be more correct to define this method as abstract instead, so that proper
+subclass behavior is enforced.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MAC_MANUAL_ARRAY_COPY" priority="INFO">
+    <name><![CDATA[Performance - Method copies arrays manually [fb-contrib]]]></name>
+    <configKey><![CDATA[MAC_MANUAL_ARRAY_COPY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method copies data from one array to another manually using a loop.
+It is much better performing to use System.arraycopy as this method is native.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="FPL_FLOATING_POINT_LOOPS" priority="INFO">
+    <name><![CDATA[Correctness - Method uses floating point indexed loops [fb-contrib]]]></name>
+    <configKey><![CDATA[FPL_FLOATING_POINT_LOOPS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses floating point variables to index a loop. Since floating point
+math is imprecise, rounding errors will accumulate over time each time the loop is
+executed. It is usually better to use integer indexing, and calculate the new value
+of the floating point number at the top of the loop body.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NCMU_NON_COLLECTION_METHOD_USE" priority="INFO">
+    <name><![CDATA[Style - Method uses old non collections interface methods [fb-contrib]]]></name>
+    <configKey><![CDATA[NCMU_NON_COLLECTION_METHOD_USE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method makes calls to collection classes where the method is not defined by the Collections
+interface, and an equivalent method exists in the interface. By using the new methods,
+you can define this object by the Collections interface and allow better decoupling.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CAO_CONFUSING_AUTOBOXED_OVERLOADING" priority="INFO">
+    <name><![CDATA[Correctness - Class defines methods which confuse Character with int parameters [fb-contrib]]]></name>
+    <configKey><![CDATA[CAO_CONFUSING_AUTOBOXED_OVERLOADING]]></configKey>
+    <description>
+<![CDATA[
+<p>This class defines two methods that differ only by a parameter being defined
+as Character vs. int, long, float or double. As autoboxing is present, it may be
+assumed that a parameter of 'a' would map to the Character version, but does not.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="AFBR_ABNORMAL_FINALLY_BLOCK_RETURN" priority="INFO">
+    <name><![CDATA[Correctness - Method has abnormal exit from finally block [fb-contrib]]]></name>
+    <configKey><![CDATA[AFBR_ABNORMAL_FINALLY_BLOCK_RETURN]]></configKey>
+    <description>
+<![CDATA[
+<p>This method returns or throws exceptions from a finally block. This will
+mask real program logic in the try block, and short-circuit normal method termination.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SMII_STATIC_METHOD_INSTANCE_INVOCATION" priority="INFO">
+    <name><![CDATA[Style - Method calls static method on instance reference [fb-contrib]]]></name>
+    <configKey><![CDATA[SMII_STATIC_METHOD_INSTANCE_INVOCATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method makes a static method call on an instance reference. For
+reading comprehension of the code is better to call the method on the class,
+rather than an instance. Perhaps this method's static nature has changed since
+this code was written, and should be revisited.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="STS_SPURIOUS_THREAD_STATES" priority="INFO">
+    <name><![CDATA[MT Correctness - Method calls wait, notify or notifyAll on a Thread instance [fb-contrib]]]></name>
+    <configKey><![CDATA[STS_SPURIOUS_THREAD_STATES]]></configKey>
+    <description>
+<![CDATA[
+<p>This method invokes the methods wait, notify or notifyAll on a Thread instance.
+Doing so will confuse the internal thread state behaviour causing spurious thread
+wakeups/sleeps because the internal mechanism also uses the thread instance for it's 
+notifications.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_AUTOBOXING_CTOR" priority="INFO">
+    <name><![CDATA[Performance - Method passes primitive wrapper to same primitive wrapper constructor [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_AUTOBOXING_CTOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a wrapped primitive object to the same class's constructor.
+Since wrapper classes are immutable, you can just use the original object, rather
+than constructing a new one. This code works because of an abuse of autoboxing.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_BOXING_STRING_CTOR" priority="INFO">
+    <name><![CDATA[Performance - Method passes parsed string to primitive wrapper constructor [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_BOXING_STRING_CTOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a primitive value retrieved from a BoxedPrimitive.parseBoxedPrimitive("1") call  to 
+the same class's constructor. It is simpler to just pass the string to the BoxedPrimitives constructor.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_AUTOBOXING_VALUEOF" priority="INFO">
+    <name><![CDATA[Performance - Method passes primitive wrapper to Wrapper class valueOf method [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_AUTOBOXING_VALUEOF]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a wrapped primitive object to the same class's .valueOf method.
+Since wrapper classes are immutable, you can just use the original object, rather
+than calling valueOf to create a new one. This code works because of an abuse of autoboxing.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_BOXING_PARSE" priority="INFO">
+    <name><![CDATA[Performance - Method converts String to primitive using excessive boxing [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_BOXING_PARSE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a String to a wrapped primitive object's valueOf method, which in turn calls
+the boxedValue() method to convert to a primitive. When it is desired to convert from a String
+to a primitive value, it is simpler to use the BoxedPrimitive.parseBoxedPrimitive(myString)
+method. </p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_BOXING_VALUEOF" priority="INFO">
+    <name><![CDATA[Performance - Method converts String to boxed primitive using excessive boxing [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_BOXING_VALUEOF]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a String to a wrapped primitive object's parse method, which in turn calls
+the valueOf() method to convert to a boxed primitive. When it is desired to convert from a String
+to a boxed primitive object, it is simpler to use the BoxedPrimitive.valueOf(myString)
+method. </p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_BOX_TO_UNBOX" priority="INFO">
+    <name><![CDATA[Performance - Method creates Boxed primitive from primitive only to get primitive value [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_BOX_TO_UNBOX]]></configKey>
+    <description>
+<![CDATA[
+<p>This method constructs a Boxed Primitive from a primitive only to call the primitiveValue() method to
+convert it back to a primitive. Just use the primitive value instead.</p>
+<pre>
+  primitive i = new BoxedPrimitive(1).primitiveValue();
+    or
+  primitive i = BoxedPrimitive.valueOf(1).primitiveValue();
+
+    should just use
+  primitive i = 1;
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_BOX_TO_CAST" priority="INFO">
+    <name><![CDATA[Performance - Method creates Boxed primitive from primitive only to cast to another primitive type [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_BOX_TO_CAST]]></configKey>
+    <description>
+<![CDATA[
+<p>This method constructs a Boxed Primitive from a primitive only to call the primitiveValue() method to
+cast the value to another primitive typee. It is simpler to just use casting</p>
+<pre>
+  primitive i = new BoxedPrimitive(1.0).primitiveValue();
+    or
+  primitive i = BoxedPrimitive.valueOf(1.0).primitiveValue();
+
+    should just use 
+  primitive i = (primitive)1.0;
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION" priority="INFO">
+    <name><![CDATA[Performance - Method needlessly boxes a boolean constant [fb-contrib]]]></name>
+    <configKey><![CDATA[NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method assigns a Boxed boolean constant to a primitive boolean variable, or assigns a primitive boolean
+constant to a Boxed boolean variable. Use the correct constant for the variable desired. Use</p>
+<pre>
+  boolean b = true;
+  boolean b = false;
+
+  or
+
+  Boolean b = Boolean.TRUE;
+  Boolean b = Boolean.FALSE;
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="USBR_UNNECESSARY_STORE_BEFORE_RETURN" priority="INFO">
+    <name><![CDATA[Style - Method stores return result in local before immediately returning it [fb-contrib]]]></name>
+    <configKey><![CDATA[USBR_UNNECESSARY_STORE_BEFORE_RETURN]]></configKey>
+    <description>
+<![CDATA[
+<p>This method stores the return result in a local variable, and then immediately
+returns the local variable. It would be simpler just to return the value that is
+assigned to the local variable, directly.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="COM_COPIED_OVERRIDDEN_METHOD" priority="INFO">
+    <name><![CDATA[Style - Method is implemented with an exact copy of it's superclass's method [fb-contrib]]]></name>
+    <configKey><![CDATA[COM_COPIED_OVERRIDDEN_METHOD]]></configKey>
+    <description>
+<![CDATA[
+<p>This method is implemented using an exact copy of it's super class method's 
+implementation, which usually means that this method can just be removed.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ABC_ARRAY_BASED_COLLECTIONS" priority="INFO">
+    <name><![CDATA[Correctness - Method uses array as basis of collection [fb-contrib]]]></name>
+    <configKey><![CDATA[ABC_ARRAY_BASED_COLLECTIONS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes an array as the key to a Map, element in a Set, or item in a List when
+the contains method is used on the List. Since arrays do not, and cannot override the equals 
+method, collection inclusion is based on the reference's address, which is probably not desired.
+In the case that this is a TreeMap or TreeSet, consider passing a Comparator to the map's
+constructor.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ODN_ORPHANED_DOM_NODE" priority="INFO">
+    <name><![CDATA[Correctness - Method creates DOM node but doesn't attach it to a document [fb-contrib]]]></name>
+    <configKey><![CDATA[ODN_ORPHANED_DOM_NODE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates a DOM node but does not attach it to a DOM document.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="AOM_ABSTRACT_OVERRIDDEN_METHOD" priority="INFO">
+    <name><![CDATA[Correctness - Abstract method overrides a concrete implementation [fb-contrib]]]></name>
+    <configKey><![CDATA[AOM_ABSTRACT_OVERRIDDEN_METHOD]]></configKey>
+    <description>
+<![CDATA[
+<p>This abstract method is derived from a concrete method implementation. It is highly
+suspect that the super class method's implementation would be cast away. 
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CBX_CUSTOM_BUILT_XML" priority="INFO">
+    <name><![CDATA[Style - Method builds xml strings through adhoc concatenation [fb-contrib]]]></name>
+    <configKey><![CDATA[CBX_CUSTOM_BUILT_XML]]></configKey>
+    <description>
+<![CDATA[
+<p>This method generates an xml based string by concatenating together various 
+xml fragments, and variable values. Doing so makes the code difficult to read, modify 
+and validate. It is much more clean to built xml structures in external files that are
+read in and transformed into the final product, thru modification by Transformer.setParameter.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="BSB_BLOATED_SYNCHRONIZED_BLOCK" priority="INFO">
+    <name><![CDATA[Performance - Method overly synchronizes a block of code [fb-contrib]]]></name>
+    <configKey><![CDATA[BSB_BLOATED_SYNCHRONIZED_BLOCK]]></configKey>
+    <description>
+<![CDATA[
+<p>This methods implements a synchronized block, but the code found at the beginning
+of this block  only accesses local variables, and not member variables, or this. 
+To be better performance move the code that access local variables only, above the
+synchronized block, and leave the synchronized block only for field accesses, or access
+to this object.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CLI_CONSTANT_LIST_INDEX" priority="INFO">
+    <name><![CDATA[Correctness - Method accesses list or array with constant index [fb-contrib]]]></name>
+    <configKey><![CDATA[CLI_CONSTANT_LIST_INDEX]]></configKey>
+    <description>
+<![CDATA[
+<p>This method accesses an array or list using a constant integer index. Often,
+this is a typo where a loop variable is intended to be used. If however, specific
+list indices mean different specific things, then perhaps replacing the list with
+a first-class object with meaningful accessors would make the code less brittle.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SCR_SLOPPY_CLASS_REFLECTION" priority="INFO">
+    <name><![CDATA[Style - Method accesses statically bound class with Class.forName [fb-contrib]]]></name>
+    <configKey><![CDATA[SCR_SLOPPY_CLASS_REFLECTION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method accesses the class object of a class that is already statically bound
+in this context, with Class.forName. Using Class.forName makes reflection more fragile
+in regards to code transformations such as obfuscation, and is unneeded here, since 
+the class in question is already 'linked' to this class.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="AWCBR_ARRAY_WRAPPED_CALL_BY_REFERENCE" priority="INFO">
+    <name><![CDATA[Style - Method uses 1 element array to simulate call by reference [fb-contrib]]]></name>
+    <configKey><![CDATA[AWCBR_ARRAY_WRAPPED_CALL_BY_REFERENCE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses a one element array to wrap an object that is to be passed to a method as an argument
+to simulate call by pointer ala C++. It is better to define a proper return class type that holds all
+the relevant information retrieved from the called method.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SG_SLUGGISH_GUI" priority="INFO">
+    <name><![CDATA[Performance - Method performs time consuming operation in gui thread [fb-contrib]]]></name>
+    <configKey><![CDATA[SG_SLUGGISH_GUI]]></configKey>
+    <description>
+<![CDATA[
+<p>This method implements an awt or swing listener and performs time 
+consuming operations. Doing these operations in the gui thread will cause the
+interface to appear sluggish and non-responsive to the user. Consider
+using a separate thread to do the time consuming work so that the user
+has a better experience.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NIR_NEEDLESS_INSTANCE_RETRIEVAL" priority="INFO">
+    <name><![CDATA[Performance - Method retrieves instance to load static member [fb-contrib]]]></name>
+    <configKey><![CDATA[NIR_NEEDLESS_INSTANCE_RETRIEVAL]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls a method to load a reference to an object, and then only
+uses it to load a static member of that instance's class. It is simpler and
+better performant to just load the static field from the class itself.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="DDC_DOUBLE_DATE_COMPARISON" priority="INFO">
+    <name><![CDATA[Performance - Method uses two date comparisons when one would do [fb-contrib]]]></name>
+    <configKey><![CDATA[DDC_DOUBLE_DATE_COMPARISON]]></configKey>
+    <description>
+<![CDATA[
+<p>This method compares dates with two comparisons, rather than using the reverse comparison.
+So This pattern
+<pre>
+  if ((date1.equals( date2 )) || (date1.after( date2 )))
+</pre>
+could become
+<pre>
+  if (date1.compareTo( date2 ) >= 0)
+</pre>
+and
+<pre>
+  if ((date1.equals( date2 )) || (date1.before( date2 )))
+</pre>
+could become
+<pre>
+  if (date1.compareTo( date2 ) <= 0)
+</pre>
+and
+<pre>
+  if ((date1.before( date2 )) || (date1.after( date2 )))
+</pre>
+could become
+<pre>
+  if (!date1.equals( date2 ))
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SWCO_SUSPICIOUS_WAIT_ON_CONCURRENT_OBJECT" priority="INFO">
+    <name><![CDATA[Correctness - Method calls wait when await was probably intended [fb-contrib]]]></name>
+    <configKey><![CDATA[SWCO_SUSPICIOUS_WAIT_ON_CONCURRENT_OBJECT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls wait() on a on mutex defined in the java.util.concurrent package.
+These classes, define await, instead of wait, and it is most likely that await
+was intended.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JVR_JDBC_VENDOR_RELIANCE" priority="INFO">
+    <name><![CDATA[Correctness - Method uses jdbc vendor specific classes and methods [fb-contrib]]]></name>
+    <configKey><![CDATA[JVR_JDBC_VENDOR_RELIANCE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses jdbc vendor specific classes and method to perform database work.
+This makes the code specific to this vendor, and unable to run on other databases.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PMB_POSSIBLE_MEMORY_BLOAT" priority="INFO">
+    <name><![CDATA[Correctness - Class defines static field that appears to allow memory bloat [fb-contrib]]]></name>
+    <configKey><![CDATA[PMB_POSSIBLE_MEMORY_BLOAT]]></configKey>
+    <description>
+<![CDATA[
+<p>This class defines static fields that are collections or StringBuffers that do not
+appear to have any way to clear or reduce their size. This is a potential cause of 
+memory bloat.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="LSYC_LOCAL_SYNCHRONIZED_COLLECTION" priority="INFO">
+    <name><![CDATA[Correctness - Method creates local variable-based synchronized collection [fb-contrib]]]></name>
+    <configKey><![CDATA[LSYC_LOCAL_SYNCHRONIZED_COLLECTION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates a synchronized collection and store the reference to it
+in a local variable. As local variables are by definition threadsafe, it seems
+questionable that this collection needs to be synchronized.</p>
+<p>
+<table>
+  <tr><th>If you are using</th><th>consider using</th></tr>
+  <tr><td>java.util.Vector</td><td>java.util.ArrayList</td></tr>
+  <tr><td>java.util.Hashtable</td><td>java.util.HashMap</td></tr>
+  <tr><td>java.lang.StringBuffer</td><td>java.lang.StringBuilder</td></tr>
+</table>
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="FCBL_FIELD_COULD_BE_LOCAL" priority="INFO">
+    <name><![CDATA[Correctness - Class defines fields that are used only as locals [fb-contrib]]]></name>
+    <configKey><![CDATA[FCBL_FIELD_COULD_BE_LOCAL]]></configKey>
+    <description>
+<![CDATA[
+<p>This class defines fields that are used in a locals only fashion, 
+specifically private fields or protected fields in final classes that are accessed 
+first in each method with a store vs. a load. This field could be replaced by one
+or more local variables.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NOS_NON_OWNED_SYNCHRONIZATION" priority="INFO">
+    <name><![CDATA[Style - Class uses non owned variables to synchronize on [fb-contrib]]]></name>
+    <configKey><![CDATA[NOS_NON_OWNED_SYNCHRONIZATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses a synchronize block where the object that is being synchronized on,
+is not owned by this current instance. This means that other instances may use this same
+object for synchronization for its own purposes causing synchronization confusion. It is 
+always cleaner and safer to only synchronize on private fields of this class. Note that 'this'
+is not owned by the current instance, but is owned by whomever assigns it to a field of its 
+class. Synchronizing on 'this' is also not a good idea.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NRTL_NON_RECYCLEABLE_TAG_LIB" priority="INFO">
+    <name><![CDATA[Correctness - Tag library is not recycleable [fb-contrib]]]></name>
+    <configKey><![CDATA[NRTL_NON_RECYCLEABLE_TAG_LIB]]></configKey>
+    <description>
+<![CDATA[
+<p>This Tag library class implements an attribute who's associated backing store field
+is modified at another point in the tag library. In order for a taglibrary to be
+recycleable, only the container is allowed to change this attribute, through the use
+of the setXXX method of the taglib. By modifying the value programmatically, the
+container will not initialize the attribute correctly on reuse.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_NULL_LAYOUT" priority="INFO">
+    <name><![CDATA[Correctness - Gui uses absolute layout [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_NULL_LAYOUT]]></configKey>
+    <description>
+<![CDATA[
+<p>This class passes null to setLayout, which specifies that components are
+to be laid out using absolute coordinates. This makes making changes for
+font sizes, etc, difficult as items will not reposition
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_NO_SETLABELFOR" priority="INFO">
+    <name><![CDATA[Correctness - JLabel doesn't specify what it's labeling [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_NO_SETLABELFOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This class uses JLabels that do not specify what fields are being labeled.
+This hampers screen readers from given appropriate feed back to users. Use
+the JLabel.setLabelFor method to accomplish this.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_NO_SETSIZE" priority="INFO">
+    <name><![CDATA[Correctness - Window sets size manually, and doesn't use pack [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_NO_SETSIZE]]></configKey>
+    <description>
+<![CDATA[
+<p>This class creates a window, and sizes the window using setSize. It is better
+to handle font size changes to use the pack method.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_NON_ACCESSIBLE_JCOMPONENT" priority="INFO">
+    <name><![CDATA[Correctness - Class extends JComponent but does not implement Accessible interface [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_NON_ACCESSIBLE_JCOMPONENT]]></configKey>
+    <description>
+<![CDATA[
+<p>This class extends the JComponent gui control but does not implement the Accessibility interface.
+This makes this control unable to be processed by screen readers, etc, for people with reading/vision
+difficulties</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_SET_COMP_COLOR" priority="INFO">
+    <name><![CDATA[Correctness - Method explicitly sets the color of a Component [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_SET_COMP_COLOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This method sets a Components explicitly foreground or background color which may
+cause difficulty with people with vision problems from using this application.
+Colors should be allowed to be set from the operating system.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_NON_TRANSLATABLE_STRING" priority="INFO">
+    <name><![CDATA[Correctness - Method passes constant string to title/label of component [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_NON_TRANSLATABLE_STRING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates a component and passes a string literal to the title or label
+of the component. As this string will be shown to users, it should be internationalizable
+through the use of a resource bundle.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="S508C_APPENDED_STRING" priority="INFO">
+    <name><![CDATA[Correctness - Method passes appended string to title/label of component [fb-contrib]]]></name>
+    <configKey><![CDATA[S508C_APPENDED_STRING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates a component and passes a string that was build up from a number of
+strings through appending multiple strings together. As foreign languages may order phrases
+differently, this will make translations difficult.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UEC_USE_ENUM_COLLECTIONS" priority="INFO">
+    <name><![CDATA[Performance - Class uses an ordinary set or map with an enum class as the key [fb-contrib]]]></name>
+    <configKey><![CDATA[UEC_USE_ENUM_COLLECTIONS]]></configKey>
+    <description>
+<![CDATA[
+<p>This class uses an ordinary set or map collection and uses an enum class as the key type.
+It is better performant to use the jdk 1.5 EnumSet or EnumMap classes.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SIL_SQL_IN_LOOP" priority="INFO">
+    <name><![CDATA[Performance - Method executes sql queries inside of loops [fb-contrib]]]></name>
+    <configKey><![CDATA[SIL_SQL_IN_LOOP]]></configKey>
+    <description>
+<![CDATA[
+<p>This method executes sql queries inside of a loop. This pattern is often inefficient
+as the number of queries may mushroom in fencepost cases. It is probably more performant
+to loop over the input and collect the key data needed for the query for all items, and
+issue one query using an in clause, or similar construct, and then loop over this result
+set, and fetch all the data at once.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NMCS_NEEDLESS_MEMBER_COLLECTION_SYNCHRONIZATION" priority="INFO">
+    <name><![CDATA[Performance - Class defines unneeded synchronization on member collection [fb-contrib]]]></name>
+    <configKey><![CDATA[NMCS_NEEDLESS_MEMBER_COLLECTION_SYNCHRONIZATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This class defines a private collection member as synchronized. It appears however
+that this collection isn't only modified in a static initializer, or constructor. As these
+two areas are guaranteed to be thread safe, defining this collection as synchronized is
+unnecessary and a potential performance bottleneck.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ITC_INHERITANCE_TYPE_CHECKING" priority="INFO">
+    <name><![CDATA[Style - Method uses instanceof on multiple types to arbitrate logic [fb-contrib]]]></name>
+    <configKey><![CDATA[ITC_INHERITANCE_TYPE_CHECKING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses the instanceof operator in a series of if/else statements to
+differentiate blocks of code based on type. If these types are related by inheritance,
+it is cleaner to just define a method in the base class, and use overridden methods
+in these classes.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SACM_STATIC_ARRAY_CREATED_IN_METHOD" priority="INFO">
+    <name><![CDATA[Performance - Method creates array using constants [fb-contrib]]]></name>
+    <configKey><![CDATA[SACM_STATIC_ARRAY_CREATED_IN_METHOD]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates an array initialized by constants. Each time this method is called
+this array will be recreated. It would be more performant to define the array as a
+static field of the class instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS" priority="INFO">
+    <name><![CDATA[Performance - Method appears to call the same method on the same object redundantly [fb-contrib]]]></name>
+    <configKey><![CDATA[PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method makes two consecutive calls to the same method using the same constant
+parameters, on the same instance without any intervening changes to the objects. If this
+method does not make changes to the object, which it appears it doesn't, then making
+two calls is just a waste. These method calls could be combined by assigning the
+result into a temporary, and using the temporary the second time.
+]]>
+    </description>
+  </rule>
+
+  <rule key="UTA_USE_TO_ARRAY" priority="INFO">
+    <name><![CDATA[Style - Method manually creates array from collection [fb-contrib]]]></name>
+    <configKey><![CDATA[UTA_USE_TO_ARRAY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method manually loops over a collection, pulling each element out and storing
+it in an array to build an array from the collection. It is easier, and clearer to use
+the built in collections method toArray. Given a collection 'mycollection' of type T, use
+mycollection.toArray(new T[mycollection.size()]);
+]]>
+    </description>
+  </rule>
+
+  <rule key="LEST_LOST_EXCEPTION_STACK_TRACE" priority="INFO">
+    <name><![CDATA[Correctness - Method throws alternative exception from catch block without history [fb-contrib]]]></name>
+    <configKey><![CDATA[LEST_LOST_EXCEPTION_STACK_TRACE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method catches an exception, and throws a different exception, without incorporating the
+original exception. Doing so hides the original source of the exception making debugging and fixing
+these problems difficult. It is better to use the constructor of this new exception that takes an
+original exception so that this detail can be passed along to the user.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UCPM_USE_CHARACTER_PARAMETERIZED_METHOD" priority="INFO">
+    <name><![CDATA[Performance - Method passes constant String of length 1 to character overridden method [fb-contrib]]]></name>
+    <configKey><![CDATA[UCPM_USE_CHARACTER_PARAMETERIZED_METHOD]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a constant literal String of length 1 as a parameter to a method, that
+exposes a similar method that takes a character. It is simpler and more expedient to handle one
+character, rather than pass a string.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="TR_TAIL_RECURSION" priority="INFO">
+    <name><![CDATA[Performance - Method employs tail recursion [fb-contrib]]]></name>
+    <configKey><![CDATA[TR_TAIL_RECURSION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method recursively calls itself as the last statement of the method
+(Tail Recursion). This method can be easily refactored into a simple loop, which
+will make it more performant, and reduce the stack size requirements.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="URV_UNRELATED_RETURN_VALUES" priority="INFO">
+    <name><![CDATA[Style - Method returns different types of unrelated Objects [fb-contrib]]]></name>
+    <configKey><![CDATA[URV_UNRELATED_RETURN_VALUES]]></configKey>
+    <description>
+<![CDATA[
+<p>This method returns two or more unrelated types of objects (Related only through java.lang.Object).
+This will be very confusing to the code that must call it.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="URV_CHANGE_RETURN_TYPE" priority="INFO">
+    <name><![CDATA[Style - Method returns more specific type of object than declared [fb-contrib]]]></name>
+    <configKey><![CDATA[URV_CHANGE_RETURN_TYPE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method is defined to return a java.lang.Object. However, the return types
+returned from this method can be defined by a more specific class or interface. Since this
+method is not derived from a superclass or interface, it would be more clear to
+change the return type of this method.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="URV_INHERITED_METHOD_WITH_RELATED_TYPES" priority="INFO">
+    <name><![CDATA[Style - Inherited method returns more specific type of object than declared [fb-contrib]]]></name>
+    <configKey><![CDATA[URV_INHERITED_METHOD_WITH_RELATED_TYPES]]></configKey>
+    <description>
+<![CDATA[
+<p>This inherited method is defined to return a java.lang.Object. However, the return types returned
+from this method can be defined by a more specific class or interface. If possible consider changing the
+return type in the inheritance hierarchy of this method, otherwise the caller of this method will be brittle
+in handling of the return type.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PIS_POSSIBLE_INCOMPLETE_SERIALIZATION" priority="INFO">
+    <name><![CDATA[Correctness - Class doesn't serialize superclass fields [fb-contrib]]]></name>
+    <configKey><![CDATA[PIS_POSSIBLE_INCOMPLETE_SERIALIZATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method implements Serializable but is derived from a
+class that does not. The super class has fields that are not serialized
+because this class does not take the responsibility of writing these fields out
+either using Serializable's writeObject method, or Externalizable's writeExternal
+method. Therefore when this class is read from a stream, the superclass fields
+will only be initialized to the values specified in it's default constructor.
+If possible, change the superclass to implement Serializable, or implement
+Serializable or Externalizable methods in the child class.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SC_SUSPICIOUS_COMPARATOR_RETURN_VALUES" priority="INFO">
+    <name><![CDATA[Correctness - Comparator method doesn't seem to return all ordering values [fb-contrib]]]></name>
+    <configKey><![CDATA[SC_SUSPICIOUS_COMPARATOR_RETURN_VALUES]]></configKey>
+    <description>
+<![CDATA[
+<p>This compareTo or compare method returns constant values for to represent less than,
+equals and greater than. However it does not return each type. Given that comparators
+are transitive, this seems incorrect.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_NEGATIVE_BITSET_ITEM" priority="INFO">
+    <name><![CDATA[Correctness - Method passes a negative number as a bit to a BitSet which isn't supported [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_NEGATIVE_BITSET_ITEM]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a constant negative value as a bit position to a java.util.BitSet. The BitSet class
+doesn't support negative values, and thus this method call will not work as expected.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_INTERN_ON_CONSTANT" priority="INFO">
+    <name><![CDATA[Correctness - Method calls intern on a string constant [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_INTERN_ON_CONSTANT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls intern on a constant string. As constant strings are already interned, this call
+is superfluous</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_NO_CHAR_SB_CTOR" priority="INFO">
+    <name><![CDATA[Correctness - Method appears to pass character to StringBuffer or StringBuilder integer constructor [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_NO_CHAR_SB_CTOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This method constructs a StringBuffer or a StringBuilder using the constructor that takes an integer, but
+appears to pass a character instead. It is probable that the author assumed that character would be appended to the
+StringBuffer/Builder, but instead the integer value of the character is used as an initial size for the buffer.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_MATH_CONSTANT" priority="INFO">
+    <name><![CDATA[Correctness - Method uses non standard math constant [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_MATH_CONSTANT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method defines its own version of <em>PI</em> or <em>e</em> and the value is not as precise as the
+one defined in the constants Math.PI or Math.E. Use these constants instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_STUTTERED_ASSIGNMENT" priority="INFO">
+    <name><![CDATA[Correctness - Method assigns a value to a local twice in a row [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_STUTTERED_ASSIGNMENT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method assigns a value twice in a row in a stuttered way such as
+<code>a = a = 5;</code> This is most probably a cut and paste error where the duplicate
+assignment can be removed.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_ISNAN" priority="INFO">
+    <name><![CDATA[Correctness - Method compares a double to Double.NAN [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_ISNAN]]></configKey>
+    <description>
+<![CDATA[
+<p>This method compares a douhle or float to the constant Double.NaN or Float.NaN. You should use
+Double.isNaN(d) or Float.isNaN(f) if a primitive; or d.isNaN() or f.isNaN() if a boxed double, instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_BIGDECIMAL_STRING_CTOR" priority="INFO">
+    <name><![CDATA[Correctness - Method passes double value to BigDecimal Constructor [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_BIGDECIMAL_STRING_CTOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the BigDecimal constructor that takes a double, and passes a literal double constant value. Since 
+the use of BigDecimal is to get better precision than double, by passing a double, you only get the precision of double number
+space. To take advantage of the BigDecimal space, pass the number as a string. </p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_STRINGBUFFER_WITH_EMPTY_STRING" priority="INFO">
+    <name><![CDATA[Performance - Method passes empty string to StringBuffer of StringBuilder constructor [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_STRINGBUFFER_WITH_EMPTY_STRING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the StringBuffer of StringBuilder constructor passing in a constant empty string ("").
+This is the same as calling the default constructor, but makes the code work harder. Consider passing in a
+default size instead.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_EQUALS_ON_ENUM" priority="INFO">
+    <name><![CDATA[Correctness - Method calls equals on an enum instance [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_EQUALS_ON_ENUM]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the equals(Object) method on an enum instance. Since enums values are singletons,
+you can use == to safely compare two enum values. In fact, the implementation for Enum.equals does just
+that.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_INVALID_BOOLEAN_NULL_CHECK" priority="INFO">
+    <name><![CDATA[Correctness - Method uses invalid C++ style null check on Boolean [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_INVALID_BOOLEAN_NULL_CHECK]]></configKey>
+    <description>
+<![CDATA[
+<p>This method attempts to check for null by just refering to the variable name
+as would be done in C++. This ordinarily would be considered a compile error, except the
+variable in question is a Boolean, which does an auto unbox to boolean.</p>
+<pre>
+if (b && b.booleanValue())
+should be
+if ((b != null) && b.booleanValue())
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_CHARAT" priority="INFO">
+    <name><![CDATA[Performance - Method fetches character array just to do the equivalent of the charAt method [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_CHARAT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the toCharArray method on a String the fetch an array of characters, only
+to retrieve one of those characters by index. It is more performant to just use the charAt method.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USELESS_TERNARY" priority="INFO">
+    <name><![CDATA[Performance - Method uses a ternary operator to cast a boolean to true or false [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USELESS_TERNARY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method tests the value of a boolean and using a ternary operator to return either true or false.
+The ternary operator is completely unecessary, just use the original boolean value.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_SUSPECT_STRING_TEST" priority="INFO">
+    <name><![CDATA[Correctness - Method treats null and normal strings differently than an empty strings [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_SUSPECT_STRING_TEST]]></configKey>
+    <description>
+<![CDATA[
+<p>This method tests a string, and groups null values with real strings, leaving empty strings as another
+case. This might be perfectly valid, but normally, null strings and empty strings are logically handled the same way,
+and so this test may be flawed.</p>
+<p>Pattern found is one of the following
+<pre>if ((s == null) || (s.length() > 0))</pre> -- did you mean ((s == null) || (s.length() == 0))?
+<pre>if ((s == null) || (s.length() != 0))</pre> -- did you mean ((s == null) || (s.length() == 0))?
+<pre>if ((s != null) && (s.length() == 0))</pre> -- did you mean ((s != null) && (s.length() > 0))?
+or perhaps ((s == null) || (s.length() == 0))?
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_STRINGBUILDER_LENGTH" priority="INFO">
+    <name><![CDATA[Performance - Method converts StringBuffer or Builder to String just to get it's length [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_STRINGBUILDER_LENGTH]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the toString method on a StringBuffer or StringBuilder only to call length() on the resulting
+string. It is faster, and less memory intensive to just call the length method directly on the StringBuffer or StringBuilder
+itself.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_INVALID_CALENDAR_COMPARE" priority="INFO">
+    <name><![CDATA[Correctness - Method passes a non calendar object to Calendar.before or Calendar.after [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_INVALID_CALENDAR_COMPARE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes a non calendar object to the java.util.Calendar.after or java.util.Calendar.before methods.
+Even though these methods take an Object as a parameter type, only Calendar type objects are supported, otherwise
+false is returned</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_CONTAINSKEY" priority="INFO">
+    <name><![CDATA[Style - Method calls keySet() just to call contains, use containsKey instead [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_CONTAINSKEY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls mySet.keySet().contains("foo") when mySet.containsKey("foo") is simpler</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_ISEMPTY" priority="INFO">
+    <name><![CDATA[Style - Method checks the size of a collection against zero rather than using isEmpty() [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_ISEMPTY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls the size() method on a collection and compares the result to zero to see if the collection
+is empty. For better code clarity, it is better to just use col.isEmpty() or !col.isEmpty()</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_GETPROPERTY" priority="INFO">
+    <name><![CDATA[Style - Method calls getProperties just to get one property, use getProperty instead [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_GETPROPERTY]]></configKey>
+    <description>
+<![CDATA[
+  <table>
+    <tr><td>This method uses</td></tr>
+    <tr><td>String prop = System.getProperties().getProperty("foo");</td></tr
+    <tr><td>instead of simply using</td></tr>
+    <tr><td>String prop = System.getProperty("foo");</td></tr>
+  </table>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_SERIALVER_SHOULD_BE_PRIVATE" priority="INFO">
+    <name><![CDATA[Style - Class defines a serialVersionUID as non private [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_SERIALVER_SHOULD_BE_PRIVATE]]></configKey>
+    <description>
+<![CDATA[
+This class defines a static field 'serialVersionUID' to define the serialization
+version for this class. This field is marked as non private. As the serialVersionUID only
+controls the current class, and doesn't effect any derived classes, defining it as non
+private is confusing. It is suggested you change this variable to be private.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USELESS_CASING" priority="INFO">
+    <name><![CDATA[Performance - Method compares string without case after enforcing a case [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USELESS_CASING]]></configKey>
+    <description>
+<![CDATA[
+This method compares two strings with compareToIgnoreCase or equalsIgnoreCase, after having
+called toUpperCase or toLowerCase on the string in question. As you are comparing with out
+concern to case, the toUpperCase or toLowerCase calls are pointless and can be removed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_NON_ARRAY_PARM" priority="INFO">
+    <name><![CDATA[Correctness - Method passes a non array object to a parameter that expects an array [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_NON_ARRAY_PARM]]></configKey>
+    <description>
+<![CDATA[
+This method expects an array to be passed as one of its parameters, but unfortunately defines
+the parameter as Object. This invocation of this method does not pass an array and will throw
+an exception when run.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_EMPTY_CASING" priority="INFO">
+    <name><![CDATA[Style - Method passes an empty string to equalsIgnoreCase or compareToIgnoreCase [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_EMPTY_CASING]]></configKey>
+    <description>
+<![CDATA[
+This method passes the empty string "" to equalsIgnoreCase or compareToIgnoreCase, as the empty string
+is not case sensitive using equals is simpler. It would be even simpler to do a length() == 0 test.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_TEMPORARY_TRIM" priority="INFO">
+    <name><![CDATA[Style - Method trims a String temporarily [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_TEMPORARY_TRIM]]></configKey>
+    <description>
+<![CDATA[
+This method calls trim() on a String without assigning the new string to another variable.
+It then calls length() or equals on this trimmed string. If trimming the string was important
+for determining it's length of it's equality, it should be trimmed when you actually go to use it.
+It would make more sense to first trim the String, store the trimmed value in a variable, and then
+continue to test and use that trimmed string.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_STRINGBUILDER_IS_MUTABLE" priority="INFO">
+    <name><![CDATA[Correctness - Method needlessly assigns a StringBuilder to itself, as it's mutable [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_STRINGBUILDER_IS_MUTABLE]]></configKey>
+    <description>
+<![CDATA[
+  This method calls StringBuilder.append and assigns the results to the same StringBuilder as
+  <pre>sb = sb.append("foo")</pre>
+  As StringBuilder is mutable this is not necessary.
+  This is also true of StringBuffer.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_USE_GET0" priority="INFO">
+    <name><![CDATA[Performance - Method uses iterator().next() on a List to get the first item [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_USE_GET0]]></configKey>
+    <description>
+<![CDATA[
+This Method calls myList.iterator().next() on a List to get the first item. It is more performant 
+to just use myList.get(0).
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_DOUBLE_APPENDED_LITERALS" priority="INFO">
+    <name><![CDATA[Performance - Method appends two literal strings back to back to a StringBuilder [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_DOUBLE_APPENDED_LITERALS]]></configKey>
+    <description>
+<![CDATA[
+This method appends two literal strings to a StringBuilder back to back. This can be done with just
+one append call, and may avoid intermediate reallocations of the StringBuilders backing store.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SPP_NULL_BEFORE_INSTANCEOF" priority="INFO">
+    <name><![CDATA[Correctness - Method checks a reference for null before calling instanceof [fb-contrib]]]></name>
+    <configKey><![CDATA[SPP_NULL_BEFORE_INSTANCEOF]]></configKey>
+    <description>
+<![CDATA[
+This method checks a reference for null just before seeing if the reference is an instanceof some class.
+Since instanceof will return false for null references, the null check is not needed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="BAS_BLOATED_ASSIGNMENT_SCOPE" priority="INFO">
+    <name><![CDATA[Performance - Method assigns a variable in a larger scope then is needed [fb-contrib]]]></name>
+    <configKey><![CDATA[BAS_BLOATED_ASSIGNMENT_SCOPE]]></configKey>
+    <description>
+<![CDATA[
+<p><em>THIS DETECTOR IS HIGHLY EXPERIMENTAL AND IS LIKELY TO CREATE A LOT OF FUD</em>
+This method assigns a value to a variable in an outer scope compared to where the variable is actually used. 
+Assuming this evaluation does not have side effects, the assignment can be moved into the inner scope (if block)
+so that its execution time isn't taken up if the if guard is false. Care should be
+taken however that the right hand side of the assignment does not contain side 
+effects that are required to happen, or that changes are not made further down that
+will effect the execution of the assignment when done later on.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SCII_SPOILED_CHILD_INTERFACE_IMPLEMENTOR" priority="INFO">
+    <name><![CDATA[Style - Class implements interface by relying on unknowing superclass methods [fb-contrib]]]></name>
+    <configKey><![CDATA[SCII_SPOILED_CHILD_INTERFACE_IMPLEMENTOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This class declares that it implements an interface, but does so by relying on methods supplied
+by superclasses, even though those superclasses know nothing about the interface in question. If you wish
+to have the child not implement all the methods of the interface, it would probably be better to declare
+the superclass as implementing the interface, and if that class does not provide all the methods, then declare
+that superclass abstract.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="DWI_DELETING_WHILE_ITERATING" priority="INFO">
+    <name><![CDATA[Correctness - Method deletes collection element while iterating [fb-contrib]]]></name>
+    <configKey><![CDATA[DWI_DELETING_WHILE_ITERATING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method removes items from a collection using the remove method of the collection, while
+at the same time iterating across the collection. Doing this will invalidate the iterator, and further
+use of it, will cause ConcurrentModificationExceptions to be thrown. To avoid this, the remove 
+method of the iterator should be used.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="DWI_MODIFYING_WHILE_ITERATING" priority="INFO">
+    <name><![CDATA[Correctness - Method modifies collection element while iterating [fb-contrib]]]></name>
+    <configKey><![CDATA[DWI_MODIFYING_WHILE_ITERATING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method modifies the contents of a collection using the collection api methods, while
+at the same time iterating across the collection. Doing this will invalidate the iterator, and further
+use of it, will cause ConcurrentModificationExceptions to be thrown.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="USS_USE_STRING_SPLIT" priority="INFO">
+    <name><![CDATA[Style - Method builds String array using String Tokenizing [fb-contrib]]]></name>
+    <configKey><![CDATA[USS_USE_STRING_SPLIT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses a StringTokenizer to split up a String and then walks thru the
+separated elements and builds an array from these enumerated values. It is simpler 
+and easier to use the String.split method.</p>
+<p>PLEASE NOTE: String.split will return an array of 1 element when passed the 
+empty string, as opposed to using StringTokenizer which returns false on the first
+hasMoreElements/hasMoreTokens call. So you may need to use</p>
+<pre>
+  if (s.length() > 0)
+    return s.split(";");
+  return new String[0];
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SJVU_SUSPICIOUS_JDK_VERSION_USE" priority="INFO">
+    <name><![CDATA[Correctness - Method uses rt.jar class or method that does not exist [fb-contrib]]]></name>
+    <configKey><![CDATA[SJVU_SUSPICIOUS_JDK_VERSION_USE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls a method that does not exist, on a class that does not exist in the jdk that
+this class has been compiled for. This can happen if you compile the class specifying the -source and
+-target options, and use a version that is before the version of the compiler's JDK.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UAA_USE_ADD_ALL" priority="INFO">
+    <name><![CDATA[Style - Method uses simple loop to copy contents of one collection to another [fb-contrib]]]></name>
+    <configKey><![CDATA[UAA_USE_ADD_ALL]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses a simple for loop to copy the contents of a set, list, map key/value, array or other collection
+to another collection. It is simpler and more straight forward to just call the addAll method of the destination collection
+passing in the source collection. In the case that the source is an array, you can use Array.asList method to massage the array
+into a collection</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MRC_METHOD_RETURNS_CONSTANT" priority="INFO">
+    <name><![CDATA[Style - Private method only returns one constant value [fb-contrib]]]></name>
+    <configKey><![CDATA[MRC_METHOD_RETURNS_CONSTANT]]></configKey>
+    <description>
+<![CDATA[
+<p>This private or static method only returns one constant value. As this method is private or static,
+it's behavior can't be overridden, and thus the return of a constant value seems dubious.
+Either the method should be changed to return no value, or perhaps another return value
+was expected to be returned in another code path in this method.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NCS_NEEDLESS_CUSTOM_SERIALIZATION" priority="INFO">
+    <name><![CDATA[Correctness - Method needlessly implements what is default streaming behavior [fb-contrib]]]></name>
+    <configKey><![CDATA[NCS_NEEDLESS_CUSTOM_SERIALIZATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method implements the Serializable interface by performing the same operations that
+would be done if this method did not exist. Since this is the case, this method is not needed.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MOM_MISLEADING_OVERLOAD_MODEL" priority="INFO">
+    <name><![CDATA[Style - Class 'overloads' a method with both instance and static versions [fb-contrib]]]></name>
+    <configKey><![CDATA[MOM_MISLEADING_OVERLOAD_MODEL]]></configKey>
+    <description>
+<![CDATA[
+<p>This class 'overloads' the same method with both an instance and static version. As the use
+of these two models is different, it will be confusing to the users of these methods.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" priority="INFO">
+    <name><![CDATA[Style - Unconstrained method converts checked exception to unchecked [fb-contrib]]]></name>
+    <configKey><![CDATA[EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method is not constrained by an interface or superclass, but converts a caught checked exception
+to unchecked exception and thrown. It would be more appropriate just throw the checked exception, adding
+the exception to the throws clause of the method.
+]]>
+    </description>
+  </rule>
+
+  <rule key="EXS_EXCEPTION_SOFTENING_HAS_CHECKED" priority="INFO">
+    <name><![CDATA[Style - Constrained method converts checked exception to unchecked instead of another allowable checked exception [fb-contrib]]]></name>
+    <configKey><![CDATA[EXS_EXCEPTION_SOFTENING_HAS_CHECKED]]></configKey>
+    <description>
+<![CDATA[
+<p>This method's exception signature is constrained by an interface of super class to not throw a 
+checked exception that was caught. Therefore this exception was converted to an unchecked exception and 
+thrown. It would probably be better to throw the closest checked exception allowed, and to annotate
+the new exception with the original exception using the initial cause field.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="EXS_EXCEPTION_SOFTENING_NO_CHECKED" priority="INFO">
+    <name><![CDATA[Style - Constrained method converts checked exception to unchecked [fb-contrib]]]></name>
+    <configKey><![CDATA[EXS_EXCEPTION_SOFTENING_NO_CHECKED]]></configKey>
+    <description>
+<![CDATA[
+<p>This method's exception signature is constrained by an interface or super class to not throw
+any checked exceptions. Therefore a caught checked exception was converted to an unchecked exception
+and thrown. However it appears that the class in question is owned by the same author as the constraining
+interface or superclass. Consider changes the signature of this method to include the checked exception.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CFS_CONFUSING_FUNCTION_SEMANTICS" priority="INFO">
+    <name><![CDATA[Style - Method returns modified parameter [fb-contrib]]]></name>
+    <configKey><![CDATA[CFS_CONFUSING_FUNCTION_SEMANTICS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method appears to modify a parameter, and then return this parameter as the 
+methods return value. This will be confusing to callers of this method, as it won't be
+apparent that the 'original' passed in parameter will be changed as well. If the purpose
+of this method is to change the parameter, it would be more clear to change the method to 
+a have a void return value. If a return type is required due to interface or superclass contract,
+perhaps a clone of the parameter should be made.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JAO_JUNIT_ASSERTION_ODDITIES_ACTUAL_CONSTANT" priority="INFO">
+    <name><![CDATA[Style - Method passes constant to second (actual) assertion parameter [fb-contrib]]]></name>
+    <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_ACTUAL_CONSTANT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls assert passing a constant value as the second of the two values. The assert
+method assumes that the expected value is the first parameter, and so it appears that the order
+of values has been swapped here.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JAO_JUNIT_ASSERTION_ODDITIES_INEXACT_DOUBLE" priority="INFO">
+    <name><![CDATA[Style - Method asserts that two doubles are exactly equal [fb-contrib]]]></name>
+    <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_INEXACT_DOUBLE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls assert with two doubles or Doubles. Due to the inprecision of doubles, you
+should be using the assert method that takes a range parameter that gives a range of error.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT" priority="INFO">
+    <name><![CDATA[Style - Method asserts that a value is true or false [fb-contrib]]]></name>
+    <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method asserts that a value is equal to true or false. It is simpler to just 
+use assertTrue, or assertFalse, instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL" priority="INFO">
+    <name><![CDATA[Correctness - Method asserts that an auto-boxed value is not null [fb-contrib]]]></name>
+    <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL]]></configKey>
+    <description>
+<![CDATA[
+<p>This method asserts that a primitive value that was autoboxed into a boxed primitive was not 
+null. This will never happen, as primitives are never null, and thus the autoboxed value isn't 
+either.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JAO_JUNIT_ASSERTION_ODDITIES_ASSERT_USED" priority="INFO">
+    <name><![CDATA[Correctness - Method uses java asserts rather than a junit assertion [fb-contrib]]]></name>
+    <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_ASSERT_USED]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses a java assert to assure that a certain state is in effect. As this is
+a junit test it makes more sense to either check this condition with a junit assert, or allow
+a following exception to occur.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="JAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_EQUALS" priority="INFO">
+    <name><![CDATA[Correctness - Method passes boolean expression to Assert.assertTrue [fb-contrib]]]></name>
+    <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_EQUALS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method evaluates a boolean expression and passes that to Assert.assertTrue. It is better 
+to pass the two values that are being equated to the Assert.assertEquals method so that the
+junit failure method is more meaningful of the intended test.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SCA_SUSPICIOUS_CLONE_ALGORITHM" priority="INFO">
+    <name><![CDATA[Correctness - Clone method stores a new value to member field of source object [fb-contrib]]]></name>
+    <configKey><![CDATA[SCA_SUSPICIOUS_CLONE_ALGORITHM]]></configKey>
+    <description>
+<![CDATA[
+<p>The clone method stores a value to a member field of the source object. Normally, all 
+changes are made to the cloned object, and given that cloning is almost always considered
+a read-only operation, this seems incorrect.</p>]]>
+    </description>
+  </rule>
+
+  <rule key="WEM_WEAK_EXCEPTION_MESSAGING" priority="INFO">
+    <name><![CDATA[Style - Method throws exception with static message string [fb-contrib]]]></name>
+    <configKey><![CDATA[WEM_WEAK_EXCEPTION_MESSAGING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates and throws an exception using a static string as the exceptions message.
+Without any specific context of this particular exception invocation, such as the value of parameters, 
+key member variables, or local variables, it may be difficult to infer how this exception occurred. Consider
+adding context to the exception message.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SCSS_SUSPICIOUS_CLUSTERED_SESSION_SUPPORT" priority="INFO">
+    <name><![CDATA[Correctness - Method modifies http session attribute without calling setAttribute [fb-contrib]]]></name>
+    <configKey><![CDATA[SCSS_SUSPICIOUS_CLUSTERED_SESSION_SUPPORT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method fetches a complex object from an HttpSession object, modifies this object, but does
+not call setAttribute, to inform the application server that this attribute has been changed. This will
+cause this attribute not to be updated in other servers in a clustered environment, as only changes marked
+by a call to setAttribute are replicated.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="LO_LOGGER_LOST_EXCEPTION_STACK_TRACE" priority="INFO">
+    <name><![CDATA[Correctness - Method incorrectly passes exception as first argument to logger method [fb-contrib]]]></name>
+    <configKey><![CDATA[LO_LOGGER_LOST_EXCEPTION_STACK_TRACE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes an exception as the first argument to a logger method. The stack
+trace is potentially lost due to the logger emitting the exception using toString(). It
+is better to construct a log message with sufficient context and pass the exception as
+the second argument to capture the stack trace.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="LO_SUSPECT_LOG_CLASS" priority="INFO">
+    <name><![CDATA[Correctness - Method specifies an unrelated class when allocating a Logger [fb-contrib]]]></name>
+    <configKey><![CDATA[LO_SUSPECT_LOG_CLASS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates a Logger by passing in a specification for a class that is unrelated
+to the class in which the logger is going to be used. This is likely caused by copy/paste code.
+]]>
+    </description>
+  </rule>
+
+  <rule key="LO_SUSPECT_LOG_PARAMETER" priority="INFO">
+    <name><![CDATA[Correctness - Constructor declares a Logger parameter [fb-contrib]]]></name>
+    <configKey><![CDATA[LO_SUSPECT_LOG_PARAMETER]]></configKey>
+    <description>
+<![CDATA[
+<p>This constructor declares a parameter that is a Logger. As loggers are meant to be
+created statically per class, it doesn't make sense that you would pass a Logger from one
+class to another. Declare the Logger static in each class instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="LO_STUTTERED_MESSAGE" priority="INFO">
+    <name><![CDATA[Style - Method stutters exception message in logger [fb-contrib]]]></name>
+    <configKey><![CDATA[LO_STUTTERED_MESSAGE]]></configKey>
+    <description>
+<![CDATA[
+This method uses a logger method that takes an exception, and passes the result of
+the getMessage() method on the exception that occurred as the log message.
+Since you are already passing in the exception, that message is already present in the
+logs, and by passing it in as the message, you are just stuttering information.
+It would be more helpful to provide a hand written message that describes the error in
+this method, possibly including the values of key variables.
+]]>
+    </description>
+  </rule>
+
+  <rule key="LO_INVALID_FORMATTING_ANCHOR" priority="INFO">
+    <name><![CDATA[Correctness - Method attempts to log using numbered formatting anchors [fb-contrib]]]></name>
+    <configKey><![CDATA[LO_INVALID_FORMATTING_ANCHOR]]></configKey>
+      <description>
+<![CDATA[
+This method attempts to use an SLF4J logger to log a parameterized expression using formatting anchors.
+However, slf4j uses simple non numbered anchors such as {}, rather than anchors with digits in them as the 
+code uses. Thus no parameter replacement will occur.
+]]>
+    </description>
+  </rule>
+
+  <rule key="LO_INCORRECT_NUMBER_OF_ANCHOR_PARAMETERS" priority="INFO">
+    <name><![CDATA[Correctness - Method passes an incorrect number of parameters to an SLF4J logging statement [fb-contrib]]]></name>
+    <configKey><![CDATA[LO_INCORRECT_NUMBER_OF_ANCHOR_PARAMETERS]]></configKey>
+    <description>
+<![CDATA[
+This method passes the wrong number of parameters to a slf4j logging method (error, warn, info, debug) based on the number of anchors {} in the 
+format string. An additional exception argument is allowed if found.
+]]>
+    </description>
+  </rule>
+
+  <rule key="IICU_INCORRECT_INTERNAL_CLASS_USE" priority="INFO">
+    <name><![CDATA[Correctness - Class relies on internal api classes [fb-contrib]]]></name>
+    <configKey><![CDATA[IICU_INCORRECT_INTERNAL_CLASS_USE]]></configKey>
+    <description>
+<![CDATA[
+<p>This class makes use of internal api classes. As these
+classes are not documented, nor externally released as part of the api, they are subject
+to change or removal. You should not be using these classes.</p>
+Packages that shouldn't be used are:
+<ul>
+  <li>com.sun.xxx</li>
+  <li>org.apache.xerces.xxx</li>
+  <li>org.apache.xalan.xxx</li>
+</ul>
+]]>
+    </description>
+  </rule>
+
+  <rule key="DSOC_DUBIOUS_SET_OF_COLLECTIONS" priority="INFO">
+    <name><![CDATA[Performance - Method uses a set of collections [fb-contrib]]]></name>
+    <configKey><![CDATA[DSOC_DUBIOUS_SET_OF_COLLECTIONS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates a set that contains other collections, or a Map whose keySet is
+another collection. As collections tend to calculate hashCode, equals and compareTo by 
+iterating the contents of the collection, this can perform poorly.</p>
+<p>In addition, when a set is used, you typically are using it to do 'contains', or 'find'
+type functionality, which seems dubious when done on a collection</p>
+<p>Finally, as a collection is often modified, problems will occur if the collection is 
+contained in a set, because the hashCode, equals or compareTo values will change while the
+collection is in the set</p>
+<p>If you wish to maintain a collection of collections, it is probably better to use a List
+as the outer collection</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="BED_BOGUS_EXCEPTION_DECLARATION" priority="INFO">
+    <name><![CDATA[Correctness - Non derivable method declares throwing an exception that isn't thrown [fb-contrib]]]></name>
+    <configKey><![CDATA[BED_BOGUS_EXCEPTION_DECLARATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method declares that it throws a checked exception that it does not throw. As this method is
+either a constructor, static method or private method, there is no reason for this method to declare
+the exception in its throws clause, and just causes calling methods to unnecessarily handle an exception
+that will never be thrown. The exception in question should be removed from the throws clause.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UNNC_UNNECESSARY_NEW_NULL_CHECK" priority="INFO">
+    <name><![CDATA[Correctness - Method checks the result of a new allocation [fb-contrib]]]></name>
+    <configKey><![CDATA[UNNC_UNNECESSARY_NEW_NULL_CHECK]]></configKey>
+    <description>
+<![CDATA[
+<p>This method allocations an object with new, and then checks that the object is null
+or non null. As the new operator is guaranteed to either succeed or throw an exception,
+this null check is unnecessary and can be removed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="DTEP_DEPRECATED_TYPESAFE_ENUM_PATTERN" priority="INFO">
+    <name><![CDATA[Style - Class appears to implement the old style type safe enum pattern [fb-contrib]]]></name>
+    <configKey><![CDATA[DTEP_DEPRECATED_TYPESAFE_ENUM_PATTERN]]></configKey>
+    <description>
+<![CDATA[
+<p>This class appears to implement the old style type safe enum pattern that was used in place of
+real enums. Since this class is compiled with java 1.5 or better, it would be simpler and more 
+easy to understand if it was just switched over to an enum.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SMA_STUTTERED_METHOD_ARGUMENTS" priority="INFO">
+    <name><![CDATA[Style - Code calls a method passing the same value to two different arguments [fb-contrib]]]></name>
+    <configKey><![CDATA[SMA_STUTTERED_METHOD_ARGUMENTS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls a method passing the same value for two or more of the parameters.
+Often this is a cut/paste bug, but if not, it is confusing why you would pass the same value for two
+different parameters. Perhaps an alternative method that just takes one parameter should be overridden
+in this case.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="TBP_TRISTATE_BOOLEAN_PATTERN" priority="INFO">
+    <name><![CDATA[Style - Method returns null for Boolean type [fb-contrib]]]></name>
+    <configKey><![CDATA[TBP_TRISTATE_BOOLEAN_PATTERN]]></configKey>
+    <description>
+<![CDATA[
+<p>This method declares that it returns a Boolean value. However the code
+can return a null value. As this is now three values that can be returned;
+Boolean.TRUE, Boolean.FALSE, null; you have changed what a Boolean means.
+It would be clearer to just create a new Enum that has the three values
+you want, and define that the method returns that type.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SUA_SUSPICIOUS_UNINITIALIZED_ARRAY" priority="INFO">
+    <name><![CDATA[Correctness - Method returns an array that appears not to be initialized [fb-contrib]]]></name>
+    <configKey><![CDATA[SUA_SUSPICIOUS_UNINITIALIZED_ARRAY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method returns an array that was allocated but apparently not initialized. It is
+possible that the caller of this method will do the work of initializing this array, but
+that is not a common pattern, and it is assumed that this array has just been forgotten to 
+be initialized.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ITU_INAPPROPRIATE_TOSTRING_USE" priority="INFO">
+    <name><![CDATA[Correctness - Method performs algorithmic operations on the result of a toString() call [fb-contrib]]]></name>
+    <configKey><![CDATA[ITU_INAPPROPRIATE_TOSTRING_USE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method calls algorithmic operations on a String that was returned from a toString() method.
+As these methods are for debugging/logging purposes, it shouldn't be the basis of core logic in your code.
+]]>
+    </description>
+  </rule>
+
+  <rule key="IKNC_INCONSISTENT_HTTP_ATTRIBUTE_CASING" priority="INFO">
+    <name><![CDATA[Style - Method uses the same HttpSession attribute name but with different casing [fb-contrib]]]></name>
+    <configKey><![CDATA[IKNC_INCONSISTENT_HTTP_ATTRIBUTE_CASING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method sets or gets an HttpSession attribute with a parmeter name that was used in other locations
+but with a different casing. As HttpSession attribute are case sensitive, this will be very confusing.
+]]>
+    </description>
+  </rule>
+
+  <rule key="IKNC_INCONSISTENT_HTTP_PARAM_CASING" priority="INFO">
+    <name><![CDATA[Style - Method uses the same HttpRequest parameter name but with different casing [fb-contrib]]]></name>
+    <configKey><![CDATA[IKNC_INCONSISTENT_HTTP_PARAM_CASING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method fetches an HttpServletRequest parameter with a parameter name that was used in other locations
+but with a different casing. As HttpServletRequest parameters are case sensitive, this will be very confusing.
+]]>
+    </description>
+  </rule>
+
+  <rule key="OC_OVERZEALOUS_CASTING" priority="INFO">
+    <name><![CDATA[Correctness - Method manually casts the right hand side of an assignment more specifically than needed [fb-contrib]]]></name>
+    <configKey><![CDATA[OC_OVERZEALOUS_CASTING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method casts the right hand side of an expression to a class that is more specific than the 
+variable on the left hand side of the assignment. The cast only has to be as specific as what the variable
+that is on the left. Using a more specific type on the right hand side just increases cohesion.
+]]>
+    </description>
+  </rule>
+
+  <rule key="PDP_POORLY_DEFINED_PARAMETER" priority="INFO">
+    <name><![CDATA[Correctness - Method defines parameters more abstractly than needed to function properly [fb-contrib]]]></name>
+    <configKey><![CDATA[PDP_POORLY_DEFINED_PARAMETER]]></configKey>
+    <description>
+<![CDATA[
+<p>This method defines parameters at a more abstract level than is actually needed to function correctly,
+as the code casts these parameters to more concrete types. Since this method is not derivable, you should 
+just define the parameters with the type that is needed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="NSE_NON_SYMMETRIC_EQUALS" priority="INFO">
+    <name><![CDATA[Correctness - Equals method compares this object against other types in a non symmetric way [fb-contrib]]]></name>
+    <configKey><![CDATA[NSE_NON_SYMMETRIC_EQUALS]]></configKey>
+    <description>
+<![CDATA[
+<p>This class implements an equals method that compares this object against another type of object.
+This is almost always a bad thing to do, but if it is to be done, you must make sure that the basic
+symmetry rule of equivalence is maintained, that being if a equals b, then b equals a. It does not
+appear that the class that is being compared to this class knows about this class, and doesn't compare itself
+to this.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CVAA_CONTRAVARIANT_ARRAY_ASSIGNMENT" priority="INFO">
+    <name><![CDATA[Correctness - Method performs a contravariant array assignment [fb-contrib]]]></name>
+    <configKey><![CDATA[CVAA_CONTRAVARIANT_ARRAY_ASSIGNMENT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method contains a contravariant array assignment. Since arrays are mutable data structures, their use 
+must be restricted to covariant or invariant usage</p>
+
+<pre>
+class A {}
+class B extends A {}
+
+ B[] b = new B[2];
+ A[] a = b;
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CVAA_CONTRAVARIANT_ELEMENT_ASSIGNMENT" priority="INFO">
+    <name><![CDATA[Correctness - Method performs a contravariant array element assignment [fb-contrib]]]></name>
+    <configKey><![CDATA[CVAA_CONTRAVARIANT_ELEMENT_ASSIGNMENT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method contains a contravariant array element assignment. Since arrays are mutable 
+data structures, their use must be restricted to covariant or invariant usage</p>
+
+<pre>
+class A {}
+class B extends A {}
+
+ B[] b = new B[2];
+ A[] a = b;
+ a[0] = new A(); // results in ArrayStoreException (Runtime)
+</pre>
+]]>
+    </description>
+  </rule>
+
+  <rule key="NFF_NON_FUNCTIONAL_FIELD" priority="INFO">
+    <name><![CDATA[Correctness - Serializable class defines a final transient field [fb-contrib]]]></name>
+    <configKey><![CDATA[NFF_NON_FUNCTIONAL_FIELD]]></configKey>
+    <description>
+<![CDATA[
+<p>This serializable class defines a field as both transient and final. As transient fields
+are not serialized across the stream, it is required that some piece of code reinitialize that field
+when it is deserialized. But since constructors aren't called when deserialization, the field is not initialized. 
+And since the field is final, no other method can initialize it as well.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="SNG_SUSPICIOUS_NULL_FIELD_GUARD" priority="INFO">
+    <name><![CDATA[Correctness - Method tests a field for not null as guard and reassigns it [fb-contrib]]]></name>
+    <configKey><![CDATA[SNG_SUSPICIOUS_NULL_FIELD_GUARD]]></configKey>
+    <description>
+<![CDATA[
+<p>This method tests a field to make sure it's not null before executing a conditional block of
+code. However in the conditional block it reassigns the field. It is likely that the guard
+should have been a check to see if the field is null, not that the field was not null.</p>
+]]>
+  </description>
+  </rule>
+
+  <rule key="SNG_SUSPICIOUS_NULL_LOCAL_GUARD" priority="INFO">
+    <name><![CDATA[Correctness - Method tests a local variable for not null as guard and reassigns it [fb-contrib]]]></name>
+    <configKey><![CDATA[SNG_SUSPICIOUS_NULL_LOCAL_GUARD]]></configKey>
+    <description>
+<![CDATA[
+<p>This method tests a local variable to make sure it's not null before executing a conditional block of
+code. However in the conditional block it reassigns the local variable. It is likely that the guard
+should have been a check to see if the local variable is null, not that the local variable was not null.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_RUNTIME_EXIT_OR_HALT" priority="INFO">
+    <name><![CDATA[Correctness - Method calls Runtime.exit() or Runtime.halt() [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_RUNTIME_EXIT_OR_HALT]]></configKey>
+    <description>
+<![CDATA[
+<p>Calling <code>Runtime.exit()</code> or <code>Runtime.halt()</code> shuts down the entire Java virtual machine. This should only been done when it is appropriate. Such calls make it hard or impossible for your code to be invoked by other code. Consider throwing a RuntimeException instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_RUNFINALIZATION" priority="INFO">
+    <name><![CDATA[Correctness - Method triggers finalization [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_RUNFINALIZATION]]></configKey>
+    <description>
+<![CDATA[
+<p>Manually triggering finalization can result in serious performance problems and may be masking resource cleanup bugs.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_BIGDECIMAL_EQUALS" priority="INFO">
+    <name><![CDATA[Correctness - Method calls BigDecimal.equals() [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_BIGDECIMAL_EQUALS]]></configKey>
+    <description>
+<![CDATA[
+<p><code>equals()</code> being called to compare two <code>java.math.BigDecimal</code> numbers. This is normally a mistake, as two <code>BigDecimal</code> objects are only equal if they are equal in both value and scale, so that <i>2.0</i> is not equal to <i>2.00</i>. To compare <code>BigDecimal</code> objects for mathematical equality, use <code>compareTo()</code> instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_INETADDRESS_GETLOCALHOST" priority="INFO">
+    <name><![CDATA[Correctness - Method calls InetAddress.getLocalHost() [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_INETADDRESS_GETLOCALHOST]]></configKey>
+    <description>
+<![CDATA[
+<p>Do not call <code>InetAddress.getLocalHost()</code> on multihomed servers. On a multihomed server, <code>InetAddress.getLocalHost()</code> simply returns the IP address associated with the server's internal hostname. This could be any of the network interfaces, which could expose the machine to security risks. Server applications that need to listen on sockets should add configurable properties to define which network interfaces the server should bind.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_PROMISCUOUS_SERVERSOCKET" priority="INFO">
+    <name><![CDATA[Correctness - Method creates promiscuous ServerSocket object [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_PROMISCUOUS_SERVERSOCKET]]></configKey>
+    <description>
+<![CDATA[
+<p>Do not use the <code>ServerSocket</code> constructor or <code>ServerSocketFactory.createServerSocket()</code> factory methods that accepts connections on any network interface. By default, an application that listens on a socket will listen for connection attempts on any network interface, which can be a security risk. Only the long form the <code>ServerSocket</code> constructor or <code>ServerSocketFactory.createServerSocket()</code> factory methods take a specific local address to define which network interface the socket should bind.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_RANDOM_SEED" priority="INFO">
+    <name><![CDATA[Correctness - Method creates insecure Random object [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_RANDOM_SEED]]></configKey>
+    <description>
+<![CDATA[
+<p><code>Random()</code> constructor without a seed is insecure because it defaults to easily guessable seed: <code>System.currentTimeMillis()</code>. Initialize seed with <code>Random(SecureRandom.getInstance().generateSeed())</code> or use <code>SecureRandom</code> instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_SECURERANDOM" priority="INFO">
+    <name><![CDATA[Correctness - Method calls deprecated SecureRandom method [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_SECURERANDOM]]></configKey>
+    <description>
+<![CDATA[
+<p>The <code>SecureRandom()</code> constructors and <code>SecureRandom.getSeed()</code> method are deprecated. Call <code>SecureRandom.getInstance()</code> and <code>SecureRandom.getInstance().generateSeed()</code> instead.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_THREAD_PRIORITIES" priority="INFO">
+    <name><![CDATA[MT Correctness - Method uses suspicious thread priorities [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_THREAD_PRIORITIES]]></configKey>
+    <description>
+<![CDATA[
+<p>Getting or setting thread priorities is not portable and could cause or mask race conditions.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_THREAD_YIELD" priority="INFO">
+    <name><![CDATA[MT Correctness - Method attempts to manually schedule threads [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_THREAD_YIELD]]></configKey>
+    <description>
+<![CDATA[
+<p>Manual thread scheduling with <code>Thread.sleep()</code> or <code>Thread.yield()</code> has no guaranteed semantics and is often used to mask race conditions.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_WAIT_WITHOUT_TIMEOUT" priority="INFO">
+    <name><![CDATA[MT Correctness - Method sleeps without timeout [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_WAIT_WITHOUT_TIMEOUT]]></configKey>
+    <description>
+<![CDATA[
+<p>Calling <code>{2}</code> without timeout could block forever. Consider using a timeout to detect deadlocks or performance problems. Thread.join() Object.wait() Condition.await() Lock.lock() Lock.lockInterruptibly()</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_THREAD_FAIRNESS" priority="INFO">
+    <name><![CDATA[MT Correctness - Method ignores Lock's fairness settings by calling tryLock() [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_THREAD_FAIRNESS]]></configKey>
+    <description>
+<![CDATA[
+<p>Calling <code>Lock.tryLock()</code> or <code>ReentrantLock.tryLock()</code> without a timeout does not honor the lock's fairness setting. If you want to honor the fairness setting for this lock, then use <code>tryLock(0, TimeUnit.SECONDS)</code> which is almost equivalent (it also detects interruption).</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_SIGNAL_NOT_SIGNALALL" priority="INFO">
+    <name><![CDATA[MT Correctness - Method calls Condition.signal() rather than Condition.signalAll() [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_SIGNAL_NOT_SIGNALALL]]></configKey>
+    <description>
+<![CDATA[
+<p><code>Condition.signalAll()</code> is prefered over <code>Condition.signal()</code>. Calling <code>signal()</code> only wakes up one thread, meaning that the thread woken up might not be the one waiting for the condition that the caller just satisfied.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_LOCK_ISLOCKED" priority="INFO">
+    <name><![CDATA[MT Correctness - Method tests if a lock is locked [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_LOCK_ISLOCKED]]></configKey>
+    <description>
+<![CDATA[
+<p>Calling <code>ReentrantLock.isLocked()</code> or <code>ReentrantLock.isHeldByCurrentThread()</code> might indicate race conditions or incorrect locking. These methods are designed for use in debug code or monitoring of the system state, not for synchronization control.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_STRING_BYTES_ENCODING" priority="INFO">
+    <name><![CDATA[Correctness - Method encodes String bytes without specifying the character encoding [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_STRING_BYTES_ENCODING]]></configKey>
+    <description>
+<![CDATA[
+<p>The behavior of the <code>String(byte[] bytes)</code> and <code>String.getBytes()</code> is undefined if the string cannot be encoded in the platform's default charset. Instead, use the <code>String(byte[] bytes, String encoding)</code> or <code>String.getBytes(String encoding)></code> constructor which accepts the string's encoding as an argument. Be sure to specify the encoding used for the user's locale.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MDM_SETDEFAULTLOCALE" priority="INFO">
+    <name><![CDATA[MT Correctness - Method calls Locale.setDefault() [fb-contrib]]]></name>
+    <configKey><![CDATA[MDM_SETDEFAULTLOCALE]]></configKey>
+    <description>
+<![CDATA[
+<p>Do not use the <code>Locale.setDefault()</code> method to change the default locale. It changes the JVM's default locale for all threads and makes your applications unsafe to threads. It does not affect the host locale. Since changing the JVM's default locale may affect many different areas of functionality, this method should only be used if the caller is prepared to reinitialize locale-sensitive code running within the same Java Virtual Machine, such as the user interface.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="ROOM_REFLECTION_ON_OBJECT_METHODS" priority="INFO">
+    <name><![CDATA[Correctness - Method uses reflection to call a method available on java.lang.Object [fb-contrib]]]></name>
+    <configKey><![CDATA[ROOM_REFLECTION_ON_OBJECT_METHODS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses reflection to call a method that is defined in java.lang.Object.
+As these methods are always available, it is not necessary to call these methods with
+reflection.
+]]>
+    </description>
+  </rule>
+
+  <rule key="IPU_IMPROPER_PROPERTIES_USE" priority="INFO">
+    <name><![CDATA[Correctness - Method puts non-String values into a Properties object [fb-contrib]]]></name>
+    <configKey><![CDATA[IPU_IMPROPER_PROPERTIES_USE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method places non-String objects into a Properties object. As the Properties object
+is intented to be a String to String map, putting non String objects is wrong, and takes advantage
+of a design flaw in the Properties class by deriving from Hashtable instead of using aggregation.
+If you want a collection that holds other types of objects, use a Hashtable, or better still newer collections
+like HashMap or TreeMap.
+]]>
+    </description>
+  </rule>
+
+  <rule key="IPU_IMPROPER_PROPERTIES_USE_SETPROPERTY" priority="INFO">
+    <name><![CDATA[Correctness - Method uses Properties.put instead of Properties.setProperty [fb-contrib]]]></name>
+    <configKey><![CDATA[IPU_IMPROPER_PROPERTIES_USE_SETPROPERTY]]></configKey>
+    <description>
+<![CDATA[
+<p>This method uses the inherited method from Hashtable put(String key, Object value) in
+a Properties object. Since the Properties object was intended to be only a String to String
+map, use of the derived put method is discouraged. Use the Properties.setProperty method instead.
+]]>
+    </description>
+  </rule>
+
+  <rule key="PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP" priority="INFO">
+    <name><![CDATA[Performance - Method allocates an object that is used in a constant way in a loop [fb-contrib]]]></name>
+    <configKey><![CDATA[PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP]]></configKey>
+    <description>
+<![CDATA[
+<p>This method allocates an object using the default constructor in a loop, and then
+only uses it in a quasi-static way. It is never assigned to anything that lives outside
+the loop, and could potentially be allocated once outside the loop. Often this can be
+achieved by calling a clear() like method in the loop, to reset the state of the object
+in the loop.
+]]>
+    </description>
+  </rule>
+
+  <rule key="WOC_WRITE_ONLY_COLLECTION_LOCAL" priority="INFO">
+    <name><![CDATA[Correctness - Method creates and initializes a collection but never reads or gains information from it [fb-contrib]]]></name>
+    <configKey><![CDATA[WOC_WRITE_ONLY_COLLECTION_LOCAL]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates and initializes a collection but then never access this collection
+to gain information, or fetch items from the collection. It is likely that this collection
+is left over from a past effort, and can be removed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="WOC_WRITE_ONLY_COLLECTION_FIELD" priority="INFO">
+    <name><![CDATA[Correctness - Class creates and initializes a collection but never reads or gains information from it [fb-contrib]]]></name>
+    <configKey><![CDATA[WOC_WRITE_ONLY_COLLECTION_FIELD]]></configKey>
+    <description>
+<![CDATA[
+<p>This class creates and initializes a collection as a field but then never access this collection
+to gain information, or fetch items from the collection. It is likely that this collection
+is left over from a past effort, and can be removed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="UVA_USE_VAR_ARGS" priority="INFO">
+    <name><![CDATA[Style - Method defines parameter list with array as last argument, rather than vararg [fb-contrib]]]></name>
+    <configKey><![CDATA[UVA_USE_VAR_ARGS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method defines a parameter list that ends with an array. As this class is compiled with
+Java 1.5 or better, this parameter could be defined as a vararg parameter instead, which can be
+more convienent for client developers to use. This is not a bug, per se, just an improvement.
+]]>
+    </description>
+  </rule>
+
+  <rule key="PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION" priority="INFO">
+    <name><![CDATA[Correctness - Method serializes an instance of a non-static inner class [fb-contrib]]]></name>
+    <configKey><![CDATA[PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method serializes an instance of a non-static inner class. Since this class has a
+reference to the containing class, this outer class will be serialized as well. This is often
+not intentional, and will make the amount of data that is serialized much more than is needed.
+If the outer classes is not desired to be serialized, either make the inner class static, or
+pull it out into a separate "first class" class.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SEC_SIDE_EFFECT_CONSTRUCTOR" priority="INFO">
+    <name><![CDATA[Style - Method uses a Side Effect Constructor [fb-contrib]]]></name>
+    <configKey><![CDATA[SEC_SIDE_EFFECT_CONSTRUCTOR]]></configKey>
+    <description>
+<![CDATA[
+<p>This method creates an object but does not assign this object to any variable or field.
+This implies that the class operates through side effects in the constructor, which is a
+bad pattern to use, as it adds unnecessary coupling. Consider pulling the side effect out of
+the constructor, into a separate method, or into the calling method.
+]]>
+    </description>
+  </rule>
+
+  <rule key="SGSU_SUSPICIOUS_GETTER_SETTER_USE" priority="INFO">
+    <name><![CDATA[Correctness - Method uses same bean's getter value for setter [fb-contrib]]]></name>
+    <configKey><![CDATA[SGSU_SUSPICIOUS_GETTER_SETTER_USE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method retrieves the property of a java bean, only to use it in the setter
+for the same property of the same bean. This is usually a copy/paste typo.
+]]>
+    </description>
+  </rule>
+
+  <rule key="LGO_LINGERING_GRAPHICS_OBJECT" priority="INFO">
+    <name><![CDATA[Performance - Method allocations a java.awt.Graphics object without disposing it [fb-contrib]]]></name>
+    <configKey><![CDATA[LGO_LINGERING_GRAPHICS_OBJECT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method allocates a java.awt.Graphics object but doesn't dispose of it when done. While
+the garbage collecter will clean this up, given that a large number of Graphics objects can be
+created in a short period of time, it is recommended that you explicitly dispose() of them.
+  </p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="STB_STACKED_TRY_BLOCKS" priority="INFO">
+    <name><![CDATA[Style - Method stacks similar try/catch blocks [fb-contrib]]]></name>
+    <configKey><![CDATA[STB_STACKED_TRY_BLOCKS]]></configKey>
+    <description>
+<![CDATA[
+<P>This method declares two try catch blocks one after another, where each
+catch block catches the same type of exception. They also throw uniformly the
+same type of exception. These two catch blocks can be combined into one to
+simplify the method.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CEBE_COMMONS_EQUALS_BUILDER_ISEQUALS" priority="INFO">
+    <name><![CDATA[Correctness - Method returns the result of invoking equals() on EqualsBuilder [fb-contrib]]]></name>
+    <configKey><![CDATA[CEBE_COMMONS_EQUALS_BUILDER_ISEQUALS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method returns the result of equals on the EqualsBuilder type
+instead of calling the method isEqual().</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CHTH_COMMONS_HASHCODE_BUILDER_TOHASHCODE" priority="INFO">
+    <name><![CDATA[Correctness - Method returns the result of invoking hashCode() on HashCodeBuilder [fb-contrib]]]></name>
+    <configKey><![CDATA[CHTH_COMMONS_HASHCODE_BUILDER_TOHASHCODE]]></configKey>
+    <description>
+<![CDATA[
+<p>This method returns the result of hashCode on the HashCodeBuilder type
+instead of calling the method toHashCode().</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CSBTS_COMMONS_STRING_BUILDER_TOSTRING" priority="INFO">
+    <name><![CDATA[Correctness - Method returns the result of invoking toString() without intermediate invocation of append() in ToStringBuilder [fb-contrib]]]></name>
+    <configKey><![CDATA[CSBTS_COMMONS_STRING_BUILDER_TOSTRING]]></configKey>
+    <description>
+<![CDATA[
+<p>This method returns the result of toString() on ToStringBuilder without an
+intermediate invocation of append()</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CCNE_COMPARE_CLASS_EQUALS_NAME" priority="INFO">
+    <name><![CDATA[Correctness - Method compares class name instead of comparing class [fb-contrib]]]></name>
+    <configKey><![CDATA[CCNE_COMPARE_CLASS_EQUALS_NAME]]></configKey>
+    <description>
+<![CDATA[
+<p>In a JVM, Two classes are the same class (and consequently the same type) if
+they are loaded by the same class loader, and they have the same fully
+qualified name [JVMSpec 1999].
+
+Comparing class name ignores the class loader.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="BRPI_BACKPORT_REUSE_PUBLIC_IDENTIFIERS" priority="INFO">
+    <name><![CDATA[Performance - Method uses backport concurrency utils [fb-contrib]]]></name>
+    <configKey><![CDATA[BRPI_BACKPORT_REUSE_PUBLIC_IDENTIFIERS]]></configKey>
+    <description>
+<![CDATA[
+<p>This class uses Backport Utils concurrent classes. Updated/Efficient version of these
+classes are available in versions of the JDK 5.0 and higher, and these
+classes should only be used if you are targeting JDK 1.4 and lower.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CU_CLONE_USABILITY_OBJECT_RETURN" priority="INFO">
+    <name><![CDATA[Style - Clone method declares it returns an Object [fb-contrib]]]></name>
+    <configKey><![CDATA[CU_CLONE_USABILITY_OBJECT_RETURN]]></configKey>
+    <description>
+<![CDATA[
+<p>This class implements the Cloneable interface but defines its clone method to return an
+Object. Since most likely users of this method will need to cast it to the real type, this will
+be more painful than necessary. Just declare the return value to be the type of this class.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CU_CLONE_USABILITY_MISMATCHED_RETURN" priority="INFO">
+    <name><![CDATA[Style - Clone method declares it returns an type different then the owning class [fb-contrib]]]></name>
+    <configKey><![CDATA[CU_CLONE_USABILITY_MISMATCHED_RETURN]]></configKey>
+    <description>
+<![CDATA[
+<p>This class implements the Cloneable interface but defines its clone method to return a type
+that is different than the class itself, or any interfaces that the class implements.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CU_CLONE_USABILITY_THROWS" priority="INFO">
+    <name><![CDATA[Style - Clone method declares it throws CloneNotSupportedException [fb-contrib]]]></name>
+    <configKey><![CDATA[CU_CLONE_USABILITY_THROWS]]></configKey>
+    <description>
+<![CDATA[
+<p>This class implements the Cloneable interface but defines its clone method to still return
+a CloneNotSupportedException. Since you are implementing clone() it would make sense that the method
+in question will <em>not</em> throw that exception, so annotating your method with it just makes client use
+of your more painful as they have to handle an exception that will never happen. Just remove the
+throws clause from your method.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CAAL_CONFUSING_ARRAY_AS_LIST" priority="INFO">
+    <name><![CDATA[Correctness - Method calls Array.asList on an array of primitive values [fb-contrib]]]></name>
+    <configKey><![CDATA[CAAL_CONFUSING_ARRAY_AS_LIST]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes an array of primitive values to the Array.asList call. As primitive
+values in arrays aren't automatically promoted to boxed primitives in arrays, the asList call
+cannot convert this array in a list of boxed primitives. It therefore just creates an array
+with one item in it, the array itself. This is rarely what is desired.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PSC_PRESIZE_COLLECTIONS" priority="INFO">
+    <name><![CDATA[Performance - Method does not presize the allocation of a collection [fb-contrib]]]></name>
+    <configKey><![CDATA[PSC_PRESIZE_COLLECTIONS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method allocates a collection using the default constructor even though it is known
+apriori how many items are going to be placed in the collection (or at least a reasonable guess)
+and thus needlessly causes intermediate reallocations of the collection.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UMTP_UNBOUND_METHOD_TEMPLATE_PARAMETER" priority="INFO">
+    <name><![CDATA[Correctness - Method declares unbound method template parameter(s) [fb-contrib]]]></name>
+    <configKey><![CDATA[UMTP_UNBOUND_METHOD_TEMPLATE_PARAMETER]]></configKey>
+    <description>
+<![CDATA[
+<p>This method declares a method level template parameter that is not bound by any parameter of this
+method. Therefore the template parameter adds no validation or type safety and can be removed, as it's
+just confusing to the reader.
+]]>
+    </description>
+  </rule>
+
+  <rule key="NPMC_NON_PRODUCTIVE_METHOD_CALL" priority="INFO">
+    <name><![CDATA[Correctness - Method ignores return value of a non mutating method [fb-contrib]]]></name>
+    <configKey><![CDATA[NPMC_NON_PRODUCTIVE_METHOD_CALL]]></configKey>
+    <description>
+<![CDATA[
+<p>This method ignores the return value of a common method that is assumed to be none mutating.
+If this method does in fact not modify the object it is called on, there is no reason to call
+this method, and it can be removed.
+]]>
+    </description>
+  </rule>
+
+  <rule key="AIOB_ARRAY_INDEX_OUT_OF_BOUNDS" priority="INFO">
+    <name><![CDATA[Correctness - Method attempts to access an array element outside the array's size [fb-contrib]]]></name>
+    <configKey><![CDATA[AIOB_ARRAY_INDEX_OUT_OF_BOUNDS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method access an array element using a literal index that is know to be outside the size of the specified
+array. This will cause an ArrayIndexOutOfBoundsException at runtime</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="AIOB_ARRAY_STORE_TO_NULL_REFERENCE" priority="INFO">
+    <name><![CDATA[Correctness - Method attempts to store an array element to an array that does not appear to be allocated [fb-contrib]]]></name>
+    <configKey><![CDATA[AIOB_ARRAY_STORE_TO_NULL_REFERENCE]]></configKey>
+      <description>
+<![CDATA[
+<p>This method attempts to store an array element into an an array that appears to not have been allocated.
+]]>
+    </description>
+  </rule>
+
+</rules>

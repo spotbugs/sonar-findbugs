@@ -19,28 +19,24 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleRepository;
+import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.plugins.java.Java;
 
 import java.util.List;
 
-public class FindbugsPlugin extends SonarPlugin {
+public final class FbContribRuleRepository extends RuleRepository {
+  private XMLRuleParser xmlRuleParser;
 
-  @Override
-  public List getExtensions() {
-    ImmutableList.Builder<Object> extensions = ImmutableList.builder();
-    extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
-    extensions.add(
-      FindbugsSensor.class,
-      FindbugsConfiguration.class,
-      FindbugsExecutor.class,
-      FindbugsRuleRepository.class,
-      FindbugsProfileExporter.class,
-      FindbugsProfileImporter.class,
-      FindbugsProfile.class,
-      FindbugsMavenInitializer.class,
-      FbContribRuleRepository.class);
-    return extensions.build();
+  public FbContribRuleRepository(XMLRuleParser xmlRuleParser) {
+    super(FindbugsConstants.REPOSITORY_KEY, Java.KEY);
+    setName(FindbugsConstants.REPOSITORY_NAME);
+    this.xmlRuleParser = xmlRuleParser;
   }
 
+  @Override
+  public List<Rule> createRules() {
+    return xmlRuleParser.parse(getClass().getResourceAsStream("/org/sonar/plugins/findbugs/rules-fbcontrib.xml"));
+  }
 }

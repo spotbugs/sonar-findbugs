@@ -19,28 +19,25 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.SonarPlugin;
+import org.junit.Test;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.XMLRuleParser;
 
 import java.util.List;
 
-public class FindbugsPlugin extends SonarPlugin {
+import static org.fest.assertions.Assertions.assertThat;
 
-  @Override
-  public List getExtensions() {
-    ImmutableList.Builder<Object> extensions = ImmutableList.builder();
-    extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
-    extensions.add(
-      FindbugsSensor.class,
-      FindbugsConfiguration.class,
-      FindbugsExecutor.class,
-      FindbugsRuleRepository.class,
-      FindbugsProfileExporter.class,
-      FindbugsProfileImporter.class,
-      FindbugsProfile.class,
-      FindbugsMavenInitializer.class,
-      FbContribRuleRepository.class);
-    return extensions.build();
+public class FbContribRuleRepositoryTest {
+  @Test
+  public void testLoadRepositoryFromXml() {
+    FbContribRuleRepository repository = new FbContribRuleRepository(new XMLRuleParser());
+    List<Rule> rules = repository.createRules();
+    assertThat(rules.size()).isEqualTo(188);
+    for (Rule rule : rules) {
+      assertThat(rule.getKey()).isNotNull();
+      assertThat(rule.getConfigKey()).isEqualTo(rule.getKey());
+      assertThat(rule.getName()).isNotNull();
+      assertThat(rule.getDescription()).isNotNull();
+    }
   }
-
 }

@@ -53,6 +53,7 @@
     <sonar.version>4.2</sonar.version>
     <!-- once java 2.4 is released only one property is required -->
     <sonar-java.version>2.3</sonar-java.version>
+    <fbcontrib.version>4.8.5</fbcontrib.version>
   </properties>
 
   <dependencies>
@@ -100,6 +101,13 @@
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
       <version>2.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.mebigfatguy.fb-contrib</groupId>
+      <artifactId>fb-contrib</artifactId>
+      <version>${fbcontrib.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -198,7 +206,7 @@
             <configuration>
               <stripVersion>true</stripVersion>
               <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              <includeArtifactIds>annotations,jsr305</includeArtifactIds>
+              <includeArtifactIds>annotations,jsr305,fb-contrib</includeArtifactIds>
             </configuration>
           </execution>
         </executions>
@@ -227,7 +235,7 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>4900000</maxsize>
+                  <maxsize>5500000</maxsize>
                   <minsize>4700000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>

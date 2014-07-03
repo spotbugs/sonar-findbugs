@@ -136,6 +136,7 @@ public class FindbugsConfiguration implements BatchExtension {
 
   private File jsr305Lib;
   private File annotationsLib;
+  private File fbContrib;
 
   public void copyLibs() {
     if (jsr305Lib == null) {
@@ -143,6 +144,9 @@ public class FindbugsConfiguration implements BatchExtension {
     }
     if (annotationsLib == null) {
       annotationsLib = copyLib("/annotations.jar");
+    }
+    if (fbContrib == null) {
+      fbContrib = copyLib("/fb-contrib.jar");
     }
   }
 
@@ -155,6 +159,9 @@ public class FindbugsConfiguration implements BatchExtension {
     }
     if (annotationsLib != null) {
       annotationsLib.delete();
+    }
+    if (fbContrib != null) {
+      fbContrib.delete();
     }
   }
 
@@ -172,6 +179,10 @@ public class FindbugsConfiguration implements BatchExtension {
     } finally {
       IOUtils.closeQuietly(input);
     }
+  }
+
+  public File getFbContribJar() {
+    return fbContrib;
   }
 
   public static List<PropertyDefinition> getPropertyDefinitions() {
