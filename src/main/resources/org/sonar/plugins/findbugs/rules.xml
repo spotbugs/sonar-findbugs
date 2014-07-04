@@ -854,6 +854,7 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - Field isn't final but should be]]></name>
     <configKey><![CDATA[MS_SHOULD_BE_FINAL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="MS_PKGPROTECT">

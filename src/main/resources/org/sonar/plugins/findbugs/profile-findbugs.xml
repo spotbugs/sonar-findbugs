@@ -299,9 +299,6 @@
     <Bug pattern="SE_NONFINAL_SERIALVERSIONID"/>
   </Match>
   <Match>
-    <Bug pattern="MS_SHOULD_BE_FINAL"/>
-  </Match>
-  <Match>
     <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED"/>
   </Match>
   <Match>
