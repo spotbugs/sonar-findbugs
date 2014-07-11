@@ -31,7 +31,6 @@ import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -110,15 +109,7 @@ public class FindbugsConfigurationTest {
     assertThat(conf.getEffort()).isEqualTo("high");
   }
 
-  @Test
-  public void should_fail_if_no_class_files() throws IOException {
-    thrown.expect(SonarException.class);
-    thrown.expectMessage("Findbugs needs sources to be compiled");
-
-    conf.getFindbugsProject();
-  }
-
-  @Test
+    @Test
   public void should_set_class_files() throws IOException {
     File file = temp.newFile("MyClass.class");
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));

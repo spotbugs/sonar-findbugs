@@ -36,9 +36,11 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Violation;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -101,14 +103,30 @@ public class FindbugsSensorTest extends FindbugsTests {
     bugInstance.add(methodAnnotation);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute()).thenReturn(collection);
-
+    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     when(context.getResource(any(Resource.class))).thenReturn(new JavaFile("org.sonar.MyClass"));
 
-    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(), FakeRuleFinder.create(), executor, mockJavaResourceLocator());
+    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(), FakeRuleFinder.create(), executor, javaResourceLocator);
     analyser.analyse(project, context);
 
     verify(executor).execute();
     verify(context, times(1)).saveViolation(any(Violation.class));
+  }
+
+  @Test
+  public void should_not_execute_if_no_compiled_class_available() throws Exception {
+    Project project = createProject();
+    FindbugsExecutor executor = mock(FindbugsExecutor.class);
+    SensorContext context = mock(SensorContext.class);
+    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.<File>emptyList());
+
+    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(), null, executor, mockJavaResourceLocator());
+
+    sensor.analyse(project, context);
+    verify(executor, never()).execute();
+
   }
 
   @Test

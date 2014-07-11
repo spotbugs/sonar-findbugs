@@ -36,7 +36,6 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -79,11 +78,6 @@ public class FindbugsConfiguration implements BatchExtension {
     Collection<File> classFilesToAnalyze = javaResourceLocator.classFilesToAnalyze();
     for (File classToAnalyze : classFilesToAnalyze) {
       findbugsProject.addFile(classToAnalyze.getCanonicalPath());
-    }
-
-    if (classFilesToAnalyze.isEmpty()) {
-      throw new SonarException("Findbugs needs sources to be compiled. "
-          + "Please build project before executing sonar and check the location of compiled classes.");
     }
 
     for (File file : projectClasspath.getElements()) {

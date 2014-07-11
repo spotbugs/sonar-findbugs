@@ -52,10 +52,16 @@ public class FindbugsSensor implements Sensor {
 
   public boolean shouldExecuteOnProject(Project project) {
     return !project.getFileSystem().mainFiles(Java.KEY).isEmpty()
-        && !profile.getActiveRulesByRepository(FindbugsConstants.REPOSITORY_KEY).isEmpty();
+        && !profile.getActiveRulesByRepository(FindbugsConstants.REPOSITORY_KEY).isEmpty()
+        ;
   }
 
   public void analyse(Project project, SensorContext context) {
+    if(javaResourceLocator.classFilesToAnalyze().isEmpty()) {
+      LOG.warn("Findbugs needs sources to be compiled."
+          + "Please build project before executing sonar and check the location of compiled classes.");
+      return;
+    }
     Collection<ReportedBug> collection = executor.execute();
 
     for (ReportedBug bugInstance : collection) {
