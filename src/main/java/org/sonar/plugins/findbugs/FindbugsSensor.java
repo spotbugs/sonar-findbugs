@@ -59,7 +59,8 @@ public class FindbugsSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     if(javaResourceLocator.classFilesToAnalyze().isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
-          + "Please build project before executing sonar and check the location of compiled classes.");
+          + " Please build project before executing sonar or check the location of compiled classes to"
+		  + " make it possible for Findbugs to analyse your project.");
       return;
     }
     Collection<ReportedBug> collection = executor.execute();
