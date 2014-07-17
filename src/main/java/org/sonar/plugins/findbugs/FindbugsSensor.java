@@ -23,13 +23,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
+import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.util.Collection;
@@ -42,25 +43,27 @@ public class FindbugsSensor implements Sensor {
   private RuleFinder ruleFinder;
   private FindbugsExecutor executor;
   private final JavaResourceLocator javaResourceLocator;
+  private final FileSystem fs;
 
-  public FindbugsSensor(RulesProfile profile, RuleFinder ruleFinder, FindbugsExecutor executor, JavaResourceLocator javaResourceLocator) {
+  public FindbugsSensor(RulesProfile profile, RuleFinder ruleFinder, FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs) {
     this.profile = profile;
     this.ruleFinder = ruleFinder;
     this.executor = executor;
     this.javaResourceLocator = javaResourceLocator;
+    this.fs = fs;
   }
 
   public boolean shouldExecuteOnProject(Project project) {
-    return !project.getFileSystem().mainFiles(Java.KEY).isEmpty()
+    return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
         && !profile.getActiveRulesByRepository(FindbugsConstants.REPOSITORY_KEY).isEmpty()
         ;
   }
 
   public void analyse(Project project, SensorContext context) {
-    if(javaResourceLocator.classFilesToAnalyze().isEmpty()) {
+    if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
           + " Please build project before executing sonar or check the location of compiled classes to"
-		  + " make it possible for Findbugs to analyse your project.");
+          + " make it possible for Findbugs to analyse your project.");
       return;
     }
     Collection<ReportedBug> collection = executor.execute();
