@@ -53,7 +53,7 @@
     <sonar.version>4.2</sonar.version>
     <!-- once java 2.4 is released only one property is required -->
     <sonar-java.version>2.3</sonar-java.version>
-    <fbcontrib.version>4.8.5</fbcontrib.version>
+    <fbcontrib.version>5.2.1</fbcontrib.version>
   </properties>
 
   <dependencies>
@@ -230,7 +230,7 @@
           <pluginDescription><![CDATA[Analyze Java code with <a href="http://findbugs.sourceforge.net/">Findbugs</a>.]]></pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>true</useChildFirstClassLoader>
-	        <requirePlugins>java:${sonar-java.version}</requirePlugins>
+          <requirePlugins>java:${sonar-java.version}</requirePlugins>
         </configuration>
       </plugin>
       <plugin>
