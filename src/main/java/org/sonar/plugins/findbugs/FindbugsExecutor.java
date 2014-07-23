@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.BugCollection;
@@ -87,7 +88,12 @@ public class FindbugsExecutor implements BatchExtension {
     this.configuration = configuration;
   }
 
-  public Collection<ReportedBug> execute() {
+  @VisibleForTesting
+  Collection<ReportedBug> execute() {
+    return execute(true);
+  }
+
+  public Collection<ReportedBug> execute(boolean useFbContrib) {
     TimeProfiler profiler = new TimeProfiler().start("Execute Findbugs " + FindbugsVersion.getVersion());
     // We keep a handle on the current security manager because FB plays with it and we need to restore it before shutting down the executor
     // service
@@ -106,7 +112,7 @@ public class FindbugsExecutor implements BatchExtension {
       final FindBugs2 engine = new FindBugs2();
 
       Project project = configuration.getFindbugsProject();
-      customPlugins = loadFindbugsPlugins();
+      customPlugins = loadFindbugsPlugins(useFbContrib);
 
       disableUpdateChecksOnEveryPlugin();
 
@@ -210,7 +216,7 @@ public class FindbugsExecutor implements BatchExtension {
     }
   }
 
-  private Collection<Plugin> loadFindbugsPlugins() {
+  private Collection<Plugin> loadFindbugsPlugins(boolean useFbContrib) {
     ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
     List<String> pluginJarPathList = Lists.newArrayList();
@@ -221,7 +227,7 @@ public class FindbugsExecutor implements BatchExtension {
         pluginJarPathList.add(normalizeUrl(url));
       }
       //Add fb-contrib plugin.
-      if (configuration.getFbContribJar() != null) {
+      if (useFbContrib && configuration.getFbContribJar() != null) {
         // fb-contrib plugin is packaged by Maven. It is not available during execution of unit tests.
         pluginJarPathList.add(configuration.getFbContribJar().getAbsolutePath());
       }

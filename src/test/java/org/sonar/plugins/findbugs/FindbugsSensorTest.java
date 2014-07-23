@@ -85,7 +85,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void shouldExecuteFindbugsWhenNoReportProvided() throws Exception {
+  public void shouldExecuteFindbugs() throws Exception {
     Project project = createProject();
     FindbugsExecutor executor = mock(FindbugsExecutor.class);
     SensorContext context = mock(SensorContext.class);
@@ -100,7 +100,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     methodAnnotation.setSourceLines(new SourceLineAnnotation(className, sourceFile, startLine, 0, 0, 0));
     bugInstance.add(methodAnnotation);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
-    when(executor.execute()).thenReturn(collection);
+    when(executor.execute(false)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     when(context.getResource(any(Resource.class))).thenReturn(new JavaFile("org.sonar.MyClass"));
@@ -108,7 +108,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(), FakeRuleFinder.create(), executor, javaResourceLocator, fs);
     analyser.analyse(project, context);
 
-    verify(executor).execute();
+    verify(executor).execute(false);
     verify(context, times(1)).saveViolation(any(Violation.class));
   }
 

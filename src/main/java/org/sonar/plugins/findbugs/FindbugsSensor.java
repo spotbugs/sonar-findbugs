@@ -73,7 +73,7 @@ public class FindbugsSensor implements Sensor {
           + " make it possible for Findbugs to analyse your project.");
       return;
     }
-    Collection<ReportedBug> collection = executor.execute();
+    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules());
 
     for (ReportedBug bugInstance : collection) {
       Rule rule = ruleFinder.findByKey(FindbugsRuleRepository.REPOSITORY_KEY, bugInstance.getType());
