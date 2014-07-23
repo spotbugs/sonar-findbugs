@@ -45,8 +45,8 @@ public abstract class FindbugsTests {
   protected List<Rule> buildRulesFixture() {
     List<Rule> rules = new ArrayList<Rule>();
 
-    Rule rule1 = Rule.create(FindbugsConstants.REPOSITORY_KEY, "DLS_DEAD_LOCAL_STORE", "DLS: Dead store to local variable");
-    Rule rule2 = Rule.create(FindbugsConstants.REPOSITORY_KEY, "URF_UNREAD_FIELD", "UrF: Unread field");
+    Rule rule1 = Rule.create(FindbugsRuleRepository.REPOSITORY_KEY, "DLS_DEAD_LOCAL_STORE", "DLS: Dead store to local variable");
+    Rule rule2 = Rule.create(FindbugsRuleRepository.REPOSITORY_KEY, "URF_UNREAD_FIELD", "UrF: Unread field");
 
     rules.add(rule1);
     rules.add(rule2);
@@ -69,7 +69,7 @@ public abstract class FindbugsTests {
     profile.setLanguage(Java.KEY);
     ServerFileSystem sfs = mock(ServerFileSystem.class);
     for (Rule rule : new FindbugsRuleRepository(sfs, new XMLRuleParser()).createRules()) {
-      rule.setRepositoryKey(FindbugsConstants.REPOSITORY_KEY);
+      rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
       profile.activateRule(rule, null);
     }
     return profile;

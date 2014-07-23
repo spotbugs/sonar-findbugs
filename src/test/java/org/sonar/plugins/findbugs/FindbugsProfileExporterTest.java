@@ -116,7 +116,7 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   private static ActiveRule anActiveRule(String configKey) {
     Rule rule = Rule.create();
     rule.setConfigKey(configKey);
-    rule.setRepositoryKey(FindbugsConstants.REPOSITORY_KEY);
+    rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
     ActiveRule activeRule = RulesProfile.create().activateRule(rule, RulePriority.CRITICAL);
     return activeRule;
   }

@@ -47,8 +47,8 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new StringReader(findbugsConf), ValidationMessages.create());
 
     assertThat(profile.getActiveRules()).hasSize(2);
-    assertThat(profile.getActiveRule(FindbugsConstants.REPOSITORY_KEY, "NP_CLOSING_NULL")).isNotNull();
-    assertThat(profile.getActiveRule(FindbugsConstants.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "NP_CLOSING_NULL")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 
   @Test
@@ -58,8 +58,8 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(18);
-    assertThat(profile.getActiveRule(FindbugsConstants.REPOSITORY_KEY, "EC_INCOMPATIBLE_ARRAY_COMPARE")).isNotNull();
-    assertThat(profile.getActiveRule(FindbugsConstants.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "EC_INCOMPATIBLE_ARRAY_COMPARE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY")).isNotNull();
   }
 
   @Test
@@ -69,7 +69,7 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(180);
-    assertThat(profile.getActiveRule(FindbugsConstants.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
   }
 
   @Test
@@ -79,7 +79,7 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(11);
-    assertThat(profile.getActiveRule(FindbugsConstants.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 
   @Test

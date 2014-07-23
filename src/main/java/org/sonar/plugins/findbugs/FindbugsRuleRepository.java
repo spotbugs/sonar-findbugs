@@ -30,12 +30,14 @@ import java.io.File;
 import java.util.List;
 
 public final class FindbugsRuleRepository extends RuleRepository {
+  public static final String REPOSITORY_KEY = "findbugs";
+
   private final ServerFileSystem fileSystem;
   private final XMLRuleParser xmlRuleParser;
 
   public FindbugsRuleRepository(ServerFileSystem fileSystem, XMLRuleParser xmlRuleParser) {
-    super(FindbugsConstants.REPOSITORY_KEY, Java.KEY);
-    setName(FindbugsConstants.REPOSITORY_NAME);
+    super(FindbugsRuleRepository.REPOSITORY_KEY, Java.KEY);
+    setName("FindBugs");
     this.fileSystem = fileSystem;
     this.xmlRuleParser = xmlRuleParser;
   }
@@ -44,7 +46,7 @@ public final class FindbugsRuleRepository extends RuleRepository {
   public List<Rule> createRules() {
     List<Rule> rules = Lists.newArrayList();
     rules.addAll(xmlRuleParser.parse(getClass().getResourceAsStream("/org/sonar/plugins/findbugs/rules.xml")));
-    for (File userExtensionXml : fileSystem.getExtensions(FindbugsConstants.REPOSITORY_KEY, "xml")) {
+    for (File userExtensionXml : fileSystem.getExtensions(FindbugsRuleRepository.REPOSITORY_KEY, "xml")) {
       rules.addAll(xmlRuleParser.parse(userExtensionXml));
     }
     return rules;

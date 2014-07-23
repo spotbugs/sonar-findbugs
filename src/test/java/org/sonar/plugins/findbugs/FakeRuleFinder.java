@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
+import org.hamcrest.CustomTypeSafeMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.platform.ServerFileSystem;
@@ -30,6 +31,7 @@ import org.sonar.api.rules.XMLRuleParser;
 import java.util.List;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,10 +47,16 @@ public class FakeRuleFinder{
     FindbugsRuleRepository repo = new FindbugsRuleRepository(sfs, new XMLRuleParser());
     final List<Rule> findbugsRules = repo.createRules();
     for (Rule rule : findbugsRules) {
-      rule.setRepositoryKey(FindbugsConstants.REPOSITORY_KEY);
+      rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
     }
 
-    when(ruleFinder.findAll(any(RuleQuery.class))).thenReturn(findbugsRules);
+    when(ruleFinder.findAll(argThat(new CustomTypeSafeMatcher<RuleQuery>("RuleQuery") {
+      @Override
+      public boolean matchesSafely(RuleQuery ruleQuery) {
+        return FindbugsRuleRepository.REPOSITORY_KEY.equals(ruleQuery.getRepositoryKey());
+      }
+    }))).thenReturn(findbugsRules);
+
     when(ruleFinder.findByKey(any(String.class), any(String.class))).thenAnswer(new Answer<Rule>() {
       @Override
       public Rule answer(InvocationOnMock invocation) throws Throwable {

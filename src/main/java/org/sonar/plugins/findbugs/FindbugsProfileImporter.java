@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.collect.Iterables;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class FindbugsProfileImporter extends ProfileImporter {
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsProfileImporter.class);
 
   public FindbugsProfileImporter(RuleFinder ruleFinder) {
-    super(FindbugsConstants.REPOSITORY_KEY, FindbugsConstants.PLUGIN_NAME);
+    super(FindbugsRuleRepository.REPOSITORY_KEY, FindbugsConstants.PLUGIN_NAME);
     setSupportedLanguages(Java.KEY);
     this.ruleFinder = ruleFinder;
   }
@@ -69,7 +70,10 @@ public class FindbugsProfileImporter extends ProfileImporter {
 
   private void activateRulesByPattern(RulesProfile profile, FindBugsFilter filter, ValidationMessages messages) {
     for (Map.Entry<String, RulePriority> patternLevel : filter.getPatternLevels(new FindbugsLevelUtils()).entrySet()) {
-      Rule rule = ruleFinder.findByKey(FindbugsConstants.REPOSITORY_KEY, patternLevel.getKey());
+      Rule rule = ruleFinder.findByKey(FindbugsRuleRepository.REPOSITORY_KEY, patternLevel.getKey());
+      if (rule == null) {
+        rule = ruleFinder.findByKey(FbContribRuleRepository.REPOSITORY_KEY, patternLevel.getKey());
+      }
       if (rule != null) {
         profile.activateRule(rule, patternLevel.getValue());
       } else {
@@ -81,7 +85,7 @@ public class FindbugsProfileImporter extends ProfileImporter {
   private void activateRulesByCode(RulesProfile profile, FindBugsFilter filter, ValidationMessages messages) {
     for (Map.Entry<String, RulePriority> codeLevel : filter.getCodeLevels(new FindbugsLevelUtils()).entrySet()) {
       boolean someRulesHaveBeenActivated = false;
-      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsConstants.REPOSITORY_KEY))) {
+      for (Rule rule : rules()) {
         if (rule.getKey().equals(codeLevel.getKey()) || StringUtils.startsWith(rule.getKey(), codeLevel.getKey() + "_")) {
           someRulesHaveBeenActivated = true;
           profile.activateRule(rule, codeLevel.getValue());
@@ -97,7 +101,7 @@ public class FindbugsProfileImporter extends ProfileImporter {
     for (Map.Entry<String, RulePriority> categoryLevel : filter.getCategoryLevels(new FindbugsLevelUtils()).entrySet()) {
       boolean someRulesHaveBeenActivated = false;
       String sonarCateg = FindbugsCategory.findbugsToSonar(categoryLevel.getKey());
-      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsConstants.REPOSITORY_KEY))) {
+      for (Rule rule : rules()) {
         if (sonarCateg != null && rule.getName().startsWith(sonarCateg)) {
           someRulesHaveBeenActivated = true;
           profile.activateRule(rule, categoryLevel.getValue());
@@ -107,6 +111,13 @@ public class FindbugsProfileImporter extends ProfileImporter {
         messages.addWarningText("Unable to find any rules associated to category  : '" + categoryLevel.getKey() + "'");
       }
     }
+  }
+
+  private Iterable<Rule> rules() {
+    return Iterables.concat(
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY)),
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FbContribRuleRepository.REPOSITORY_KEY))
+    );
   }
 
 }

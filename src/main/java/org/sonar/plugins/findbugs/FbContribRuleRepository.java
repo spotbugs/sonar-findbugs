@@ -27,11 +27,14 @@ import org.sonar.plugins.java.Java;
 import java.util.List;
 
 public final class FbContribRuleRepository extends RuleRepository {
+
+  public static final String REPOSITORY_KEY = "fb-contrib";
+
   private XMLRuleParser xmlRuleParser;
 
   public FbContribRuleRepository(XMLRuleParser xmlRuleParser) {
-    super(FindbugsConstants.REPOSITORY_KEY, Java.KEY);
-    setName(FindbugsConstants.REPOSITORY_NAME);
+    super(REPOSITORY_KEY, Java.KEY);
+    setName("fb-contib");
     this.xmlRuleParser = xmlRuleParser;
   }
 

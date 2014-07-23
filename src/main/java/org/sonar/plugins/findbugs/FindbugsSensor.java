@@ -55,8 +55,15 @@ public class FindbugsSensor implements Sensor {
 
   public boolean shouldExecuteOnProject(Project project) {
     return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
-        && !profile.getActiveRulesByRepository(FindbugsConstants.REPOSITORY_KEY).isEmpty()
-        ;
+        && (hasActiveFindbugsbRules() || hasActiveFbContribRules());
+  }
+
+  private boolean hasActiveFindbugsbRules() {
+    return !profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY).isEmpty();
+  }
+
+  private boolean hasActiveFbContribRules() {
+    return !profile.getActiveRulesByRepository(FbContribRuleRepository.REPOSITORY_KEY).isEmpty();
   }
 
   public void analyse(Project project, SensorContext context) {
@@ -69,11 +76,14 @@ public class FindbugsSensor implements Sensor {
     Collection<ReportedBug> collection = executor.execute();
 
     for (ReportedBug bugInstance : collection) {
-      Rule rule = ruleFinder.findByKey(FindbugsConstants.REPOSITORY_KEY, bugInstance.getType());
+      Rule rule = ruleFinder.findByKey(FindbugsRuleRepository.REPOSITORY_KEY, bugInstance.getType());
       if (rule == null) {
-        // ignore violations from report, if rule not activated in Sonar
-        LOG.warn("Findbugs rule '{}' not active in Sonar.", bugInstance.getType());
-        continue;
+        rule = ruleFinder.findByKey(FbContribRuleRepository.REPOSITORY_KEY, bugInstance.getType());
+        if (rule == null) {
+          // ignore violations from report, if rule not activated in Sonar
+          LOG.warn("Findbugs rule '{}' not active in Sonar.", bugInstance.getType());
+          continue;
+        }
       }
 
       String longMessage = bugInstance.getMessage();
