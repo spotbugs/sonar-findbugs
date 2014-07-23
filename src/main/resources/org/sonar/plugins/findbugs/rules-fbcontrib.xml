@@ -2,7 +2,7 @@
 <rules>
 
   <rule key="ISB_INEFFICIENT_STRING_BUFFERING" priority="INFO">
-    <name><![CDATA[Performance - Method passes simple concatenating string in StringBuffer or StringBuilder append [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method passes simple concatenating string in StringBuffer or StringBuilder append]]></name>
     <configKey><![CDATA[ISB_INEFFICIENT_STRING_BUFFERING]]></configKey>
     <description>
 <![CDATA[
@@ -14,7 +14,7 @@ of using the StringBuffer or StringBuilder class.</p>
   </rule>
 
   <rule key="ISB_EMPTY_STRING_APPENDING" priority="INFO">
-    <name><![CDATA[Performance - Method concatenates an empty string to effect type conversion [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method concatenates an empty string to effect type conversion]]></name>
     <configKey><![CDATA[ISB_EMPTY_STRING_APPENDING]]></configKey>
     <description>
 <![CDATA[
@@ -27,7 +27,7 @@ to accomplish this.</p>
   </rule>
 
   <rule key="ISB_TOSTRING_APPENDING" priority="INFO">
-     <name><![CDATA[Correctness - Method concatenates the result of a toString() call [fb-contrib]]]></name>
+     <name><![CDATA[Correctness - Method concatenates the result of a toString() call]]></name>
      <configKey><![CDATA[ISB_TOSTRING_APPENDING]]></configKey>
      <description>
 <![CDATA[
@@ -39,7 +39,7 @@ does not suffer the potential for NullPointerExceptions, and is easier to read.<
   </rule>
 
   <rule key="SCI_SYNCHRONIZED_COLLECTION_ITERATORS" priority="INFO">
-    <name><![CDATA[Correctness - Method creates iterators on synchronized collections [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method creates iterators on synchronized collections]]></name>
     <configKey><![CDATA[SCI_SYNCHRONIZED_COLLECTION_ITERATORS]]></configKey>
     <description>
 <![CDATA[
@@ -51,7 +51,7 @@ concept. When using iterators, you should do the synchronization manually.</p>
   </rule>
 
   <!--<rule key="CC_CYCLOMATIC_COMPLEXITY" priority="INFO">-->
-    <!--<name><![CDATA[Style - Method is excessively complex [fb-contrib]]]></name>-->
+    <!--<name><![CDATA[Style - Method is excessively complex]]></name>-->
     <!--<configKey><![CDATA[CC_CYCLOMATIC_COMPLEXITY]]></configKey>-->
     <!--<description>-->
 <!--<![CDATA[-->
@@ -63,7 +63,7 @@ concept. When using iterators, you should do the synchronization manually.</p>
   <!--</rule>-->
 
   <rule key="OCP_OVERLY_CONCRETE_PARAMETER" priority="INFO">
-    <name><![CDATA[Style - Method needlessly defines parameter with concrete classes [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method needlessly defines parameter with concrete classes]]></name>
     <configKey><![CDATA[OCP_OVERLY_CONCRETE_PARAMETER]]></configKey>
     <description>
 <![CDATA[
@@ -75,7 +75,7 @@ make low impact changes easier to accomplish in the future.</p>
   </rule>
 
   <rule key="LII_LIST_INDEXED_ITERATING" priority="INFO">
-    <name><![CDATA[Style - Method uses integer based for loops to iterate over a List [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses integer based for loops to iterate over a List]]></name>
     <configKey><![CDATA[LII_LIST_INDEXED_ITERATING]]></configKey>
     <description>
 <![CDATA[
@@ -88,7 +88,7 @@ and they also allow for exchanging of other collection types without issue.</p>
   </rule>
 
   <rule key="UCC_UNRELATED_COLLECTION_CONTENTS" priority="INFO">
-    <name><![CDATA[Style - Method adds unrelated types to collection or array [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method adds unrelated types to collection or array]]></name>
     <configKey><![CDATA[UCC_UNRELATED_COLLECTION_CONTENTS]]></configKey>
     <description>
 <![CDATA[
@@ -100,7 +100,7 @@ an instance of this class to the collection or array, if possible.</p>
   </rule>
 
   <rule key="DRE_DECLARED_RUNTIME_EXCEPTION" priority="INFO">
-    <name><![CDATA[Style - Method declares RuntimeException in throws clause [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method declares RuntimeException in throws clause]]></name>
     <configKey><![CDATA[DRE_DECLARED_RUNTIME_EXCEPTION]]></configKey>
     <description>
 <![CDATA[
@@ -113,7 +113,7 @@ is probably a better idea to prevent the occurance in code.</p>
   </rule>
 
   <rule key="CE_CLASS_ENVY" priority="INFO">
-    <name><![CDATA[Style - Method excessively uses methods of another class [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method excessively uses methods of another class]]></name>
     <configKey><![CDATA[CE_CLASS_ENVY]]></configKey>
     <description>
 <![CDATA[
@@ -127,7 +127,7 @@ method to be contained in that class, and to accept all the parameters needed in
   </rule>
 
   <rule key="LSC_LITERAL_STRING_COMPARISON" priority="INFO">
-    <name><![CDATA[Style - Method makes literal string comparisons passing the literal as an argument [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method makes literal string comparisons passing the literal as an argument]]></name>
     <configKey><![CDATA[LSC_LITERAL_STRING_COMPARISON]]></configKey>
     <description>
 <![CDATA[
@@ -139,7 +139,7 @@ the string literal, and the variable was passed as an argument, this exception c
   </rule>
 
   <rule key="PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS" priority="INFO">
-    <name><![CDATA[Correctness - Constructor makes call to non-final method [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Constructor makes call to non-final method]]></name>
     <configKey><![CDATA[PCOA_PARTIALLY_CONSTRUCTED_OBJECT_ACCESS]]></configKey>
     <description>
 <![CDATA[
@@ -151,7 +151,7 @@ You should mark all methods called from the constructor as final to avoid this p
   </rule>
 
   <rule key="DLC_DUBIOUS_LIST_COLLECTION" priority="INFO">
-    <name><![CDATA[Performance - Class defines List based fields but uses them like Sets [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Class defines List based fields but uses them like Sets]]></name>
     <configKey><![CDATA[DLC_DUBIOUS_LIST_COLLECTION]]></configKey>
     <description>
 <![CDATA[
@@ -164,7 +164,7 @@ iteration is important to maintain insert order, perhaps consider a LinkedHashSe
   </rule>
 
   <rule key="PL_PARALLEL_LISTS" priority="INFO">
-    <name><![CDATA[Style - Class defines two or more one for one associated lists or arrays [fb-contrib]]]></name>
+    <name><![CDATA[Style - Class defines two or more one for one associated lists or arrays]]></name>
     <configKey><![CDATA[PL_PARALLEL_LISTS]]></configKey>
     <description>
 <![CDATA[
@@ -177,7 +177,7 @@ a Map to associate one value with the other.</p>
   </rule>
 
   <rule key="FP_FINAL_PARAMETERS" priority="INFO">
-    <name><![CDATA[Style - Method does not define a parameter as final, but could [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method does not define a parameter as final, but could]]></name>
     <configKey><![CDATA[FP_FINAL_PARAMETERS]]></configKey>
     <description>
 <![CDATA[
@@ -189,7 +189,7 @@ as final.</p>
   </rule>
 
   <rule key="ACEM_ABSTRACT_CLASS_EMPTY_METHODS" priority="INFO">
-    <name><![CDATA[Style - Empty method could be declared abstract [fb-contrib]]]></name>
+    <name><![CDATA[Style - Empty method could be declared abstract]]></name>
     <configKey><![CDATA[ACEM_ABSTRACT_CLASS_EMPTY_METHODS]]></configKey>
     <description>
 <![CDATA[
@@ -201,7 +201,7 @@ subclass behavior is enforced.</p>
   </rule>
 
   <rule key="MAC_MANUAL_ARRAY_COPY" priority="INFO">
-    <name><![CDATA[Performance - Method copies arrays manually [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method copies arrays manually]]></name>
     <configKey><![CDATA[MAC_MANUAL_ARRAY_COPY]]></configKey>
     <description>
 <![CDATA[
@@ -212,7 +212,7 @@ It is much better performing to use System.arraycopy as this method is native.</
   </rule>
 
   <rule key="FPL_FLOATING_POINT_LOOPS" priority="INFO">
-    <name><![CDATA[Correctness - Method uses floating point indexed loops [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses floating point indexed loops]]></name>
     <configKey><![CDATA[FPL_FLOATING_POINT_LOOPS]]></configKey>
     <description>
 <![CDATA[
@@ -225,7 +225,7 @@ of the floating point number at the top of the loop body.</p>
   </rule>
 
   <rule key="NCMU_NON_COLLECTION_METHOD_USE" priority="INFO">
-    <name><![CDATA[Style - Method uses old non collections interface methods [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses old non collections interface methods]]></name>
     <configKey><![CDATA[NCMU_NON_COLLECTION_METHOD_USE]]></configKey>
     <description>
 <![CDATA[
@@ -237,7 +237,7 @@ you can define this object by the Collections interface and allow better decoupl
   </rule>
 
   <rule key="CAO_CONFUSING_AUTOBOXED_OVERLOADING" priority="INFO">
-    <name><![CDATA[Correctness - Class defines methods which confuse Character with int parameters [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class defines methods which confuse Character with int parameters]]></name>
     <configKey><![CDATA[CAO_CONFUSING_AUTOBOXED_OVERLOADING]]></configKey>
     <description>
 <![CDATA[
@@ -249,7 +249,7 @@ assumed that a parameter of 'a' would map to the Character version, but does not
   </rule>
 
   <rule key="AFBR_ABNORMAL_FINALLY_BLOCK_RETURN" priority="INFO">
-    <name><![CDATA[Correctness - Method has abnormal exit from finally block [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method has abnormal exit from finally block]]></name>
     <configKey><![CDATA[AFBR_ABNORMAL_FINALLY_BLOCK_RETURN]]></configKey>
     <description>
 <![CDATA[
@@ -261,7 +261,7 @@ mask real program logic in the try block, and short-circuit normal method termin
   </rule>
 
   <rule key="SMII_STATIC_METHOD_INSTANCE_INVOCATION" priority="INFO">
-    <name><![CDATA[Style - Method calls static method on instance reference [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method calls static method on instance reference]]></name>
     <configKey><![CDATA[SMII_STATIC_METHOD_INSTANCE_INVOCATION]]></configKey>
     <description>
 <![CDATA[
@@ -275,7 +275,7 @@ this code was written, and should be revisited.
   </rule>
 
   <rule key="STS_SPURIOUS_THREAD_STATES" priority="INFO">
-    <name><![CDATA[MT Correctness - Method calls wait, notify or notifyAll on a Thread instance [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method calls wait, notify or notifyAll on a Thread instance]]></name>
     <configKey><![CDATA[STS_SPURIOUS_THREAD_STATES]]></configKey>
     <description>
 <![CDATA[
@@ -289,7 +289,7 @@ notifications.
   </rule>
 
   <rule key="NAB_NEEDLESS_AUTOBOXING_CTOR" priority="INFO">
-    <name><![CDATA[Performance - Method passes primitive wrapper to same primitive wrapper constructor [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method passes primitive wrapper to same primitive wrapper constructor]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_AUTOBOXING_CTOR]]></configKey>
     <description>
 <![CDATA[
@@ -302,7 +302,7 @@ than constructing a new one. This code works because of an abuse of autoboxing.
   </rule>
 
   <rule key="NAB_NEEDLESS_BOXING_STRING_CTOR" priority="INFO">
-    <name><![CDATA[Performance - Method passes parsed string to primitive wrapper constructor [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method passes parsed string to primitive wrapper constructor]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_BOXING_STRING_CTOR]]></configKey>
     <description>
 <![CDATA[
@@ -314,7 +314,7 @@ the same class's constructor. It is simpler to just pass the string to the Boxed
   </rule>
 
   <rule key="NAB_NEEDLESS_AUTOBOXING_VALUEOF" priority="INFO">
-    <name><![CDATA[Performance - Method passes primitive wrapper to Wrapper class valueOf method [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method passes primitive wrapper to Wrapper class valueOf method]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_AUTOBOXING_VALUEOF]]></configKey>
     <description>
 <![CDATA[
@@ -327,7 +327,7 @@ than calling valueOf to create a new one. This code works because of an abuse of
   </rule>
 
   <rule key="NAB_NEEDLESS_BOXING_PARSE" priority="INFO">
-    <name><![CDATA[Performance - Method converts String to primitive using excessive boxing [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method converts String to primitive using excessive boxing]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_BOXING_PARSE]]></configKey>
     <description>
 <![CDATA[
@@ -340,7 +340,7 @@ method. </p>
   </rule>
 
   <rule key="NAB_NEEDLESS_BOXING_VALUEOF" priority="INFO">
-    <name><![CDATA[Performance - Method converts String to boxed primitive using excessive boxing [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method converts String to boxed primitive using excessive boxing]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_BOXING_VALUEOF]]></configKey>
     <description>
 <![CDATA[
@@ -353,7 +353,7 @@ method. </p>
   </rule>
 
   <rule key="NAB_NEEDLESS_BOX_TO_UNBOX" priority="INFO">
-    <name><![CDATA[Performance - Method creates Boxed primitive from primitive only to get primitive value [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method creates Boxed primitive from primitive only to get primitive value]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_BOX_TO_UNBOX]]></configKey>
     <description>
 <![CDATA[
@@ -372,7 +372,7 @@ convert it back to a primitive. Just use the primitive value instead.</p>
   </rule>
 
   <rule key="NAB_NEEDLESS_BOX_TO_CAST" priority="INFO">
-    <name><![CDATA[Performance - Method creates Boxed primitive from primitive only to cast to another primitive type [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method creates Boxed primitive from primitive only to cast to another primitive type]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_BOX_TO_CAST]]></configKey>
     <description>
 <![CDATA[
@@ -391,7 +391,7 @@ cast the value to another primitive typee. It is simpler to just use casting</p>
   </rule>
 
   <rule key="NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION" priority="INFO">
-    <name><![CDATA[Performance - Method needlessly boxes a boolean constant [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method needlessly boxes a boolean constant]]></name>
     <configKey><![CDATA[NAB_NEEDLESS_BOOLEAN_CONSTANT_CONVERSION]]></configKey>
     <description>
 <![CDATA[
@@ -411,7 +411,7 @@ constant to a Boxed boolean variable. Use the correct constant for the variable 
   </rule>
 
   <rule key="USBR_UNNECESSARY_STORE_BEFORE_RETURN" priority="INFO">
-    <name><![CDATA[Style - Method stores return result in local before immediately returning it [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method stores return result in local before immediately returning it]]></name>
     <configKey><![CDATA[USBR_UNNECESSARY_STORE_BEFORE_RETURN]]></configKey>
     <description>
 <![CDATA[
@@ -424,7 +424,7 @@ assigned to the local variable, directly.
   </rule>
 
   <rule key="COM_COPIED_OVERRIDDEN_METHOD" priority="INFO">
-    <name><![CDATA[Style - Method is implemented with an exact copy of it's superclass's method [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method is implemented with an exact copy of it's superclass's method]]></name>
     <configKey><![CDATA[COM_COPIED_OVERRIDDEN_METHOD]]></configKey>
     <description>
 <![CDATA[
@@ -436,7 +436,7 @@ implementation, which usually means that this method can just be removed.
   </rule>
 
   <rule key="ABC_ARRAY_BASED_COLLECTIONS" priority="INFO">
-    <name><![CDATA[Correctness - Method uses array as basis of collection [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses array as basis of collection]]></name>
     <configKey><![CDATA[ABC_ARRAY_BASED_COLLECTIONS]]></configKey>
     <description>
 <![CDATA[
@@ -451,7 +451,7 @@ constructor.
   </rule>
 
   <rule key="ODN_ORPHANED_DOM_NODE" priority="INFO">
-    <name><![CDATA[Correctness - Method creates DOM node but doesn't attach it to a document [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method creates DOM node but doesn't attach it to a document]]></name>
     <configKey><![CDATA[ODN_ORPHANED_DOM_NODE]]></configKey>
     <description>
 <![CDATA[
@@ -462,7 +462,7 @@ constructor.
   </rule>
 
   <rule key="AOM_ABSTRACT_OVERRIDDEN_METHOD" priority="INFO">
-    <name><![CDATA[Correctness - Abstract method overrides a concrete implementation [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Abstract method overrides a concrete implementation]]></name>
     <configKey><![CDATA[AOM_ABSTRACT_OVERRIDDEN_METHOD]]></configKey>
     <description>
 <![CDATA[
@@ -474,7 +474,7 @@ suspect that the super class method's implementation would be cast away.
   </rule>
 
   <rule key="CBX_CUSTOM_BUILT_XML" priority="INFO">
-    <name><![CDATA[Style - Method builds xml strings through adhoc concatenation [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method builds xml strings through adhoc concatenation]]></name>
     <configKey><![CDATA[CBX_CUSTOM_BUILT_XML]]></configKey>
     <description>
 <![CDATA[
@@ -488,7 +488,7 @@ read in and transformed into the final product, thru modification by Transformer
   </rule>
 
   <rule key="BSB_BLOATED_SYNCHRONIZED_BLOCK" priority="INFO">
-    <name><![CDATA[Performance - Method overly synchronizes a block of code [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method overly synchronizes a block of code]]></name>
     <configKey><![CDATA[BSB_BLOATED_SYNCHRONIZED_BLOCK]]></configKey>
     <description>
 <![CDATA[
@@ -502,7 +502,7 @@ to this object.</p>
   </rule>
 
   <rule key="CLI_CONSTANT_LIST_INDEX" priority="INFO">
-    <name><![CDATA[Correctness - Method accesses list or array with constant index [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method accesses list or array with constant index]]></name>
     <configKey><![CDATA[CLI_CONSTANT_LIST_INDEX]]></configKey>
     <description>
 <![CDATA[
@@ -515,7 +515,7 @@ a first-class object with meaningful accessors would make the code less brittle.
   </rule>
 
   <rule key="SCR_SLOPPY_CLASS_REFLECTION" priority="INFO">
-    <name><![CDATA[Style - Method accesses statically bound class with Class.forName [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method accesses statically bound class with Class.forName]]></name>
     <configKey><![CDATA[SCR_SLOPPY_CLASS_REFLECTION]]></configKey>
     <description>
 <![CDATA[
@@ -528,7 +528,7 @@ the class in question is already 'linked' to this class.</p>
   </rule>
 
   <rule key="AWCBR_ARRAY_WRAPPED_CALL_BY_REFERENCE" priority="INFO">
-    <name><![CDATA[Style - Method uses 1 element array to simulate call by reference [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses 1 element array to simulate call by reference]]></name>
     <configKey><![CDATA[AWCBR_ARRAY_WRAPPED_CALL_BY_REFERENCE]]></configKey>
     <description>
 <![CDATA[
@@ -540,7 +540,7 @@ the relevant information retrieved from the called method.</p>
   </rule>
 
   <rule key="SG_SLUGGISH_GUI" priority="INFO">
-    <name><![CDATA[Performance - Method performs time consuming operation in gui thread [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method performs time consuming operation in gui thread]]></name>
     <configKey><![CDATA[SG_SLUGGISH_GUI]]></configKey>
     <description>
 <![CDATA[
@@ -554,7 +554,7 @@ has a better experience.</p>
   </rule>
 
   <rule key="NIR_NEEDLESS_INSTANCE_RETRIEVAL" priority="INFO">
-    <name><![CDATA[Performance - Method retrieves instance to load static member [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method retrieves instance to load static member]]></name>
     <configKey><![CDATA[NIR_NEEDLESS_INSTANCE_RETRIEVAL]]></configKey>
     <description>
 <![CDATA[
@@ -566,7 +566,7 @@ better performant to just load the static field from the class itself.</p>
   </rule>
 
   <rule key="DDC_DOUBLE_DATE_COMPARISON" priority="INFO">
-    <name><![CDATA[Performance - Method uses two date comparisons when one would do [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method uses two date comparisons when one would do]]></name>
     <configKey><![CDATA[DDC_DOUBLE_DATE_COMPARISON]]></configKey>
     <description>
 <![CDATA[
@@ -600,7 +600,7 @@ could become
   </rule>
 
   <rule key="SWCO_SUSPICIOUS_WAIT_ON_CONCURRENT_OBJECT" priority="INFO">
-    <name><![CDATA[Correctness - Method calls wait when await was probably intended [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls wait when await was probably intended]]></name>
     <configKey><![CDATA[SWCO_SUSPICIOUS_WAIT_ON_CONCURRENT_OBJECT]]></configKey>
     <description>
 <![CDATA[
@@ -612,7 +612,7 @@ was intended.</p>
   </rule>
 
   <rule key="JVR_JDBC_VENDOR_RELIANCE" priority="INFO">
-    <name><![CDATA[Correctness - Method uses jdbc vendor specific classes and methods [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses jdbc vendor specific classes and methods]]></name>
     <configKey><![CDATA[JVR_JDBC_VENDOR_RELIANCE]]></configKey>
     <description>
 <![CDATA[
@@ -623,7 +623,7 @@ This makes the code specific to this vendor, and unable to run on other database
   </rule>
 
   <rule key="PMB_POSSIBLE_MEMORY_BLOAT" priority="INFO">
-    <name><![CDATA[Correctness - Class defines static field that appears to allow memory bloat [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class defines static field that appears to allow memory bloat]]></name>
     <configKey><![CDATA[PMB_POSSIBLE_MEMORY_BLOAT]]></configKey>
     <description>
 <![CDATA[
@@ -635,7 +635,7 @@ memory bloat.</p>
   </rule>
 
   <rule key="LSYC_LOCAL_SYNCHRONIZED_COLLECTION" priority="INFO">
-    <name><![CDATA[Correctness - Method creates local variable-based synchronized collection [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method creates local variable-based synchronized collection]]></name>
     <configKey><![CDATA[LSYC_LOCAL_SYNCHRONIZED_COLLECTION]]></configKey>
     <description>
 <![CDATA[
@@ -655,7 +655,7 @@ questionable that this collection needs to be synchronized.</p>
   </rule>
 
   <rule key="FCBL_FIELD_COULD_BE_LOCAL" priority="INFO">
-    <name><![CDATA[Correctness - Class defines fields that are used only as locals [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class defines fields that are used only as locals]]></name>
     <configKey><![CDATA[FCBL_FIELD_COULD_BE_LOCAL]]></configKey>
     <description>
 <![CDATA[
@@ -668,7 +668,7 @@ or more local variables.</p>
   </rule>
 
   <rule key="NOS_NON_OWNED_SYNCHRONIZATION" priority="INFO">
-    <name><![CDATA[Style - Class uses non owned variables to synchronize on [fb-contrib]]]></name>
+    <name><![CDATA[Style - Class uses non owned variables to synchronize on]]></name>
     <configKey><![CDATA[NOS_NON_OWNED_SYNCHRONIZATION]]></configKey>
     <description>
 <![CDATA[
@@ -683,7 +683,7 @@ class. Synchronizing on 'this' is also not a good idea.</p>
   </rule>
 
   <rule key="NRTL_NON_RECYCLEABLE_TAG_LIB" priority="INFO">
-    <name><![CDATA[Correctness - Tag library is not recycleable [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Tag library is not recycleable]]></name>
     <configKey><![CDATA[NRTL_NON_RECYCLEABLE_TAG_LIB]]></configKey>
     <description>
 <![CDATA[
@@ -697,7 +697,7 @@ container will not initialize the attribute correctly on reuse.</p>
   </rule>
 
   <rule key="S508C_NULL_LAYOUT" priority="INFO">
-    <name><![CDATA[Correctness - Gui uses absolute layout [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Gui uses absolute layout]]></name>
     <configKey><![CDATA[S508C_NULL_LAYOUT]]></configKey>
     <description>
 <![CDATA[
@@ -710,7 +710,7 @@ font sizes, etc, difficult as items will not reposition
   </rule>
 
   <rule key="S508C_NO_SETLABELFOR" priority="INFO">
-    <name><![CDATA[Correctness - JLabel doesn't specify what it's labeling [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - JLabel doesn't specify what it's labeling]]></name>
     <configKey><![CDATA[S508C_NO_SETLABELFOR]]></configKey>
     <description>
 <![CDATA[
@@ -723,7 +723,7 @@ the JLabel.setLabelFor method to accomplish this.
   </rule>
 
   <rule key="S508C_NO_SETSIZE" priority="INFO">
-    <name><![CDATA[Correctness - Window sets size manually, and doesn't use pack [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Window sets size manually, and doesn't use pack]]></name>
     <configKey><![CDATA[S508C_NO_SETSIZE]]></configKey>
     <description>
 <![CDATA[
@@ -735,7 +735,7 @@ to handle font size changes to use the pack method.
   </rule>
 
   <rule key="S508C_NON_ACCESSIBLE_JCOMPONENT" priority="INFO">
-    <name><![CDATA[Correctness - Class extends JComponent but does not implement Accessible interface [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class extends JComponent but does not implement Accessible interface]]></name>
     <configKey><![CDATA[S508C_NON_ACCESSIBLE_JCOMPONENT]]></configKey>
     <description>
 <![CDATA[
@@ -747,7 +747,7 @@ difficulties</p>
   </rule>
 
   <rule key="S508C_SET_COMP_COLOR" priority="INFO">
-    <name><![CDATA[Correctness - Method explicitly sets the color of a Component [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method explicitly sets the color of a Component]]></name>
     <configKey><![CDATA[S508C_SET_COMP_COLOR]]></configKey>
     <description>
 <![CDATA[
@@ -759,7 +759,7 @@ Colors should be allowed to be set from the operating system.</p>
   </rule>
 
   <rule key="S508C_NON_TRANSLATABLE_STRING" priority="INFO">
-    <name><![CDATA[Correctness - Method passes constant string to title/label of component [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes constant string to title/label of component]]></name>
     <configKey><![CDATA[S508C_NON_TRANSLATABLE_STRING]]></configKey>
     <description>
 <![CDATA[
@@ -771,7 +771,7 @@ through the use of a resource bundle.</p>
   </rule>
 
   <rule key="S508C_APPENDED_STRING" priority="INFO">
-    <name><![CDATA[Correctness - Method passes appended string to title/label of component [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes appended string to title/label of component]]></name>
     <configKey><![CDATA[S508C_APPENDED_STRING]]></configKey>
     <description>
 <![CDATA[
@@ -783,7 +783,7 @@ differently, this will make translations difficult.</p>
   </rule>
 
   <rule key="UEC_USE_ENUM_COLLECTIONS" priority="INFO">
-    <name><![CDATA[Performance - Class uses an ordinary set or map with an enum class as the key [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Class uses an ordinary set or map with an enum class as the key]]></name>
     <configKey><![CDATA[UEC_USE_ENUM_COLLECTIONS]]></configKey>
     <description>
 <![CDATA[
@@ -794,7 +794,7 @@ It is better performant to use the jdk 1.5 EnumSet or EnumMap classes.</p>
   </rule>
 
   <rule key="SIL_SQL_IN_LOOP" priority="INFO">
-    <name><![CDATA[Performance - Method executes sql queries inside of loops [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method executes sql queries inside of loops]]></name>
     <configKey><![CDATA[SIL_SQL_IN_LOOP]]></configKey>
     <description>
 <![CDATA[
@@ -808,7 +808,7 @@ set, and fetch all the data at once.</p>
   </rule>
 
   <rule key="NMCS_NEEDLESS_MEMBER_COLLECTION_SYNCHRONIZATION" priority="INFO">
-    <name><![CDATA[Performance - Class defines unneeded synchronization on member collection [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Class defines unneeded synchronization on member collection]]></name>
     <configKey><![CDATA[NMCS_NEEDLESS_MEMBER_COLLECTION_SYNCHRONIZATION]]></configKey>
     <description>
 <![CDATA[
@@ -821,7 +821,7 @@ unnecessary and a potential performance bottleneck.</p>
   </rule>
 
   <rule key="ITC_INHERITANCE_TYPE_CHECKING" priority="INFO">
-    <name><![CDATA[Style - Method uses instanceof on multiple types to arbitrate logic [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses instanceof on multiple types to arbitrate logic]]></name>
     <configKey><![CDATA[ITC_INHERITANCE_TYPE_CHECKING]]></configKey>
     <description>
 <![CDATA[
@@ -834,7 +834,7 @@ in these classes.</p>
   </rule>
 
   <rule key="SACM_STATIC_ARRAY_CREATED_IN_METHOD" priority="INFO">
-    <name><![CDATA[Performance - Method creates array using constants [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method creates array using constants]]></name>
     <configKey><![CDATA[SACM_STATIC_ARRAY_CREATED_IN_METHOD]]></configKey>
     <description>
 <![CDATA[
@@ -846,7 +846,7 @@ static field of the class instead.</p>
   </rule>
 
   <rule key="PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS" priority="INFO">
-    <name><![CDATA[Performance - Method appears to call the same method on the same object redundantly [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method appears to call the same method on the same object redundantly]]></name>
     <configKey><![CDATA[PRMC_POSSIBLY_REDUNDANT_METHOD_CALLS]]></configKey>
     <description>
 <![CDATA[
@@ -860,7 +860,7 @@ result into a temporary, and using the temporary the second time.
   </rule>
 
   <rule key="UTA_USE_TO_ARRAY" priority="INFO">
-    <name><![CDATA[Style - Method manually creates array from collection [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method manually creates array from collection]]></name>
     <configKey><![CDATA[UTA_USE_TO_ARRAY]]></configKey>
     <description>
 <![CDATA[
@@ -873,7 +873,7 @@ mycollection.toArray(new T[mycollection.size()]);
   </rule>
 
   <rule key="LEST_LOST_EXCEPTION_STACK_TRACE" priority="INFO">
-    <name><![CDATA[Correctness - Method throws alternative exception from catch block without history [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method throws alternative exception from catch block without history]]></name>
     <configKey><![CDATA[LEST_LOST_EXCEPTION_STACK_TRACE]]></configKey>
     <description>
 <![CDATA[
@@ -886,7 +886,7 @@ original exception so that this detail can be passed along to the user.</p>
   </rule>
 
   <rule key="UCPM_USE_CHARACTER_PARAMETERIZED_METHOD" priority="INFO">
-    <name><![CDATA[Performance - Method passes constant String of length 1 to character overridden method [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method passes constant String of length 1 to character overridden method]]></name>
     <configKey><![CDATA[UCPM_USE_CHARACTER_PARAMETERIZED_METHOD]]></configKey>
     <description>
 <![CDATA[
@@ -898,7 +898,7 @@ character, rather than pass a string.</p>
   </rule>
 
   <rule key="TR_TAIL_RECURSION" priority="INFO">
-    <name><![CDATA[Performance - Method employs tail recursion [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method employs tail recursion]]></name>
     <configKey><![CDATA[TR_TAIL_RECURSION]]></configKey>
     <description>
 <![CDATA[
@@ -910,7 +910,7 @@ will make it more performant, and reduce the stack size requirements.</p>
   </rule>
 
   <rule key="URV_UNRELATED_RETURN_VALUES" priority="INFO">
-    <name><![CDATA[Style - Method returns different types of unrelated Objects [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method returns different types of unrelated Objects]]></name>
     <configKey><![CDATA[URV_UNRELATED_RETURN_VALUES]]></configKey>
     <description>
 <![CDATA[
@@ -921,7 +921,7 @@ This will be very confusing to the code that must call it.</p>
   </rule>
 
   <rule key="URV_CHANGE_RETURN_TYPE" priority="INFO">
-    <name><![CDATA[Style - Method returns more specific type of object than declared [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method returns more specific type of object than declared]]></name>
     <configKey><![CDATA[URV_CHANGE_RETURN_TYPE]]></configKey>
     <description>
 <![CDATA[
@@ -934,7 +934,7 @@ change the return type of this method.</p>
   </rule>
 
   <rule key="URV_INHERITED_METHOD_WITH_RELATED_TYPES" priority="INFO">
-    <name><![CDATA[Style - Inherited method returns more specific type of object than declared [fb-contrib]]]></name>
+    <name><![CDATA[Style - Inherited method returns more specific type of object than declared]]></name>
     <configKey><![CDATA[URV_INHERITED_METHOD_WITH_RELATED_TYPES]]></configKey>
     <description>
 <![CDATA[
@@ -947,7 +947,7 @@ in handling of the return type.</p>
   </rule>
 
   <rule key="PIS_POSSIBLE_INCOMPLETE_SERIALIZATION" priority="INFO">
-    <name><![CDATA[Correctness - Class doesn't serialize superclass fields [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class doesn't serialize superclass fields]]></name>
     <configKey><![CDATA[PIS_POSSIBLE_INCOMPLETE_SERIALIZATION]]></configKey>
     <description>
 <![CDATA[
@@ -964,7 +964,7 @@ Serializable or Externalizable methods in the child class.</p>
   </rule>
 
   <rule key="SC_SUSPICIOUS_COMPARATOR_RETURN_VALUES" priority="INFO">
-    <name><![CDATA[Correctness - Comparator method doesn't seem to return all ordering values [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Comparator method doesn't seem to return all ordering values]]></name>
     <configKey><![CDATA[SC_SUSPICIOUS_COMPARATOR_RETURN_VALUES]]></configKey>
     <description>
 <![CDATA[
@@ -976,7 +976,7 @@ are transitive, this seems incorrect.</p>
   </rule>
 
   <rule key="SPP_NEGATIVE_BITSET_ITEM" priority="INFO">
-    <name><![CDATA[Correctness - Method passes a negative number as a bit to a BitSet which isn't supported [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes a negative number as a bit to a BitSet which isn't supported]]></name>
     <configKey><![CDATA[SPP_NEGATIVE_BITSET_ITEM]]></configKey>
     <description>
 <![CDATA[
@@ -987,7 +987,7 @@ doesn't support negative values, and thus this method call will not work as expe
   </rule>
 
   <rule key="SPP_INTERN_ON_CONSTANT" priority="INFO">
-    <name><![CDATA[Correctness - Method calls intern on a string constant [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls intern on a string constant]]></name>
     <configKey><![CDATA[SPP_INTERN_ON_CONSTANT]]></configKey>
     <description>
 <![CDATA[
@@ -998,7 +998,7 @@ is superfluous</p>
   </rule>
 
   <rule key="SPP_NO_CHAR_SB_CTOR" priority="INFO">
-    <name><![CDATA[Correctness - Method appears to pass character to StringBuffer or StringBuilder integer constructor [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method appears to pass character to StringBuffer or StringBuilder integer constructor]]></name>
     <configKey><![CDATA[SPP_NO_CHAR_SB_CTOR]]></configKey>
     <description>
 <![CDATA[
@@ -1011,7 +1011,7 @@ StringBuffer/Builder, but instead the integer value of the character is used as 
   </rule>
 
   <rule key="SPP_USE_MATH_CONSTANT" priority="INFO">
-    <name><![CDATA[Correctness - Method uses non standard math constant [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses non standard math constant]]></name>
     <configKey><![CDATA[SPP_USE_MATH_CONSTANT]]></configKey>
     <description>
 <![CDATA[
@@ -1022,7 +1022,7 @@ one defined in the constants Math.PI or Math.E. Use these constants instead.</p>
   </rule>
 
   <rule key="SPP_STUTTERED_ASSIGNMENT" priority="INFO">
-    <name><![CDATA[Correctness - Method assigns a value to a local twice in a row [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method assigns a value to a local twice in a row]]></name>
     <configKey><![CDATA[SPP_STUTTERED_ASSIGNMENT]]></configKey>
     <description>
 <![CDATA[
@@ -1034,7 +1034,7 @@ assignment can be removed.</p>
   </rule>
 
   <rule key="SPP_USE_ISNAN" priority="INFO">
-    <name><![CDATA[Correctness - Method compares a double to Double.NAN [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method compares a double to Double.NAN]]></name>
     <configKey><![CDATA[SPP_USE_ISNAN]]></configKey>
     <description>
 <![CDATA[
@@ -1045,7 +1045,7 @@ Double.isNaN(d) or Float.isNaN(f) if a primitive; or d.isNaN() or f.isNaN() if a
   </rule>
 
   <rule key="SPP_USE_BIGDECIMAL_STRING_CTOR" priority="INFO">
-    <name><![CDATA[Correctness - Method passes double value to BigDecimal Constructor [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes double value to BigDecimal Constructor]]></name>
     <configKey><![CDATA[SPP_USE_BIGDECIMAL_STRING_CTOR]]></configKey>
     <description>
 <![CDATA[
@@ -1057,7 +1057,7 @@ space. To take advantage of the BigDecimal space, pass the number as a string. <
   </rule>
 
   <rule key="SPP_STRINGBUFFER_WITH_EMPTY_STRING" priority="INFO">
-    <name><![CDATA[Performance - Method passes empty string to StringBuffer of StringBuilder constructor [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method passes empty string to StringBuffer of StringBuilder constructor]]></name>
     <configKey><![CDATA[SPP_STRINGBUFFER_WITH_EMPTY_STRING]]></configKey>
     <description>
 <![CDATA[
@@ -1069,7 +1069,7 @@ default size instead.
   </rule>
 
   <rule key="SPP_EQUALS_ON_ENUM" priority="INFO">
-    <name><![CDATA[Correctness - Method calls equals on an enum instance [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls equals on an enum instance]]></name>
     <configKey><![CDATA[SPP_EQUALS_ON_ENUM]]></configKey>
     <description>
 <![CDATA[
@@ -1081,7 +1081,7 @@ that.</p>
   </rule>
 
   <rule key="SPP_INVALID_BOOLEAN_NULL_CHECK" priority="INFO">
-    <name><![CDATA[Correctness - Method uses invalid C++ style null check on Boolean [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses invalid C++ style null check on Boolean]]></name>
     <configKey><![CDATA[SPP_INVALID_BOOLEAN_NULL_CHECK]]></configKey>
     <description>
 <![CDATA[
@@ -1098,7 +1098,7 @@ if ((b != null) && b.booleanValue())
   </rule>
 
   <rule key="SPP_USE_CHARAT" priority="INFO">
-    <name><![CDATA[Performance - Method fetches character array just to do the equivalent of the charAt method [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method fetches character array just to do the equivalent of the charAt method]]></name>
     <configKey><![CDATA[SPP_USE_CHARAT]]></configKey>
     <description>
 <![CDATA[
@@ -1110,7 +1110,7 @@ to retrieve one of those characters by index. It is more performant to just use 
   </rule>
 
   <rule key="SPP_USELESS_TERNARY" priority="INFO">
-    <name><![CDATA[Performance - Method uses a ternary operator to cast a boolean to true or false [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method uses a ternary operator to cast a boolean to true or false]]></name>
     <configKey><![CDATA[SPP_USELESS_TERNARY]]></configKey>
     <description>
 <![CDATA[
@@ -1121,7 +1121,7 @@ The ternary operator is completely unecessary, just use the original boolean val
   </rule>
 
   <rule key="SPP_SUSPECT_STRING_TEST" priority="INFO">
-    <name><![CDATA[Correctness - Method treats null and normal strings differently than an empty strings [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method treats null and normal strings differently than an empty strings]]></name>
     <configKey><![CDATA[SPP_SUSPECT_STRING_TEST]]></configKey>
     <description>
 <![CDATA[
@@ -1139,7 +1139,7 @@ or perhaps ((s == null) || (s.length() == 0))?
   </rule>
 
   <rule key="SPP_USE_STRINGBUILDER_LENGTH" priority="INFO">
-    <name><![CDATA[Performance - Method converts StringBuffer or Builder to String just to get it's length [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method converts StringBuffer or Builder to String just to get it's length]]></name>
     <configKey><![CDATA[SPP_USE_STRINGBUILDER_LENGTH]]></configKey>
     <description>
 <![CDATA[
@@ -1151,7 +1151,7 @@ itself.</p>
   </rule>
 
   <rule key="SPP_INVALID_CALENDAR_COMPARE" priority="INFO">
-    <name><![CDATA[Correctness - Method passes a non calendar object to Calendar.before or Calendar.after [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes a non calendar object to Calendar.before or Calendar.after]]></name>
     <configKey><![CDATA[SPP_INVALID_CALENDAR_COMPARE]]></configKey>
     <description>
 <![CDATA[
@@ -1163,7 +1163,7 @@ false is returned</p>
   </rule>
 
   <rule key="SPP_USE_CONTAINSKEY" priority="INFO">
-    <name><![CDATA[Style - Method calls keySet() just to call contains, use containsKey instead [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method calls keySet() just to call contains, use containsKey instead]]></name>
     <configKey><![CDATA[SPP_USE_CONTAINSKEY]]></configKey>
     <description>
 <![CDATA[
@@ -1173,7 +1173,7 @@ false is returned</p>
   </rule>
 
   <rule key="SPP_USE_ISEMPTY" priority="INFO">
-    <name><![CDATA[Style - Method checks the size of a collection against zero rather than using isEmpty() [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method checks the size of a collection against zero rather than using isEmpty()]]></name>
     <configKey><![CDATA[SPP_USE_ISEMPTY]]></configKey>
     <description>
 <![CDATA[
@@ -1184,7 +1184,7 @@ is empty. For better code clarity, it is better to just use col.isEmpty() or !co
   </rule>
 
   <rule key="SPP_USE_GETPROPERTY" priority="INFO">
-    <name><![CDATA[Style - Method calls getProperties just to get one property, use getProperty instead [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method calls getProperties just to get one property, use getProperty instead]]></name>
     <configKey><![CDATA[SPP_USE_GETPROPERTY]]></configKey>
     <description>
 <![CDATA[
@@ -1199,7 +1199,7 @@ is empty. For better code clarity, it is better to just use col.isEmpty() or !co
   </rule>
 
   <rule key="SPP_SERIALVER_SHOULD_BE_PRIVATE" priority="INFO">
-    <name><![CDATA[Style - Class defines a serialVersionUID as non private [fb-contrib]]]></name>
+    <name><![CDATA[Style - Class defines a serialVersionUID as non private]]></name>
     <configKey><![CDATA[SPP_SERIALVER_SHOULD_BE_PRIVATE]]></configKey>
     <description>
 <![CDATA[
@@ -1212,7 +1212,7 @@ private is confusing. It is suggested you change this variable to be private.
   </rule>
 
   <rule key="SPP_USELESS_CASING" priority="INFO">
-    <name><![CDATA[Performance - Method compares string without case after enforcing a case [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method compares string without case after enforcing a case]]></name>
     <configKey><![CDATA[SPP_USELESS_CASING]]></configKey>
     <description>
 <![CDATA[
@@ -1224,7 +1224,7 @@ concern to case, the toUpperCase or toLowerCase calls are pointless and can be r
   </rule>
 
   <rule key="SPP_NON_ARRAY_PARM" priority="INFO">
-    <name><![CDATA[Correctness - Method passes a non array object to a parameter that expects an array [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes a non array object to a parameter that expects an array]]></name>
     <configKey><![CDATA[SPP_NON_ARRAY_PARM]]></configKey>
     <description>
 <![CDATA[
@@ -1236,7 +1236,7 @@ an exception when run.
   </rule>
 
   <rule key="SPP_EMPTY_CASING" priority="INFO">
-    <name><![CDATA[Style - Method passes an empty string to equalsIgnoreCase or compareToIgnoreCase [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method passes an empty string to equalsIgnoreCase or compareToIgnoreCase]]></name>
     <configKey><![CDATA[SPP_EMPTY_CASING]]></configKey>
     <description>
 <![CDATA[
@@ -1247,7 +1247,7 @@ is not case sensitive using equals is simpler. It would be even simpler to do a 
   </rule>
 
   <rule key="SPP_TEMPORARY_TRIM" priority="INFO">
-    <name><![CDATA[Style - Method trims a String temporarily [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method trims a String temporarily]]></name>
     <configKey><![CDATA[SPP_TEMPORARY_TRIM]]></configKey>
     <description>
 <![CDATA[
@@ -1261,7 +1261,7 @@ continue to test and use that trimmed string.
   </rule>
 
   <rule key="SPP_STRINGBUILDER_IS_MUTABLE" priority="INFO">
-    <name><![CDATA[Correctness - Method needlessly assigns a StringBuilder to itself, as it's mutable [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method needlessly assigns a StringBuilder to itself, as it's mutable]]></name>
     <configKey><![CDATA[SPP_STRINGBUILDER_IS_MUTABLE]]></configKey>
     <description>
 <![CDATA[
@@ -1274,7 +1274,7 @@ continue to test and use that trimmed string.
   </rule>
 
   <rule key="SPP_USE_GET0" priority="INFO">
-    <name><![CDATA[Performance - Method uses iterator().next() on a List to get the first item [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method uses iterator().next() on a List to get the first item]]></name>
     <configKey><![CDATA[SPP_USE_GET0]]></configKey>
     <description>
 <![CDATA[
@@ -1285,7 +1285,7 @@ to just use myList.get(0).
   </rule>
 
   <rule key="SPP_DOUBLE_APPENDED_LITERALS" priority="INFO">
-    <name><![CDATA[Performance - Method appends two literal strings back to back to a StringBuilder [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method appends two literal strings back to back to a StringBuilder]]></name>
     <configKey><![CDATA[SPP_DOUBLE_APPENDED_LITERALS]]></configKey>
     <description>
 <![CDATA[
@@ -1296,7 +1296,7 @@ one append call, and may avoid intermediate reallocations of the StringBuilders 
   </rule>
 
   <rule key="SPP_NULL_BEFORE_INSTANCEOF" priority="INFO">
-    <name><![CDATA[Correctness - Method checks a reference for null before calling instanceof [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method checks a reference for null before calling instanceof]]></name>
     <configKey><![CDATA[SPP_NULL_BEFORE_INSTANCEOF]]></configKey>
     <description>
 <![CDATA[
@@ -1307,7 +1307,7 @@ Since instanceof will return false for null references, the null check is not ne
   </rule>
 
   <rule key="BAS_BLOATED_ASSIGNMENT_SCOPE" priority="INFO">
-    <name><![CDATA[Performance - Method assigns a variable in a larger scope then is needed [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method assigns a variable in a larger scope then is needed]]></name>
     <configKey><![CDATA[BAS_BLOATED_ASSIGNMENT_SCOPE]]></configKey>
     <description>
 <![CDATA[
@@ -1323,7 +1323,7 @@ will effect the execution of the assignment when done later on.</p>
   </rule>
 
   <rule key="SCII_SPOILED_CHILD_INTERFACE_IMPLEMENTOR" priority="INFO">
-    <name><![CDATA[Style - Class implements interface by relying on unknowing superclass methods [fb-contrib]]]></name>
+    <name><![CDATA[Style - Class implements interface by relying on unknowing superclass methods]]></name>
     <configKey><![CDATA[SCII_SPOILED_CHILD_INTERFACE_IMPLEMENTOR]]></configKey>
     <description>
 <![CDATA[
@@ -1337,7 +1337,7 @@ that superclass abstract.</p>
   </rule>
 
   <rule key="DWI_DELETING_WHILE_ITERATING" priority="INFO">
-    <name><![CDATA[Correctness - Method deletes collection element while iterating [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method deletes collection element while iterating]]></name>
     <configKey><![CDATA[DWI_DELETING_WHILE_ITERATING]]></configKey>
     <description>
 <![CDATA[
@@ -1351,7 +1351,7 @@ method of the iterator should be used.
   </rule>
 
   <rule key="DWI_MODIFYING_WHILE_ITERATING" priority="INFO">
-    <name><![CDATA[Correctness - Method modifies collection element while iterating [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method modifies collection element while iterating]]></name>
     <configKey><![CDATA[DWI_MODIFYING_WHILE_ITERATING]]></configKey>
     <description>
 <![CDATA[
@@ -1364,7 +1364,7 @@ use of it, will cause ConcurrentModificationExceptions to be thrown.
   </rule>
 
   <rule key="USS_USE_STRING_SPLIT" priority="INFO">
-    <name><![CDATA[Style - Method builds String array using String Tokenizing [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method builds String array using String Tokenizing]]></name>
     <configKey><![CDATA[USS_USE_STRING_SPLIT]]></configKey>
     <description>
 <![CDATA[
@@ -1384,7 +1384,7 @@ hasMoreElements/hasMoreTokens call. So you may need to use</p>
   </rule>
 
   <rule key="SJVU_SUSPICIOUS_JDK_VERSION_USE" priority="INFO">
-    <name><![CDATA[Correctness - Method uses rt.jar class or method that does not exist [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses rt.jar class or method that does not exist]]></name>
     <configKey><![CDATA[SJVU_SUSPICIOUS_JDK_VERSION_USE]]></configKey>
     <description>
 <![CDATA[
@@ -1396,7 +1396,7 @@ this class has been compiled for. This can happen if you compile the class speci
   </rule>
 
   <rule key="UAA_USE_ADD_ALL" priority="INFO">
-    <name><![CDATA[Style - Method uses simple loop to copy contents of one collection to another [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses simple loop to copy contents of one collection to another]]></name>
     <configKey><![CDATA[UAA_USE_ADD_ALL]]></configKey>
     <description>
 <![CDATA[
@@ -1409,7 +1409,7 @@ into a collection</p>
   </rule>
 
   <rule key="MRC_METHOD_RETURNS_CONSTANT" priority="INFO">
-    <name><![CDATA[Style - Private method only returns one constant value [fb-contrib]]]></name>
+    <name><![CDATA[Style - Private method only returns one constant value]]></name>
     <configKey><![CDATA[MRC_METHOD_RETURNS_CONSTANT]]></configKey>
     <description>
 <![CDATA[
@@ -1422,7 +1422,7 @@ was expected to be returned in another code path in this method.</p>
   </rule>
 
   <rule key="NCS_NEEDLESS_CUSTOM_SERIALIZATION" priority="INFO">
-    <name><![CDATA[Correctness - Method needlessly implements what is default streaming behavior [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method needlessly implements what is default streaming behavior]]></name>
     <configKey><![CDATA[NCS_NEEDLESS_CUSTOM_SERIALIZATION]]></configKey>
     <description>
 <![CDATA[
@@ -1433,7 +1433,7 @@ would be done if this method did not exist. Since this is the case, this method 
   </rule>
 
   <rule key="MOM_MISLEADING_OVERLOAD_MODEL" priority="INFO">
-    <name><![CDATA[Style - Class 'overloads' a method with both instance and static versions [fb-contrib]]]></name>
+    <name><![CDATA[Style - Class 'overloads' a method with both instance and static versions]]></name>
     <configKey><![CDATA[MOM_MISLEADING_OVERLOAD_MODEL]]></configKey>
     <description>
 <![CDATA[
@@ -1444,7 +1444,7 @@ of these two models is different, it will be confusing to the users of these met
   </rule>
 
   <rule key="EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS" priority="INFO">
-    <name><![CDATA[Style - Unconstrained method converts checked exception to unchecked [fb-contrib]]]></name>
+    <name><![CDATA[Style - Unconstrained method converts checked exception to unchecked]]></name>
     <configKey><![CDATA[EXS_EXCEPTION_SOFTENING_NO_CONSTRAINTS]]></configKey>
     <description>
 <![CDATA[
@@ -1456,7 +1456,7 @@ the exception to the throws clause of the method.
   </rule>
 
   <rule key="EXS_EXCEPTION_SOFTENING_HAS_CHECKED" priority="INFO">
-    <name><![CDATA[Style - Constrained method converts checked exception to unchecked instead of another allowable checked exception [fb-contrib]]]></name>
+    <name><![CDATA[Style - Constrained method converts checked exception to unchecked instead of another allowable checked exception]]></name>
     <configKey><![CDATA[EXS_EXCEPTION_SOFTENING_HAS_CHECKED]]></configKey>
     <description>
 <![CDATA[
@@ -1469,7 +1469,7 @@ the new exception with the original exception using the initial cause field.</p>
   </rule>
 
   <rule key="EXS_EXCEPTION_SOFTENING_NO_CHECKED" priority="INFO">
-    <name><![CDATA[Style - Constrained method converts checked exception to unchecked [fb-contrib]]]></name>
+    <name><![CDATA[Style - Constrained method converts checked exception to unchecked]]></name>
     <configKey><![CDATA[EXS_EXCEPTION_SOFTENING_NO_CHECKED]]></configKey>
     <description>
 <![CDATA[
@@ -1482,7 +1482,7 @@ interface or superclass. Consider changes the signature of this method to includ
   </rule>
 
   <rule key="CFS_CONFUSING_FUNCTION_SEMANTICS" priority="INFO">
-    <name><![CDATA[Style - Method returns modified parameter [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method returns modified parameter]]></name>
     <configKey><![CDATA[CFS_CONFUSING_FUNCTION_SEMANTICS]]></configKey>
     <description>
 <![CDATA[
@@ -1497,7 +1497,7 @@ perhaps a clone of the parameter should be made.</p>
   </rule>
 
   <rule key="JAO_JUNIT_ASSERTION_ODDITIES_ACTUAL_CONSTANT" priority="INFO">
-    <name><![CDATA[Style - Method passes constant to second (actual) assertion parameter [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method passes constant to second (actual) assertion parameter]]></name>
     <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_ACTUAL_CONSTANT]]></configKey>
     <description>
 <![CDATA[
@@ -1509,7 +1509,7 @@ of values has been swapped here.</p>
   </rule>
 
   <rule key="JAO_JUNIT_ASSERTION_ODDITIES_INEXACT_DOUBLE" priority="INFO">
-    <name><![CDATA[Style - Method asserts that two doubles are exactly equal [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method asserts that two doubles are exactly equal]]></name>
     <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_INEXACT_DOUBLE]]></configKey>
     <description>
 <![CDATA[
@@ -1520,7 +1520,7 @@ should be using the assert method that takes a range parameter that gives a rang
   </rule>
 
   <rule key="JAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT" priority="INFO">
-    <name><![CDATA[Style - Method asserts that a value is true or false [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method asserts that a value is true or false]]></name>
     <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT]]></configKey>
     <description>
 <![CDATA[
@@ -1531,7 +1531,7 @@ use assertTrue, or assertFalse, instead.</p>
   </rule>
 
   <rule key="JAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL" priority="INFO">
-    <name><![CDATA[Correctness - Method asserts that an auto-boxed value is not null [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method asserts that an auto-boxed value is not null]]></name>
     <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL]]></configKey>
     <description>
 <![CDATA[
@@ -1543,7 +1543,7 @@ either.</p>
   </rule>
 
   <rule key="JAO_JUNIT_ASSERTION_ODDITIES_ASSERT_USED" priority="INFO">
-    <name><![CDATA[Correctness - Method uses java asserts rather than a junit assertion [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses java asserts rather than a junit assertion]]></name>
     <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_ASSERT_USED]]></configKey>
     <description>
 <![CDATA[
@@ -1555,7 +1555,7 @@ a following exception to occur.</p>
   </rule>
 
   <rule key="JAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_EQUALS" priority="INFO">
-    <name><![CDATA[Correctness - Method passes boolean expression to Assert.assertTrue [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes boolean expression to Assert.assertTrue]]></name>
     <configKey><![CDATA[JAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_EQUALS]]></configKey>
     <description>
 <![CDATA[
@@ -1567,7 +1567,7 @@ junit failure method is more meaningful of the intended test.</p>
   </rule>
 
   <rule key="SCA_SUSPICIOUS_CLONE_ALGORITHM" priority="INFO">
-    <name><![CDATA[Correctness - Clone method stores a new value to member field of source object [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Clone method stores a new value to member field of source object]]></name>
     <configKey><![CDATA[SCA_SUSPICIOUS_CLONE_ALGORITHM]]></configKey>
     <description>
 <![CDATA[
@@ -1578,7 +1578,7 @@ a read-only operation, this seems incorrect.</p>]]>
   </rule>
 
   <rule key="WEM_WEAK_EXCEPTION_MESSAGING" priority="INFO">
-    <name><![CDATA[Style - Method throws exception with static message string [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method throws exception with static message string]]></name>
     <configKey><![CDATA[WEM_WEAK_EXCEPTION_MESSAGING]]></configKey>
     <description>
 <![CDATA[
@@ -1591,7 +1591,7 @@ adding context to the exception message.</p>
   </rule>
 
   <rule key="SCSS_SUSPICIOUS_CLUSTERED_SESSION_SUPPORT" priority="INFO">
-    <name><![CDATA[Correctness - Method modifies http session attribute without calling setAttribute [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method modifies http session attribute without calling setAttribute]]></name>
     <configKey><![CDATA[SCSS_SUSPICIOUS_CLUSTERED_SESSION_SUPPORT]]></configKey>
     <description>
 <![CDATA[
@@ -1604,7 +1604,7 @@ by a call to setAttribute are replicated.</p>
   </rule>
 
   <rule key="LO_LOGGER_LOST_EXCEPTION_STACK_TRACE" priority="INFO">
-    <name><![CDATA[Correctness - Method incorrectly passes exception as first argument to logger method [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method incorrectly passes exception as first argument to logger method]]></name>
     <configKey><![CDATA[LO_LOGGER_LOST_EXCEPTION_STACK_TRACE]]></configKey>
     <description>
 <![CDATA[
@@ -1617,7 +1617,7 @@ the second argument to capture the stack trace.</p>
   </rule>
 
   <rule key="LO_SUSPECT_LOG_CLASS" priority="INFO">
-    <name><![CDATA[Correctness - Method specifies an unrelated class when allocating a Logger [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method specifies an unrelated class when allocating a Logger]]></name>
     <configKey><![CDATA[LO_SUSPECT_LOG_CLASS]]></configKey>
     <description>
 <![CDATA[
@@ -1628,7 +1628,7 @@ to the class in which the logger is going to be used. This is likely caused by c
   </rule>
 
   <rule key="LO_SUSPECT_LOG_PARAMETER" priority="INFO">
-    <name><![CDATA[Correctness - Constructor declares a Logger parameter [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Constructor declares a Logger parameter]]></name>
     <configKey><![CDATA[LO_SUSPECT_LOG_PARAMETER]]></configKey>
     <description>
 <![CDATA[
@@ -1640,7 +1640,7 @@ class to another. Declare the Logger static in each class instead.</p>
   </rule>
 
   <rule key="LO_STUTTERED_MESSAGE" priority="INFO">
-    <name><![CDATA[Style - Method stutters exception message in logger [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method stutters exception message in logger]]></name>
     <configKey><![CDATA[LO_STUTTERED_MESSAGE]]></configKey>
     <description>
 <![CDATA[
@@ -1655,7 +1655,7 @@ this method, possibly including the values of key variables.
   </rule>
 
   <rule key="LO_INVALID_FORMATTING_ANCHOR" priority="INFO">
-    <name><![CDATA[Correctness - Method attempts to log using numbered formatting anchors [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method attempts to log using numbered formatting anchors]]></name>
     <configKey><![CDATA[LO_INVALID_FORMATTING_ANCHOR]]></configKey>
       <description>
 <![CDATA[
@@ -1667,7 +1667,7 @@ code uses. Thus no parameter replacement will occur.
   </rule>
 
   <rule key="LO_INCORRECT_NUMBER_OF_ANCHOR_PARAMETERS" priority="INFO">
-    <name><![CDATA[Correctness - Method passes an incorrect number of parameters to an SLF4J logging statement [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method passes an incorrect number of parameters to an SLF4J logging statement]]></name>
     <configKey><![CDATA[LO_INCORRECT_NUMBER_OF_ANCHOR_PARAMETERS]]></configKey>
     <description>
 <![CDATA[
@@ -1678,7 +1678,7 @@ format string. An additional exception argument is allowed if found.
   </rule>
 
   <rule key="IICU_INCORRECT_INTERNAL_CLASS_USE" priority="INFO">
-    <name><![CDATA[Correctness - Class relies on internal api classes [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class relies on internal api classes]]></name>
     <configKey><![CDATA[IICU_INCORRECT_INTERNAL_CLASS_USE]]></configKey>
     <description>
 <![CDATA[
@@ -1696,7 +1696,7 @@ Packages that shouldn't be used are:
   </rule>
 
   <rule key="DSOC_DUBIOUS_SET_OF_COLLECTIONS" priority="INFO">
-    <name><![CDATA[Performance - Method uses a set of collections [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method uses a set of collections]]></name>
     <configKey><![CDATA[DSOC_DUBIOUS_SET_OF_COLLECTIONS]]></configKey>
     <description>
 <![CDATA[
@@ -1715,7 +1715,7 @@ as the outer collection</p>
   </rule>
 
   <rule key="BED_BOGUS_EXCEPTION_DECLARATION" priority="INFO">
-    <name><![CDATA[Correctness - Non derivable method declares throwing an exception that isn't thrown [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Non derivable method declares throwing an exception that isn't thrown]]></name>
     <configKey><![CDATA[BED_BOGUS_EXCEPTION_DECLARATION]]></configKey>
     <description>
 <![CDATA[
@@ -1728,7 +1728,7 @@ that will never be thrown. The exception in question should be removed from the 
   </rule>
 
   <rule key="UNNC_UNNECESSARY_NEW_NULL_CHECK" priority="INFO">
-    <name><![CDATA[Correctness - Method checks the result of a new allocation [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method checks the result of a new allocation]]></name>
     <configKey><![CDATA[UNNC_UNNECESSARY_NEW_NULL_CHECK]]></configKey>
     <description>
 <![CDATA[
@@ -1740,7 +1740,7 @@ this null check is unnecessary and can be removed.
   </rule>
 
   <rule key="DTEP_DEPRECATED_TYPESAFE_ENUM_PATTERN" priority="INFO">
-    <name><![CDATA[Style - Class appears to implement the old style type safe enum pattern [fb-contrib]]]></name>
+    <name><![CDATA[Style - Class appears to implement the old style type safe enum pattern]]></name>
     <configKey><![CDATA[DTEP_DEPRECATED_TYPESAFE_ENUM_PATTERN]]></configKey>
     <description>
 <![CDATA[
@@ -1752,7 +1752,7 @@ easy to understand if it was just switched over to an enum.</p>
   </rule>
 
   <rule key="SMA_STUTTERED_METHOD_ARGUMENTS" priority="INFO">
-    <name><![CDATA[Style - Code calls a method passing the same value to two different arguments [fb-contrib]]]></name>
+    <name><![CDATA[Style - Code calls a method passing the same value to two different arguments]]></name>
     <configKey><![CDATA[SMA_STUTTERED_METHOD_ARGUMENTS]]></configKey>
     <description>
 <![CDATA[
@@ -1765,7 +1765,7 @@ in this case.</p>
   </rule>
 
   <rule key="TBP_TRISTATE_BOOLEAN_PATTERN" priority="INFO">
-    <name><![CDATA[Style - Method returns null for Boolean type [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method returns null for Boolean type]]></name>
     <configKey><![CDATA[TBP_TRISTATE_BOOLEAN_PATTERN]]></configKey>
     <description>
 <![CDATA[
@@ -1779,7 +1779,7 @@ you want, and define that the method returns that type.</p>
   </rule>
 
   <rule key="SUA_SUSPICIOUS_UNINITIALIZED_ARRAY" priority="INFO">
-    <name><![CDATA[Correctness - Method returns an array that appears not to be initialized [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method returns an array that appears not to be initialized]]></name>
     <configKey><![CDATA[SUA_SUSPICIOUS_UNINITIALIZED_ARRAY]]></configKey>
     <description>
 <![CDATA[
@@ -1792,7 +1792,7 @@ be initialized.</p>
   </rule>
 
   <rule key="ITU_INAPPROPRIATE_TOSTRING_USE" priority="INFO">
-    <name><![CDATA[Correctness - Method performs algorithmic operations on the result of a toString() call [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method performs algorithmic operations on the result of a toString() call]]></name>
     <configKey><![CDATA[ITU_INAPPROPRIATE_TOSTRING_USE]]></configKey>
     <description>
 <![CDATA[
@@ -1803,7 +1803,7 @@ As these methods are for debugging/logging purposes, it shouldn't be the basis o
   </rule>
 
   <rule key="IKNC_INCONSISTENT_HTTP_ATTRIBUTE_CASING" priority="INFO">
-    <name><![CDATA[Style - Method uses the same HttpSession attribute name but with different casing [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses the same HttpSession attribute name but with different casing]]></name>
     <configKey><![CDATA[IKNC_INCONSISTENT_HTTP_ATTRIBUTE_CASING]]></configKey>
     <description>
 <![CDATA[
@@ -1814,7 +1814,7 @@ but with a different casing. As HttpSession attribute are case sensitive, this w
   </rule>
 
   <rule key="IKNC_INCONSISTENT_HTTP_PARAM_CASING" priority="INFO">
-    <name><![CDATA[Style - Method uses the same HttpRequest parameter name but with different casing [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses the same HttpRequest parameter name but with different casing]]></name>
     <configKey><![CDATA[IKNC_INCONSISTENT_HTTP_PARAM_CASING]]></configKey>
     <description>
 <![CDATA[
@@ -1825,7 +1825,7 @@ but with a different casing. As HttpServletRequest parameters are case sensitive
   </rule>
 
   <rule key="OC_OVERZEALOUS_CASTING" priority="INFO">
-    <name><![CDATA[Correctness - Method manually casts the right hand side of an assignment more specifically than needed [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method manually casts the right hand side of an assignment more specifically than needed]]></name>
     <configKey><![CDATA[OC_OVERZEALOUS_CASTING]]></configKey>
     <description>
 <![CDATA[
@@ -1837,7 +1837,7 @@ that is on the left. Using a more specific type on the right hand side just incr
   </rule>
 
   <rule key="PDP_POORLY_DEFINED_PARAMETER" priority="INFO">
-    <name><![CDATA[Correctness - Method defines parameters more abstractly than needed to function properly [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method defines parameters more abstractly than needed to function properly]]></name>
     <configKey><![CDATA[PDP_POORLY_DEFINED_PARAMETER]]></configKey>
     <description>
 <![CDATA[
@@ -1849,7 +1849,7 @@ just define the parameters with the type that is needed.
   </rule>
 
   <rule key="NSE_NON_SYMMETRIC_EQUALS" priority="INFO">
-    <name><![CDATA[Correctness - Equals method compares this object against other types in a non symmetric way [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Equals method compares this object against other types in a non symmetric way]]></name>
     <configKey><![CDATA[NSE_NON_SYMMETRIC_EQUALS]]></configKey>
     <description>
 <![CDATA[
@@ -1863,7 +1863,7 @@ to this.</p>
   </rule>
 
   <rule key="CVAA_CONTRAVARIANT_ARRAY_ASSIGNMENT" priority="INFO">
-    <name><![CDATA[Correctness - Method performs a contravariant array assignment [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method performs a contravariant array assignment]]></name>
     <configKey><![CDATA[CVAA_CONTRAVARIANT_ARRAY_ASSIGNMENT]]></configKey>
     <description>
 <![CDATA[
@@ -1882,7 +1882,7 @@ class B extends A {}
   </rule>
 
   <rule key="CVAA_CONTRAVARIANT_ELEMENT_ASSIGNMENT" priority="INFO">
-    <name><![CDATA[Correctness - Method performs a contravariant array element assignment [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method performs a contravariant array element assignment]]></name>
     <configKey><![CDATA[CVAA_CONTRAVARIANT_ELEMENT_ASSIGNMENT]]></configKey>
     <description>
 <![CDATA[
@@ -1902,7 +1902,7 @@ class B extends A {}
   </rule>
 
   <rule key="NFF_NON_FUNCTIONAL_FIELD" priority="INFO">
-    <name><![CDATA[Correctness - Serializable class defines a final transient field [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Serializable class defines a final transient field]]></name>
     <configKey><![CDATA[NFF_NON_FUNCTIONAL_FIELD]]></configKey>
     <description>
 <![CDATA[
@@ -1915,7 +1915,7 @@ And since the field is final, no other method can initialize it as well.</p>
   </rule>
 
   <rule key="SNG_SUSPICIOUS_NULL_FIELD_GUARD" priority="INFO">
-    <name><![CDATA[Correctness - Method tests a field for not null as guard and reassigns it [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method tests a field for not null as guard and reassigns it]]></name>
     <configKey><![CDATA[SNG_SUSPICIOUS_NULL_FIELD_GUARD]]></configKey>
     <description>
 <![CDATA[
@@ -1927,7 +1927,7 @@ should have been a check to see if the field is null, not that the field was not
   </rule>
 
   <rule key="SNG_SUSPICIOUS_NULL_LOCAL_GUARD" priority="INFO">
-    <name><![CDATA[Correctness - Method tests a local variable for not null as guard and reassigns it [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method tests a local variable for not null as guard and reassigns it]]></name>
     <configKey><![CDATA[SNG_SUSPICIOUS_NULL_LOCAL_GUARD]]></configKey>
     <description>
 <![CDATA[
@@ -1939,7 +1939,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_RUNTIME_EXIT_OR_HALT" priority="INFO">
-    <name><![CDATA[Correctness - Method calls Runtime.exit() or Runtime.halt() [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls Runtime.exit() or Runtime.halt()]]></name>
     <configKey><![CDATA[MDM_RUNTIME_EXIT_OR_HALT]]></configKey>
     <description>
 <![CDATA[
@@ -1949,7 +1949,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_RUNFINALIZATION" priority="INFO">
-    <name><![CDATA[Correctness - Method triggers finalization [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method triggers finalization]]></name>
     <configKey><![CDATA[MDM_RUNFINALIZATION]]></configKey>
     <description>
 <![CDATA[
@@ -1959,7 +1959,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_BIGDECIMAL_EQUALS" priority="INFO">
-    <name><![CDATA[Correctness - Method calls BigDecimal.equals() [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls BigDecimal.equals()]]></name>
     <configKey><![CDATA[MDM_BIGDECIMAL_EQUALS]]></configKey>
     <description>
 <![CDATA[
@@ -1969,7 +1969,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_INETADDRESS_GETLOCALHOST" priority="INFO">
-    <name><![CDATA[Correctness - Method calls InetAddress.getLocalHost() [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls InetAddress.getLocalHost()]]></name>
     <configKey><![CDATA[MDM_INETADDRESS_GETLOCALHOST]]></configKey>
     <description>
 <![CDATA[
@@ -1979,7 +1979,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_PROMISCUOUS_SERVERSOCKET" priority="INFO">
-    <name><![CDATA[Correctness - Method creates promiscuous ServerSocket object [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method creates promiscuous ServerSocket object]]></name>
     <configKey><![CDATA[MDM_PROMISCUOUS_SERVERSOCKET]]></configKey>
     <description>
 <![CDATA[
@@ -1989,7 +1989,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_RANDOM_SEED" priority="INFO">
-    <name><![CDATA[Correctness - Method creates insecure Random object [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method creates insecure Random object]]></name>
     <configKey><![CDATA[MDM_RANDOM_SEED]]></configKey>
     <description>
 <![CDATA[
@@ -1999,7 +1999,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_SECURERANDOM" priority="INFO">
-    <name><![CDATA[Correctness - Method calls deprecated SecureRandom method [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls deprecated SecureRandom method]]></name>
     <configKey><![CDATA[MDM_SECURERANDOM]]></configKey>
     <description>
 <![CDATA[
@@ -2009,7 +2009,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_THREAD_PRIORITIES" priority="INFO">
-    <name><![CDATA[MT Correctness - Method uses suspicious thread priorities [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method uses suspicious thread priorities]]></name>
     <configKey><![CDATA[MDM_THREAD_PRIORITIES]]></configKey>
     <description>
 <![CDATA[
@@ -2019,7 +2019,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_THREAD_YIELD" priority="INFO">
-    <name><![CDATA[MT Correctness - Method attempts to manually schedule threads [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method attempts to manually schedule threads]]></name>
     <configKey><![CDATA[MDM_THREAD_YIELD]]></configKey>
     <description>
 <![CDATA[
@@ -2029,7 +2029,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_WAIT_WITHOUT_TIMEOUT" priority="INFO">
-    <name><![CDATA[MT Correctness - Method sleeps without timeout [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method sleeps without timeout]]></name>
     <configKey><![CDATA[MDM_WAIT_WITHOUT_TIMEOUT]]></configKey>
     <description>
 <![CDATA[
@@ -2039,7 +2039,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_THREAD_FAIRNESS" priority="INFO">
-    <name><![CDATA[MT Correctness - Method ignores Lock's fairness settings by calling tryLock() [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method ignores Lock's fairness settings by calling tryLock()]]></name>
     <configKey><![CDATA[MDM_THREAD_FAIRNESS]]></configKey>
     <description>
 <![CDATA[
@@ -2049,7 +2049,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_SIGNAL_NOT_SIGNALALL" priority="INFO">
-    <name><![CDATA[MT Correctness - Method calls Condition.signal() rather than Condition.signalAll() [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method calls Condition.signal() rather than Condition.signalAll()]]></name>
     <configKey><![CDATA[MDM_SIGNAL_NOT_SIGNALALL]]></configKey>
     <description>
 <![CDATA[
@@ -2059,7 +2059,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_LOCK_ISLOCKED" priority="INFO">
-    <name><![CDATA[MT Correctness - Method tests if a lock is locked [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method tests if a lock is locked]]></name>
     <configKey><![CDATA[MDM_LOCK_ISLOCKED]]></configKey>
     <description>
 <![CDATA[
@@ -2069,7 +2069,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_STRING_BYTES_ENCODING" priority="INFO">
-    <name><![CDATA[Correctness - Method encodes String bytes without specifying the character encoding [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method encodes String bytes without specifying the character encoding]]></name>
     <configKey><![CDATA[MDM_STRING_BYTES_ENCODING]]></configKey>
     <description>
 <![CDATA[
@@ -2079,7 +2079,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="MDM_SETDEFAULTLOCALE" priority="INFO">
-    <name><![CDATA[MT Correctness - Method calls Locale.setDefault() [fb-contrib]]]></name>
+    <name><![CDATA[MT Correctness - Method calls Locale.setDefault()]]></name>
     <configKey><![CDATA[MDM_SETDEFAULTLOCALE]]></configKey>
     <description>
 <![CDATA[
@@ -2089,7 +2089,7 @@ should have been a check to see if the local variable is null, not that the loca
   </rule>
 
   <rule key="ROOM_REFLECTION_ON_OBJECT_METHODS" priority="INFO">
-    <name><![CDATA[Correctness - Method uses reflection to call a method available on java.lang.Object [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses reflection to call a method available on java.lang.Object]]></name>
     <configKey><![CDATA[ROOM_REFLECTION_ON_OBJECT_METHODS]]></configKey>
     <description>
 <![CDATA[
@@ -2101,7 +2101,7 @@ reflection.
   </rule>
 
   <rule key="IPU_IMPROPER_PROPERTIES_USE" priority="INFO">
-    <name><![CDATA[Correctness - Method puts non-String values into a Properties object [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method puts non-String values into a Properties object]]></name>
     <configKey><![CDATA[IPU_IMPROPER_PROPERTIES_USE]]></configKey>
     <description>
 <![CDATA[
@@ -2115,7 +2115,7 @@ like HashMap or TreeMap.
   </rule>
 
   <rule key="IPU_IMPROPER_PROPERTIES_USE_SETPROPERTY" priority="INFO">
-    <name><![CDATA[Correctness - Method uses Properties.put instead of Properties.setProperty [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses Properties.put instead of Properties.setProperty]]></name>
     <configKey><![CDATA[IPU_IMPROPER_PROPERTIES_USE_SETPROPERTY]]></configKey>
     <description>
 <![CDATA[
@@ -2127,7 +2127,7 @@ map, use of the derived put method is discouraged. Use the Properties.setPropert
   </rule>
 
   <rule key="PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP" priority="INFO">
-    <name><![CDATA[Performance - Method allocates an object that is used in a constant way in a loop [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method allocates an object that is used in a constant way in a loop]]></name>
     <configKey><![CDATA[PCAIL_POSSIBLE_CONSTANT_ALLOCATION_IN_LOOP]]></configKey>
     <description>
 <![CDATA[
@@ -2141,7 +2141,7 @@ in the loop.
   </rule>
 
   <rule key="WOC_WRITE_ONLY_COLLECTION_LOCAL" priority="INFO">
-    <name><![CDATA[Correctness - Method creates and initializes a collection but never reads or gains information from it [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method creates and initializes a collection but never reads or gains information from it]]></name>
     <configKey><![CDATA[WOC_WRITE_ONLY_COLLECTION_LOCAL]]></configKey>
     <description>
 <![CDATA[
@@ -2153,7 +2153,7 @@ is left over from a past effort, and can be removed.
   </rule>
 
   <rule key="WOC_WRITE_ONLY_COLLECTION_FIELD" priority="INFO">
-    <name><![CDATA[Correctness - Class creates and initializes a collection but never reads or gains information from it [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Class creates and initializes a collection but never reads or gains information from it]]></name>
     <configKey><![CDATA[WOC_WRITE_ONLY_COLLECTION_FIELD]]></configKey>
     <description>
 <![CDATA[
@@ -2165,7 +2165,7 @@ is left over from a past effort, and can be removed.
   </rule>
 
   <rule key="UVA_USE_VAR_ARGS" priority="INFO">
-    <name><![CDATA[Style - Method defines parameter list with array as last argument, rather than vararg [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method defines parameter list with array as last argument, rather than vararg]]></name>
     <configKey><![CDATA[UVA_USE_VAR_ARGS]]></configKey>
     <description>
 <![CDATA[
@@ -2177,7 +2177,7 @@ more convienent for client developers to use. This is not a bug, per se, just an
   </rule>
 
   <rule key="PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION" priority="INFO">
-    <name><![CDATA[Correctness - Method serializes an instance of a non-static inner class [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method serializes an instance of a non-static inner class]]></name>
     <configKey><![CDATA[PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION]]></configKey>
     <description>
 <![CDATA[
@@ -2191,7 +2191,7 @@ pull it out into a separate "first class" class.
   </rule>
 
   <rule key="SEC_SIDE_EFFECT_CONSTRUCTOR" priority="INFO">
-    <name><![CDATA[Style - Method uses a Side Effect Constructor [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method uses a Side Effect Constructor]]></name>
     <configKey><![CDATA[SEC_SIDE_EFFECT_CONSTRUCTOR]]></configKey>
     <description>
 <![CDATA[
@@ -2204,7 +2204,7 @@ the constructor, into a separate method, or into the calling method.
   </rule>
 
   <rule key="SGSU_SUSPICIOUS_GETTER_SETTER_USE" priority="INFO">
-    <name><![CDATA[Correctness - Method uses same bean's getter value for setter [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method uses same bean's getter value for setter]]></name>
     <configKey><![CDATA[SGSU_SUSPICIOUS_GETTER_SETTER_USE]]></configKey>
     <description>
 <![CDATA[
@@ -2215,7 +2215,7 @@ for the same property of the same bean. This is usually a copy/paste typo.
   </rule>
 
   <rule key="LGO_LINGERING_GRAPHICS_OBJECT" priority="INFO">
-    <name><![CDATA[Performance - Method allocations a java.awt.Graphics object without disposing it [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method allocations a java.awt.Graphics object without disposing it]]></name>
     <configKey><![CDATA[LGO_LINGERING_GRAPHICS_OBJECT]]></configKey>
     <description>
 <![CDATA[
@@ -2228,7 +2228,7 @@ created in a short period of time, it is recommended that you explicitly dispose
   </rule>
 
   <rule key="STB_STACKED_TRY_BLOCKS" priority="INFO">
-    <name><![CDATA[Style - Method stacks similar try/catch blocks [fb-contrib]]]></name>
+    <name><![CDATA[Style - Method stacks similar try/catch blocks]]></name>
     <configKey><![CDATA[STB_STACKED_TRY_BLOCKS]]></configKey>
     <description>
 <![CDATA[
@@ -2241,7 +2241,7 @@ simplify the method.</p>
   </rule>
 
   <rule key="CEBE_COMMONS_EQUALS_BUILDER_ISEQUALS" priority="INFO">
-    <name><![CDATA[Correctness - Method returns the result of invoking equals() on EqualsBuilder [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method returns the result of invoking equals() on EqualsBuilder]]></name>
     <configKey><![CDATA[CEBE_COMMONS_EQUALS_BUILDER_ISEQUALS]]></configKey>
     <description>
 <![CDATA[
@@ -2252,7 +2252,7 @@ instead of calling the method isEqual().</p>
   </rule>
 
   <rule key="CHTH_COMMONS_HASHCODE_BUILDER_TOHASHCODE" priority="INFO">
-    <name><![CDATA[Correctness - Method returns the result of invoking hashCode() on HashCodeBuilder [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method returns the result of invoking hashCode() on HashCodeBuilder]]></name>
     <configKey><![CDATA[CHTH_COMMONS_HASHCODE_BUILDER_TOHASHCODE]]></configKey>
     <description>
 <![CDATA[
@@ -2263,7 +2263,7 @@ instead of calling the method toHashCode().</p>
   </rule>
 
   <rule key="CSBTS_COMMONS_STRING_BUILDER_TOSTRING" priority="INFO">
-    <name><![CDATA[Correctness - Method returns the result of invoking toString() without intermediate invocation of append() in ToStringBuilder [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method returns the result of invoking toString() without intermediate invocation of append() in ToStringBuilder]]></name>
     <configKey><![CDATA[CSBTS_COMMONS_STRING_BUILDER_TOSTRING]]></configKey>
     <description>
 <![CDATA[
@@ -2274,7 +2274,7 @@ intermediate invocation of append()</p>
   </rule>
 
   <rule key="CCNE_COMPARE_CLASS_EQUALS_NAME" priority="INFO">
-    <name><![CDATA[Correctness - Method compares class name instead of comparing class [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method compares class name instead of comparing class]]></name>
     <configKey><![CDATA[CCNE_COMPARE_CLASS_EQUALS_NAME]]></configKey>
     <description>
 <![CDATA[
@@ -2289,7 +2289,7 @@ Comparing class name ignores the class loader.
   </rule>
 
   <rule key="BRPI_BACKPORT_REUSE_PUBLIC_IDENTIFIERS" priority="INFO">
-    <name><![CDATA[Performance - Method uses backport concurrency utils [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method uses backport concurrency utils]]></name>
     <configKey><![CDATA[BRPI_BACKPORT_REUSE_PUBLIC_IDENTIFIERS]]></configKey>
     <description>
 <![CDATA[
@@ -2302,7 +2302,7 @@ classes should only be used if you are targeting JDK 1.4 and lower.
   </rule>
 
   <rule key="CU_CLONE_USABILITY_OBJECT_RETURN" priority="INFO">
-    <name><![CDATA[Style - Clone method declares it returns an Object [fb-contrib]]]></name>
+    <name><![CDATA[Style - Clone method declares it returns an Object]]></name>
     <configKey><![CDATA[CU_CLONE_USABILITY_OBJECT_RETURN]]></configKey>
     <description>
 <![CDATA[
@@ -2315,7 +2315,7 @@ be more painful than necessary. Just declare the return value to be the type of 
   </rule>
 
   <rule key="CU_CLONE_USABILITY_MISMATCHED_RETURN" priority="INFO">
-    <name><![CDATA[Style - Clone method declares it returns an type different then the owning class [fb-contrib]]]></name>
+    <name><![CDATA[Style - Clone method declares it returns an type different then the owning class]]></name>
     <configKey><![CDATA[CU_CLONE_USABILITY_MISMATCHED_RETURN]]></configKey>
     <description>
 <![CDATA[
@@ -2327,7 +2327,7 @@ that is different than the class itself, or any interfaces that the class implem
   </rule>
 
   <rule key="CU_CLONE_USABILITY_THROWS" priority="INFO">
-    <name><![CDATA[Style - Clone method declares it throws CloneNotSupportedException [fb-contrib]]]></name>
+    <name><![CDATA[Style - Clone method declares it throws CloneNotSupportedException]]></name>
     <configKey><![CDATA[CU_CLONE_USABILITY_THROWS]]></configKey>
     <description>
 <![CDATA[
@@ -2342,7 +2342,7 @@ throws clause from your method.
   </rule>
 
   <rule key="CAAL_CONFUSING_ARRAY_AS_LIST" priority="INFO">
-    <name><![CDATA[Correctness - Method calls Array.asList on an array of primitive values [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method calls Array.asList on an array of primitive values]]></name>
     <configKey><![CDATA[CAAL_CONFUSING_ARRAY_AS_LIST]]></configKey>
     <description>
 <![CDATA[
@@ -2356,7 +2356,7 @@ with one item in it, the array itself. This is rarely what is desired.
   </rule>
 
   <rule key="PSC_PRESIZE_COLLECTIONS" priority="INFO">
-    <name><![CDATA[Performance - Method does not presize the allocation of a collection [fb-contrib]]]></name>
+    <name><![CDATA[Performance - Method does not presize the allocation of a collection]]></name>
     <configKey><![CDATA[PSC_PRESIZE_COLLECTIONS]]></configKey>
     <description>
 <![CDATA[
@@ -2369,7 +2369,7 @@ and thus needlessly causes intermediate reallocations of the collection.
   </rule>
 
   <rule key="UMTP_UNBOUND_METHOD_TEMPLATE_PARAMETER" priority="INFO">
-    <name><![CDATA[Correctness - Method declares unbound method template parameter(s) [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method declares unbound method template parameter(s)]]></name>
     <configKey><![CDATA[UMTP_UNBOUND_METHOD_TEMPLATE_PARAMETER]]></configKey>
     <description>
 <![CDATA[
@@ -2381,7 +2381,7 @@ just confusing to the reader.
   </rule>
 
   <rule key="NPMC_NON_PRODUCTIVE_METHOD_CALL" priority="INFO">
-    <name><![CDATA[Correctness - Method ignores return value of a non mutating method [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method ignores return value of a non mutating method]]></name>
     <configKey><![CDATA[NPMC_NON_PRODUCTIVE_METHOD_CALL]]></configKey>
     <description>
 <![CDATA[
@@ -2393,7 +2393,7 @@ this method, and it can be removed.
   </rule>
 
   <rule key="AIOB_ARRAY_INDEX_OUT_OF_BOUNDS" priority="INFO">
-    <name><![CDATA[Correctness - Method attempts to access an array element outside the array's size [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method attempts to access an array element outside the array's size]]></name>
     <configKey><![CDATA[AIOB_ARRAY_INDEX_OUT_OF_BOUNDS]]></configKey>
     <description>
 <![CDATA[
@@ -2404,7 +2404,7 @@ array. This will cause an ArrayIndexOutOfBoundsException at runtime</p>
   </rule>
 
   <rule key="AIOB_ARRAY_STORE_TO_NULL_REFERENCE" priority="INFO">
-    <name><![CDATA[Correctness - Method attempts to store an array element to an array that does not appear to be allocated [fb-contrib]]]></name>
+    <name><![CDATA[Correctness - Method attempts to store an array element to an array that does not appear to be allocated]]></name>
     <configKey><![CDATA[AIOB_ARRAY_STORE_TO_NULL_REFERENCE]]></configKey>
       <description>
 <![CDATA[
