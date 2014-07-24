@@ -1,4 +1,4 @@
-<!-- fb-contrib 4.8.5 -->
+<!-- fb-contrib 5.2.1 -->
 <rules>
 
   <rule key="ISB_INEFFICIENT_STRING_BUFFERING" priority="INFO">
@@ -2409,6 +2409,183 @@ array. This will cause an ArrayIndexOutOfBoundsException at runtime</p>
       <description>
 <![CDATA[
 <p>This method attempts to store an array element into an an array that appears to not have been allocated.
+]]>
+    </description>
+  </rule>
+
+  <rule key="ICA_INVALID_CONSTANT_ARGUMENT" priority="INFO">
+    <name><![CDATA[Correctness - Invalid Constant Argument]]></name>
+    <configKey><![CDATA[ICA_INVALID_CONSTANT_ARGUMENT]]></configKey>
+    <description>
+<![CDATA[
+<p>This method passes an invalid constant value to a method parameter that expects only a select number of possible values.
+This is likely going to cause this method to fail to operate correctly.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="CNC_COLLECTION_NAMING_CONFUSION" priority="INFO">
+    <name><![CDATA[Style - Collection Naming Confusion]]></name>
+    <configKey><![CDATA[CNC_COLLECTION_NAMING_CONFUSION]]></configKey>
+    <description>
+<![CDATA[
+<p>This class defines a field or local collection variable with a name that contains a different type
+of collection in its name. An example woutd be a Set<User> called userList. This is confusing to the reader,
+and likely caused by a previous refactor of type, without changing the name.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="PME_POOR_MANS_ENUM" priority="INFO">
+    <name><![CDATA[Style - Poor Mans Enum]]></name>
+    <configKey><![CDATA[PME_POOR_MANS_ENUM]]></configKey>
+    <description>
+<![CDATA[
+<p>This field, although defined as a simple variable (int, String, etc) only has a set of constant values
+assigned to it. Thus it appears to be used like an enum value, and should probably be defined as such.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UP_UNUSED_PARAMETER" priority="INFO">
+    <name><![CDATA[Style - Unused Parameter]]></name>
+    <configKey><![CDATA[UP_UNUSED_PARAMETER]]></configKey>
+    <description>
+<![CDATA[
+<p>This method defines parameters that are never used. As this method is either static of private,
+and can't be derived from, it is safe to remove these parameters and simplify your method.
+You should consider, while unlikely, that this method may be used reflectively, and thus you will
+want to change that call as well.
+]]>
+    </description>
+  </rule>
+
+  <rule key="CD_CIRCULAR_DEPENDENCY" priority="INFO">
+    <name><![CDATA[Correctness - Circular Dependencies]]></name>
+    <configKey><![CDATA[CD_CIRCULAR_DEPENDENCY]]></configKey>
+    <description>
+<![CDATA[
+<p>
+This class has a circular dependency with other classes. This makes building these classes
+difficult, as each is dependent on the other to build correctly. Consider using interfaces
+to break the hard dependency.
+</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="MUC_MODIFYING_UNMODIFIABLE_COLLECTION" priority="INFO">
+    <name><![CDATA[Correctness - Modifying Unmodifiable Collection]]></name>
+    <configKey><![CDATA[MUC_MODIFYING_UNMODIFIABLE_COLLECTION]]></configKey>
+    <description>
+<![CDATA[
+<p>This method attempts to modify a collection that it got from a source that could potentially have created an
+immutable collection, thru Arrays.asList, Collections.unmodifiableXXX, or one of guava's methods. Doing so will cause
+an exception, as these collections are not mutable.
+]]>
+    </description>
+  </rule>
+
+  <rule key="HES_EXECUTOR_NEVER_SHUTDOWN" priority="INFO">
+    <name><![CDATA[Correctness - Hanging ExecutorService]]></name>
+    <configKey><![CDATA[HES_EXECUTOR_NEVER_SHUTDOWN]]></configKey>
+    <description>
+<![CDATA[
+<p>Most <code>ExecutorService</code> objects must be explicitly shutdown,
+otherwise, their internal threads can prolong the running of the JVM, even when everything
+else has stopped.</p>
+
+<p>FindBugs has detected that there are no calls to either the <code>shutdown()</code> or <code>shutdownNow()</code>
+method, and thus, the <code>ExecutorService</code> is not guaranteed to ever terminate.  This is especially
+problematic for <code>Executors.newFixedThreadPool()</code> and most of the other convenience methods in
+the <code>Executors</code> class.</p>
+
+<p>Even though there are some exceptions to this, particularly when a custom <code>ThreadFactory</code> is
+provided, or for <code>ThreadPoolExecutor</code>s with <code>allowsCoreThreadTimeOut()</code> set to true,
+it is good practice to explictly shutdown the <code>ExecutorService</code> when its utility is done.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="HES_LOCAL_EXECUTOR_SERVICE" priority="INFO">
+    <name><![CDATA[Correctness - Hanging ExecutorService]]></name>
+    <configKey><![CDATA[HES_LOCAL_EXECUTOR_SERVICE]]></configKey>
+    <description>
+      <![CDATA[
+<p><code>ExecutorService</code>s are typically instantiated as fields so that many tasks can be executed on a controlled number of <code>Thread</code>s across many method calls.  Therefore, it is unusual for <code>ExecutorService</code>s to be a local variable, where tasks will be added only one time, in the enclosing method. </p>
+
+<p>Furthermore, when a local <code>ExecutorService</code> reaches the end of scope and goes up for garbage collection, the internal <code>Thread</code>s are not necessarily terminated and can prevent the JVM from ever shutting down.</p>
+
+<p>Consider making this local variable a field and create a method that will explicitly shutdown the <code>ExecutorService</code></p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="HES_EXECUTOR_OVERWRITTEN_WITHOUT_SHUTDOWN" priority="INFO">
+    <name><![CDATA[Correctness - Hanging ExecutorService]]></name>
+    <configKey><![CDATA[HES_EXECUTOR_OVERWRITTEN_WITHOUT_SHUTDOWN]]></configKey>
+    <description>
+<![CDATA[
+<p>Most <code>ExecutorService</code> objects must be explicitly shutdown, otherwise, their internal threads can prevent the JVM from ever shutting down, even when everything else has stopped.</p>
+
+<p>FindBugs has detected that something like the following is happening:<br/>
+<code>
+ExecutorService executor = ... //e.g. Executors.newCachedThreadPool();<br/>
+...<br/>
+public void reset() {<br/>
+&nbsp;&nbsp;&nbsp;this.executor = Executors.newCachedThreadPool(); <br/>
+&nbsp;&nbsp;&nbsp;this.executor.execute(new SampleExecutable()); <br/>
+}<br/>
+</code>
+For normal objects, losing the last reference to them like this would trigger the object to be cleaned up
+in garbage collection.  For <code>ExecutorService</code>s, this isn't enough to terminate the internal threads in the
+thread pool, and the <code>ExecutorService</code> isn't guaranteed to shutdown, causing the JVM to never stop. <br/>
+To fix this, simply add a call to <code>shutdown()</code> like this:<br/>
+<code>
+ExecutorService executor = ... //e.g. Executors.newCachedThreadPool();<br/>
+...<br/>
+public void reset() {<br/>
+<b>&nbsp;&nbsp;&nbsp;this.executor.shutDown();</b> <br/>
+&nbsp;&nbsp;&nbsp;this.executor = Executors.newCachedThreadPool(); <br/>
+&nbsp;&nbsp;&nbsp;this.executor.execute(new SampleExecutable()); <br/>
+}
+</code>
+</p>
+
+<p>Even though there are some exceptions to this, particularly when a custom <code>ThreadFactory</code> is
+provided, or for <code>ThreadPoolExecutor</code>s with <code>allowsCoreThreadTimeOut()</code> set to true,
+it is good practice to explictly shutdown the <code>ExecutorService</code> at the end of execution, or
+when it is being replaced.</p>
+
+<p><b>Note:</b> <code>ExecutorService</code>s are generally created once in a program's lifecycle.  If you find yourself
+replacing the <code>ExecutorService</code>, perhaps you may consider restructuring your code to use calls like
+<code>awaitTermination()</code> or <code>Future</code>s/<code>Callable</code>s to avoid recreating the <code>ExecutorService</code>.</p>
+]]>
+    </description>
+  </rule>
+
+  <rule key="UJM_UNJITABLE_METHOD" priority="INFO">
+    <name><![CDATA[Performance - Unjitable method]]></name>
+    <configKey><![CDATA[UJM_UNJITABLE_METHOD]]></configKey>
+    <description>
+<![CDATA[
+<p>This method is longer than 8000 bytes. By default the JIT will not attempt to compile this method no matter
+how hot it is, and so this method will always be interpreted. If performance is important, you should consider
+breaking this method up in smaller chunks. (And probably a good idea for readability too!).
+]]>
+    </description>
+  </rule>
+
+  <rule key="CTU_CONFLICTING_TIME_UNITS" priority="INFO">
+    <name><![CDATA[Correctness - Conflicting Time Units]]></name>
+    <configKey><![CDATA[CTU_CONFLICTING_TIME_UNITS]]></configKey>
+    <description>
+<![CDATA[
+<p>This method takes two values that appear to be representing time, and performs arithmetic operations on this
+two values directly, even though it appears that the two values are representing different time units, such as
+adding a millisecond value to a nanosecond value. You should convert the two values to the same time unit before
+performing this calculation in order for it to be meaningful.
 ]]>
     </description>
   </rule>
