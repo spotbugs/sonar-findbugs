@@ -54,7 +54,7 @@
 
     <sonar.version>4.2</sonar.version>
     <sonar-java.version>2.4</sonar-java.version>
-    <fbcontrib.version>5.2.1</fbcontrib.version>
+    <fbcontrib.version>6.0.0</fbcontrib.version>
   </properties>
 
   <dependencies>
