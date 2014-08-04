@@ -32,7 +32,7 @@ public class FbContribRuleRepositoryTest {
   public void testLoadRepositoryFromXml() {
     FbContribRuleRepository repository = new FbContribRuleRepository(new XMLRuleParser());
     List<Rule> rules = repository.createRules();
-    assertThat(rules.size()).isEqualTo(199);
+    assertThat(rules.size()).isEqualTo(209);
     for (Rule rule : rules) {
       assertThat(rule.getKey()).isNotNull();
       assertThat(rule.getConfigKey()).isEqualTo(rule.getKey());
