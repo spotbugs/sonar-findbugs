@@ -2540,4 +2540,28 @@
     <configKey><![CDATA[NP_METHOD_PARAMETER_TIGHTENS_ANNOTATION]]></configKey>
   </rule>
 
+  <rule key="NP_OPTIONAL_RETURN_NULL">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Method with Optional return type returns explicit null]]></name>
+    <configKey><![CDATA[NP_OPTIONAL_RETURN_NULL]]></configKey>
+  </rule>
+
+  <rule key="IIO_INEFFICIENT_INDEX_OF">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Inefficient use of String.indexOf(String)]]></name>
+    <configKey><![CDATA[IIO_INEFFICIENT_INDEX_OF]]></configKey>
+  </rule>
+
+  <rule key="IIO_INEFFICIENT_LAST_INDEX_OF">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Inefficient use of String.lastIndexOf(String)]]></name>
+    <configKey><![CDATA[IIO_INEFFICIENT_LAST_INDEX_OF]]></configKey>
+  </rule>
+
+  <rule key="CNT_ROUGH_CONSTANT_VALUE">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Rough value of known constant found]]></name>
+    <configKey><![CDATA[CNT_ROUGH_CONSTANT_VALUE]]></configKey>
+  </rule>
+
 </rules>

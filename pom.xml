@@ -49,7 +49,9 @@
   </scm>
 
   <properties>
-    <findbugs.version>2.0.3</findbugs.version>
+    <findbugs.version>3.0.0</findbugs.version>
+    <jdk.min.version>1.7</jdk.min.version>
+
     <sonar.version>4.2</sonar.version>
     <sonar-java.version>2.4</sonar-java.version>
     <fbcontrib.version>5.2.1</fbcontrib.version>
@@ -245,8 +247,8 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>5800000</maxsize>
-                  <minsize>4700000</minsize>
+                  <maxsize>6800000</maxsize>
+                  <minsize>5800000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
                   </files>
