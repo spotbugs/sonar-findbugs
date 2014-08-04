@@ -13,7 +13,7 @@ target/
 .settings
 
 # ---- Mac OS X
-.DS_Store?
+.DS_Store
 Icon?
 # Thumbnails
 ._*
