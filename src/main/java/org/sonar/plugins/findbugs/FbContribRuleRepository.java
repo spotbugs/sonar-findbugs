@@ -34,7 +34,7 @@ public final class FbContribRuleRepository extends RuleRepository {
 
   public FbContribRuleRepository(XMLRuleParser xmlRuleParser) {
     super(REPOSITORY_KEY, Java.KEY);
-    setName("fb-contib");
+    setName(REPOSITORY_KEY);
     this.xmlRuleParser = xmlRuleParser;
   }
 
