@@ -113,6 +113,8 @@
     <priority>BLOCKER</priority>
     <name><![CDATA[Security - Hardcoded constant database password]]></name>
     <configKey><![CDATA[DMI_CONSTANT_DB_PASSWORD]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="HRS_REQUEST_PARAMETER_TO_COOKIE">
@@ -125,24 +127,32 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Security - HTTP Response splitting vulnerability]]></name>
     <configKey><![CDATA[HRS_REQUEST_PARAMETER_TO_HTTP_HEADER]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER">
     <priority>CRITICAL</priority>
     <name><![CDATA[Security - Servlet reflected cross site scripting vulnerability]]></name>
     <configKey><![CDATA[XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="XSS_REQUEST_PARAMETER_TO_SEND_ERROR">
     <priority>CRITICAL</priority>
     <name><![CDATA[Security - Servlet reflected cross site scripting vulnerability]]></name>
     <configKey><![CDATA[XSS_REQUEST_PARAMETER_TO_SEND_ERROR]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="XSS_REQUEST_PARAMETER_TO_JSP_WRITER">
     <priority>CRITICAL</priority>
     <name><![CDATA[Security - JSP reflected cross site scripting vulnerability]]></name>
     <configKey><![CDATA[XSS_REQUEST_PARAMETER_TO_JSP_WRITER]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="SW_SWING_METHODS_INVOKED_IN_SWING_THREAD">
@@ -422,12 +432,16 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Security - Nonconstant string passed to execute method on an SQL statement]]></name>
     <configKey><![CDATA[SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING">
     <priority>CRITICAL</priority>
     <name><![CDATA[Security - A prepared statement is generated from a nonconstant String]]></name>
     <configKey><![CDATA[SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="DM_USELESS_THREAD">
@@ -2478,12 +2492,16 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Absolute path traversal in servlet]]></name>
     <configKey><![CDATA[PT_ABSOLUTE_PATH_TRAVERSAL]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="PT_RELATIVE_PATH_TRAVERSAL">
     <priority>MAJOR</priority>
     <name><![CDATA[Relative path traversal in servlet]]></name>
     <configKey><![CDATA[PT_RELATIVE_PATH_TRAVERSAL]]></configKey>
+    <tag>owasp-top10</tag>
+    <tag>cwe</tag>
   </rule>
 
   <rule key="NP_NONNULL_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR">
