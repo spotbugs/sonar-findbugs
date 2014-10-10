@@ -53,6 +53,7 @@ public class FindbugsSensor implements Sensor {
     this.fs = fs;
   }
 
+  @Override
   public boolean shouldExecuteOnProject(Project project) {
     return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
         && (hasActiveFindbugsbRules() || hasActiveFbContribRules());
@@ -66,6 +67,7 @@ public class FindbugsSensor implements Sensor {
     return !profile.getActiveRulesByRepository(FbContribRuleRepository.REPOSITORY_KEY).isEmpty();
   }
 
+  @Override
   public void analyse(Project project, SensorContext context) {
     if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
