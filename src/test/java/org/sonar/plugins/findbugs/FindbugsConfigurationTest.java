@@ -26,7 +26,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.ProjectClasspath;
 import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
@@ -52,7 +51,6 @@ public class FindbugsConfigurationTest {
   private Settings settings;
   private File baseDir;
   private FindbugsConfiguration conf;
-  private ProjectClasspath classpath;
   private JavaResourceLocator javaResourceLocator;
 
   @Before
@@ -64,9 +62,8 @@ public class FindbugsConfigurationTest {
     when(fs.baseDir()).thenReturn(baseDir);
 
     settings = new Settings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
-    classpath = mock(ProjectClasspath.class);
     javaResourceLocator = mock(JavaResourceLocator.class);
-    conf = new FindbugsConfiguration(fs, settings, RulesProfile.create(), new FindbugsProfileExporter(), classpath, javaResourceLocator);
+    conf = new FindbugsConfiguration(fs, settings, RulesProfile.create(), new FindbugsProfileExporter(), javaResourceLocator);
   }
 
   @Test

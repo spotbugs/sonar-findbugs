@@ -29,7 +29,6 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
-import org.sonar.api.batch.ProjectClasspath;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
@@ -52,16 +51,13 @@ public class FindbugsConfiguration implements BatchExtension {
   private final Settings settings;
   private final RulesProfile profile;
   private final FindbugsProfileExporter exporter;
-  private final ProjectClasspath projectClasspath;
   private final JavaResourceLocator javaResourceLocator;
 
-  public FindbugsConfiguration(ModuleFileSystem fileSystem, Settings settings, RulesProfile profile, FindbugsProfileExporter exporter, ProjectClasspath classpath,
-                               JavaResourceLocator javaResourceLocator) {
+  public FindbugsConfiguration(ModuleFileSystem fileSystem, Settings settings, RulesProfile profile, FindbugsProfileExporter exporter, JavaResourceLocator javaResourceLocator) {
     this.fileSystem = fileSystem;
     this.settings = settings;
     this.profile = profile;
     this.exporter = exporter;
-    this.projectClasspath = classpath;
     this.javaResourceLocator = javaResourceLocator;
   }
 
@@ -80,7 +76,7 @@ public class FindbugsConfiguration implements BatchExtension {
       findbugsProject.addFile(classToAnalyze.getCanonicalPath());
     }
 
-    for (File file : projectClasspath.getElements()) {
+    for (File file : javaResourceLocator.classpath()) {
       findbugsProject.addAuxClasspathEntry(file.getAbsolutePath());
     }
     copyLibs();
