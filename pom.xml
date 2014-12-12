@@ -15,7 +15,7 @@
 
   <name>SonarQube Findbugs Plugin</name>
   <description>FindBugs is a program that uses static analysis to look for bugs in Java code. It can detect a variety of common coding mistakes, including thread synchronization problems, misuse of API methods.</description>
-  <url>http://docs.codehaus.org/x/4ZS7DQ</url>
+  <url>http://redirect.sonarsource.com/plugins/findbugs.html</url>
   <issueManagement>
     <system>JIRA</system>
     <url>http://jira.codehaus.org/browse/SONARFBUGS</url>
