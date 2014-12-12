@@ -57,7 +57,7 @@
     <jdk.min.version>1.7</jdk.min.version>
 
     <sonar.version>4.2</sonar.version>
-    <sonar-java.version>2.5</sonar-java.version>
+    <sonar-java.version>2.7</sonar-java.version>
     <fbcontrib.version>6.0.0</fbcontrib.version>
   </properties>
 
