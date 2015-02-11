@@ -20,14 +20,25 @@
 package org.sonar.plugins.findbugs;
 
 import org.junit.Test;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.XMLRuleParser;
+
+import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FindbugsPluginTest {
-
-  @Test
-  public void testGetExtensions() {
-    assertThat(new FindbugsPlugin().getExtensions()).hasSize(15);
-  }
-
+public class FindSecurityBugsRuleRepositoryTest {
+    @Test
+    public void testLoadRepositoryFromXml() {
+        FindSecurityBugsRuleRepository repository = new FindSecurityBugsRuleRepository(new XMLRuleParser());
+        List<Rule> rules = repository.createRules();
+        //assertThat(rules.size()).isEqualTo(209);
+        for (Rule rule : rules) {
+            assertThat(rule.getKey()).isNotNull();
+            assertThat(rule.getConfigKey()).isEqualTo(rule.getKey());
+            assertThat(rule.getName()).isNotNull();
+            assertThat(rule.getDescription()).isNotNull();
+        }
+        assertThat(repository.getName()).isEqualTo("Find Security Bugs");
+    }
 }

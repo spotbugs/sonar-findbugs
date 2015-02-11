@@ -20,14 +20,22 @@
 package org.sonar.plugins.findbugs;
 
 import org.junit.Test;
+import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.utils.ValidationMessages;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FindbugsPluginTest {
+public class FindbugsSecurityOnlyProfileTest {
 
-  @Test
-  public void testGetExtensions() {
-    assertThat(new FindbugsPlugin().getExtensions()).hasSize(15);
-  }
-
+    @Test
+    public void shouldCreateProfile() {
+        FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinderAllRepo.create());
+        FindbugsSecurityOnlyProfile secOnlyProfile = new FindbugsSecurityOnlyProfile(importer);
+        ValidationMessages validation = ValidationMessages.create();
+        RulesProfile profile = secOnlyProfile.createProfile(validation);
+        //The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
+        assertThat(profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY)).hasSize(9);
+        assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY)).hasSize(1);
+        assertThat(validation.hasErrors()).isFalse();
+    }
 }

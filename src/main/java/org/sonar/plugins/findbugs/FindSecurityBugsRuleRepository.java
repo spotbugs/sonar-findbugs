@@ -19,15 +19,27 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
+import org.sonar.api.resources.Java;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleRepository;
+import org.sonar.api.rules.XMLRuleParser;
 
-import static org.fest.assertions.Assertions.assertThat;
+import java.util.List;
 
-public class FindbugsPluginTest {
+public final class FindSecurityBugsRuleRepository extends RuleRepository {
 
-  @Test
-  public void testGetExtensions() {
-    assertThat(new FindbugsPlugin().getExtensions()).hasSize(15);
+  public static final String REPOSITORY_KEY = "findsecbugs";
+
+  private XMLRuleParser xmlRuleParser;
+
+  public FindSecurityBugsRuleRepository(XMLRuleParser xmlRuleParser) {
+    super(REPOSITORY_KEY, Java.KEY);
+    setName("Find Security Bugs");
+    this.xmlRuleParser = xmlRuleParser;
   }
 
+  @Override
+  public List<Rule> createRules() {
+    return xmlRuleParser.parse(getClass().getResourceAsStream("/org/sonar/plugins/findbugs/rules-findsecbugs.xml"));
+  }
 }

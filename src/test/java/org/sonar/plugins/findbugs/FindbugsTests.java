@@ -25,7 +25,7 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.XMLRuleParser;
-import org.sonar.plugins.java.Java;
+import org.sonar.api.resources.Java;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
 

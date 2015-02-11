@@ -59,6 +59,7 @@
     <sonar.version>4.2</sonar.version>
     <sonar-java.version>2.7</sonar-java.version>
     <fbcontrib.version>6.0.0</fbcontrib.version>
+    <findsecbugs.version>1.3.0</findsecbugs.version>
   </properties>
 
   <dependencies>
@@ -112,6 +113,13 @@
       <groupId>com.mebigfatguy.fb-contrib</groupId>
       <artifactId>fb-contrib</artifactId>
       <version>${fbcontrib.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.h3xstream.findsecbugs</groupId>
+      <artifactId>findsecbugs-plugin</artifactId>
+      <version>${findsecbugs.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -222,7 +230,7 @@
             <configuration>
               <stripVersion>true</stripVersion>
               <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              <includeArtifactIds>annotations,jsr305,fb-contrib</includeArtifactIds>
+              <includeArtifactIds>annotations,jsr305,fb-contrib,findsecbugs-plugin</includeArtifactIds>
             </configuration>
           </execution>
         </executions>
