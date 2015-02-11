@@ -21,29 +21,32 @@ package org.sonar.plugins.findbugs;
 
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
 import org.sonar.api.resources.Java;
+import org.sonar.api.utils.ValidationMessages;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-public class FindbugsProfile extends ProfileDefinition {
+/**
+ * Security rules with only the issue that require immediate analysis. It is intend for periodic scan that will trigger
+ * a moderate number of false positive.
+ */
+public class FindbugsSecurityMinimalProfile extends ProfileDefinition {
 
-  private static final String FINDBUGS_PROFILE_NAME = "FindBugs";
-  private final FindbugsProfileImporter importer;
+    private static final String FINDBUGS_SECURITY_AUDIT_PROFILE_NAME = "FindBugs Security Minimal";
+    private final FindbugsProfileImporter importer;
 
-  public FindbugsProfile(FindbugsProfileImporter importer) {
-    this.importer = importer;
-  }
+    public FindbugsSecurityMinimalProfile(FindbugsProfileImporter importer) {
+        this.importer = importer;
+    }
 
-  @Override
-  public RulesProfile createProfile(ValidationMessages messages) {
-    Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
-        "/org/sonar/plugins/findbugs/profile-findbugs.xml"));
-    RulesProfile profile = importer.importProfile(findbugsProfile, messages);
-    profile.setLanguage(Java.KEY);
-    profile.setName(FINDBUGS_PROFILE_NAME);
-    return profile;
-  }
-
+    @Override
+    public RulesProfile createProfile(ValidationMessages messages) {
+        Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
+                "/org/sonar/plugins/findbugs/profile-findbugs-security-minimal.xml"));
+        RulesProfile profile = importer.importProfile(findbugsProfile, messages);
+        profile.setLanguage(Java.KEY);
+        profile.setName(FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
+        return profile;
+    }
 }

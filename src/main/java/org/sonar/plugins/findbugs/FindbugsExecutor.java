@@ -93,7 +93,11 @@ public class FindbugsExecutor implements BatchExtension {
     return execute(true);
   }
 
-  public Collection<ReportedBug> execute(boolean useFbContrib) {
+  public Collection<ReportedBug> execute(boolean useAllPlugin) {
+    return execute(useAllPlugin,useAllPlugin);
+  }
+
+  public Collection<ReportedBug> execute(boolean useFbContrib, boolean useFindSecBugs) {
     TimeProfiler profiler = new TimeProfiler().start("Execute Findbugs " + FindbugsVersion.getVersion());
     // We keep a handle on the current security manager because FB plays with it and we need to restore it before shutting down the executor
     // service
@@ -112,7 +116,7 @@ public class FindbugsExecutor implements BatchExtension {
       final FindBugs2 engine = new FindBugs2();
 
       Project project = configuration.getFindbugsProject();
-      customPlugins = loadFindbugsPlugins(useFbContrib);
+      customPlugins = loadFindbugsPlugins(useFbContrib,useFindSecBugs);
 
       disableUpdateChecksOnEveryPlugin();
 
@@ -216,7 +220,7 @@ public class FindbugsExecutor implements BatchExtension {
     }
   }
 
-  private Collection<Plugin> loadFindbugsPlugins(boolean useFbContrib) {
+  private Collection<Plugin> loadFindbugsPlugins(boolean useFbContrib,boolean useFindSecBugs) {
     ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
     List<String> pluginJarPathList = Lists.newArrayList();
@@ -230,6 +234,10 @@ public class FindbugsExecutor implements BatchExtension {
       if (useFbContrib && configuration.getFbContribJar() != null) {
         // fb-contrib plugin is packaged by Maven. It is not available during execution of unit tests.
         pluginJarPathList.add(configuration.getFbContribJar().getAbsolutePath());
+      }
+      //Add find-sec-bugs plugin. (same as fb-contrib)
+      if (useFindSecBugs && configuration.getFindSecBugsJar() != null) {
+        pluginJarPathList.add(configuration.getFindSecBugsJar().getAbsolutePath());
       }
     } catch (IOException e) {
       throw new SonarException(e);

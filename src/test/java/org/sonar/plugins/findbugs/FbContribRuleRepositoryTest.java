@@ -39,6 +39,6 @@ public class FbContribRuleRepositoryTest {
       assertThat(rule.getName()).isNotNull();
       assertThat(rule.getDescription()).isNotNull();
     }
-    assertThat(repository.getName()).isEqualTo("fb-contrib");
+    assertThat(repository.getName()).isEqualTo("FindBugs Contrib");
   }
 }

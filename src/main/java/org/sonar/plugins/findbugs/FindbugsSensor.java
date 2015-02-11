@@ -30,7 +30,7 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.plugins.java.Java;
+import org.sonar.api.resources.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.util.Collection;
@@ -56,15 +56,19 @@ public class FindbugsSensor implements Sensor {
   @Override
   public boolean shouldExecuteOnProject(Project project) {
     return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
-        && (hasActiveFindbugsbRules() || hasActiveFbContribRules());
+        && (hasActiveFindbugsRules() || hasActiveFbContribRules() || hasActiveFindSecBugsRules());
   }
 
-  private boolean hasActiveFindbugsbRules() {
+  private boolean hasActiveFindbugsRules() {
     return !profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY).isEmpty();
   }
 
   private boolean hasActiveFbContribRules() {
     return !profile.getActiveRulesByRepository(FbContribRuleRepository.REPOSITORY_KEY).isEmpty();
+  }
+
+  private boolean hasActiveFindSecBugsRules() {
+    return !profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY).isEmpty();
   }
 
   @Override
@@ -75,16 +79,20 @@ public class FindbugsSensor implements Sensor {
           + " make it possible for Findbugs to analyse your project.");
       return;
     }
-    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules());
+    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
 
     for (ReportedBug bugInstance : collection) {
       Rule rule = ruleFinder.findByKey(FindbugsRuleRepository.REPOSITORY_KEY, bugInstance.getType());
       if (rule == null) {
         rule = ruleFinder.findByKey(FbContribRuleRepository.REPOSITORY_KEY, bugInstance.getType());
         if (rule == null) {
-          // ignore violations from report, if rule not activated in Sonar
-          LOG.warn("Findbugs rule '{}' not active in Sonar.", bugInstance.getType());
-          continue;
+          rule = ruleFinder.findByKey(FindSecurityBugsRuleRepository.REPOSITORY_KEY, bugInstance.getType());
+
+          if (rule == null) {
+            // ignore violations from report, if rule not activated in Sonar
+            LOG.warn("Findbugs rule '{}' is not active in Sonar.", bugInstance.getType());
+            continue;
+          }
         }
       }
 

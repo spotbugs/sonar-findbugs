@@ -19,31 +19,27 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.resources.Java;
+import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleRepository;
+import org.sonar.api.rules.XMLRuleParser;
 
 import java.util.List;
 
-public class FindbugsPlugin extends SonarPlugin {
+public final class FindSecurityBugsRuleRepository extends RuleRepository {
 
-  @Override
-  public List getExtensions() {
-    ImmutableList.Builder<Object> extensions = ImmutableList.builder();
-    extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
-    extensions.add(
-      FindbugsSensor.class,
-      FindbugsConfiguration.class,
-      FindbugsExecutor.class,
-      FindbugsRuleRepository.class,
-      FindbugsProfileExporter.class,
-      FindbugsProfileImporter.class,
-      FindbugsProfile.class,
-      FindbugsSecurityAuditProfile.class,
-      FindbugsSecurityMinimalProfile.class,
-      FindbugsMavenInitializer.class,
-      FbContribRuleRepository.class,
-      FindSecurityBugsRuleRepository.class);
-    return extensions.build();
+  public static final String REPOSITORY_KEY = "findsecbugs";
+
+  private XMLRuleParser xmlRuleParser;
+
+  public FindSecurityBugsRuleRepository(XMLRuleParser xmlRuleParser) {
+    super(REPOSITORY_KEY, Java.KEY);
+    setName("Find Security Bugs");
+    this.xmlRuleParser = xmlRuleParser;
   }
 
+  @Override
+  public List<Rule> createRules() {
+    return xmlRuleParser.parse(getClass().getResourceAsStream("/org/sonar/plugins/findbugs/rules-findsecbugs.xml"));
+  }
 }
