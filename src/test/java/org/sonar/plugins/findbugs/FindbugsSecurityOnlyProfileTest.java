@@ -35,7 +35,7 @@ public class FindbugsSecurityOnlyProfileTest {
         RulesProfile profile = secOnlyProfile.createProfile(validation);
         //The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
         assertThat(profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY)).hasSize(9);
-        assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY)).hasSize(1);
+        assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY)).hasSize(56);
         assertThat(validation.hasErrors()).isFalse();
     }
 }
