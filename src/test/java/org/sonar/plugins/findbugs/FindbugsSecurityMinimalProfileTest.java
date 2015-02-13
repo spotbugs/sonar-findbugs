@@ -25,17 +25,18 @@ import org.sonar.api.utils.ValidationMessages;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FindbugsSecurityOnlyProfileTest {
+public class FindbugsSecurityMinimalProfileTest {
 
     @Test
     public void shouldCreateProfile() {
         FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinderAllRepo.create());
-        FindbugsSecurityOnlyProfile secOnlyProfile = new FindbugsSecurityOnlyProfile(importer);
+        FindbugsSecurityMinimalProfile secOnlyProfile = new FindbugsSecurityMinimalProfile(importer);
         ValidationMessages validation = ValidationMessages.create();
         RulesProfile profile = secOnlyProfile.createProfile(validation);
         //The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
         assertThat(profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY)).hasSize(9);
-        assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY)).hasSize(56);
+        //56 rules - 20 informational = 36 major or critical
+        assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY)).hasSize(36);
         assertThat(validation.hasErrors()).isFalse();
     }
 }

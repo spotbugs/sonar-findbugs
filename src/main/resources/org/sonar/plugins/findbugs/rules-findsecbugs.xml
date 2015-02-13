@@ -1,4 +1,4 @@
-<rules><!-- This file is auto-generated. It is generated from FindSecurityBugs messages.xml file. -->
+<rules><!-- This file is auto-generated. -->
   <rule key='PREDICTABLE_RANDOM' priority='MAJOR'>
     <name>Security - Predictable Pseudo Random Number Generator</name>
     <configKey>PREDICTABLE_RANDOM</configKey>
@@ -20,6 +20,7 @@ A quick fix could be to replace the use of &lt;b&gt;java.util.Random&lt;/b&gt; w
 &lt;a href="http://blog.h3xstream.com/2014/12/predicting-struts-csrf-token-cve-2014.html"&gt;Predicting Struts CSRF Token (Example of real-life vulnerability and exploitation)&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_PARAMETER' priority='INFO'>
     <name>Security - Untrusted Servlet Parameter</name>
@@ -40,6 +41,7 @@ You may need to validate or sanitize those values before passing them to sensiti
 &lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_CONTENT_TYPE' priority='INFO'>
     <name>Security - Untrusted Content-Type Header</name>
@@ -53,6 +55,7 @@ The HTTP header Content-Type can be controlled by the client. As such, its value
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_SERVER_NAME' priority='INFO'>
     <name>Security - Untrusted Hostname Header</name>
@@ -75,6 +78,7 @@ decisions you make with respect to a request.
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_SESSION_ID' priority='INFO'>
     <name>Security - Untrusted Session Cookie Value</name>
@@ -102,6 +106,7 @@ valid active session IDs, allowing an insider to hijack any sessions whose IDs h
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet"&gt;OWASP: Session Management Cheat Sheet&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_QUERY_STRING' priority='INFO'>
     <name>Security - Untrusted Query String</name>
@@ -119,6 +124,7 @@ You may need to validate or sanitize anything pulled from the query string befor
 &lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_HEADER' priority='INFO'>
     <name>Security - HTTP Headers Untrusted</name>
@@ -132,6 +138,7 @@ not trust this value in any security decisions you make with respect to a reques
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_HEADER_REFERER' priority='INFO'>
     <name>Security - Untrusted Referer Header</name>
@@ -156,6 +163,7 @@ Recommendations:
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_HEADER_USER_AGENT' priority='INFO'>
     <name>Security - Untrusted User-Agent Header</name>
@@ -168,6 +176,7 @@ crawler UA) is not recommended.&lt;/p&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='COOKIE_USAGE' priority='INFO'>
     <name>Security - Potentially Sensitive Data in Cookie</name>
@@ -181,6 +190,7 @@ and referenced by the user's session cookie. See HttpSession (HttpServletRequest
 &lt;a href="http://cwe.mitre.org/data/definitions/315.html"&gt;CWE-315: Cleartext Storage of Sensitive Information in a Cookie&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='PATH_TRAVERSAL_IN' priority='MAJOR'>
     <name>Security - Potential Path Traversal (File Read)</name>
@@ -199,6 +209,7 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;/p&gt;</description>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='PATH_TRAVERSAL_OUT' priority='MAJOR'>
     <name>Security - Potential Path Traversal (File Write)</name>
@@ -217,6 +228,7 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;/p&gt;</description>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='COMMAND_INJECTION' priority='CRITICAL'>
     <name>Security - Potential Command Injection</name>
@@ -232,6 +244,7 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
     <tag>owasp-top10</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='WEAK_FILENAMEUTILS' priority='INFO'>
     <name>Security - FilenameUtils Not Filtering Null Bytes</name>
@@ -257,8 +270,9 @@ that looks at the end of the filename (e.g., endswith ".log") to make sure its a
 &lt;/p&gt;</description>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='WEAK_TRUST_MANAGER' priority='INFO'>
+  <rule key='WEAK_TRUST_MANAGER' priority='MAJOR'>
     <name>Security - TrustManager Implementation Empty</name>
     <configKey>WEAK_TRUST_MANAGER</configKey>
     <description>&lt;p&gt;Empty TrustManager implementations are often used to connect easily to a host that is not signed by a root
@@ -281,6 +295,7 @@ Detailed information for a proper implementation is at:
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
   <rule key='JAXWS_ENDPOINT' priority='INFO'>
     <name>Security - Found JAX-WS SOAP Endpoint</name>
@@ -300,6 +315,7 @@ Detailed information for a proper implementation is at:
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet"&gt;OWASP: Web Service Security Cheat Sheet&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='JAXRS_ENDPOINT' priority='INFO'>
     <name>Security - Found JAX-RS REST Endpoint</name>
@@ -324,6 +340,7 @@ Detailed information for a proper implementation is at:
 1. &lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)"&gt;OWASP: Cross-Site Request Forgery&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet"&gt;OWASP: CSRF Prevention Cheat Sheet&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='TAPESTRY_ENDPOINT' priority='INFO'>
     <name>Security - Found Tapestry Page</name>
@@ -355,6 +372,7 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://tapestry.apache.org/"&gt;Apache Tapestry Home Page&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='WICKET_ENDPOINT' priority='INFO'>
     <name>Security - Found Wicket Page</name>
@@ -368,8 +386,9 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://wicket.apache.org/"&gt;Apache Wicket Home Page&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
-  <rule key='WEAK_MESSAGE_DIGEST' priority='INFO'>
+  <rule key='WEAK_MESSAGE_DIGEST' priority='MAJOR'>
     <name>Security - MessageDigest Is Weak</name>
     <configKey>WEAK_MESSAGE_DIGEST</configKey>
     <description>&lt;p&gt;The algorithm used is not a recommended MessageDigest.&lt;/p&gt;
@@ -384,8 +403,9 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='CUSTOM_MESSAGE_DIGEST' priority='INFO'>
+  <rule key='CUSTOM_MESSAGE_DIGEST' priority='MAJOR'>
     <name>Security - MessageDigest Is Custom</name>
     <configKey>CUSTOM_MESSAGE_DIGEST</configKey>
     <description>&lt;p&gt;Implementing a custom MessageDigest is error-prone.&lt;/p&gt;
@@ -417,6 +437,7 @@ sha256Digest.update(password.getBytes());&lt;/pre&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
   <rule key='FILE_UPLOAD_FILENAME' priority='INFO'>
     <name>Security - Tainted Filename Read</name>
@@ -437,6 +458,7 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='REDOS' priority='MAJOR'>
     <name>Security - Regex DOS (ReDOS)</name>
@@ -463,6 +485,7 @@ regex meant, this new regex can be evaluated quickly, and is not subject to ReDO
 &lt;a href="http://cwe.mitre.org/data/definitions/400.html"&gt;CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XXE_SAXPARSER' priority='CRITICAL'>
     <name>Security - XML Parsing Vulnerable to XXE (SAXParser)</name>
@@ -542,6 +565,7 @@ parser.parse(inputStream, customHandler);&lt;/pre&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XXE_XMLREADER' priority='CRITICAL'>
     <name>Security - XML Parsing Vulnerable to XXE (XMLReader)</name>
@@ -621,6 +645,7 @@ reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XXE_DOCUMENT' priority='CRITICAL'>
     <name>Security - XML Parsing Vulnerable to XXE (DocumentBuilder)</name>
@@ -700,6 +725,7 @@ Document doc = db.parse(input);&lt;/pre&gt;
 &lt;a href="http://xerces.apache.org/xerces2-j/features.html"&gt;Xerces2 complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XPATH_INJECTION' priority='CRITICAL'>
     <name>Security - Potential XPath Injection</name>
@@ -722,6 +748,7 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='STRUTS1_ENDPOINT' priority='INFO'>
     <name>Security - Found Struts 1 Action</name>
@@ -729,6 +756,7 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
     <description>&lt;p&gt;This class is a Struts 1 Action.&lt;/p&gt;
 &lt;p&gt;Once a request is routed to this controller, a Form object will automatically be instantiated that contains the HTTP parameters.
 The use of these parameters should be reviewed to make sure they are used safely.&lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='STRUTS2_ENDPOINT' priority='INFO'>
     <name>Security - Found Struts 2 Endpoint</name>
@@ -738,12 +766,14 @@ The use of these parameters should be reviewed to make sure they are used safely
 the class. Therefore, all setters of this class should be considered as untrusted input even if the form doesn't include those values.
 An attacker can simply provide additional values in the request, and they will be set in the object anyway, as long as that object has
 such a setter. The use of these parameters should be reviewed to make sure they are used safely.&lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='SPRING_ENDPOINT' priority='INFO'>
     <name>Security - Found Spring Endpoint</name>
     <configKey>SPRING_ENDPOINT</configKey>
     <description>&lt;p&gt;This class is a Spring Controller. All methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; are reachable remotely.
 This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.&lt;/p&gt;</description>
+    <tag>security</tag>
   </rule>
   <rule key='SQL_INJECTION_HIBERNATE' priority='CRITICAL'>
     <name>Security - Potential SQL/HQL Injection (Hibernate)</name>
@@ -795,6 +825,7 @@ q.execute();&lt;/pre&gt;
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SQL_INJECTION_JDO' priority='CRITICAL'>
     <name>Security - Potential SQL/JDOQL Injection (JDO)</name>
@@ -836,6 +867,7 @@ q.execute(input);&lt;/pre&gt;
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SQL_INJECTION_JPA' priority='CRITICAL'>
     <name>Security - Potential SQL/JPQL Injection (JPA)</name>
@@ -880,6 +912,7 @@ UserEntity res = q.getSingleResult();&lt;/pre&gt;
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='LDAP_INJECTION' priority='CRITICAL'>
     <name>Security - Potential LDAP Injection</name>
@@ -905,6 +938,7 @@ Therefore, the primary defense against LDAP injection is strong input validation
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SCRIPT_ENGINE_INJECTION' priority='CRITICAL'>
     <name>Security - Potential code injection when using Script Engine</name>
@@ -956,6 +990,7 @@ public void runCustomTrigger(String script) {
 &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be use to test sandboxing rules.&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SPEL_INJECTION' priority='CRITICAL'>
     <name>Security - Potential code injection when using Spring Expression</name>
@@ -989,6 +1024,7 @@ public void parseExpressionInterface(Person personObj,String property) {
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>security</tag>
   </rule>
   <rule key='BAD_HEXA_CONVERSION' priority='MAJOR'>
     <name>Security - Bad hexadecimal concatenation</name>
@@ -1023,8 +1059,9 @@ stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/704.html"&gt;CWE-704: Incorrect Type Conversion or Cast&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='HAZELCAST_SYMMETRIC_ENCRYPTION' priority='INFO'>
+  <rule key='HAZELCAST_SYMMETRIC_ENCRYPTION' priority='MAJOR'>
     <name>Security - Hazelcast Symmetric Encryption</name>
     <configKey>HAZELCAST_SYMMETRIC_ENCRYPTION</configKey>
     <description>&lt;p&gt;The network communications for Hazelcast is configured to use a symmetric cipher (probably DES or blowfish).&lt;/p&gt;
@@ -1039,8 +1076,9 @@ stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='NULL_CIPHER' priority='INFO'>
+  <rule key='NULL_CIPHER' priority='MAJOR'>
     <name>Security - NullCipher Unsafe</name>
     <configKey>NULL_CIPHER</configKey>
     <description>&lt;p&gt;
@@ -1065,8 +1103,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='UNENCRYPTED_SOCKET' priority='INFO'>
+  <rule key='UNENCRYPTED_SOCKET' priority='MAJOR'>
     <name>Security - Unencrypted Socket</name>
     <configKey>UNENCRYPTED_SOCKET</configKey>
     <description>&lt;p&gt;
@@ -1099,8 +1138,9 @@ to do this correctly.
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='DES_USAGE' priority='INFO'>
+  <rule key='DES_USAGE' priority='MAJOR'>
     <name>Security - DES / DESede Unsafe</name>
     <configKey>DES_USAGE</configKey>
     <description>&lt;p&gt;
@@ -1127,8 +1167,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='RSA_NO_PADDING' priority='INFO'>
+  <rule key='RSA_NO_PADDING' priority='MAJOR'>
     <name>Security - RSA NoPadding Unsafe</name>
     <configKey>RSA_NO_PADDING</configKey>
     <description>&lt;p&gt;
@@ -1151,6 +1192,7 @@ The code should be replaced with:&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
   <rule key='HARD_CODE_PASSWORD' priority='MAJOR'>
     <name>Security - Hard Coded Password</name>
@@ -1174,6 +1216,7 @@ props.put(Context.SECURITY_CREDENTIALS, "p@ssw0rd");&lt;/pre&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/259.html"&gt;CWE-259: Use of Hard-coded Password&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='STRUTS_FORM_VALIDATION' priority='INFO'>
     <name>Security - Struts Form Without Input Validation</name>
@@ -1204,6 +1247,7 @@ public class RegistrationForm extends ValidatorForm {
 &lt;a href="http://cwe.mitre.org/data/definitions/106.html"&gt;CWE-106: Struts: Plug-in Framework not in Use&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XSS_REQUEST_WRAPPER' priority='MAJOR'>
     <name>Security - XSSRequestWrapper is Weak XSS Protection</name>
@@ -1244,8 +1288,9 @@ the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet.
     <tag>owasp-top10</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='BLOWFISH_KEY_SIZE' priority='INFO'>
+  <rule key='BLOWFISH_KEY_SIZE' priority='MAJOR'>
     <name>Security - Blowfish Usage with Weak Key Size</name>
     <configKey>BLOWFISH_KEY_SIZE</configKey>
     <description>&lt;p&gt;
@@ -1273,8 +1318,9 @@ keyGen.init(128);&lt;/pre&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='RSA_KEY_SIZE' priority='INFO'>
+  <rule key='RSA_KEY_SIZE' priority='MAJOR'>
     <name>Security - RSA Usage with Weak Key Size</name>
     <configKey>RSA_KEY_SIZE</configKey>
     <description>&lt;p&gt;"RSA Laboratories currently recommends key sizes of 1024 bits for corporate use and 2048 bits for extremely valuable keys
@@ -1304,6 +1350,7 @@ keyGen.initialize(2048);
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
   <rule key='UNVALIDATED_REDIRECT' priority='MAJOR'>
     <name>Security - Unvalidated Redirect</name>
@@ -1351,6 +1398,7 @@ keyGen.initialize(2048);
     <tag>owasp-top10</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XSS_JSP_PRINT' priority='CRITICAL'>
     <name>Security - Potential XSS in JSP</name>
@@ -1395,6 +1443,7 @@ which explains these defenses in significant detail.
     <tag>owasp-top10</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XSS_SERVLET' priority='CRITICAL'>
     <name>Security - Potential XSS in Servlet</name>
@@ -1437,6 +1486,7 @@ which explains these defenses in significant detail.
     <tag>owasp-top10</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='XML_DECODER' priority='CRITICAL'>
     <name>Security - XMLDecoder usage</name>
@@ -1484,8 +1534,9 @@ The solution is to avoid using XMLDecoder to parse content from an untrusted sou
 &lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='STATIC_IV' priority='INFO'>
+  <rule key='STATIC_IV' priority='MAJOR'>
     <name>Security - Static IV</name>
     <configKey>STATIC_IV</configKey>
     <description>&lt;p&gt;
@@ -1522,8 +1573,9 @@ public void encrypt(String message) throws Exception {
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='ECB_MODE' priority='INFO'>
+  <rule key='ECB_MODE' priority='MAJOR'>
     <name>Security - ECB Mode Unsafe</name>
     <configKey>ECB_MODE</configKey>
     <description>&lt;p&gt;An authentication cipher mode which provides better confidentiality of the encrypted data should be used instead of Electronic Codebook (ECB) mode,
@@ -1554,8 +1606,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;a href="http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf"&gt;NIST: Recommendation for Block Cipher Modes of Operation&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='PADDING_ORACLE' priority='INFO'>
+  <rule key='PADDING_ORACLE' priority='MAJOR'>
     <name>Security - Cipher is Susceptible to Padding Oracle</name>
     <configKey>PADDING_ORACLE</configKey>
     <description>&lt;p&gt;
@@ -1586,8 +1639,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
-  <rule key='CIPHER_INTEGRITY' priority='INFO'>
+  <rule key='CIPHER_INTEGRITY' priority='MAJOR'>
     <name>Security - Cipher With No Integrity</name>
     <configKey>CIPHER_INTEGRITY</configKey>
     <description>&lt;p&gt;
@@ -1633,6 +1687,7 @@ In the example solution above, the GCM mode introduces an HMAC into the resultin
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cryptography</tag>
+    <tag>security</tag>
   </rule>
   <rule key='ESAPI_ENCRYPTOR' priority='INFO'>
     <name>Security - Usage of ESAPI Encryptor</name>
@@ -1709,5 +1764,6 @@ Encryptor.cipher_modes.additional_allowed=&lt;/pre&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/310.html"&gt;CWE-310: Cryptographic Issues&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
 </rules>
