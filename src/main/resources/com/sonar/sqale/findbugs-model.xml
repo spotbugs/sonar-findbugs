@@ -5850,8 +5850,8 @@
         </prop>
         <prop>
           <key>offset</key>
-          <val>1.0</val>
-          <txt>h</txt>
+          <val>20.0</val>
+          <txt>mn</txt>
         </prop>
       </chc>
       <chc>
