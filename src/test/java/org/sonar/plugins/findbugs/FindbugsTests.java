@@ -25,7 +25,7 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.XMLRuleParser;
-import org.sonar.api.resources.Java;
+import org.sonar.plugins.java.Java;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
 
@@ -63,15 +63,33 @@ public abstract class FindbugsTests {
     return activeRules;
   }
 
-  protected RulesProfile createRulesProfileWithActiveRules() {
+  protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug) {
     RulesProfile profile = RulesProfile.create();
     profile.setName("FindBugs");
     profile.setLanguage(Java.KEY);
     ServerFileSystem sfs = mock(ServerFileSystem.class);
-    for (Rule rule : new FindbugsRuleRepository(sfs, new XMLRuleParser()).createRules()) {
-      rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
-      profile.activateRule(rule, null);
+    if (findbugs) {
+      for (Rule rule : new FindbugsRuleRepository(sfs, new XMLRuleParser()).createRules()) {
+        rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
+        profile.activateRule(rule, null);
+      }
+    }
+    if (fbContrib) {
+      for (Rule rule : new FbContribRuleRepository(new XMLRuleParser()).createRules()) {
+        rule.setRepositoryKey(FbContribRuleRepository.REPOSITORY_KEY);
+        profile.activateRule(rule, null);
+      }
+    }
+    if (findsecbug) {
+      for (Rule rule : new FindSecurityBugsRuleRepository(new XMLRuleParser()).createRules()) {
+        rule.setRepositoryKey(FindSecurityBugsRuleRepository.REPOSITORY_KEY);
+        profile.activateRule(rule, null);
+      }
     }
     return profile;
+  }
+
+  protected RulesProfile createRulesProfileWithActiveRules() {
+    return createRulesProfileWithActiveRules(true, false, false);
   }
 }

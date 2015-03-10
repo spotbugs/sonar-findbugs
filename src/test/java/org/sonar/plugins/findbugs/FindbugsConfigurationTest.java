@@ -106,7 +106,7 @@ public class FindbugsConfigurationTest {
     assertThat(conf.getEffort()).isEqualTo("high");
   }
 
-    @Test
+  @Test
   public void should_set_class_files() throws IOException {
     File file = temp.newFile("MyClass.class");
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
@@ -121,12 +121,36 @@ public class FindbugsConfigurationTest {
     String jsr305 = "findbugs/jsr305.jar";
     String annotations = "findbugs/annotations.jar";
 
-    conf.copyLibs();
-    assertThat(new File(fs.workingDir(), jsr305)).isFile();
-    assertThat(new File(fs.workingDir(), annotations)).isFile();
+    // stop at start
     conf.stop();
     assertThat(new File(fs.workingDir(), jsr305)).doesNotExist();
     assertThat(new File(fs.workingDir(), annotations)).doesNotExist();
+
+    conf.copyLibs();
+    assertThat(new File(fs.workingDir(), jsr305)).isFile();
+    assertThat(new File(fs.workingDir(), annotations)).isFile();
+
+    // copy again
+    conf.copyLibs();
+    assertThat(new File(fs.workingDir(), jsr305)).isFile();
+    assertThat(new File(fs.workingDir(), annotations)).isFile();
+
+    conf.stop();
+    assertThat(new File(fs.workingDir(), jsr305)).doesNotExist();
+    assertThat(new File(fs.workingDir(), annotations)).doesNotExist();
+
+  }
+
+  @Test
+  public void should_get_fbcontrib() throws IOException {
+    conf.copyLibs();
+    assertThat(conf.getFbContribJar()).isFile();
+  }
+
+  @Test
+  public void should_get_findSecBugs() throws IOException {
+    conf.copyLibs();
+    assertThat(conf.getFindSecBugsJar()).isFile();
   }
 
 }

@@ -139,9 +139,9 @@ public class FindbugsConfiguration implements BatchExtension {
     if (fbContrib == null) {
       fbContrib = copyLib("/fb-contrib.jar");
     }
-      if (findSecBugs == null) {
-          findSecBugs = copyLib("/findsecbugs-plugin.jar");
-      }
+    if (findSecBugs == null) {
+      findSecBugs = copyLib("/findsecbugs-plugin.jar");
+    }
   }
 
   /**
@@ -158,9 +158,9 @@ public class FindbugsConfiguration implements BatchExtension {
       fbContrib.delete();
     }
 
-      if (findSecBugs != null) {
-          findSecBugs.delete();
-      }
+    if (findSecBugs != null) {
+      findSecBugs.delete();
+    }
   }
 
   private File copyLib(String name) {

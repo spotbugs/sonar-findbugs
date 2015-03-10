@@ -22,7 +22,7 @@ package org.sonar.plugins.findbugs;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.api.rules.XMLRuleParser;
-import org.sonar.api.resources.Java;
+import org.sonar.plugins.java.Java;
 
 import java.util.List;
 

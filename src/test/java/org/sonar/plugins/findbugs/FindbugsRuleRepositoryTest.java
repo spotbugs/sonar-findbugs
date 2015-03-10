@@ -19,30 +19,39 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.XMLRuleParser;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FindbugsRuleRepositoryTest {
   private FindbugsRuleRepository repository;
 
   @Before
-  public void setUpRuleRepository() {
-    repository = new FindbugsRuleRepository(mock(ServerFileSystem.class), new XMLRuleParser());
+  public void setUpRuleRepository() throws URISyntaxException {
+    URL extraRules = getClass().getResource("/org/sonar/plugins/findbugs/extra-rules.xml");
+    ServerFileSystem serverFileSystem = mock(ServerFileSystem.class);
+    when(serverFileSystem.getExtensions(eq(FindbugsRuleRepository.REPOSITORY_KEY), eq("xml"))).thenReturn(Lists.newArrayList(new File(extraRules.getPath())));
+    repository = new FindbugsRuleRepository(serverFileSystem, new XMLRuleParser());
   }
 
   @Test
   public void testLoadRepositoryFromXml() {
     List<Rule> rules = repository.createRules();
 
-    assertThat(rules.size()).isEqualTo(423);
+    assertThat(rules.size()).isEqualTo(424);
     for (Rule rule : rules) {
       assertThat(rule.getKey()).isNotNull();
       assertThat(rule.getConfigKey()).isNotNull();

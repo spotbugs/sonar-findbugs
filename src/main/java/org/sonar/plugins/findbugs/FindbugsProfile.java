@@ -22,7 +22,7 @@ package org.sonar.plugins.findbugs;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.api.resources.Java;
+import org.sonar.plugins.java.Java;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -39,7 +39,7 @@ public class FindbugsProfile extends ProfileDefinition {
   @Override
   public RulesProfile createProfile(ValidationMessages messages) {
     Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
-        "/org/sonar/plugins/findbugs/profile-findbugs.xml"));
+      "/org/sonar/plugins/findbugs/profile-findbugs.xml"));
     RulesProfile profile = importer.importProfile(findbugsProfile, messages);
     profile.setLanguage(Java.KEY);
     profile.setName(FINDBUGS_PROFILE_NAME);

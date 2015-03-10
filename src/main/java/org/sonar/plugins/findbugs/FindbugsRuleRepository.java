@@ -21,10 +21,10 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
 import org.sonar.api.platform.ServerFileSystem;
-import org.sonar.api.resources.Java;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleRepository;
 import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.plugins.java.Java;
 
 import java.io.File;
 import java.util.List;

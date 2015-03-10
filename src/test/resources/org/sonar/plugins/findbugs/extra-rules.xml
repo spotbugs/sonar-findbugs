@@ -1,0 +1,9 @@
+<rules>
+  <rule key='PREDICTABLE_RANDOM' priority='MAJOR'>
+    <name>Security - Predictable Pseudo Random Number Generator</name>
+    <configKey>PREDICTABLE_RANDOM</configKey>
+    <description></description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+</rules>

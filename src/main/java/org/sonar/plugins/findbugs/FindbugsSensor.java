@@ -30,7 +30,7 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.Violation;
-import org.sonar.api.resources.Java;
+import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.util.Collection;
@@ -56,7 +56,7 @@ public class FindbugsSensor implements Sensor {
   @Override
   public boolean shouldExecuteOnProject(Project project) {
     return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
-        && (hasActiveFindbugsRules() || hasActiveFbContribRules() || hasActiveFindSecBugsRules());
+      && (hasActiveFindbugsRules() || hasActiveFbContribRules() || hasActiveFindSecBugsRules());
   }
 
   private boolean hasActiveFindbugsRules() {
@@ -75,8 +75,8 @@ public class FindbugsSensor implements Sensor {
   public void analyse(Project project, SensorContext context) {
     if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
-          + " Please build project before executing sonar or check the location of compiled classes to"
-          + " make it possible for Findbugs to analyse your project.");
+        + " Please build project before executing sonar or check the location of compiled classes to"
+        + " make it possible for Findbugs to analyse your project.");
       return;
     }
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
@@ -103,18 +103,13 @@ public class FindbugsSensor implements Sensor {
       Resource resource = javaResourceLocator.findResourceByClassName(className);
       if (context.getResource(resource) != null) {
         Violation violation = Violation.create(rule, resource)
-            .setMessage(longMessage);
+          .setMessage(longMessage);
         if (start > 0) {
           violation.setLineId(start);
         }
         context.saveViolation(violation);
       }
     }
-  }
-
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
   }
 
 }
