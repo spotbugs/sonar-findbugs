@@ -26,7 +26,11 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.plugins.findbugs.FindbugsLevelUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @XStreamAlias("FindBugsFilter")
 public class FindBugsFilter {
@@ -65,10 +69,12 @@ public class FindBugsFilter {
 
   public Map<String, RulePriority> getPatternLevels(FindbugsLevelUtils priorityMapper) {
     BugInfoSplitter splitter = new BugInfoSplitter() {
+      @Override
       public String getSeparator() {
         return PATTERN_SEPARATOR;
       }
 
+      @Override
       public String getVar(Bug bug) {
         return bug.getPattern();
       }
@@ -78,10 +84,12 @@ public class FindBugsFilter {
 
   public Map<String, RulePriority> getCodeLevels(FindbugsLevelUtils priorityMapper) {
     BugInfoSplitter splitter = new BugInfoSplitter() {
+      @Override
       public String getSeparator() {
         return CODE_SEPARATOR;
       }
 
+      @Override
       public String getVar(Bug bug) {
         return bug.getCode();
       }
@@ -91,10 +99,12 @@ public class FindBugsFilter {
 
   public Map<String, RulePriority> getCategoryLevels(FindbugsLevelUtils priorityMapper) {
     BugInfoSplitter splitter = new BugInfoSplitter() {
+      @Override
       public String getSeparator() {
         return CATEGORY_SEPARATOR;
       }
 
+      @Override
       public String getVar(Bug bug) {
         return bug.getCategory();
       }
