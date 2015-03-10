@@ -19,27 +19,24 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleRepository;
-import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.java.Java;
 
-import java.util.List;
+public final class FindSecurityBugsRulesDefinition implements RulesDefinition {
 
-public final class FbContribRuleRepository extends RuleRepository {
-
-  public static final String REPOSITORY_KEY = "fb-contrib";
-
-  private XMLRuleParser xmlRuleParser;
-
-  public FbContribRuleRepository(XMLRuleParser xmlRuleParser) {
-    super(REPOSITORY_KEY, Java.KEY);
-    setName("FindBugs Contrib");
-    this.xmlRuleParser = xmlRuleParser;
-  }
+  public static final String REPOSITORY_KEY = "findsecbugs";
+  public static final String REPOSITORY_NAME = "Find Security Bugs";
 
   @Override
-  public List<Rule> createRules() {
-    return xmlRuleParser.parse(getClass().getResourceAsStream("/org/sonar/plugins/findbugs/rules-fbcontrib.xml"));
+  public void define(Context context) {
+    NewRepository repository = context
+      .createRepository(REPOSITORY_KEY, Java.KEY)
+      .setName(REPOSITORY_NAME);
+
+    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
+    ruleLoader.load(repository, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-findsecbugs.xml"), "UTF-8");
+    repository.done();
+
   }
 }

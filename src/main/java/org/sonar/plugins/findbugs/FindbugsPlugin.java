@@ -34,15 +34,15 @@ public class FindbugsPlugin extends SonarPlugin {
       FindbugsSensor.class,
       FindbugsConfiguration.class,
       FindbugsExecutor.class,
-      FindbugsRuleRepository.class,
+      FindbugsRulesDefinition.class,
       FindbugsProfileExporter.class,
       FindbugsProfileImporter.class,
       FindbugsProfile.class,
       FindbugsSecurityAuditProfile.class,
       FindbugsSecurityMinimalProfile.class,
       FindbugsMavenInitializer.class,
-      FbContribRuleRepository.class,
-      FindSecurityBugsRuleRepository.class);
+      FbContribRulesDefinition.class,
+      FindSecurityBugsRulesDefinition.class);
     return extensions.build();
   }
 

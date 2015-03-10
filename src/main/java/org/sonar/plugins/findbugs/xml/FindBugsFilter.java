@@ -23,7 +23,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.rules.RulePriority;
+import org.sonar.api.rule.Severity;
 import org.sonar.plugins.findbugs.FindbugsLevelUtils;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class FindBugsFilter {
     matchs.add(child);
   }
 
-  public Map<String, RulePriority> getPatternLevels(FindbugsLevelUtils priorityMapper) {
+  public Map<String, String> getPatternLevels(FindbugsLevelUtils priorityMapper) {
     BugInfoSplitter splitter = new BugInfoSplitter() {
       @Override
       public String getSeparator() {
@@ -82,7 +82,7 @@ public class FindBugsFilter {
     return processMatches(priorityMapper, splitter);
   }
 
-  public Map<String, RulePriority> getCodeLevels(FindbugsLevelUtils priorityMapper) {
+  public Map<String, String> getCodeLevels(FindbugsLevelUtils priorityMapper) {
     BugInfoSplitter splitter = new BugInfoSplitter() {
       @Override
       public String getSeparator() {
@@ -97,7 +97,7 @@ public class FindBugsFilter {
     return processMatches(priorityMapper, splitter);
   }
 
-  public Map<String, RulePriority> getCategoryLevels(FindbugsLevelUtils priorityMapper) {
+  public Map<String, String> getCategoryLevels(FindbugsLevelUtils priorityMapper) {
     BugInfoSplitter splitter = new BugInfoSplitter() {
       @Override
       public String getSeparator() {
@@ -112,12 +112,12 @@ public class FindBugsFilter {
     return processMatches(priorityMapper, splitter);
   }
 
-  private RulePriority getRulePriority(Priority priority, FindbugsLevelUtils priorityMapper) {
+  private String getRuleSeverity(Priority priority, FindbugsLevelUtils priorityMapper) {
     return priority != null ? priorityMapper.from(priority.getValue()) : null;
   }
 
-  private Map<String, RulePriority> processMatches(FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
-    Map<String, RulePriority> result = new HashMap<String, RulePriority>();
+  private Map<String, String> processMatches(FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
+    Map<String, String> result = new HashMap<String, String>();
     for (Match child : getChildren()) {
       if (child.getOrs() != null) {
         for (OrFilter orFilter : child.getOrs()) {
@@ -131,17 +131,17 @@ public class FindBugsFilter {
     return result;
   }
 
-  private void completeLevels(Map<String, RulePriority> result, List<Bug> bugs, Priority priority, FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
+  private void completeLevels(Map<String, String> result, List<Bug> bugs, Priority priority, FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
     if (bugs == null) {
       return;
     }
-    RulePriority rulePriority = getRulePriority(priority, priorityMapper);
+    String severity = getRuleSeverity(priority, priorityMapper);
     for (Bug bug : bugs) {
       String varToSplit = splitter.getVar(bug);
       if (!StringUtils.isBlank(varToSplit)) {
         String[] splitted = StringUtils.split(varToSplit, splitter.getSeparator());
         for (String code : splitted) {
-          mapRulePriority(result, rulePriority, code);
+          mapRuleSeverity(result, severity, code);
         }
       }
     }
@@ -153,14 +153,25 @@ public class FindBugsFilter {
     String getSeparator();
   }
 
-  private void mapRulePriority(Map<String, RulePriority> prioritiesByRule, RulePriority priority, String key) {
-    if (prioritiesByRule.containsKey(key) && prioritiesByRule.get(key) != null) {
-      if (prioritiesByRule.get(key).compareTo(priority) < 0) {
-        prioritiesByRule.put(key, priority);
-      }
+  private void mapRuleSeverity(Map<String, String> severityByRule, String severity, String key) {
+    if (severityByRule.containsKey(key) && severityByRule.get(key) != null) {
+      severityByRule.put(key, getHighestSeverity(severityByRule.get(key), severity));
     } else {
-      prioritiesByRule.put(key, priority);
+      severityByRule.put(key, severity);
     }
+  }
+
+  private String getHighestSeverity(String s1, String s2) {
+    if (s1.equals(s2)) {
+      return s1;
+    } else if (Severity.INFO.equals(s1)) {
+      return s2;
+    } else if (Severity.MAJOR.equals(s1) && Severity.INFO.equals(s2)) {
+      return s1;
+    } else if (Severity.BLOCKER.equals(s1)) {
+      return s1;
+    }
+    return s2;
   }
 
   public static XStream createXStream() {

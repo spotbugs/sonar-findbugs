@@ -27,16 +27,16 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class FindbugsSecurityMinimalProfileTest {
 
-    @Test
-    public void shouldCreateProfile() {
-        FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinderAllRepo.create());
-        FindbugsSecurityMinimalProfile secOnlyProfile = new FindbugsSecurityMinimalProfile(importer);
-        ValidationMessages validation = ValidationMessages.create();
-        RulesProfile profile = secOnlyProfile.createProfile(validation);
-        //The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
-        assertThat(profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY)).hasSize(9);
-        //56 rules - 20 informational = 36 major or critical
-        assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY)).hasSize(36);
-        assertThat(validation.hasErrors()).isFalse();
-    }
+  @Test
+  public void shouldCreateProfile() {
+    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
+    FindbugsSecurityMinimalProfile secOnlyProfile = new FindbugsSecurityMinimalProfile(importer);
+    ValidationMessages validation = ValidationMessages.create();
+    RulesProfile profile = secOnlyProfile.createProfile(validation);
+    // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(9);
+    // 56 rules - 20 informational = 36 major or critical
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(36);
+    assertThat(validation.hasErrors()).isFalse();
+  }
 }

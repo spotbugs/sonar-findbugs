@@ -27,28 +27,26 @@ import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
-import org.sonar.test.TestUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class FindbugsProfileImporterTest {
 
-  private final FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.create(true));
+  private final FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithOnlyFindbugsRules());
 
   @Test
   public void shouldImportPatterns() {
-    String findbugsConf = TestUtils.getResourceContent("/org/sonar/plugins/findbugs/shouldImportPatterns.xml");
-    RulesProfile profile = importer.importProfile(new StringReader(findbugsConf), ValidationMessages.create());
+    InputStream findbugsConf = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/shouldImportPatterns.xml");
+    RulesProfile profile = importer.importProfile(new InputStreamReader(findbugsConf), ValidationMessages.create());
 
     assertThat(profile.getActiveRules()).hasSize(2);
-    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "NP_CLOSING_NULL")).isNotNull();
-    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "NP_CLOSING_NULL")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 
   @Test
@@ -58,8 +56,8 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(18);
-    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "EC_INCOMPATIBLE_ARRAY_COMPARE")).isNotNull();
-    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "EC_INCOMPATIBLE_ARRAY_COMPARE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY")).isNotNull();
   }
 
   @Test
@@ -69,7 +67,7 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(180);
-    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
   }
 
   @Test
@@ -79,7 +77,7 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(11);
-    assertThat(profile.getActiveRule(FindbugsRuleRepository.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 
   @Test
@@ -97,9 +95,9 @@ public class FindbugsProfileImporterTest {
 
   @Test
   public void testImportingUncorrectXmlFile() {
-    String uncorrectFindbugsXml = TestUtils.getResourceContent("/org/sonar/plugins/findbugs/uncorrectFindbugsXml.xml");
+    InputStream uncorrectFindbugsXml = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/uncorrectFindbugsXml.xml");
     ValidationMessages messages = ValidationMessages.create();
-    RulesProfile profile = importer.importProfile(new StringReader(uncorrectFindbugsXml), messages);
+    RulesProfile profile = importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), messages);
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(0);
@@ -108,9 +106,9 @@ public class FindbugsProfileImporterTest {
 
   @Test
   public void testImportingXmlFileWithUnknownRule() {
-    String uncorrectFindbugsXml = TestUtils.getResourceContent("/org/sonar/plugins/findbugs/findbugsXmlWithUnknownRule.xml");
+    InputStream uncorrectFindbugsXml = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/findbugsXmlWithUnknownRule.xml");
     ValidationMessages messages = ValidationMessages.create();
-    RulesProfile profile = importer.importProfile(new StringReader(uncorrectFindbugsXml), messages);
+    RulesProfile profile = importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), messages);
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(1);
@@ -119,9 +117,9 @@ public class FindbugsProfileImporterTest {
 
   @Test
   public void testImportingXmlFileWithUnknownCategory() {
-    String uncorrectFindbugsXml = TestUtils.getResourceContent("/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCategory.xml");
+    InputStream uncorrectFindbugsXml = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCategory.xml");
     ValidationMessages messages = ValidationMessages.create();
-    RulesProfile profile = importer.importProfile(new StringReader(uncorrectFindbugsXml), messages);
+    RulesProfile profile = importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), messages);
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(139);
@@ -130,9 +128,9 @@ public class FindbugsProfileImporterTest {
 
   @Test
   public void testImportingXmlFileWithUnknownCode() {
-    String uncorrectFindbugsXml = TestUtils.getResourceContent("/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCode.xml");
+    InputStream uncorrectFindbugsXml = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCode.xml");
     ValidationMessages messages = ValidationMessages.create();
-    RulesProfile profile = importer.importProfile(new StringReader(uncorrectFindbugsXml), messages);
+    RulesProfile profile = importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), messages);
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(10);

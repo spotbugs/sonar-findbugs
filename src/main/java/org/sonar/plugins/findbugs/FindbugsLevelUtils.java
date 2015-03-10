@@ -19,19 +19,19 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.sonar.api.rules.RulePriority;
+import org.sonar.api.rule.Severity;
 
 public class FindbugsLevelUtils {
 
-  public RulePriority from(String priority) {
+  public String from(String priority) {
     if ("1".equals(priority)) {
-      return RulePriority.BLOCKER;
+      return Severity.BLOCKER;
     }
     if ("2".equals(priority)) {
-      return RulePriority.MAJOR;
+      return Severity.MAJOR;
     }
     if ("3".equals(priority)) {
-      return RulePriority.INFO;
+      return Severity.INFO;
     }
     throw new IllegalArgumentException("Priority not supported: " + priority);
   }

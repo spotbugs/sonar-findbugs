@@ -29,11 +29,11 @@ public class FindbugsProfileTest {
 
   @Test
   public void shouldCreateProfile() {
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.create());
+    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
     FindbugsProfile findbugsProfile = new FindbugsProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
     RulesProfile profile = findbugsProfile.createProfile(validation);
-    assertThat(profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY))
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY))
       .hasSize(379);
     assertThat(validation.hasErrors()).isFalse();
   }

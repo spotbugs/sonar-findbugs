@@ -20,25 +20,35 @@
 package org.sonar.plugins.findbugs;
 
 import org.junit.Test;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinition.Rule;
+import org.sonar.plugins.java.Java;
 
 import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FindSecurityBugsRuleRepositoryTest {
-    @Test
-    public void testLoadRepositoryFromXml() {
-        FindSecurityBugsRuleRepository repository = new FindSecurityBugsRuleRepository(new XMLRuleParser());
-        List<Rule> rules = repository.createRules();
-        //assertThat(rules.size()).isEqualTo(209);
-        for (Rule rule : rules) {
-            assertThat(rule.getKey()).isNotNull();
-            assertThat(rule.getConfigKey()).isEqualTo(rule.getKey());
-            assertThat(rule.getName()).isNotNull();
-            assertThat(rule.getDescription()).isNotNull();
-        }
-        assertThat(repository.getName()).isEqualTo("Find Security Bugs");
+public class FbContribRulesDefinitionTest {
+
+  @Test
+  public void test() {
+    FbContribRulesDefinition definition = new FbContribRulesDefinition();
+    RulesDefinition.Context context = new RulesDefinition.Context();
+    definition.define(context);
+    RulesDefinition.Repository repository = context.repository(FbContribRulesDefinition.REPOSITORY_KEY);
+
+    assertThat(repository.name()).isEqualTo(FbContribRulesDefinition.REPOSITORY_NAME);
+    assertThat(repository.language()).isEqualTo(Java.KEY);
+
+    List<Rule> rules = repository.rules();
+    assertThat(rules).hasSize(209);
+
+    for (Rule rule : rules) {
+      assertThat(rule.key()).isNotNull();
+      assertThat(rule.internalKey()).isEqualTo(rule.key());
+      assertThat(rule.name()).isNotNull();
+      assertThat(rule.htmlDescription()).isNotNull();
     }
+  }
+
 }

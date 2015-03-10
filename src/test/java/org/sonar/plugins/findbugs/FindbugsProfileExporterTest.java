@@ -64,7 +64,7 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
 
   @Test
   public void shouldBuildOnlyOneModuleWhenNoActiveRules() {
-    FindBugsFilter filter = FindbugsProfileExporter.buildFindbugsFilter(Collections.<ActiveRule> emptyList());
+    FindBugsFilter filter = FindbugsProfileExporter.buildFindbugsFilter(Collections.<ActiveRule>emptyList());
     assertThat(filter.getMatchs()).hasSize(0);
   }
 
@@ -116,7 +116,7 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   private static ActiveRule anActiveRule(String configKey) {
     Rule rule = Rule.create();
     rule.setConfigKey(configKey);
-    rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
+    rule.setRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY);
     ActiveRule activeRule = RulesProfile.create().activateRule(rule, RulePriority.CRITICAL);
     return activeRule;
   }

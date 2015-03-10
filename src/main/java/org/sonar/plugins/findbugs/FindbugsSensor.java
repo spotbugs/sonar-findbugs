@@ -24,12 +24,14 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.component.ResourcePerspectives;
+import org.sonar.api.issue.Issuable;
+import org.sonar.api.issue.Issuable.IssueBuilder;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.Violation;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
@@ -44,10 +46,13 @@ public class FindbugsSensor implements Sensor {
   private FindbugsExecutor executor;
   private final JavaResourceLocator javaResourceLocator;
   private final FileSystem fs;
+  private final ResourcePerspectives perspectives;
 
-  public FindbugsSensor(RulesProfile profile, RuleFinder ruleFinder, FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs) {
+  public FindbugsSensor(RulesProfile profile, RuleFinder ruleFinder, ResourcePerspectives perspectives,
+    FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs) {
     this.profile = profile;
     this.ruleFinder = ruleFinder;
+    this.perspectives = perspectives;
     this.executor = executor;
     this.javaResourceLocator = javaResourceLocator;
     this.fs = fs;
@@ -60,15 +65,15 @@ public class FindbugsSensor implements Sensor {
   }
 
   private boolean hasActiveFindbugsRules() {
-    return !profile.getActiveRulesByRepository(FindbugsRuleRepository.REPOSITORY_KEY).isEmpty();
+    return !profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY).isEmpty();
   }
 
   private boolean hasActiveFbContribRules() {
-    return !profile.getActiveRulesByRepository(FbContribRuleRepository.REPOSITORY_KEY).isEmpty();
+    return !profile.getActiveRulesByRepository(FbContribRulesDefinition.REPOSITORY_KEY).isEmpty();
   }
 
   private boolean hasActiveFindSecBugsRules() {
-    return !profile.getActiveRulesByRepository(FindSecurityBugsRuleRepository.REPOSITORY_KEY).isEmpty();
+    return !profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY).isEmpty();
   }
 
   @Override
@@ -82,11 +87,11 @@ public class FindbugsSensor implements Sensor {
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
 
     for (ReportedBug bugInstance : collection) {
-      Rule rule = ruleFinder.findByKey(FindbugsRuleRepository.REPOSITORY_KEY, bugInstance.getType());
+      Rule rule = ruleFinder.findByKey(FindbugsRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
       if (rule == null) {
-        rule = ruleFinder.findByKey(FbContribRuleRepository.REPOSITORY_KEY, bugInstance.getType());
+        rule = ruleFinder.findByKey(FbContribRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
         if (rule == null) {
-          rule = ruleFinder.findByKey(FindSecurityBugsRuleRepository.REPOSITORY_KEY, bugInstance.getType());
+          rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
 
           if (rule == null) {
             // ignore violations from report, if rule not activated in Sonar
@@ -96,20 +101,23 @@ public class FindbugsSensor implements Sensor {
         }
       }
 
-      String longMessage = bugInstance.getMessage();
       String className = bugInstance.getClassName();
-      int start = bugInstance.getStartLine();
+      String longMessage = bugInstance.getMessage();
+      int line = bugInstance.getStartLine();
 
       Resource resource = javaResourceLocator.findResourceByClassName(className);
-      if (context.getResource(resource) != null) {
-        Violation violation = Violation.create(rule, resource)
-          .setMessage(longMessage);
-        if (start > 0) {
-          violation.setLineId(start);
-        }
-        context.saveViolation(violation);
-      }
+      insertIssue(rule, resource, line, longMessage);
     }
   }
 
+  private void insertIssue(Rule rule, Resource resource, int line, String message) {
+    Issuable issuable = perspectives.as(Issuable.class, resource);
+    if (issuable != null) {
+      IssueBuilder builder = issuable.newIssueBuilder().ruleKey(rule.ruleKey()).message(message);
+      if (line > 0) {
+        builder.line(line);
+      }
+      issuable.addIssue(builder.build());
+    }
+  }
 }

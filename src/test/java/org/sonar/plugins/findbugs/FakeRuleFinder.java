@@ -19,15 +19,15 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.collect.Lists;
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.sonar.api.platform.ServerFileSystem;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
-import org.sonar.api.rules.RuleRepository;
-import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinition.Context;
 
 import java.util.List;
 
@@ -45,30 +45,50 @@ public class FakeRuleFinder {
   private FakeRuleFinder() {
   }
 
-  public static RuleFinder create(boolean onlyFindbugs) {
+  private static RuleFinder create(boolean findbugs, boolean fbContrib, boolean findSecBug) {
     RuleFinder ruleFinder = mock(RuleFinder.class);
+    RulesDefinition.Context context = new RulesDefinition.Context();
 
-    RuleRepository repo = new FindbugsRuleRepository(mock(ServerFileSystem.class), new XMLRuleParser());
-    final List<Rule> findbugsRules = getRulesFromRepo(repo, FindbugsRuleRepository.REPOSITORY_KEY);
-    configRuleFinderForRepo(ruleFinder, FindbugsRuleRepository.REPOSITORY_KEY, findbugsRules);
+    if (findbugs) {
+      RulesDefinition rulesDefinition = new FindbugsRulesDefinition();
+      rulesDefinition.define(context);
+      configRuleFinderForRepo(ruleFinder, context, FindbugsRulesDefinition.REPOSITORY_KEY);
+    }
 
-    if (!onlyFindbugs) {
-      repo = new FindSecurityBugsRuleRepository(new XMLRuleParser());
-      final List<Rule> findsecuritybugsRules = getRulesFromRepo(repo, FindSecurityBugsRuleRepository.REPOSITORY_KEY);
-      configRuleFinderForRepo(ruleFinder, FindSecurityBugsRuleRepository.REPOSITORY_KEY, findsecuritybugsRules);
+    if (findSecBug) {
+      RulesDefinition rulesDefinition = new FindSecurityBugsRulesDefinition();
+      rulesDefinition.define(context);
+      configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
+    }
 
-      repo = new FbContribRuleRepository(new XMLRuleParser());
-      final List<Rule> fbContribRules = getRulesFromRepo(repo, FbContribRuleRepository.REPOSITORY_KEY);
-      configRuleFinderForRepo(ruleFinder, FbContribRuleRepository.REPOSITORY_KEY, fbContribRules);
+    if (fbContrib) {
+      RulesDefinition rulesDefinition = new FbContribRulesDefinition();
+      rulesDefinition.define(context);
+      configRuleFinderForRepo(ruleFinder, context, FbContribRulesDefinition.REPOSITORY_KEY);
     }
     return ruleFinder;
   }
 
-  public static RuleFinder create() {
-    return create(false);
+  public static RuleFinder createWithAllRules() {
+    return create(true, true, true);
   }
 
-  private static void configRuleFinderForRepo(RuleFinder ruleFinder, final String repositoryKey, final List<Rule> rules) {
+  public static RuleFinder createWithOnlyFindbugsRules() {
+    return create(true, false, false);
+  }
+
+  public static RuleFinder createWithOnlyFbContribRules() {
+    return create(false, true, false);
+  }
+
+  public static RuleFinder createWithOnlyFindSecBugsRules() {
+    return create(false, false, true);
+  }
+
+  private static void configRuleFinderForRepo(RuleFinder ruleFinder, final Context context, final String repositoryKey) {
+    final RulesDefinition.Repository repository = context.repository(repositoryKey);
+    final List<Rule> rules = convert(repository.rules());
+
     when(ruleFinder.findAll(argThat(new CustomTypeSafeMatcher<RuleQuery>("RuleQuery") {
       @Override
       public boolean matchesSafely(RuleQuery ruleQuery) {
@@ -89,11 +109,12 @@ public class FakeRuleFinder {
     });
   }
 
-  private static List<Rule> getRulesFromRepo(RuleRepository repo, String repositoryKey) {
-    List<Rule> rules = repo.createRules();
-    for (Rule rule : rules) {
-      rule.setRepositoryKey(repositoryKey);
+  private static List<Rule> convert(List<RulesDefinition.Rule> rules) {
+    List<Rule> results = Lists.newArrayListWithCapacity(rules.size());
+    for (RulesDefinition.Rule rule : rules) {
+      Rule newRule = Rule.create(rule.repository().key(), rule.key(), rule.name()).setDescription(rule.htmlDescription()).setRepositoryKey(rule.repository().key());
+      results.add(newRule);
     }
-    return rules;
+    return results;
   }
 }

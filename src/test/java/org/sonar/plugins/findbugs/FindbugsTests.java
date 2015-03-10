@@ -19,34 +19,39 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.sonar.api.platform.ServerFileSystem;
+import org.apache.commons.lang.CharUtils;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.Assert;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RulePriority;
-import org.sonar.api.rules.XMLRuleParser;
+import org.sonar.api.rules.RuleQuery;
 import org.sonar.plugins.java.Java;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
-
 public abstract class FindbugsTests {
 
-  protected void assertXmlAreSimilar(String actualContent, String expectedFileName) throws IOException, SAXException {
-    String expectedContent = TestUtils.getResourceContent("/org/sonar/plugins/findbugs/" + expectedFileName);
-    TestUtils.assertSimilarXml(expectedContent, actualContent);
+  protected void assertXmlAreSimilar(String actualContent, String expectedFileName) throws SAXException, IOException {
+    File expectedContent = TestUtils.getResource("/org/sonar/plugins/findbugs/" + expectedFileName);
+    assertSimilarXml(expectedContent, actualContent);
   }
 
   protected List<Rule> buildRulesFixture() {
     List<Rule> rules = new ArrayList<Rule>();
 
-    Rule rule1 = Rule.create(FindbugsRuleRepository.REPOSITORY_KEY, "DLS_DEAD_LOCAL_STORE", "DLS: Dead store to local variable");
-    Rule rule2 = Rule.create(FindbugsRuleRepository.REPOSITORY_KEY, "URF_UNREAD_FIELD", "UrF: Unread field");
+    Rule rule1 = Rule.create(FindbugsRulesDefinition.REPOSITORY_KEY, "DLS_DEAD_LOCAL_STORE", "DLS: Dead store to local variable");
+    Rule rule2 = Rule.create(FindbugsRulesDefinition.REPOSITORY_KEY, "URF_UNREAD_FIELD", "UrF: Unread field");
 
     rules.add(rule1);
     rules.add(rule2);
@@ -67,22 +72,20 @@ public abstract class FindbugsTests {
     RulesProfile profile = RulesProfile.create();
     profile.setName("FindBugs");
     profile.setLanguage(Java.KEY);
-    ServerFileSystem sfs = mock(ServerFileSystem.class);
+    RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
     if (findbugs) {
-      for (Rule rule : new FindbugsRuleRepository(sfs, new XMLRuleParser()).createRules()) {
-        rule.setRepositoryKey(FindbugsRuleRepository.REPOSITORY_KEY);
+      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY))) {
         profile.activateRule(rule, null);
       }
     }
     if (fbContrib) {
-      for (Rule rule : new FbContribRuleRepository(new XMLRuleParser()).createRules()) {
-        rule.setRepositoryKey(FbContribRuleRepository.REPOSITORY_KEY);
+      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FbContribRulesDefinition.REPOSITORY_KEY))) {
         profile.activateRule(rule, null);
       }
     }
     if (findsecbug) {
-      for (Rule rule : new FindSecurityBugsRuleRepository(new XMLRuleParser()).createRules()) {
-        rule.setRepositoryKey(FindSecurityBugsRuleRepository.REPOSITORY_KEY);
+      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY))) {
+        rule.setRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
         profile.activateRule(rule, null);
       }
     }
@@ -91,5 +94,13 @@ public abstract class FindbugsTests {
 
   protected RulesProfile createRulesProfileWithActiveRules() {
     return createRulesProfileWithActiveRules(true, false, false);
+  }
+
+  private void assertSimilarXml(File expectedFile, String xml) throws SAXException, IOException {
+    XMLUnit.setIgnoreWhitespace(true);
+    Reader reader = new FileReader(expectedFile);
+    Diff diff = XMLUnit.compareXML(reader, xml);
+    String message = "Diff: " + diff.toString() + CharUtils.LF + "XML: " + xml;
+    Assert.assertTrue(message, diff.similar());
   }
 }

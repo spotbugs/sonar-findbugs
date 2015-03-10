@@ -25,8 +25,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.CoreProperties;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.config.Settings;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.utils.SonarException;
 
 import java.io.File;
@@ -86,7 +86,7 @@ public class FindbugsExecutorTest {
 
   @Test(expected = SonarException.class)
   public void shoulFailIfNoCompiledClasses() throws Exception {
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    DefaultFileSystem fs = new DefaultFileSystem(new File("."));
     Settings settings = new Settings();
     settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
     FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings, null, null, null);

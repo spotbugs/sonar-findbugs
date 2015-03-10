@@ -26,10 +26,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
+import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -47,7 +50,7 @@ public class FindbugsConfigurationTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private ModuleFileSystem fs;
+  private DefaultFileSystem fs;
   private Settings settings;
   private File baseDir;
   private FindbugsConfiguration conf;
@@ -57,9 +60,8 @@ public class FindbugsConfigurationTest {
   public void setUp() throws Exception {
     baseDir = temp.newFolder("findbugs");
 
-    fs = mock(ModuleFileSystem.class);
-    when(fs.workingDir()).thenReturn(temp.newFolder());
-    when(fs.baseDir()).thenReturn(baseDir);
+    fs = new DefaultFileSystem(baseDir);
+    fs.setWorkDir(temp.newFolder());
 
     settings = new Settings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
     javaResourceLocator = mock(JavaResourceLocator.class);
@@ -68,13 +70,13 @@ public class FindbugsConfigurationTest {
 
   @Test
   public void should_return_report_file() throws Exception {
-    assertThat(conf.getTargetXMLReport().getCanonicalPath()).isEqualTo(new File(fs.workingDir(), "findbugs-result.xml").getCanonicalPath());
+    assertThat(conf.getTargetXMLReport().getCanonicalPath()).isEqualTo(new File(fs.workDir(), "findbugs-result.xml").getCanonicalPath());
   }
 
   @Test
   public void should_save_include_config() throws Exception {
     conf.saveIncludeConfigXml();
-    File findbugsIncludeFile = new File(fs.workingDir(), "findbugs-include.xml");
+    File findbugsIncludeFile = new File(fs.workDir(), "findbugs-include.xml");
     assertThat(findbugsIncludeFile.exists()).isTrue();
   }
 
@@ -117,27 +119,47 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
+  public void should_set_source_files() throws IOException {
+    File file = temp.newFile("MyClass.java");
+    fs.add(new DefaultInputFile(file.getPath()).setAbsolutePath(file.getAbsolutePath()).setType(Type.MAIN).setLanguage(Java.KEY));
+    Project findbugsProject = conf.getFindbugsProject();
+
+    assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
+    conf.stop();
+  }
+
+  @Test
+  public void should_set_class_path() throws IOException {
+    File classpath = temp.newFolder();
+    when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
+    Project findbugsProject = conf.getFindbugsProject();
+
+    assertThat(findbugsProject.getAuxClasspathEntryList()).contains(classpath.getCanonicalPath());
+    conf.stop();
+  }
+
+  @Test
   public void should_copy_lib_in_working_dir() throws IOException {
     String jsr305 = "findbugs/jsr305.jar";
     String annotations = "findbugs/annotations.jar";
 
     // stop at start
     conf.stop();
-    assertThat(new File(fs.workingDir(), jsr305)).doesNotExist();
-    assertThat(new File(fs.workingDir(), annotations)).doesNotExist();
+    assertThat(new File(fs.workDir(), jsr305)).doesNotExist();
+    assertThat(new File(fs.workDir(), annotations)).doesNotExist();
 
     conf.copyLibs();
-    assertThat(new File(fs.workingDir(), jsr305)).isFile();
-    assertThat(new File(fs.workingDir(), annotations)).isFile();
+    assertThat(new File(fs.workDir(), jsr305)).isFile();
+    assertThat(new File(fs.workDir(), annotations)).isFile();
 
     // copy again
     conf.copyLibs();
-    assertThat(new File(fs.workingDir(), jsr305)).isFile();
-    assertThat(new File(fs.workingDir(), annotations)).isFile();
+    assertThat(new File(fs.workDir(), jsr305)).isFile();
+    assertThat(new File(fs.workDir(), annotations)).isFile();
 
     conf.stop();
-    assertThat(new File(fs.workingDir(), jsr305)).doesNotExist();
-    assertThat(new File(fs.workingDir(), annotations)).doesNotExist();
+    assertThat(new File(fs.workDir(), jsr305)).doesNotExist();
+    assertThat(new File(fs.workDir(), annotations)).doesNotExist();
 
   }
 
