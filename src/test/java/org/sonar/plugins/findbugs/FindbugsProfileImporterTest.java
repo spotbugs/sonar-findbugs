@@ -24,6 +24,7 @@ import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
+import org.sonar.api.rules.RulePriority;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
@@ -47,6 +48,28 @@ public class FindbugsProfileImporterTest {
     assertThat(profile.getActiveRules()).hasSize(2);
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "NP_CLOSING_NULL")).isNotNull();
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
+  }
+
+  @Test
+  public void shouldImportPatternsWithMultiplePriority() {
+    InputStream findbugsConf = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/shouldImportPatternsWithMultiplePriorities.xml");
+    RulesProfile profile = importer.importProfile(new InputStreamReader(findbugsConf), ValidationMessages.create());
+
+    assertThat(profile.getActiveRules()).hasSize(3);
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "NP_CLOSING_NULL")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "NP_CLOSING_NULL").getSeverity()).isEqualTo(RulePriority.BLOCKER);
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE").getSeverity()).isEqualTo(RulePriority.BLOCKER);
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "DLS_DEAD_LOCAL_STORE")).isNotNull();
+    assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "DLS_DEAD_LOCAL_STORE").getSeverity()).isEqualTo(RulePriority.MAJOR);
+  }
+
+  @Test
+  public void shouldNotImportIfInvalidPriority() {
+    InputStream findbugsConf = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/invalidPriority.xml");
+    RulesProfile profile = importer.importProfile(new InputStreamReader(findbugsConf), ValidationMessages.create());
+
+    assertThat(profile.getActiveRules()).hasSize(0);
   }
 
   @Test

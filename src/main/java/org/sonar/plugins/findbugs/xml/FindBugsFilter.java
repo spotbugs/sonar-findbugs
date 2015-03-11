@@ -59,10 +59,6 @@ public class FindBugsFilter {
     return matchs;
   }
 
-  public void setMatchs(List<Match> matchs) {
-    this.matchs = matchs;
-  }
-
   public void addMatch(Match child) {
     matchs.add(child);
   }

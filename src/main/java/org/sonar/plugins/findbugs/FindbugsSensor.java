@@ -106,7 +106,9 @@ public class FindbugsSensor implements Sensor {
       int line = bugInstance.getStartLine();
 
       Resource resource = javaResourceLocator.findResourceByClassName(className);
-      insertIssue(rule, resource, line, longMessage);
+      if (resource != null) {
+        insertIssue(rule, resource, line, longMessage);
+      }
     }
   }
 

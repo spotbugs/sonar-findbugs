@@ -133,7 +133,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     Project project = createProject();
     FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
-    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY");
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
@@ -147,11 +147,49 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
+  public void should_not_add_issue_if_resource_not_found() throws Exception {
+    Project project = createProject();
+    FindbugsExecutor executor = mock(FindbugsExecutor.class);
+
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 13);
+    Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
+    when(executor.execute(false, false)).thenReturn(collection);
+    JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
+    when(javaResourceLocator.findResourceByClassName(anyString())).thenReturn(null);
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+
+    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(), FakeRuleFinder.createWithAllRules(), perspectives, executor, javaResourceLocator, fs);
+    analyser.analyse(project, context);
+
+    verify(executor).execute(false, false);
+    verify(issuable, never()).addIssue(any(Issue.class));
+  }
+
+  @Test
+  public void should_not_add_issue_if_issuable_not_found() throws Exception {
+    Project project = createProject();
+    FindbugsExecutor executor = mock(FindbugsExecutor.class);
+
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 27);
+    Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
+    when(executor.execute(false, false)).thenReturn(collection);
+    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+
+    when(perspectives.as(eq(Issuable.class), any(Resource.class))).thenReturn(null);
+    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(), FakeRuleFinder.createWithAllRules(), perspectives, executor, javaResourceLocator, fs);
+    analyser.analyse(project, context);
+
+    verify(executor).execute(false, false);
+    verify(issuable, never()).addIssue(any(Issue.class));
+  }
+
+  @Test
   public void should_execute_findbugs_even_if_only_fbcontrib() throws Exception {
     Project project = createProject();
     FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
-    BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING");
+    BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(true, false)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
@@ -170,7 +208,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     Project project = createProject();
     FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
-    BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM");
+    BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, true)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
@@ -194,7 +232,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     Project project = createProject();
     FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
-    BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST");
+    BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
@@ -208,15 +246,14 @@ public class FindbugsSensorTest extends FindbugsTests {
     verify(issuable, never()).addIssue(any(Issue.class));
   }
 
-  private BugInstance getBugInstance(String name) {
+  private BugInstance getBugInstance(String name, int line) {
     BugInstance bugInstance = new BugInstance(name, 2);
     String className = "org.sonar.commons.ZipUtils";
     String sourceFile = "org/sonar/commons/ZipUtils.java";
-    int startLine = 107;
     ClassAnnotation classAnnotation = new ClassAnnotation(className, sourceFile);
     bugInstance.add(classAnnotation);
     MethodAnnotation methodAnnotation = new MethodAnnotation(className, "_zip", "(Ljava/lang/String;Ljava/io/File;Ljava/util/zip/ZipOutputStream;)V", true);
-    methodAnnotation.setSourceLines(new SourceLineAnnotation(className, sourceFile, startLine, 0, 0, 0));
+    methodAnnotation.setSourceLines(new SourceLineAnnotation(className, sourceFile, line, 0, 0, 0));
     bugInstance.add(methodAnnotation);
     return bugInstance;
   }
