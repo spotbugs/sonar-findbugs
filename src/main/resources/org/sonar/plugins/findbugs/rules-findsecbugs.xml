@@ -1150,7 +1150,7 @@ to do this correctly.
 &lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/319.html"&gt;CWE-319: Cleartext Transmission of Sensitive Information&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a6</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>cryptography</tag>
@@ -1303,7 +1303,7 @@ the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet.
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a3</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>security</tag>
@@ -1414,7 +1414,7 @@ keyGen.initialize(2048);
 &lt;a href="https://www.owasp.org/index.php/Unvalidated_Redirects_and_Forwards_Cheat_Sheet"&gt;OWASP: Unvalidated Redirects and Forwards Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/601.html"&gt;CWE-601: URL Redirection to Untrusted Site ('Open Redirect')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a10</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>security</tag>
