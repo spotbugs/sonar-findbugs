@@ -40,6 +40,7 @@ You may need to validate or sanitize those values before passing them to sensiti
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -54,6 +55,7 @@ The HTTP header Content-Type can be controlled by the client. As such, its value
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -77,6 +79,7 @@ decisions you make with respect to a request.
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a2</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -107,6 +110,8 @@ valid active session IDs, allowing an insider to hijack any sessions whose IDs h
 &lt;a href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet"&gt;OWASP: Session Management Cheat Sheet&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>security</tag>
+    <tag>cwe</tag>
+    <tag>owasp-a2</tag>
   </rule>
   <rule key='SERVLET_QUERY_STRING' priority='INFO'>
     <name>Security - Untrusted Query String</name>
@@ -162,6 +167,7 @@ Recommendations:
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a2</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -207,8 +213,9 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;a href="http://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>wasc</tag>
+    <tag>owasp-a6</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
   <rule key='PATH_TRAVERSAL_OUT' priority='MAJOR'>
@@ -226,8 +233,9 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;a href="http://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>wasc</tag>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
   <rule key='COMMAND_INJECTION' priority='CRITICAL'>
@@ -241,7 +249,7 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/78.html"&gt;CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
     <tag>security</tag>
@@ -268,8 +276,9 @@ that looks at the end of the filename (e.g., endswith ".log") to make sure its a
 &lt;a href="http://projects.webappsec.org/w/page/13246949/Null%20Byte%20Injection"&gt;WASC-28: Null Byte Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/158.html"&gt;CWE-158: Improper Neutralization of Null Byte or NUL Character&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>wasc</tag>
+    <tag>owasp-a6</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
   <rule key='WEAK_TRUST_MANAGER' priority='MAJOR'>
@@ -457,6 +466,7 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
 &lt;a href="http://blogs.securiteam.com/index.php/archives/1268"&gt;Securiteam: File upload security recommendations&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -564,6 +574,7 @@ parser.parse(inputStream, customHandler);&lt;/pre&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -644,6 +655,7 @@ reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -724,6 +736,7 @@ Document doc = db.parse(input);&lt;/pre&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces2-j/features.html"&gt;Xerces2 complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -744,9 +757,9 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
 &lt;a href="http://media.blackhat.com/bh-eu-12/Siddharth/bh-eu-12-Siddharth-Xpath-WP.pdf"&gt;Black Hat Europe 2012: Hacking XPath 2.0&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.balisage.net/Proceedings/vol7/html/Vlist02/BalisageVol7-Vlist02.html"&gt;Balisage: XQuery Injection&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
-    <tag>wasc</tag>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>injection</tag>
     <tag>security</tag>
   </rule>
@@ -821,7 +834,7 @@ q.execute();&lt;/pre&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a1</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
@@ -863,7 +876,7 @@ q.execute(input);&lt;/pre&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a1</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
@@ -908,7 +921,7 @@ UserEntity res = q.getSingleResult();&lt;/pre&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
+    <tag>owasp-a1</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
@@ -934,9 +947,9 @@ Therefore, the primary defense against LDAP injection is strong input validation
 &lt;a href="http://cwe.mitre.org/data/definitions/90.html"&gt;CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.veracode.com/security/ldap-injection"&gt;LDAP Injection Guide: Learn How to Detect LDAP Injections and Improve LDAP Security&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
-    <tag>wasc</tag>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>injection</tag>
     <tag>security</tag>
   </rule>
@@ -989,6 +1002,8 @@ public void runCustomTrigger(String script) {
 &lt;a href="http://codeutopia.net/blog/2009/01/02/sandboxing-rhino-in-java/"&gt;CodeUtopia.net: Sandboxing Rhino in Java&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be use to test sandboxing rules.&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>cwe</tag>
     <tag>injection</tag>
     <tag>security</tag>
   </rule>
@@ -1022,6 +1037,7 @@ public void parseExpressionInterface(Person personObj,String property) {
     &lt;a href="https://www.mindedsecurity.com/fileshare/ExpressionLanguageInjection.pdf"&gt;Minded Security: Expression Language Injection&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be use to test sandboxing rules.&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
     <tag>cwe</tag>
     <tag>injection</tag>
     <tag>security</tag>
@@ -1190,6 +1206,7 @@ The code should be replaced with:&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/780.html"&gt;CWE-780: Use of RSA Algorithm without OAEP&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://rdist.root.org/2009/10/06/why-rsa-encryption-padding-is-critical/"&gt;Root Labs: Why RSA encryption padding is critical&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a5</tag>
     <tag>cwe</tag>
     <tag>cryptography</tag>
     <tag>security</tag>
@@ -1217,6 +1234,7 @@ props.put(Context.SECURITY_CREDENTIALS, "p@ssw0rd");&lt;/pre&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
+    <tag>owasp-a6</tag>
   </rule>
   <rule key='STRUTS_FORM_VALIDATION' priority='INFO'>
     <name>Security - Struts Form Without Input Validation</name>
@@ -1348,9 +1366,10 @@ keyGen.initialize(2048);
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.keylength.com/en/compare/"&gt;Keylength.com (BlueKrypt): Aggregate key length recommendations.&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
     <tag>cryptography</tag>
     <tag>security</tag>
+    <tag>owasp-a5</tag>
+    <tag>cwe</tag>
   </rule>
   <rule key='UNVALIDATED_REDIRECT' priority='MAJOR'>
     <name>Security - Unvalidated Redirect</name>
@@ -1440,9 +1459,9 @@ which explains these defenses in significant detail.
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
-    <tag>wasc</tag>
+    <tag>owasp-a3</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
   <rule key='XSS_SERVLET' priority='CRITICAL'>
@@ -1483,9 +1502,9 @@ which explains these defenses in significant detail.
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-top10</tag>
-    <tag>wasc</tag>
+    <tag>owasp-a3</tag>
     <tag>cwe</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
   <rule key='XML_DECODER' priority='CRITICAL'>
