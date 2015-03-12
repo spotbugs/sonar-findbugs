@@ -1,0 +1,3 @@
+<p>Looks like this method uses lazy field initialization with double-checked locking. While the field is correctly declared as volatile, it's possible that the internal structure of the object is changed after the field assignment, thus another thread may see the partially initialized object.</p>
+
+<p>To fix this problem consider storing the object into the local variable first and save it to the volatile field only after it's fully constructed.</p>

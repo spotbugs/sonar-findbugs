@@ -2745,4 +2745,118 @@
     <configKey><![CDATA[CNT_ROUGH_CONSTANT_VALUE]]></configKey>
   </rule>
 
+  <rule key="BSHIFT_WRONG_ADD_PRIORITY">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Possible bad parsing of shift operation]]></name>
+    <configKey><![CDATA[BSHIFT_WRONG_ADD_PRIORITY]]></configKey>
+  </rule>
+
+  <rule key="CO_COMPARETO_INCORRECT_FLOATING">
+    <priority>MAJOR</priority>
+    <name><![CDATA[compareTo()/compare() incorrectly handles float or double value]]></name>
+    <configKey><![CDATA[CO_COMPARETO_INCORRECT_FLOATING]]></configKey>
+  </rule>
+
+  <rule key="DC_PARTIALLY_CONSTRUCTED">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Possible exposure of partially initialized object]]></name>
+    <configKey><![CDATA[DC_PARTIALLY_CONSTRUCTED]]></configKey>
+  </rule>
+
+  <rule key="DM_BOXED_PRIMITIVE_FOR_COMPARE">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Boxing a primitive to compare]]></name>
+    <configKey><![CDATA[DM_BOXED_PRIMITIVE_FOR_COMPARE]]></configKey>
+  </rule>
+
+  <rule key="DM_INVALID_MIN_MAX">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Incorrect combination of Math.max and Math.min]]></name>
+    <configKey><![CDATA[DM_INVALID_MIN_MAX]]></configKey>
+  </rule>
+
+  <rule key="ME_MUTABLE_ENUM_FIELD">
+    <priority>CRITICAL</priority>
+    <name><![CDATA[Enum field is public and mutable]]></name>
+    <configKey><![CDATA[ME_MUTABLE_ENUM_FIELD]]></configKey>
+  </rule>
+
+  <rule key="ME_ENUM_FIELD_SETTER">
+    <priority>CRITICAL</priority>
+    <name><![CDATA[Public enum method unconditionally sets its field]]></name>
+    <configKey><![CDATA[ME_ENUM_FIELD_SETTER]]></configKey>
+  </rule>
+
+  <rule key="MS_MUTABLE_COLLECTION">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Field is a mutable collection]]></name>
+    <configKey><![CDATA[MS_MUTABLE_COLLECTION]]></configKey>
+  </rule>
+
+  <rule key="MS_MUTABLE_COLLECTION_PKGPROTECT">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Field is a mutable collection which should be package protected]]></name>
+    <configKey><![CDATA[MS_MUTABLE_COLLECTION_PKGPROTECT]]></configKey>
+  </rule>
+
+  <rule key="RANGE_ARRAY_INDEX">
+    <priority>CRITICAL</priority>
+    <name><![CDATA[Array index is out of bounds]]></name>
+    <configKey><![CDATA[RANGE_ARRAY_INDEX]]></configKey>
+  </rule>
+
+  <rule key="RANGE_ARRAY_OFFSET">
+    <priority>CRITICAL</priority>
+    <name><![CDATA[Array offset is out of bounds]]></name>
+    <configKey><![CDATA[RANGE_ARRAY_OFFSET]]></configKey>
+  </rule>
+
+  <rule key="RANGE_ARRAY_LENGTH">
+    <priority>CRITICAL</priority>
+    <name><![CDATA[Array length is out of bounds]]></name>
+    <configKey><![CDATA[RANGE_ARRAY_LENGTH]]></configKey>
+  </rule>
+
+  <rule key="RANGE_STRING_INDEX">
+    <priority>CRITICAL</priority>
+    <name><![CDATA[String index is out of bounds]]></name>
+    <configKey><![CDATA[RANGE_STRING_INDEX]]></configKey>
+  </rule>
+
+  <rule key="RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Return value of method without side effect is ignored]]></name>
+    <configKey><![CDATA[RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT]]></configKey>
+  </rule>
+
+  <rule key="UC_USELESS_CONDITION">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Condition has no effect]]></name>
+    <configKey><![CDATA[UC_USELESS_CONDITION]]></configKey>
+  </rule>
+
+  <rule key="UC_USELESS_CONDITION_TYPE">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Condition has no effect due to the variable type]]></name>
+    <configKey><![CDATA[UC_USELESS_CONDITION_TYPE]]></configKey>
+  </rule>
+
+  <rule key="UC_USELESS_OBJECT">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Useless object created]]></name>
+    <configKey><![CDATA[UC_USELESS_OBJECT]]></configKey>
+  </rule>
+
+  <rule key="UC_USELESS_OBJECT_STACK">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Useless object created on stack]]></name>
+    <configKey><![CDATA[UC_USELESS_OBJECT_STACK]]></configKey>
+  </rule>
+
+  <rule key="UC_USELESS_VOID_METHOD">
+    <priority>MAJOR</priority>
+    <name><![CDATA[Useless non-empty void method]]></name>
+    <configKey><![CDATA[UC_USELESS_VOID_METHOD]]></configKey>
+  </rule>
+
 </rules>

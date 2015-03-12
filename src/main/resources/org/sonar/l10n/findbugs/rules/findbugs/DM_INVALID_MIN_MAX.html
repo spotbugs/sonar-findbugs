@@ -1,0 +1,1 @@
+<p>This code tries to limit the value bounds using the construct like <code>Math.min(0, Math.max(100, value))</code>. However the order of the constants is incorrect: it should be <code>Math.min(100, Math.max(0, value))</code>. As the result this code always produces the same result (or <code>NaN</code> if the value is <code>NaN</code>).</p>

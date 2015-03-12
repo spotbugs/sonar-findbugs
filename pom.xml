@@ -53,7 +53,7 @@
   </scm>
 
   <properties>
-    <findbugs.version>3.0.0</findbugs.version>
+    <findbugs.version>3.0.1</findbugs.version>
     <jdk.min.version>1.7</jdk.min.version>
 
     <sonar.version>4.5.4</sonar.version>

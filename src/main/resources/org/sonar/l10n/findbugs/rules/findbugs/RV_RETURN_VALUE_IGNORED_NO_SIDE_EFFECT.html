@@ -1,0 +1,11 @@
+<p>This code calls a method and ignores the return value. However our analysis shows that the method (including its implementations in subclasses if any) does not produce any effect other than return value. Thus this call can be removed.</p>
+
+<p>We are trying to reduce the false positives as much as possible, but in some cases this warning might be wrong. Common false-positive cases include:</p>
+
+<ul>
+    <li>The method is designed to be overridden and produce a side effect in other projects which are out of the scope of the analysis.</li>
+    <li>The method is called to trigger the class loading which may have a side effect.</li>
+    <li>The method is called just to get some exception.</li>
+</ul>
+
+<p>If you feel that our assumption is incorrect, you can use a <code>@CheckReturnValue</code> annotation to instruct FindBugs that ignoring the return value of this method is acceptable.</p>
