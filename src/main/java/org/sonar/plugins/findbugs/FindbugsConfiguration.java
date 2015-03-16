@@ -72,7 +72,7 @@ public class FindbugsConfiguration implements BatchExtension {
     edu.umd.cs.findbugs.Project findbugsProject = new edu.umd.cs.findbugs.Project();
 
     for (File file : getSourceFiles()) {
-      findbugsProject.addFile(file.getAbsolutePath());
+      findbugsProject.addFile(file.getCanonicalPath());
     }
 
     Collection<File> classFilesToAnalyze = javaResourceLocator.classFilesToAnalyze();
@@ -81,13 +81,13 @@ public class FindbugsConfiguration implements BatchExtension {
     }
 
     for (File file : javaResourceLocator.classpath()) {
-      findbugsProject.addAuxClasspathEntry(file.getAbsolutePath());
+      findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
     copyLibs();
     if (annotationsLib != null) {
       // Findbugs dependencies are packaged by Maven. They are not available during execution of unit tests.
-      findbugsProject.addAuxClasspathEntry(annotationsLib.getAbsolutePath());
-      findbugsProject.addAuxClasspathEntry(jsr305Lib.getAbsolutePath());
+      findbugsProject.addAuxClasspathEntry(annotationsLib.getCanonicalPath());
+      findbugsProject.addAuxClasspathEntry(jsr305Lib.getCanonicalPath());
     }
     findbugsProject.setCurrentWorkingDirectory(fileSystem.workDir());
     return findbugsProject;
