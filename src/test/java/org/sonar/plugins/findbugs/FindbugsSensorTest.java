@@ -58,7 +58,7 @@ import static org.mockito.Mockito.when;
 
 public class FindbugsSensorTest extends FindbugsTests {
 
-  private DefaultFileSystem fs = new DefaultFileSystem(new File("."));
+  private DefaultFileSystem fs = new DefaultFileSystem();
   private Project project;
   private SensorContext context;
   private ResourcePerspectives perspectives;
@@ -66,6 +66,7 @@ public class FindbugsSensorTest extends FindbugsTests {
 
   @Before
   public void setUp() {
+    fs.setBaseDir(new File("."));
     project = mock(Project.class);
     context = mock(SensorContext.class);
     when(context.getResource(any(Resource.class))).thenReturn(new org.sonar.api.resources.File("org.sonar.MyClass"));

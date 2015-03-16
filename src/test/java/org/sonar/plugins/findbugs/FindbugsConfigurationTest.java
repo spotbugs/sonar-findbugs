@@ -60,7 +60,8 @@ public class FindbugsConfigurationTest {
   public void setUp() throws Exception {
     baseDir = temp.newFolder("findbugs");
 
-    fs = new DefaultFileSystem(baseDir);
+    fs = new DefaultFileSystem();
+    fs.setBaseDir(baseDir);
     fs.setWorkDir(temp.newFolder());
 
     settings = new Settings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
