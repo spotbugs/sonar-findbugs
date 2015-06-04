@@ -173,7 +173,7 @@ public class FindbugsExecutor implements BatchExtension {
     }
   }
 
-  private Collection<ReportedBug> toReportedBugs(BugCollection bugCollection) {
+  private static Collection<ReportedBug> toReportedBugs(BugCollection bugCollection) {
     // We need to retrieve information such as the message before we shut everything down as we will lose any custom
     // bug messages
     final Collection<ReportedBug> bugs = new ArrayList<ReportedBug>();
@@ -267,14 +267,14 @@ public class FindbugsExecutor implements BatchExtension {
     return customPluginList;
   }
 
-  private String normalizeUrl(URL url) throws URISyntaxException {
+  private static String normalizeUrl(URL url) throws URISyntaxException {
     return StringUtils.removeStart(StringUtils.substringBefore(url.toURI().getSchemeSpecificPart(), "!"), "file:");
   }
 
   /**
    * Disable the update check for every plugin. See http://findbugs.sourceforge.net/updateChecking.html
    */
-  private void disableUpdateChecksOnEveryPlugin() {
+  private static void disableUpdateChecksOnEveryPlugin() {
     for (Plugin plugin : Plugin.getAllPlugins()) {
       plugin.setMyGlobalOption("noUpdateChecks", "true");
     }

@@ -43,7 +43,7 @@ public class FindBugsFilter {
   private List<Match> matchs;
 
   public FindBugsFilter() {
-    matchs = new ArrayList<Match>();
+    matchs = new ArrayList<>();
   }
 
   public String toXml() {
@@ -108,12 +108,12 @@ public class FindBugsFilter {
     return processMatches(priorityMapper, splitter);
   }
 
-  private String getRuleSeverity(Priority priority, FindbugsLevelUtils priorityMapper) {
+  private static String getRuleSeverity(Priority priority, FindbugsLevelUtils priorityMapper) {
     return priority != null ? priorityMapper.from(priority.getValue()) : null;
   }
 
   private Map<String, String> processMatches(FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
-    Map<String, String> result = new HashMap<String, String>();
+    Map<String, String> result = new HashMap<>();
     for (Match child : getChildren()) {
       if (child.getOrs() != null) {
         for (OrFilter orFilter : child.getOrs()) {
@@ -157,7 +157,7 @@ public class FindBugsFilter {
     }
   }
 
-  private String getHighestSeverity(String s1, String s2) {
+  private static String getHighestSeverity(String s1, String s2) {
     if (s1.equals(s2)) {
       return s1;
     } else if (Severity.INFO.equals(s1)) {

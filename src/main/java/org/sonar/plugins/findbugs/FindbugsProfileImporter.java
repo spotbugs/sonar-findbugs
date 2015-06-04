@@ -117,7 +117,7 @@ public class FindbugsProfileImporter extends ProfileImporter {
     }
   }
 
-  private RulePriority getPriorityFromSeverity(String severity) {
+  private static RulePriority getPriorityFromSeverity(String severity) {
     if (Severity.INFO.equals(severity)) {
       return RulePriority.INFO;
     } else if (Severity.MAJOR.equals(severity)) {
