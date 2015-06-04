@@ -27,7 +27,7 @@ public class FindbugsPluginTest {
 
   @Test
   public void testGetExtensions() {
-    assertThat(new FindbugsPlugin().getExtensions()).hasSize(16);
+    assertThat(new FindbugsPlugin().getExtensions()).hasSize(15);
   }
 
 }
