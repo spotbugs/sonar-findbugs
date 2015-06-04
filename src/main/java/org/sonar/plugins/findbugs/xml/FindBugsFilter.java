@@ -127,7 +127,7 @@ public class FindBugsFilter {
     return result;
   }
 
-  private void completeLevels(Map<String, String> result, List<Bug> bugs, Priority priority, FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
+  private static void completeLevels(Map<String, String> result, List<Bug> bugs, Priority priority, FindbugsLevelUtils priorityMapper, BugInfoSplitter splitter) {
     if (bugs == null) {
       return;
     }
@@ -149,7 +149,7 @@ public class FindBugsFilter {
     String getSeparator();
   }
 
-  private void mapRuleSeverity(Map<String, String> severityByRule, String severity, String key) {
+  private static void mapRuleSeverity(Map<String, String> severityByRule, String severity, String key) {
     if (severityByRule.containsKey(key) && severityByRule.get(key) != null) {
       severityByRule.put(key, getHighestSeverity(severityByRule.get(key), severity));
     } else {
