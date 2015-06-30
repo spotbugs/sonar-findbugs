@@ -42,11 +42,17 @@ public class FindbugsRulesDefinitionTest {
     List<Rule> rules = repository.rules();
     assertThat(rules).hasSize(442);
 
+    int missingDebt = 0;
     for (Rule rule : rules) {
       assertThat(rule.key()).isNotNull();
       assertThat(rule.internalKey()).isEqualTo(rule.key());
       assertThat(rule.name()).isNotNull();
       assertThat(rule.htmlDescription()).isNotNull();
+      if (rule.debtRemediationFunction() == null) {
+        missingDebt++;
+      }
     }
+    // FIXME SONARFBUGS-34 add missing debt
+    assertThat(missingDebt).isEqualTo(29);
   }
 }

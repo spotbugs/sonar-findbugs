@@ -23,6 +23,7 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.java.Java;
 import org.sonar.squidbridge.rules.ExternalDescriptionLoader;
+import org.sonar.squidbridge.rules.SqaleXmlLoader;
 
 public final class FindbugsRulesDefinition implements RulesDefinition {
 
@@ -41,6 +42,7 @@ public final class FindbugsRulesDefinition implements RulesDefinition {
     RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
     ruleLoader.load(repository, FindbugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules.xml"), "UTF-8");
     ExternalDescriptionLoader.loadHtmlDescriptions(repository, "/org/sonar/l10n/findbugs/rules/findbugs");
+    SqaleXmlLoader.load(repository, "/com/sonar/sqale/findbugs-model.xml");
 
     repository.done();
   }
