@@ -2,11 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
-    <groupId>com.sonarsource.parent</groupId>
+    <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>parent</artifactId>
-    <version>28</version>
+    <version>19</version>
   </parent>
 
   <groupId>com.sonarsource.it.findbugs</groupId>
@@ -14,8 +13,12 @@
   <name>Findbugs :: IT :: Plugin</name>
   <version>1.0-SNAPSHOT</version>
 
-  <inceptionYear>2014</inceptionYear>
 
+  <inceptionYear>2014</inceptionYear>
+  <organization>
+    <name>SonarSource</name>
+    <url>http://www.sonarsource.com</url>
+  </organization>
   <properties>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
     <findbugsVersion>DEV</findbugsVersion>
