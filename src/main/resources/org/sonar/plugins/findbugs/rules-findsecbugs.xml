@@ -11,6 +11,25 @@
 &lt;p&gt;
 A quick fix could be to replace the use of &lt;b&gt;java.util.Random&lt;/b&gt; with something stronger, such as &lt;b&gt;java.security.SecureRandom&lt;/b&gt;.
 &lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;String generateSecretToken() {
+    Random r = new Random();
+    return Long.toHexString(r.nextLong());
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;
+&lt;pre&gt;import org.apache.commons.codec.binary.Hex;
+
+String generateSecretToken() {
+    SecureRandom secRandom = new SecureRandom();
+
+    byte[] result = new byte[32];
+    secRandom.nextBytes(result);
+    return Hex.encodeHexString(result);
+}&lt;/pre&gt;
+&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -41,6 +60,7 @@ You may need to validate or sanitize those values before passing them to sensiti
 &lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -55,7 +75,6 @@ The HTTP header Content-Type can be controlled by the client. As such, its value
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a1</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -79,7 +98,6 @@ decisions you make with respect to a request.
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a2</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -106,12 +124,13 @@ valid active session IDs, allowing an insider to hijack any sessions whose IDs h
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
-&lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet"&gt;OWASP: Session Management Cheat Sheet&lt;/a&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Session_Management_Cheat_Sheet"&gt;OWASP: Session Management Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
+
 &lt;/p&gt;</description>
-    <tag>security</tag>
     <tag>cwe</tag>
-    <tag>owasp-a2</tag>
+    <tag>security</tag>
   </rule>
   <rule key='SERVLET_QUERY_STRING' priority='INFO'>
     <name>Security - Untrusted Query String</name>
@@ -167,7 +186,6 @@ Recommendations:
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/807.html"&gt;CWE-807: Untrusted Inputs in a Security Decision&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a2</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -213,9 +231,9 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;a href="http://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a6</tag>
-    <tag>cwe</tag>
+    <tag>owasp-a4</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='PATH_TRAVERSAL_OUT' priority='MAJOR'>
@@ -233,9 +251,9 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;a href="http://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a1</tag>
-    <tag>cwe</tag>
+    <tag>owasp-a4</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='COMMAND_INJECTION' priority='CRITICAL'>
@@ -250,8 +268,8 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
 &lt;a href="http://cwe.mitre.org/data/definitions/78.html"&gt;CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
-    <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='WEAK_FILENAMEUTILS' priority='INFO'>
@@ -276,9 +294,10 @@ that looks at the end of the filename (e.g., endswith ".log") to make sure its a
 &lt;a href="http://projects.webappsec.org/w/page/13246949/Null%20Byte%20Injection"&gt;WASC-28: Null Byte Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/158.html"&gt;CWE-158: Improper Neutralization of Null Byte or NUL Character&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a6</tag>
-    <tag>cwe</tag>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='WEAK_TRUST_MANAGER' priority='MAJOR'>
@@ -301,9 +320,10 @@ Detailed information for a proper implementation is at:
 &lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/295.html"&gt;CWE-295: Improper Certificate Validation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>cryptography</tag>
     <tag>security</tag>
   </rule>
   <rule key='JAXWS_ENDPOINT' priority='INFO'>
@@ -321,9 +341,11 @@ Detailed information for a proper implementation is at:
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
-&lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet"&gt;OWASP: Web Service Security Cheat Sheet&lt;/a&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet"&gt;OWASP: Web Service Security Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='JAXRS_ENDPOINT' priority='INFO'>
@@ -347,8 +369,10 @@ Detailed information for a proper implementation is at:
 &lt;a href="https://www.owasp.org/index.php/REST_Security_Cheat_Sheet"&gt;OWASP: REST Security Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Web_Service_Security_Cheat_Sheet"&gt;OWASP: Web Service Security Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 1. &lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)"&gt;OWASP: Cross-Site Request Forgery&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet"&gt;OWASP: CSRF Prevention Cheat Sheet&lt;/a&gt;
+&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet"&gt;OWASP: CSRF Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='TAPESTRY_ENDPOINT' priority='INFO'>
@@ -378,9 +402,11 @@ inputs in the backing Java class. The mapping is either done with fieldName:&lt;
 mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
-&lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://tapestry.apache.org/"&gt;Apache Tapestry Home Page&lt;/a&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://tapestry.apache.org/"&gt;Apache Tapestry Home Page&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='WICKET_ENDPOINT' priority='INFO'>
@@ -392,9 +418,11 @@ The current page is mapped to the view [/package/WebPageName].html.&lt;/p&gt;
 mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
-&lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
-&lt;a href="https://wicket.apache.org/"&gt;Apache Wicket Home Page&lt;/a&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://wicket.apache.org/"&gt;Apache Wicket Home Page&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='WEAK_MESSAGE_DIGEST' priority='MAJOR'>
@@ -410,8 +438,9 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST Approved Hashing Algorithms&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='CUSTOM_MESSAGE_DIGEST' priority='MAJOR'>
@@ -444,8 +473,9 @@ sha256Digest.update(password.getBytes());&lt;/pre&gt;
 &lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST Approved Hashing Algorithms&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='FILE_UPLOAD_FILENAME' priority='INFO'>
@@ -464,9 +494,14 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://blogs.securiteam.com/index.php/archives/1268"&gt;Securiteam: File upload security recommendations&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC-33: Path Traversal&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a1</tag>
+    <tag>owasp-a4</tag>
+    <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -574,7 +609,6 @@ parser.parse(inputStream, customHandler);&lt;/pre&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a6</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -655,7 +689,6 @@ reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a6</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -736,7 +769,6 @@ Document doc = db.parse(input);&lt;/pre&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces2-j/features.html"&gt;Xerces2 complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a6</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -758,9 +790,9 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
 &lt;a href="http://www.balisage.net/Proceedings/vol7/html/Vlist02/BalisageVol7-Vlist02.html"&gt;Balisage: XQuery Injection&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
-    <tag>cwe</tag>
-    <tag>wasc</tag>
     <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='STRUTS1_ENDPOINT' priority='INFO'>
@@ -793,7 +825,7 @@ This class should be analyzed to make sure that remotely exposed methods are saf
     <configKey>SQL_INJECTION_HIBERNATE</configKey>
     <description>&lt;p&gt;
 The input values included in SQL queries need to be passed in safely.
-Bind variables in prepared statements can be use to easily mitigate the risk of SQL injection.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
 Alternatively to prepare statement, Hibernate Criteria can be used.
 &lt;/p&gt;
 &lt;p&gt;
@@ -829,15 +861,15 @@ q.execute();&lt;/pre&gt;
 &lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>injection</tag>
     <tag>security</tag>
   </rule>
   <rule key='SQL_INJECTION_JDO' priority='CRITICAL'>
@@ -845,7 +877,7 @@ q.execute();&lt;/pre&gt;
     <configKey>SQL_INJECTION_JDO</configKey>
     <description>&lt;p&gt;
 The input values included in SQL queries need to be passed in safely.
-Bind variables in prepared statements can be use to easily mitigate the risk of SQL injection.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
@@ -871,15 +903,15 @@ q.execute(input);&lt;/pre&gt;
 &lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>injection</tag>
     <tag>security</tag>
   </rule>
   <rule key='SQL_INJECTION_JPA' priority='CRITICAL'>
@@ -887,7 +919,7 @@ q.execute(input);&lt;/pre&gt;
     <configKey>SQL_INJECTION_JPA</configKey>
     <description>&lt;p&gt;
 The input values included in SQL queries need to be passed in safely.
-Bind variables in prepared statements can be use to easily mitigate the risk of SQL injection.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
@@ -916,15 +948,15 @@ UserEntity res = q.getSingleResult();&lt;/pre&gt;
 &lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>injection</tag>
     <tag>security</tag>
   </rule>
   <rule key='LDAP_INJECTION' priority='CRITICAL'>
@@ -948,9 +980,9 @@ Therefore, the primary defense against LDAP injection is strong input validation
 &lt;a href="http://www.veracode.com/security/ldap-injection"&gt;LDAP Injection Guide: Learn How to Detect LDAP Injections and Improve LDAP Security&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
-    <tag>cwe</tag>
-    <tag>wasc</tag>
     <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='SCRIPT_ENGINE_INJECTION' priority='CRITICAL'>
@@ -1000,11 +1032,13 @@ public void runCustomTrigger(String script) {
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://github.com/cloudbees/rhino-sandbox"&gt;Cloudbees Rhino Sandbox&lt;/a&gt;: Utility to create sandbox with Rhino (block access to all classes)&lt;br/&gt;
 &lt;a href="http://codeutopia.net/blog/2009/01/02/sandboxing-rhino-in-java/"&gt;CodeUtopia.net: Sandboxing Rhino in Java&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be use to test sandboxing rules.&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be used to test sandboxing rules.&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
-    <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='SPEL_INJECTION' priority='CRITICAL'>
@@ -1035,11 +1069,11 @@ public void parseExpressionInterface(Person personObj,String property) {
     &lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html"&gt;Spring Expression Language (SpEL) - Official Documentation&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.mindedsecurity.com/fileshare/ExpressionLanguageInjection.pdf"&gt;Minded Security: Expression Language Injection&lt;/a&gt;&lt;br/&gt;
-    &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be use to test sandboxing rules.&lt;br/&gt;
+    &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be used to test sandboxing rules.&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
-    <tag>cwe</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='BAD_HEXA_CONVERSION' priority='MAJOR'>
@@ -1089,9 +1123,10 @@ stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
 &lt;a href="http://www.hazelcast.com/documentation.jsp#Encryption"&gt;Hazelcast Documentation: Encryption (see second part)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>cryptography</tag>
     <tag>security</tag>
   </rule>
   <rule key='NULL_CIPHER' priority='MAJOR'>
@@ -1117,8 +1152,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='UNENCRYPTED_SOCKET' priority='MAJOR'>
@@ -1151,9 +1187,9 @@ to do this correctly.
 &lt;a href="http://cwe.mitre.org/data/definitions/319.html"&gt;CWE-319: Cleartext Transmission of Sensitive Information&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>cryptography</tag>
     <tag>security</tag>
   </rule>
   <rule key='DES_USAGE' priority='MAJOR'>
@@ -1181,8 +1217,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;a href="http://www.nist.gov/itl/fips/060205_des.cfm"&gt;NIST Withdraws Outdated Data Encryption Standard&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='RSA_NO_PADDING' priority='MAJOR'>
@@ -1206,9 +1243,9 @@ The code should be replaced with:&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/780.html"&gt;CWE-780: Use of RSA Algorithm without OAEP&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://rdist.root.org/2009/10/06/why-rsa-encryption-padding-is-critical/"&gt;Root Labs: Why RSA encryption padding is critical&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a5</tag>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='HARD_CODE_PASSWORD' priority='MAJOR'>
@@ -1232,9 +1269,10 @@ props.put(Context.SECURITY_CREDENTIALS, "p@ssw0rd");&lt;/pre&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/321.html"&gt;CWE-321: Use of Hard-coded Cryptographic Key&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/259.html"&gt;CWE-259: Use of Hard-coded Password&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
     <tag>cwe</tag>
     <tag>security</tag>
-    <tag>owasp-a6</tag>
   </rule>
   <rule key='STRUTS_FORM_VALIDATION' priority='INFO'>
     <name>Security - Struts Form Without Input Validation</name>
@@ -1334,8 +1372,9 @@ keyGen.init(128);&lt;/pre&gt;
 &lt;a href="http://en.wikipedia.org/wiki/Blowfish_(cipher)"&gt;Blowfish (cipher)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='RSA_KEY_SIZE' priority='MAJOR'>
@@ -1366,10 +1405,10 @@ keyGen.initialize(2048);
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.keylength.com/en/compare/"&gt;Keylength.com (BlueKrypt): Aggregate key length recommendations.&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
-    <tag>security</tag>
-    <tag>owasp-a5</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
   </rule>
   <rule key='UNVALIDATED_REDIRECT' priority='MAJOR'>
     <name>Security - Unvalidated Redirect</name>
@@ -1414,7 +1453,6 @@ keyGen.initialize(2048);
 &lt;a href="https://www.owasp.org/index.php/Unvalidated_Redirects_and_Forwards_Cheat_Sheet"&gt;OWASP: Unvalidated Redirects and Forwards Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/601.html"&gt;CWE-601: URL Redirection to Untrusted Site ('Open Redirect')&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>owasp-a10</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
     <tag>security</tag>
@@ -1443,7 +1481,7 @@ String taintedInput = (String) request.getAttribute("input");
 String taintedInput = (String) request.getAttribute("input");
 %&gt;
 [...]
-&lt;%= ESAPI.encoder().encodeForHTML(taintedInput) %&gt;
+&lt;%= Encode.forHtml(taintedInput) %&gt;
     &lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -1457,11 +1495,12 @@ which explains these defenses in significant detail.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
-    <tag>cwe</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='XSS_SERVLET' priority='CRITICAL'>
@@ -1483,7 +1522,7 @@ A potential XSS was found. It could be used to execute unwanted JavaScript in a 
 &lt;pre&gt;protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String input1 = req.getParameter("input1");
     [...]
-    resp.getWriter().write(ESAPI.encoder().encodeForHTML(input1));
+    resp.getWriter().write(Encode.forHtml(input1));
 }&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -1500,11 +1539,12 @@ which explains these defenses in significant detail.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
-    <tag>cwe</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='XML_DECODER' priority='CRITICAL'>
@@ -1590,8 +1630,9 @@ public void encrypt(String message) throws Exception {
 &lt;a href="http://cwe.mitre.org/data/definitions/329.html"&gt;CWE-329: Not Using a Random IV with CBC Mode&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://defuse.ca/cbcmodeiv.htm"&gt;Encryption - CBC Mode IV: Secret or Not?&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='ECB_MODE' priority='MAJOR'>
@@ -1624,6 +1665,7 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;a href="http://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29"&gt;Wikipedia: Block cipher modes of operation&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf"&gt;NIST: Recommendation for Block Cipher Modes of Operation&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
     <tag>security</tag>
   </rule>
@@ -1656,8 +1698,9 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     &lt;a href="http://capec.mitre.org/data/definitions/463.html"&gt;CAPEC: Padding Oracle Crypto Attack&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/696.html"&gt;CWE-696: Incorrect Behavior Order&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='CIPHER_INTEGRITY' priority='MAJOR'>
@@ -1704,8 +1747,9 @@ In the example solution above, the GCM mode introduces an HMAC into the resultin
     &lt;a href="http://www.thoughtcrime.org/blog/the-cryptographic-doom-principle/"&gt;Moxie Marlinspike's blog: The Cryptographic Doom Principle&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/353.html"&gt;CWE-353: Missing Support for Integrity Check&lt;/a&gt;
 &lt;/p&gt;</description>
-    <tag>cwe</tag>
+    <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='ESAPI_ENCRYPTOR' priority='INFO'>
@@ -1770,7 +1814,7 @@ Encryptor.CipherText.useMAC=true
 Encryptor.EncryptionAlgorithm=AES
 Encryptor.CipherTransformation=AES/GCM/NoPadding
 
-#CBC mode should be removed to avoid key size downgrade
+#CBC mode should be removed to avoid padding oracle
 Encryptor.cipher_modes.additional_allowed=&lt;/pre&gt;
     &lt;/div&gt;
 &lt;/p&gt;
@@ -1780,9 +1824,285 @@ Encryptor.cipher_modes.additional_allowed=&lt;/pre&gt;
     &lt;a href="http://owasp-esapi-java.googlecode.com/svn/trunk/documentation/ESAPI-security-bulletin1.pdf"&gt;ESAPI Security bulletin 1 (CVE-2013-5679)&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-5679"&gt;Vulnerability Summary for CVE-2013-5679&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://www.synacktiv.com/ressources/synacktiv_owasp_esapi_hmac_bypass.pdf"&gt;Synactiv: Bypassing HMAC validation in OWASP ESAPI symmetric encryption&lt;/a&gt;&lt;br/&gt;
-    &lt;a href="http://cwe.mitre.org/data/definitions/310.html"&gt;CWE-310: Cryptographic Issues&lt;/a&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/310.html"&gt;CWE-310: Cryptographic Issues&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://lists.owasp.org/pipermail/esapi-dev/2015-March/002533.html"&gt;ESAPI-dev mailing list: Status of CVE-2013-5960&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ANDROID_EXTERNAL_FILE_ACCESS' priority='INFO'>
+    <name>Security - External File Access (Android)</name>
+    <configKey>ANDROID_EXTERNAL_FILE_ACCESS</configKey>
+    <description>&lt;p&gt;
+    The application write data to external storage (potentially SD card). There are multiple security implication to this
+    action. First, file store on SD card will be accessible to the application having the
+    &lt;a href="http://developer.android.com/reference/android/Manifest.permission.html#READ_EXTERNAL_STORAGE"&gt;&lt;code&gt;READ_EXTERNAL_STORAGE&lt;/code&gt;&lt;/a&gt; permission.
+    Also, if the data persisted contains confidential information about the user, encryption would be needed.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+file file = new File(getExternalFilesDir(TARGET_TYPE), filename);
+fos = new FileOutputStream(file);
+fos.write(confidentialData.getBytes());
+fos.flush();
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Better alternative:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+fos = openFileOutput(filename, Context.MODE_PRIVATE);
+fos.write(string.getBytes());
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/training/articles/security-tips.html#ExternalStorage"&gt;Android Official Doc: Security Tips&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.securecoding.cert.org/confluence/display/java/DRD00-J.+Do+not+store+sensitive+information+on+external+storage+%28SD+card%29+unless+encrypted+first"&gt;CERT: DRD00-J: Do not store sensitive information on external storage [...]&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/guide/topics/data/data-storage.html#filesExternal"&gt;Android Official Doc: Using the External Storage&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.owasp.org/index.php/Mobile_Top_10_2014-M2"&gt;OWASP Mobile Top 10 2014-M2: Insecure Data Storage&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/312.html"&gt;CWE-312: Cleartext Storage of Sensitive Information&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>android</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ANDROID_BROADCAST' priority='INFO'>
+    <name>Security - Broadcast (Android)</name>
+    <configKey>ANDROID_BROADCAST</configKey>
+    <description>&lt;p&gt;
+    Broadcast intents can be listen by any application with the appropriate permission. It is suggest to avoid transmitting
+    sensitive information when possible.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Intent i = new Intent();
+i.setAction("com.insecure.action.UserConnected");
+i.putExtra("username", user);
+i.putExtra("email", email);
+i.putExtra("session", newSessionId);
+
+this.sendBroadcast(v1);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (if possible):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Intent i = new Intent();
+i.setAction("com.secure.action.UserConnected");
+
+sendBroadcast(v1);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Configuration (receiver)&lt;sup&gt;[1] Source: StackOverflow&lt;/sup&gt;:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+&amp;lt;manifest ...&amp;gt;
+
+    &amp;lt;!-- Permission declaration --&amp;gt;
+    &amp;lt;permission android:name="my.app.PERMISSION" /&amp;gt;
+
+    &amp;lt;receiver
+        android:name="my.app.BroadcastReceiver"
+        android:permission="com.secure.PERMISSION"&amp;gt; &amp;lt;!-- Permission enforcement --&amp;gt;
+        &amp;lt;intent-filter&gt;
+            &amp;lt;action android:name="com.secure.action.UserConnected" /&amp;gt;
+        &amp;lt;/intent-filter&amp;gt;
+    &amp;lt;/receiver&amp;gt;
+
+    ...
+&amp;lt;/manifest&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Configuration (receiver)&lt;sup&gt;[1] Source: StackOverflow&lt;/sup&gt;:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+&amp;lt;manifest&amp;gt;
+    &amp;lt;!-- We declare we own the permission to send broadcast to the above receiver --&amp;gt;
+    &amp;lt;uses-permission android:name="my.app.PERMISSION" /&amp;gt;
+&amp;lt;/manifest&amp;gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://www.securecoding.cert.org/confluence/display/java/DRD03-J.+Do+not+broadcast+sensitive+information+using+an+implicit+intent"&gt;CERT: DRD03-J. Do not broadcast sensitive information using an implicit intent&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/reference/android/content/BroadcastReceiver.html#Security"&gt;Android Official Doc: BroadcastReceiver (Security)&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/guide/topics/manifest/receiver-element.html"&gt;Android Official Doc: Receiver configuration (see &lt;code&gt;android:permission&lt;/code&gt;)&lt;/a&gt;&lt;br/&gt;
+    &lt;sup&gt;[1]&lt;/sup&gt; &lt;a href="http://stackoverflow.com/a/21513368/89769"&gt;StackOverflow: How to set permissions in broadcast sender and receiver in android&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/925.html"&gt;CWE-925: Improper Verification of Intent by Broadcast Receiver&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/927.html"&gt;CWE-927: Use of Implicit Intent for Sensitive Communication&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>android</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ANDROID_WORLD_WRITABLE' priority='INFO'>
+    <name>Security - World Writable File (Android)</name>
+    <configKey>ANDROID_WORLD_WRITABLE</configKey>
+    <description>&lt;p&gt;
+    The file written in this context is using the creation mode &lt;code&gt;MODE_WORLD_READABLE&lt;/code&gt;. It might not be the
+    expected behavior to exposed the content being written.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+fos = openFileOutput(filename, MODE_WORLD_READABLE);
+fos.write(userInfo.getBytes());
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (using MODE_PRIVATE):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+fos = openFileOutput(filename, MODE_PRIVATE);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (using local SQLite Database):&lt;/b&gt;&lt;br/&gt;
+
+Using a local SQLite database is probably the best solution to store structured data. Make sure the database file is not
+create on external storage. See references below for implementation guidelines.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://www.securecoding.cert.org/confluence/display/java/DRD11-J.+Ensure+that+sensitive+data+is+kept+secure"&gt;CERT: DRD11-J. Ensure that sensitive data is kept secure&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/training/articles/security-tips.html#InternalStorage"&gt;Android Official Doc: Security Tips&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/reference/android/content/Context.html#MODE_PRIVATE"&gt;Android Official Doc: Context.MODE_PRIVATE&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://www.vogella.com/tutorials/AndroidSQLite/article.html#databasetutorial_database"&gt;vogella.com: Android SQLite database and content provider - Tutorial&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.owasp.org/index.php/Mobile_Top_10_2014-M2"&gt;OWASP Mobile Top 10 2014-M2: Insecure Data Storage&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/312.html"&gt;CWE-312: Cleartext Storage of Sensitive Information&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>android</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ANDROID_GEOLOCATION' priority='INFO'>
+    <name>Security - WebView with Geolocation Activated (Android)</name>
+    <configKey>ANDROID_GEOLOCATION</configKey>
+    <description>&lt;p&gt;
+    It is suggest to ask the user for a confirmation about obtaining its geolocation.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+webView.setWebChromeClient(new WebChromeClient() {
+    @Override
+    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+        callback.invoke(origin, true, false);
+    }
+});
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Suggest code:&lt;/b&gt;&lt;br/&gt;
+
+    Limit the sampling of geolocation and ask the user for confirmation.
+&lt;pre&gt;
+webView.setWebChromeClient(new WebChromeClient() {
+    @Override
+    public void onGeolocationPermissionsShowPrompt(String origin, GeolocationPermissions.Callback callback) {
+        callback.invoke(origin, true, false);
+
+        //Ask the user for confirmation
+    }
+});
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://www.securecoding.cert.org/confluence/display/java/DRD15-J.+Consider+privacy+concerns+when+using+Geolocation+API"&gt;CERT: DRD15-J. Consider privacy concerns when using Geolocation API&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://en.wikipedia.org/wiki/W3C_Geolocation_API"&gt;Wikipedia: W3C Geolocation API&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://dev.w3.org/geo/api/spec-source.html"&gt;W3C: Geolocation Specification&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>android</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ANDROID_WEB_VIEW_JAVASCRIPT' priority='INFO'>
+    <name>Security - WebView with JavaScript Enabled (Android)</name>
+    <configKey>ANDROID_WEB_VIEW_JAVASCRIPT</configKey>
+    <description>&lt;p&gt;
+    Enabling JavaScript for the WebView means that it is now susceptible to XSS. The page render should be inspected
+    for potential reflected XSS, stored XSS and DOM XSS.&lt;br/&gt;
+&lt;pre&gt;
+WebView myWebView = (WebView) findViewById(R.id.webView);
+WebSettings webSettings = myWebView.getSettings();
+webSettings.setJavaScriptEnabled(true);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+Enabling is JavaScript is not a bad practice. It just means that the backend code need to be audit for potential XSS.
+The XSS can also be introduce client-side with DOM XSS.
+&lt;pre&gt;
+function updateDescription(newDescription) {
+    $("#userDescription").html("&lt;p&gt;"+newDescription+"&lt;/p&gt;");
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="http://www.technotalkative.com/issue-using-setjavascriptenabled-can-introduce-xss-vulnerabilities-application-review-carefully/"&gt;Issue: Using setJavaScriptEnabled can introduce XSS vulnerabilities&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/guide/webapps/webview.html#UsingJavaScript"&gt;Android Official Doc: WebView&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a3</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>android</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE' priority='INFO'>
+    <name>Security - WebView with Javascript Interface (Android)</name>
+    <configKey>ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE</configKey>
+    <description>&lt;p&gt;
+    The use Javascript Interface could expose the WebView to risky API. If an XSS is trigger in the WebView, the class
+    could be call by the malicious JavaScript code.
+&lt;/p&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;
+WebView myWebView = (WebView) findViewById(R.id.webView);
+
+myWebView.addJavascriptInterface(new FileWriteUtil(this), "fileWriteUtil");
+
+WebSettings webSettings = myWebView.getSettings();
+webSettings.setJavaScriptEnabled(true);
+
+[...]
+class FileWriteUtil {
+    Context mContext;
+
+    FileOpenUtil(Context c) {
+        mContext = c;
+    }
+
+    public void writeToFile(String data, String filename, String tag) {
+        [...]
+    }
+}
+    &lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="http://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface%28java.lang.Object,%20java.lang.String%29"&gt;Android Official Doc: WebView.addJavascriptInterface()&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/749.html"&gt;CWE-749: Exposed Dangerous Method or Function&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>android</tag>
     <tag>security</tag>
   </rule>
 </rules>

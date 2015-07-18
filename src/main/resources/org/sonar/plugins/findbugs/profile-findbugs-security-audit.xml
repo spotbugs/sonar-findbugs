@@ -168,6 +168,24 @@
         <Bug pattern='ESAPI_ENCRYPTOR' />
     </Match>
     <Match>
+        <Bug pattern='ANDROID_EXTERNAL_FILE_ACCESS' />
+    </Match>
+    <Match>
+        <Bug pattern='ANDROID_BROADCAST' />
+    </Match>
+    <Match>
+        <Bug pattern='ANDROID_WORLD_WRITABLE' />
+    </Match>
+    <Match>
+        <Bug pattern='ANDROID_GEOLOCATION' />
+    </Match>
+    <Match>
+        <Bug pattern='ANDROID_WEB_VIEW_JAVASCRIPT' />
+    </Match>
+    <Match>
+        <Bug pattern='ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE' />
+    </Match>
+    <Match>
         <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
     </Match>
     <Match>
