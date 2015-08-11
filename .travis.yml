@@ -9,7 +9,7 @@ script: ./travis.sh
 env:
   - TESTS=CI
   - TESTS=IT-DEV
-  - TESTS=IT-LATEST
+  - TESTS=IT-LTS
 
 matrix:
   fast_finish: true

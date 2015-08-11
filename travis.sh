@@ -25,13 +25,13 @@ IT-DEV)
   mvn -DfindbugsVersion="DEV" -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="DEV" -Dmaven.test.redirectTestOutputToFile=false install
   ;;
 
-IT-LATEST)
+IT-LTS)
   installTravisTools
 
   mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
   cd its/plugin
-  mvn -DfindbugsVersion="DEV" -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="LATEST_RELEASE" -Dmaven.test.redirectTestOutputToFile=false install
+  mvn -DfindbugsVersion="DEV" -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="LTS_OR_OLDEST_COMPATIBLE" -Dmaven.test.redirectTestOutputToFile=false install
   ;;
 
 esac
