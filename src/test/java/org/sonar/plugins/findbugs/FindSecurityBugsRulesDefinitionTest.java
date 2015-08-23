@@ -40,7 +40,7 @@ public class FindSecurityBugsRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
-    assertThat(rules).hasSize(62);
+    assertThat(rules).hasSize(63);
 
     for (Rule rule : rules) {
       assertThat(rule.key()).isNotNull();
