@@ -59,7 +59,7 @@
     <sonar.version>4.5.2</sonar.version>
     <sonar-java.version>2.7</sonar-java.version>
     <fbcontrib.version>6.0.0</fbcontrib.version>
-    <findsecbugs.version>1.4.1</findsecbugs.version>
+    <findsecbugs.version>1.4.2</findsecbugs.version>
   </properties>
 
   <dependencies>
@@ -279,7 +279,7 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>7000000</maxsize>
+                  <maxsize>7500000</maxsize>
                   <minsize>5800000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
