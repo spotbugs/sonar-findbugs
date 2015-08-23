@@ -1254,6 +1254,7 @@ The code should be replaced with:&lt;br/&gt;
     <description>&lt;p&gt;
 Passwords should not be kept in the source code. The source code can be widely shared in an enterprise environment, and is
 certainly shared in open source. To be managed safely, passwords and secret keys should be stored in separate configuration files or keystores.
+(Hard coded keys are reported separately by &lt;i&gt;Hard Coded Key&lt;/i&gt; pattern)
 &lt;/p&gt;
 &lt;p&gt;
 &lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
@@ -1266,11 +1267,35 @@ props.put(Context.SECURITY_CREDENTIALS, "p@ssw0rd");&lt;/pre&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/321.html"&gt;CWE-321: Use of Hard-coded Cryptographic Key&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/259.html"&gt;CWE-259: Use of Hard-coded Password&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='HARD_CODE_KEY' priority='INFO'>
+    <name>Security - Hard Coded Key</name>
+    <configKey>HARD_CODE_KEY</configKey>
+    <description>&lt;p&gt;
+Cryptographic keys should not be kept in the source code. The source code can be widely shared in an enterprise environment, and is
+certainly shared in open source. To be managed safely, passwords and secret keys should be stored in separate configuration files or keystores.
+(Hard coded passwords are reported separately by &lt;i&gt;Hard Coded Password&lt;/i&gt; pattern)
+&lt;/p&gt;
+&lt;p&gt;
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+
+&lt;pre&gt;byte[] key = {1, 2, 3, 4, 5, 6, 7, 8};
+SecretKeySpec spec = new SecretKeySpec(key, "AES");
+Cipher aes = Cipher.getInstance("AES");
+aes.init(Cipher.ENCRYPT_MODE, spec);
+return aesCipher.doFinal(secretData);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/321.html"&gt;CWE-321: Use of Hard-coded Cryptographic Key&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -1830,7 +1855,7 @@ Encryptor.cipher_modes.additional_allowed=&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='ANDROID_EXTERNAL_FILE_ACCESS' priority='INFO'>
+  <rule key='ANDROID_EXTERNAL_FILE_ACCESS' priority='MAJOR'>
     <name>Security - External File Access (Android)</name>
     <configKey>ANDROID_EXTERNAL_FILE_ACCESS</configKey>
     <description>&lt;p&gt;
@@ -1941,7 +1966,7 @@ sendBroadcast(v1);
     <tag>android</tag>
     <tag>security</tag>
   </rule>
-  <rule key='ANDROID_WORLD_WRITABLE' priority='INFO'>
+  <rule key='ANDROID_WORLD_WRITABLE' priority='MAJOR'>
     <name>Security - World Writable File (Android)</name>
     <configKey>ANDROID_WORLD_WRITABLE</configKey>
     <description>&lt;p&gt;

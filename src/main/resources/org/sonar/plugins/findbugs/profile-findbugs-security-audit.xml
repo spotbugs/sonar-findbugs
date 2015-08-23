@@ -129,6 +129,9 @@
     <Bug pattern='HARD_CODE_PASSWORD' />
   </Match>
   <Match>
+    <Bug pattern='HARD_CODE_KEY' />
+  </Match>
+  <Match>
     <Bug pattern='STRUTS_FORM_VALIDATION' />
   </Match>
   <Match>
