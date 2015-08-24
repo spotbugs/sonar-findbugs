@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
@@ -42,17 +43,17 @@ public class FindbugsRulesDefinitionTest {
     List<Rule> rules = repository.rules();
     assertThat(rules).hasSize(442);
 
-    int missingDebt = 0;
+    List<String> rulesWithMissingSQALE = Lists.newLinkedList();
     for (Rule rule : rules) {
       assertThat(rule.key()).isNotNull();
       assertThat(rule.internalKey()).isEqualTo(rule.key());
       assertThat(rule.name()).isNotNull();
       assertThat(rule.htmlDescription()).isNotNull();
-      if (rule.debtRemediationFunction() == null) {
-        missingDebt++;
+      if (rule.debtSubCharacteristic() == null) {
+        rulesWithMissingSQALE.add(rule.key());
       }
     }
-    // FIXME SONARFBUGS-34 add missing debt
-    assertThat(missingDebt).isEqualTo(29);
+    // These rules are "rejected" Findbugs rules
+    assertThat(rulesWithMissingSQALE).containsOnly("CNT_ROUGH_CONSTANT_VALUE", "TQ_UNKNOWN_VALUE_USED_WHERE_ALWAYS_STRICTLY_REQUIRED");
   }
 }
