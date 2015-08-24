@@ -23,6 +23,7 @@
     <priority>BLOCKER</priority>
     <name><![CDATA[Correctness - close() invoked on a value that is always null]]></name>
     <configKey><![CDATA[NP_CLOSING_NULL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RC_REF_COMPARISON_BAD_PRACTICE">
@@ -43,12 +44,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Correctness - Return value of putIfAbsent ignored, value passed to putIfAbsent reused ]]></name>
     <configKey><![CDATA[RV_RETURN_VALUE_OF_PUTIFABSENT_IGNORED]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SIC_THREADLOCAL_DEADLY_EMBRACE">
     <priority>MAJOR</priority>
     <name><![CDATA[Correctness - Deadly embrace of non-static inner class and thread local]]></name>
     <configKey><![CDATA[SIC_THREADLOCAL_DEADLY_EMBRACE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UR_UNINIT_READ_CALLED_FROM_SUPER_CONSTRUCTOR">
@@ -74,6 +77,7 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Correctness - Read of unwritten field]]></name>
     <configKey><![CDATA[NP_UNWRITTEN_FIELD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UWF_UNWRITTEN_FIELD">
@@ -210,6 +214,7 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Multithreaded correctness - Synchronize and null check on the same field.]]></name>
     <configKey><![CDATA[NP_SYNC_AND_NULL_CHECK_FIELD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RpC_REPEATED_CONDITIONAL_TEST">
@@ -323,12 +328,14 @@
     <priority>BLOCKER</priority>
     <name><![CDATA[Performance - Maps and sets of URLs can be performance hogs]]></name>
     <configKey><![CDATA[DMI_COLLECTION_OF_URLS]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DMI_BLOCKING_METHODS_ON_URL">
     <priority>BLOCKER</priority>
     <name><![CDATA[Performance - The equals and hashCode methods of URL are blocking]]></name>
     <configKey><![CDATA[DMI_BLOCKING_METHODS_ON_URL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DMI_ANNOTATION_IS_NOT_VISIBLE_TO_REFLECTION">
@@ -368,6 +375,7 @@
     <priority>INFO</priority>
     <name><![CDATA[Performance - Method invokes toString() method on a String]]></name>
     <configKey><![CDATA[DM_STRING_TOSTRING]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DM_GC">
@@ -602,6 +610,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - equals method fails for subtypes]]></name>
     <configKey><![CDATA[EQ_GETCLASS_AND_CLASS_CONSTANT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EQ_UNUSUAL">
@@ -639,12 +648,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Correctness - Method does not check for null argument]]></name>
     <configKey><![CDATA[NP_ARGUMENT_MIGHT_BE_NULL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_EQUALS_SHOULD_HANDLE_NULL_ARGUMENT">
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - equals() method does not check for null argument]]></name>
     <configKey><![CDATA[NP_EQUALS_SHOULD_HANDLE_NULL_ARGUMENT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="CO_SELF_NO_OBJECT">
@@ -762,24 +773,28 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Malicious code vulnerability - Public static method may expose internal representation by returning array]]></name>
     <configKey><![CDATA[MS_EXPOSE_REP]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EI_EXPOSE_REP">
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - May expose internal representation by returning reference to mutable object]]></name>
     <configKey><![CDATA[EI_EXPOSE_REP]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EI_EXPOSE_REP2">
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - May expose internal representation by incorporating reference to mutable object]]></name>
     <configKey><![CDATA[EI_EXPOSE_REP2]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EI_EXPOSE_STATIC_REP2">
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - May expose internal static state by storing a mutable object into a static field]]></name>
     <configKey><![CDATA[EI_EXPOSE_STATIC_REP2]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RU_INVOKE_RUN">
@@ -919,6 +934,7 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - Field should be both final and package protected]]></name>
     <configKey><![CDATA[MS_FINAL_PKGPROTECT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="MS_SHOULD_BE_FINAL">
@@ -932,18 +948,21 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - Field should be package protected]]></name>
     <configKey><![CDATA[MS_PKGPROTECT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="MS_MUTABLE_HASHTABLE">
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - Field is a mutable Hashtable]]></name>
     <configKey><![CDATA[MS_MUTABLE_HASHTABLE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="MS_MUTABLE_ARRAY">
     <priority>MAJOR</priority>
     <name><![CDATA[Malicious code vulnerability - Field is a mutable array]]></name>
     <configKey><![CDATA[MS_MUTABLE_ARRAY]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="MS_CANNOT_BE_FINAL">
@@ -1022,12 +1041,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Bad practice - Method ignores results of InputStream.read()]]></name>
     <configKey><![CDATA[RR_NOT_CHECKED]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SR_NOT_CHECKED">
     <priority>MAJOR</priority>
     <name><![CDATA[Bad practice - Method ignores results of InputStream.skip()]]></name>
     <configKey><![CDATA[SR_NOT_CHECKED]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SE_READ_RESOLVE_IS_STATIC">
@@ -1154,6 +1175,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Constructor invokes Thread.start()]]></name>
     <configKey><![CDATA[SC_START_IN_CTOR]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SS_SHOULD_BE_STATIC">
@@ -1195,42 +1217,49 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Write to static field from instance method]]></name>
     <configKey><![CDATA[ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_LOAD_OF_KNOWN_NULL_VALUE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Load of known null value]]></name>
     <configKey><![CDATA[NP_LOAD_OF_KNOWN_NULL_VALUE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_DEREFERENCE_OF_READLINE_VALUE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Dereference of the result of readLine() without nullcheck]]></name>
     <configKey><![CDATA[NP_DEREFERENCE_OF_READLINE_VALUE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_IMMEDIATE_DEREFERENCE_OF_READLINE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Immediate dereference of the result of readLine()]]></name>
     <configKey><![CDATA[NP_IMMEDIATE_DEREFERENCE_OF_READLINE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SIC_INNER_SHOULD_BE_STATIC">
     <priority>MAJOR</priority>
     <name><![CDATA[Performance - Should be a static inner class]]></name>
     <configKey><![CDATA[SIC_INNER_SHOULD_BE_STATIC]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SIC_INNER_SHOULD_BE_STATIC_ANON">
     <priority>MAJOR</priority>
     <name><![CDATA[Performance - Could be refactored into a named static inner class]]></name>
     <configKey><![CDATA[SIC_INNER_SHOULD_BE_STATIC_ANON]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS">
     <priority>MAJOR</priority>
     <name><![CDATA[Performance - Could be refactored into a static inner class]]></name>
     <configKey><![CDATA[SIC_INNER_SHOULD_BE_STATIC_NEEDS_THIS]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="WA_NOT_IN_LOOP">
@@ -1258,12 +1287,14 @@
     <priority>MINOR</priority>
     <name><![CDATA[Dodgy - Method checks to see if result of String.indexOf is positive]]></name>
     <configKey><![CDATA[RV_CHECK_FOR_POSITIVE_INDEXOF]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RV_DONT_JUST_NULL_CHECK_READLINE">
     <priority>MAJOR</priority>
     <name><![CDATA[Dodgy - Method discards result of readLine after checking if it is nonnull]]></name>
     <configKey><![CDATA[RV_DONT_JUST_NULL_CHECK_READLINE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RV_RETURN_VALUE_IGNORED">
@@ -1297,6 +1328,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Null pointer dereference]]></name>
     <configKey><![CDATA[NP_ALWAYS_NULL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_STORE_INTO_NONNULL_FIELD">
@@ -1309,6 +1341,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Null pointer dereference in method on exception path]]></name>
     <configKey><![CDATA[NP_ALWAYS_NULL_EXCEPTION]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_PARAMETER_MUST_BE_NONNULL_BUT_MARKED_AS_NULLABLE">
@@ -1321,24 +1354,28 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Possible null pointer dereference]]></name>
     <configKey><![CDATA[NP_NULL_ON_SOME_PATH]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_NULL_ON_SOME_PATH_MIGHT_BE_INFEASIBLE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Possible null pointer dereference on path that might be infeasible]]></name>
     <configKey><![CDATA[NP_NULL_ON_SOME_PATH_MIGHT_BE_INFEASIBLE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_NULL_ON_SOME_PATH_EXCEPTION">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Possible null pointer dereference in method on exception path]]></name>
     <configKey><![CDATA[NP_NULL_ON_SOME_PATH_EXCEPTION]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Possible null pointer dereference due to return value of called method]]></name>
     <configKey><![CDATA[NP_NULL_ON_SOME_PATH_FROM_RETURN_VALUE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_NULL_PARAM_DEREF_NONVIRTUAL">
@@ -1375,6 +1412,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Clone method may return null]]></name>
     <configKey><![CDATA[NP_CLONE_COULD_RETURN_NULL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_TOSTRING_COULD_RETURN_NULL">
@@ -1388,12 +1426,14 @@
     <priority>BLOCKER</priority>
     <name><![CDATA[Correctness - Null value is guaranteed to be dereferenced]]></name>
     <configKey><![CDATA[NP_GUARANTEED_DEREF]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="NP_GUARANTEED_DEREF_ON_EXCEPTION_PATH">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Value is null and guaranteed to be dereferenced on exception path]]></name>
     <configKey><![CDATA[NP_GUARANTEED_DEREF_ON_EXCEPTION_PATH]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SI_INSTANCE_BEFORE_FINALS_ASSIGNED">
@@ -1406,12 +1446,14 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Method may fail to close stream]]></name>
     <configKey><![CDATA[OS_OPEN_STREAM]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="OS_OPEN_STREAM_EXCEPTION_PATH">
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Method may fail to close stream on exception]]></name>
     <configKey><![CDATA[OS_OPEN_STREAM_EXCEPTION_PATH]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="PZLA_PREFER_ZERO_LENGTH_ARRAYS">
@@ -1425,12 +1467,14 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Useless control flow]]></name>
     <configKey><![CDATA[UCF_USELESS_CONTROL_FLOW]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UCF_USELESS_CONTROL_FLOW_NEXT_LINE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Useless control flow to next line]]></name>
     <configKey><![CDATA[UCF_USELESS_CONTROL_FLOW_NEXT_LINE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE">
@@ -1467,12 +1511,14 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Method does not release lock on all paths]]></name>
     <configKey><![CDATA[UL_UNRELEASED_LOCK]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UL_UNRELEASED_LOCK_EXCEPTION_PATH">
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Method does not release lock on all exception paths]]></name>
     <configKey><![CDATA[UL_UNRELEASED_LOCK_EXCEPTION_PATH]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RC_REF_COMPARISON">
@@ -1493,18 +1539,21 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Call to equals() comparing different types]]></name>
     <configKey><![CDATA[EC_UNRELATED_TYPES]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EC_UNRELATED_INTERFACES">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Call to equals() comparing different interface types]]></name>
     <configKey><![CDATA[EC_UNRELATED_INTERFACES]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EC_UNRELATED_CLASS_AND_INTERFACE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Call to equals() comparing unrelated class and interface]]></name>
     <configKey><![CDATA[EC_UNRELATED_CLASS_AND_INTERFACE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EC_NULL_ARG">
@@ -1601,18 +1650,21 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Bad attempt to compute absolute value of signed 32-bit random integer]]></name>
     <configKey><![CDATA[RV_ABSOLUTE_VALUE_OF_RANDOM_INT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RV_ABSOLUTE_VALUE_OF_HASHCODE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Bad attempt to compute absolute value of signed 32-bit hashcode ]]></name>
     <configKey><![CDATA[RV_ABSOLUTE_VALUE_OF_HASHCODE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RV_REM_OF_RANDOM_INT">
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Remainder of 32-bit signed random integer]]></name>
     <configKey><![CDATA[RV_REM_OF_RANDOM_INT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RV_REM_OF_HASHCODE">
@@ -1651,6 +1703,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Integer remainder modulo 1]]></name>
     <configKey><![CDATA[INT_BAD_REM_BY_1]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BIT_IOR_OF_SIGNED_BYTE">
@@ -1669,30 +1722,35 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Incompatible bit masks (BIT_AND)]]></name>
     <configKey><![CDATA[BIT_AND]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BIT_SIGNED_CHECK">
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Check for sign of bitwise operation]]></name>
     <configKey><![CDATA[BIT_SIGNED_CHECK]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BIT_SIGNED_CHECK_HIGH_BIT">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Check for sign of bitwise operation]]></name>
     <configKey><![CDATA[BIT_SIGNED_CHECK_HIGH_BIT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BIT_AND_ZZ">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Check to see if ((...) & 0) == 0]]></name>
     <configKey><![CDATA[BIT_AND_ZZ]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BIT_IOR">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Incompatible bit masks (BIT_IOR)]]></name>
     <configKey><![CDATA[BIT_IOR]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="LI_LAZY_INIT_STATIC">
@@ -1733,12 +1791,14 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Method may fail to close database resource]]></name>
     <configKey><![CDATA[ODR_OPEN_DATABASE_RESOURCE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="ODR_OPEN_DATABASE_RESOURCE_EXCEPTION_PATH">
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Method may fail to close database resource on exception]]></name>
     <configKey><![CDATA[ODR_OPEN_DATABASE_RESOURCE_EXCEPTION_PATH]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SBSC_USE_STRINGBUFFER_CONCATENATION">
@@ -1758,36 +1818,42 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - JUnit assertion in run method will not be noticed by JUnit]]></name>
     <configKey><![CDATA[IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="IJU_SETUP_NO_SUPER">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - TestCase defines setUp that doesn't call super.setUp()]]></name>
     <configKey><![CDATA[IJU_SETUP_NO_SUPER]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="IJU_TEARDOWN_NO_SUPER">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - TestCase defines tearDown that doesn't call super.tearDown()]]></name>
     <configKey><![CDATA[IJU_TEARDOWN_NO_SUPER]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="IJU_SUITE_NOT_STATIC">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - TestCase implements a non-static suite method ]]></name>
     <configKey><![CDATA[IJU_SUITE_NOT_STATIC]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="IJU_BAD_SUITE_METHOD">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - TestCase declares a bad suite method ]]></name>
     <configKey><![CDATA[IJU_BAD_SUITE_METHOD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="IJU_NO_TESTS">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - TestCase has no tests]]></name>
     <configKey><![CDATA[IJU_NO_TESTS]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BOA_BADLY_OVERRIDDEN_ADAPTER">
@@ -1800,24 +1866,28 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Method attempts to access a result set field with index 0]]></name>
     <configKey><![CDATA[SQL_BAD_RESULTSET_ACCESS]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SQL_BAD_PREPARED_STATEMENT_ACCESS">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Method attempts to access a prepared statement parameter with index 0]]></name>
     <configKey><![CDATA[SQL_BAD_PREPARED_STATEMENT_ACCESS]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="SIO_SUPERFLUOUS_INSTANCEOF">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Unnecessary type check done using instanceof operator]]></name>
     <configKey><![CDATA[SIO_SUPERFLUOUS_INSTANCEOF]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EC_ARRAY_AND_NONARRAY">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - equals() used to compare array and nonarray]]></name>
     <configKey><![CDATA[EC_ARRAY_AND_NONARRAY]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="EC_BAD_ARRAY_COMPARE">
@@ -1831,12 +1901,14 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Unneeded use of currentThread() call, to call interrupted() ]]></name>
     <configKey><![CDATA[STI_INTERRUPTED_ON_CURRENTTHREAD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="STI_INTERRUPTED_ON_UNKNOWNTHREAD">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Static Thread.interrupted() method invoked on thread instance]]></name>
     <configKey><![CDATA[STI_INTERRUPTED_ON_UNKNOWNTHREAD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="IP_PARAMETER_IS_DEAD_BUT_OVERWRITTEN">
@@ -1881,12 +1953,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Correctness - Class defines field that masks a superclass field]]></name>
     <configKey><![CDATA[MF_CLASS_MASKS_FIELD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="WMI_WRONG_MAP_ITERATOR">
     <priority>CRITICAL</priority>
     <name><![CDATA[Performance - Inefficient use of keySet iterator instead of entrySet iterator]]></name>
     <configKey><![CDATA[WMI_WRONG_MAP_ITERATOR]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="ISC_INSTANTIATE_STATIC_CLASS">
@@ -1920,6 +1994,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Performance - Method calls static Math class method on a constant value]]></name>
     <configKey><![CDATA[UM_UNNECESSARY_MATH]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RI_REDUNDANT_INTERFACES">
@@ -1959,12 +2034,14 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - int value cast to float and then passed to Math.round]]></name>
     <configKey><![CDATA[ICAST_INT_CAST_TO_FLOAT_PASSED_TO_ROUND]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="ICAST_INT_CAST_TO_DOUBLE_PASSED_TO_CEIL">
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - int value cast to double and then passed to Math.ceil]]></name>
     <configKey><![CDATA[ICAST_INT_CAST_TO_DOUBLE_PASSED_TO_CEIL]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="ICAST_IDIV_CAST_TO_DOUBLE">
@@ -2061,6 +2138,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Bad practice - Equals method should not assume anything about the type of its argument]]></name>
     <configKey><![CDATA[BC_EQUALS_METHOD_SHOULD_WORK_FOR_ALL_OBJECTS]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="BC_BAD_CAST_TO_ABSTRACT_COLLECTION">
@@ -2150,6 +2228,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Correctness - Integer multiply of result of integer remainder]]></name>
     <configKey><![CDATA[IM_MULTIPLYING_RESULT_OF_IREM]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DMI_INVOKING_HASHCODE_ON_ARRAY">
@@ -2223,6 +2302,7 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Dodgy - Method uses the same code for two branches]]></name>
     <configKey><![CDATA[DB_DUPLICATE_BRANCHES]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DB_DUPLICATE_SWITCH_CLAUSES">
@@ -2291,24 +2371,28 @@
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Static Calendar]]></name>
     <configKey><![CDATA[STCAL_STATIC_CALENDAR_INSTANCE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="STCAL_INVOKE_ON_STATIC_CALENDAR_INSTANCE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Call to static Calendar]]></name>
     <configKey><![CDATA[STCAL_INVOKE_ON_STATIC_CALENDAR_INSTANCE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="STCAL_STATIC_SIMPLE_DATE_FORMAT_INSTANCE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Static DateFormat]]></name>
     <configKey><![CDATA[STCAL_STATIC_SIMPLE_DATE_FORMAT_INSTANCE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="STCAL_INVOKE_ON_STATIC_DATE_FORMAT_INSTANCE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Multithreaded correctness - Call to static DateFormat]]></name>
     <configKey><![CDATA[STCAL_INVOKE_ON_STATIC_DATE_FORMAT_INSTANCE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="TQ_ALWAYS_VALUE_USED_WHERE_NEVER_REQUIRED">
@@ -2475,6 +2559,7 @@
     <priority>INFO</priority>
     <name><![CDATA[Experimental - Method may fail to clean up stream or resource]]></name>
     <configKey><![CDATA[OBL_UNSATISFIED_OBLIGATION]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="FB_UNEXPECTED_WARNING">
@@ -2577,12 +2662,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Read of unwritten public or protected field]]></name>
     <configKey><![CDATA[NP_UNWRITTEN_PUBLIC_OR_PROTECTED_FIELD]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE">
     <priority>CRITICAL</priority>
     <name><![CDATA[Method may fail to clean up stream or resource on checked exception]]></name>
     <configKey><![CDATA[OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="PZ_DONT_REUSE_ENTRY_OBJECTS_IN_ITERATORS">
@@ -2602,6 +2689,7 @@
     <priority>MINOR</priority>
     <name><![CDATA[Negating the result of compareTo()/compare()]]></name>
     <configKey><![CDATA[RV_NEGATING_RESULT_OF_COMPARETO]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RV_RETURN_VALUE_IGNORED_INFERRED">
@@ -2750,12 +2838,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Possible bad parsing of shift operation]]></name>
     <configKey><![CDATA[BSHIFT_WRONG_ADD_PRIORITY]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="CO_COMPARETO_INCORRECT_FLOATING">
     <priority>MAJOR</priority>
     <name><![CDATA[compareTo()/compare() incorrectly handles float or double value]]></name>
     <configKey><![CDATA[CO_COMPARETO_INCORRECT_FLOATING]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DC_PARTIALLY_CONSTRUCTED">
@@ -2768,6 +2858,7 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Boxing a primitive to compare]]></name>
     <configKey><![CDATA[DM_BOXED_PRIMITIVE_FOR_COMPARE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="DM_INVALID_MIN_MAX">
@@ -2792,12 +2883,14 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Field is a mutable collection]]></name>
     <configKey><![CDATA[MS_MUTABLE_COLLECTION]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="MS_MUTABLE_COLLECTION_PKGPROTECT">
     <priority>MAJOR</priority>
     <name><![CDATA[Field is a mutable collection which should be package protected]]></name>
     <configKey><![CDATA[MS_MUTABLE_COLLECTION_PKGPROTECT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="RANGE_ARRAY_INDEX">
@@ -2828,18 +2921,21 @@
     <priority>MAJOR</priority>
     <name><![CDATA[Return value of method without side effect is ignored]]></name>
     <configKey><![CDATA[RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UC_USELESS_CONDITION">
     <priority>MAJOR</priority>
     <name><![CDATA[Condition has no effect]]></name>
     <configKey><![CDATA[UC_USELESS_CONDITION]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UC_USELESS_CONDITION_TYPE">
     <priority>MAJOR</priority>
     <name><![CDATA[Condition has no effect due to the variable type]]></name>
     <configKey><![CDATA[UC_USELESS_CONDITION_TYPE]]></configKey>
+    <status>DEPRECATED</status>
   </rule>
 
   <rule key="UC_USELESS_OBJECT">
