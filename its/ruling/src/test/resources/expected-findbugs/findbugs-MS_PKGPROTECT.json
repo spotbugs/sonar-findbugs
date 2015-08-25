@@ -1,0 +1,16 @@
+{
+'org.apache.struts:struts-core:src/main/java/org/apache/struts/config/ModuleConfigFactory.java':[
+39,
+50,
+],
+'org.apache.struts:struts-core:src/main/java/org/apache/struts/util/MessageResources.java':[
+65,
+],
+'org.apache.struts:struts-core:src/main/java/org/apache/struts/util/MessageResourcesFactory.java':[
+55,
+66,
+],
+'org.apache.struts:struts-core:src/main/java/org/apache/struts/validator/validwhen/ValidWhenParser.java':[
+500,
+],
+}
