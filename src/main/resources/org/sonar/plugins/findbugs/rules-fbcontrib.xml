@@ -2992,5 +2992,86 @@
 
     	]]></description>
   </rule>
+  
+  <rule key="CSI_CHAR_SET_ISSUES_USE_STANDARD_CHARSET" priority="INFO">
+    <name><![CDATA[Correctness - Method uses a string literal to specify Charset encoding]]></name>
+    <configKey><![CDATA[CSI_CHAR_SET_ISSUES_USE_STANDARD_CHARSET]]></configKey>
+    <description><![CDATA[
+    
+            <p>This method uses a string literal to specify a Charset encoding. However the method invoked has an alternative 
+            signature that takes a <code>Charset</code> object. You should use this signature, as this class is compiled with 
+            JDK 7 (or better), and the <code>Charset</code> in question is available as a constant from the 
+            <code>java.nio.charset.StandardCharsets</code> class.</p>
+            
+            <p>So instead of specifying "UTF-8", use <code>StandardCharsets.UTF_8</code>, for instance. An added benefit of this 
+            is that you will not need to catch <code>UnsupportedEncodingException</code>.</p>
+    
+    ]]></description>
+  </rule>
+  
+  <rule key="CSI_CHAR_SET_ISSUES_USE_STANDARD_CHARSET_NAME" priority="INFO">
+    <name><![CDATA[Correctness - Method uses a hand-typed String literal to specify Charset encoding]]></name>
+    <configKey><![CDATA[CSI_CHAR_SET_ISSUES_USE_STANDARD_CHARSET_NAME]]></configKey>
+    <description><![CDATA[
+    
+            <p>This method uses a hand-typed <code>String</code> literal to specify a <code>Charset</code> encoding. As this class is compiled 
+            with JDK 7 (or better), and the charset in question is available as a constant from the <code>java.nio.charset.StandardCharsets</code> 
+            class, it is better to use the <code>.name()</code> method of the appropriate <code>StandardCharsets</code> constant.</p>
+            
+            <p>The method in question doesn't directly support a Charset as a parameter, only a String. Still, instead of specifying something 
+            like "UTF-8" (and potentially mistyping it), use <code>StandardCharsets.UTF_8.name()</code>.</p>
+            
+    ]]></description>
+  </rule>
+  
+  <rule key="CSI_CHAR_SET_ISSUES_UNKNOWN_ENCODING" priority="INFO">
+    <name><![CDATA[Correctness - Method specifies a Charset encoding with a String literal not recognized by current JDK]]></name>
+    <configKey><![CDATA[CSI_CHAR_SET_ISSUES_UNKNOWN_ENCODING]]></configKey>
+    <description><![CDATA[
+    
+            <p>This method specifies a <code>Charset</code> encoding with a <code>String</code> literal that is not recognized by the current 
+            JDK. It's possible that this application will only be deployed on a JVM that does recognize this encoding, but it seem dubious that 
+            this is the case.</p>
+            
+            <p>The standard JDK encodings are "UTF-8", "US-ASCII", "ISO-8859-1", "UTF-16BE", "UTF-16LE", "UTF-16". These are all 
+            case-sensitive.</p>
+            
+    ]]></description>
+  </rule>
 
+  <rule key="CBC_CONTAINS_BASED_CONDITIONAL" priority="INFO">
+    <name><![CDATA[Correctness - Method uses complex if expression with multiple conditions joined by OR]]></name>
+    <configKey><![CDATA[CBC_CONTAINS_BASED_CONDITIONAL]]></configKey>
+    <description><![CDATA[
+    
+            <p>This method uses an overly complex if expression made up of multiple conditions joined by <code>OR</code>, where the same local 
+            variable is compared to a static value. When the number of conditions grow it is much cleaner to build a static set of the possible 
+            values, and use the contains method on that set. This will shorten the code, and make it more self documenting.</p>
+            
+    ]]></description>
+  </rule>
+  
+  <rule key="SLS_SUSPICIOUS_LOOP_SEARCH" priority="INFO">
+    <name><![CDATA[Correctness - Method continues with a loop without break after finding an setting a variable]]></name>
+    <configKey><![CDATA[SLS_SUSPICIOUS_LOOP_SEARCH]]></configKey>
+    <description><![CDATA[
+    
+            <p>This method continues with a loop, and does not break out of it, after finding an setting a variable in an if condition based 
+            on equality. Since continuing on in the loop would seem to be unlikely to find the item again, breaking at this point would seem 
+            to be the proper action.</p>
+            
+    ]]></description>
+  </rule>
+  
+  <rule key="CRF_CONFLATING_RESOURCES_AND_FILES" priority="INFO">
+    <name><![CDATA[Correctness - Method fetches a resource from a URL and uses File api to manipulate it]]></name>
+    <configKey><![CDATA[CRF_CONFLATING_RESOURCES_AND_FILES]]></configKey>
+    <description><![CDATA[
+    
+            <p>This method fetches a resource from a URL, and uses the <code>File</code> api to manipulate it. If this resource is a classpath 
+            resource, it will work if the resource is a file in a directory. If however the file is inside a jar file this will fail. Use the 
+            <code>URL.openStream</code> api instead to access the data of the classpath resource.</p>
+    
+    ]]></description>
+  </rule>
 </rules>
