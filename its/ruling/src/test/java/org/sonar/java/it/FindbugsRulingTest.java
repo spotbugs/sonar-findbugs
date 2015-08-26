@@ -5,17 +5,16 @@
  */
 package org.sonar.java.it;
 
+import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.MavenLocation;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.sonar.wsclient.issue.Issue;
-import org.sonar.wsclient.issue.IssueClient;
-import org.sonar.wsclient.issue.IssueQuery;
 
-import java.util.List;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -26,28 +25,25 @@ public class FindbugsRulingTest {
     .addPlugin("java")
     .addPlugin("findbugs")
     .setMainPluginKey("findbugs")
-    .addPlugin(MavenLocation.create("com.sonarsource.lits", "sonar-lits-plugin", "0.4"))
+    .addPlugin(MavenLocation.create("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.5-SNAPSHOT"))
     .restoreProfileAtStartup(FileLocation.of("src/test/resources/profile-findbugs.xml"))
     .build();
 
   @Test
   public void test() throws Exception {
-    MavenBuild build = MavenBuild.create(FileLocation.ofShared("it-sonar-performancing/struts-1.3.9/core/pom.xml").getFile())
+    File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    MavenBuild build = MavenBuild.create(FileLocation.of("../sources/struts-1.3.9/core/pom.xml").getFile())
       .setProfile("rules_findbugs")
       .setProperty("sonar.scm.disabled", "true")
+      .setProperty("sonar.analysis.mode", "preview")
+      .setProperty("sonar.issuesReport.html.enable", "true")
       .setProperty("dump.old", FileLocation.of("src/test/resources/expected-findbugs").getFile().getAbsolutePath())
       .setProperty("dump.new", FileLocation.of("target/actual-findbugs").getFile().getAbsolutePath())
+      .setProperty("lits.differences", litsDifferencesFile.getAbsolutePath())
       .setCleanPackageSonarGoals()
       .setEnvironmentVariable("SONAR_RUNNER_OPTS", "-Xmx1000m");
     orchestrator.executeBuild(build);
 
-    assertThatNoDifferences();
+    assertThat(Files.toString(litsDifferencesFile, StandardCharsets.UTF_8)).isEmpty();
   }
-
-  private void assertThatNoDifferences() {
-    IssueClient issueClient = orchestrator.getServer().wsClient().issueClient();
-    List<Issue> issues = issueClient.find(IssueQuery.create().componentRoots("org.apache.struts:struts-core").severities("BLOCKER", "INFO")).list();
-    assertThat(issues.size()).as("differences").isEqualTo(0);
-  }
-
 }
