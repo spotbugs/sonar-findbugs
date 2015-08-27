@@ -38,7 +38,7 @@ public class FindbugsTestSuite {
 
   static {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
-      .addPlugin("findbugs")
+      .addPlugin(FileLocation.of("../../target/sonar-findbugs-plugin.jar"))
       .addPlugin("java")
       .setMainPluginKey("findbugs")
       .restoreProfileAtStartup(FileLocation.ofClasspath("/com/sonar/it/java/FindbugsTest/findbugs-backup.xml"))

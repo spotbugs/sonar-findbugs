@@ -17,34 +17,34 @@ CI)
 IT-DEV)
   installTravisTools
 
-  mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
+  mvn package -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
   build_snapshot "SonarSource/sonarqube"
 
   cd its/plugin
-  mvn -DfindbugsVersion="DEV" -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="DEV" -Dmaven.test.redirectTestOutputToFile=false install
+  mvn -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="DEV" -Dmaven.test.redirectTestOutputToFile=false install
   ;;
 
 IT-LTS)
   installTravisTools
 
-  mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
+  mvn package -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
   cd its/plugin
-  mvn -DfindbugsVersion="DEV" -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="LTS_OR_OLDEST_COMPATIBLE" -Dmaven.test.redirectTestOutputToFile=false install
+  mvn -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="LTS" -Dmaven.test.redirectTestOutputToFile=false install
   ;;
 
 RULING)
   installTravisTools
 
-  mvn install -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
+  mvn package -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
   
   build_snapshot "SonarSource/sonar-lits"
 
   export SONAR_IT_SOURCES=$(pwd)/its/sources
 
   cd its/ruling
-  mvn clean install -Dmaven.test.redirectTestOutputToFile=false -DjavaVersion="LATEST_RELEASE" -DfindbugsVersion="DEV" -Dsonar.runtimeVersion=5.1.1
+  mvn clean install -Dmaven.test.redirectTestOutputToFile=false -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion=5.1.1
   ;;
 
 esac

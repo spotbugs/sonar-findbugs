@@ -1,6 +1,9 @@
 # ---- Maven
 target/
 
+# ---- SonarQube
+.sonar
+
 # ---- IntelliJ IDEA
 *.iws
 *.iml

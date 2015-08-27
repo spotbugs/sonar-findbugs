@@ -23,7 +23,7 @@ public class FindbugsRulingTest {
   @ClassRule
   public static Orchestrator orchestrator = Orchestrator.builderEnv()
     .addPlugin("java")
-    .addPlugin("findbugs")
+    .addPlugin(FileLocation.of("../../target/sonar-findbugs-plugin.jar"))
     .setMainPluginKey("findbugs")
     .addPlugin(MavenLocation.create("org.sonarsource.sonar-lits-plugin", "sonar-lits-plugin", "0.5-SNAPSHOT"))
     .restoreProfileAtStartup(FileLocation.of("src/test/resources/profile-findbugs.xml"))
