@@ -29,6 +29,7 @@ public class ClassFilter {
   private String name;
 
   public ClassFilter() {
+    // Empty constructor required by XStream converters
   }
 
   public ClassFilter(String name) {

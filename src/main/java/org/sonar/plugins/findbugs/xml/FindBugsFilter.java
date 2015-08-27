@@ -64,48 +64,15 @@ public class FindBugsFilter {
   }
 
   public Map<String, String> getPatternLevels(FindbugsLevelUtils priorityMapper) {
-    BugInfoSplitter splitter = new BugInfoSplitter() {
-      @Override
-      public String getSeparator() {
-        return PATTERN_SEPARATOR;
-      }
-
-      @Override
-      public String getVar(Bug bug) {
-        return bug.getPattern();
-      }
-    };
-    return processMatches(priorityMapper, splitter);
+    return processMatches(priorityMapper, new PatternSplitter());
   }
 
   public Map<String, String> getCodeLevels(FindbugsLevelUtils priorityMapper) {
-    BugInfoSplitter splitter = new BugInfoSplitter() {
-      @Override
-      public String getSeparator() {
-        return CODE_SEPARATOR;
-      }
-
-      @Override
-      public String getVar(Bug bug) {
-        return bug.getCode();
-      }
-    };
-    return processMatches(priorityMapper, splitter);
+    return processMatches(priorityMapper, new CodeSplitter());
   }
 
   public Map<String, String> getCategoryLevels(FindbugsLevelUtils priorityMapper) {
-    BugInfoSplitter splitter = new BugInfoSplitter() {
-      @Override
-      public String getSeparator() {
-        return CATEGORY_SEPARATOR;
-      }
-
-      @Override
-      public String getVar(Bug bug) {
-        return bug.getCategory();
-      }
-    };
-    return processMatches(priorityMapper, splitter);
+    return processMatches(priorityMapper, new CategorySplitter());
   }
 
   private static String getRuleSeverity(Priority priority, FindbugsLevelUtils priorityMapper) {
@@ -143,12 +110,6 @@ public class FindBugsFilter {
     }
   }
 
-  private interface BugInfoSplitter {
-    String getVar(Bug bug);
-
-    String getSeparator();
-  }
-
   private static void mapRuleSeverity(Map<String, String> severityByRule, String severity, String key) {
     if (severityByRule.containsKey(key) && severityByRule.get(key) != null) {
       severityByRule.put(key, getHighestSeverity(severityByRule.get(key), severity));
@@ -158,13 +119,7 @@ public class FindBugsFilter {
   }
 
   private static String getHighestSeverity(String s1, String s2) {
-    if (s1.equals(s2)) {
-      return s1;
-    } else if (Severity.INFO.equals(s1)) {
-      return s2;
-    } else if (Severity.MAJOR.equals(s1) && Severity.INFO.equals(s2)) {
-      return s1;
-    } else if (Severity.BLOCKER.equals(s1)) {
+    if (s1.equals(s2) || (Severity.MAJOR.equals(s1) && Severity.INFO.equals(s2)) || Severity.BLOCKER.equals(s1)) {
       return s1;
     }
     return s2;
@@ -184,5 +139,47 @@ public class FindBugsFilter {
     xstream.processAnnotations(LocalFilter.class);
     xstream.processAnnotations(OrFilter.class);
     return xstream;
+  }
+
+  private interface BugInfoSplitter {
+    String getVar(Bug bug);
+
+    String getSeparator();
+  }
+
+  private static class PatternSplitter implements BugInfoSplitter {
+    @Override
+    public String getSeparator() {
+      return PATTERN_SEPARATOR;
+    }
+
+    @Override
+    public String getVar(Bug bug) {
+      return bug.getPattern();
+    }
+  }
+
+  private static class CodeSplitter implements BugInfoSplitter {
+    @Override
+    public String getSeparator() {
+      return CODE_SEPARATOR;
+    }
+
+    @Override
+    public String getVar(Bug bug) {
+      return bug.getCode();
+    }
+  }
+
+  private static class CategorySplitter implements BugInfoSplitter {
+    @Override
+    public String getSeparator() {
+      return CATEGORY_SEPARATOR;
+    }
+
+    @Override
+    public String getVar(Bug bug) {
+      return bug.getCategory();
+    }
   }
 }

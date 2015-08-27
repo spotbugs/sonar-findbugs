@@ -45,6 +45,7 @@ public enum FindbugsVersion {
 
     } catch (IOException e) {
       LoggerFactory.getLogger(getClass()).warn("Can not load the Findbugs version from the file " + PROPERTIES_PATH);
+      LoggerFactory.getLogger(getClass()).debug("Error while loading propoerties", e);
       this.version = "";
 
     } finally {

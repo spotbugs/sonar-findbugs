@@ -29,6 +29,7 @@ public class PackageFilter {
   private String name;
 
   public PackageFilter() {
+    // Empty constructor required by XStream converters
   }
 
   public PackageFilter(String name) {

@@ -209,7 +209,7 @@ public class FindbugsConfiguration implements BatchExtension {
         .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.TIMEOUT_PROPERTY)
-        .defaultValue(FindbugsConstants.TIMEOUT_DEFAULT_VALUE + "")
+        .defaultValue(Long.toString(FindbugsConstants.TIMEOUT_DEFAULT_VALUE))
         .category(CoreProperties.CATEGORY_JAVA)
         .subCategory(subCategory)
         .name("Timeout")

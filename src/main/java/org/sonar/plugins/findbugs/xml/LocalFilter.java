@@ -29,6 +29,7 @@ public class LocalFilter {
   private String name;
 
   public LocalFilter() {
+    // Empty constructor required by XStream converters
   }
 
   public LocalFilter(String name) {

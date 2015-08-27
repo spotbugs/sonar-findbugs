@@ -30,9 +30,6 @@ public final class FindbugsRulesDefinition implements RulesDefinition {
   public static final String REPOSITORY_KEY = "findbugs";
   public static final String REPOSITORY_NAME = "FindBugs";
 
-  public FindbugsRulesDefinition() {
-  }
-
   @Override
   public void define(Context context) {
     NewRepository repository = context

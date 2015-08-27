@@ -35,6 +35,7 @@ public class MethodFilter {
   private String returns;
 
   public MethodFilter() {
+    // Empty constructor required by XStream converters
   }
 
   public MethodFilter(String name) {

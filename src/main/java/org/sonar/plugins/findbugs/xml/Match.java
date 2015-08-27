@@ -19,10 +19,10 @@
  */
 package org.sonar.plugins.findbugs.xml;
 
-import java.util.List;
-
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
+
+import java.util.List;
 
 @XStreamAlias("Match")
 public class Match {
@@ -52,6 +52,7 @@ public class Match {
   private List<OrFilter> ors;
 
   public Match() {
+    // Empty constructor required by XStream converters
   }
 
   public Match(Bug bug, Priority priority) {

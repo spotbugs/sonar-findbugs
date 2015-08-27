@@ -35,6 +35,7 @@ public class Bug {
   private String pattern;
 
   public Bug() {
+    // Empty constructor required by XStream converters
   }
 
   public Bug(String pattern) {

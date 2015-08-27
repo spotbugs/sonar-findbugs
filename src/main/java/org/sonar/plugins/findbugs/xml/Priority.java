@@ -29,6 +29,7 @@ public class Priority {
   private String value;
 
   public Priority() {
+    // Empty constructor required by XStream converters
   }
 
   public Priority(String value) {

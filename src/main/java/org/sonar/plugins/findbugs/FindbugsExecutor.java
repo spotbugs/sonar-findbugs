@@ -255,11 +255,12 @@ public class FindbugsExecutor implements BatchExtension {
         }
       } catch (PluginException e) {
         LOG.warn("Failed to load plugin for custom detector: " + path);
+        LOG.debug("Cause of failure", e);
       } catch (DuplicatePluginIdException e) {
         // FB Core plugin is always loaded, so we'll get an exception for it always
         if (!FINDBUGS_CORE_PLUGIN_ID.equals(e.getPluginId())) {
           // log only if it's not the FV Core plugin
-          LOG.debug("Plugin already loaded: exception ignored: " + e.getMessage());
+          LOG.debug("Plugin already loaded: exception ignored: " + e.getMessage(), e);
         }
       }
     }

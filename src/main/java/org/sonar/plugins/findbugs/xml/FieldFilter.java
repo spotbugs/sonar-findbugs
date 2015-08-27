@@ -32,6 +32,7 @@ public class FieldFilter {
   private String type;
 
   public FieldFilter() {
+    // Empty constructor required by XStream converters
   }
 
   public FieldFilter(String name) {
