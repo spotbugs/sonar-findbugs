@@ -10,7 +10,7 @@
 
   <groupId>org.sonarsource.sonar-findbugs-plugin</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>3.3</version>
+  <version>3.4-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Findbugs Plugin</name>
@@ -49,7 +49,7 @@
     <connection>scm:git:git@github.com:SonarSource/sonar-findbugs.git</connection>
     <developerConnection>scm:git:git@github.com:SonarSource/sonar-findbugs.git</developerConnection>
     <url>https://github.com/SonarSource/sonar-findbugs</url>
-    <tag>3.3</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <properties>
