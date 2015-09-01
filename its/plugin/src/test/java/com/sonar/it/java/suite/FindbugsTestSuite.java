@@ -26,6 +26,8 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import java.io.File;
+
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
   FindbugsTest.class,
@@ -40,7 +42,6 @@ public class FindbugsTestSuite {
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
       .addPlugin(FileLocation.of("../../target/sonar-findbugs-plugin.jar"))
       .addPlugin("java")
-      .setMainPluginKey("findbugs")
       .restoreProfileAtStartup(FileLocation.ofClasspath("/com/sonar/it/java/FindbugsTest/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/com/sonar/it/java/FindbugsTest/fbcontrib-backup.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
@@ -50,8 +51,7 @@ public class FindbugsTestSuite {
     return projectKey + ":src/main/java/" + pkgDir + cls;
   }
 
-  public static boolean isJavaAtLeast_2_9() {
-    return ORCHESTRATOR.getConfiguration().getPluginVersion("java").isGreaterThanOrEquals("2.9");
+  public static File projectPom(String projectName) {
+    return new File("projects/" + projectName + "/pom.xml").getAbsoluteFile();
   }
-
 }

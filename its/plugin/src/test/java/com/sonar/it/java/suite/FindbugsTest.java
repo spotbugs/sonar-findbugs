@@ -48,7 +48,7 @@ public class FindbugsTest {
 
   @Test
   public void analysis() {
-    MavenBuild build = MavenBuild.create(TestUtils.projectPom("findbugs"))
+    MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.profile", "findbugs-it")
       .setProperty("sonar.dynamicAnalysis", "false");
@@ -67,13 +67,7 @@ public class FindbugsTest {
     assertThat(issues.get(0).line()).isEqualTo(8);
 
     issues = issueClient.find(IssueQuery.create().components(FindbugsTestSuite.keyFor("com.sonarsource.it.samples:findbugs", "", "Findbugs4.java"))).list();
-    if (FindbugsTestSuite.isJavaAtLeast_2_9()) {
-      assertThat(issues).isEmpty();
-    } else {
-      assertThat(issues).hasSize(1);
-      assertThat(issues.get(0).ruleKey()).isEqualTo("findbugs:ICAST_INT_2_LONG_AS_INSTANT");
-      assertThat(issues.get(0).line()).isEqualTo(9);
-    }
+    assertThat(issues).isEmpty();
   }
 
   /**
@@ -81,7 +75,7 @@ public class FindbugsTest {
    */
   @Test
   public void confidence_level() {
-    MavenBuild build = MavenBuild.create(TestUtils.projectPom("findbugs"))
+    MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.profile", "findbugs-it")
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -105,7 +99,7 @@ public class FindbugsTest {
    */
   @Test
   public void should_always_use_english_locale() throws Exception {
-    MavenBuild build = MavenBuild.create(TestUtils.projectPom("findbugs"))
+    MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.profile", "findbugs-it")
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -124,7 +118,7 @@ public class FindbugsTest {
    */
   @Test
   public void inclusions_exclusions() throws Exception {
-    File projectDir = TestUtils.projectPom("findbugs").getParentFile();
+    File projectDir = FindbugsTestSuite.projectPom("findbugs").getParentFile();
     // Compile
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
       .setGoals("clean package");
@@ -153,7 +147,7 @@ public class FindbugsTest {
 
   @Test
   public void multiple_directories_with_classes() throws Exception {
-    File projectDir = TestUtils.projectPom("multiple-directories-with-classes").getParentFile();
+    File projectDir = FindbugsTestSuite.projectPom("multiple-directories-with-classes").getParentFile();
     // Compile
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
       .setGoals("clean package");
