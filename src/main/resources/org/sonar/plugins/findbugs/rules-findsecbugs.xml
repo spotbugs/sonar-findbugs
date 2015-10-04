@@ -959,6 +959,82 @@ UserEntity res = q.getSingleResult();&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='SQL_INJECTION_SPRING_JDBC' priority='CRITICAL'>
+    <name>Security - Potential JDBC Injection (Spring JDBC)</name>
+    <configKey>SQL_INJECTION_SPRING_JDBC</configKey>
+    <description>&lt;p&gt;
+The input values included in SQL queries need to be passed in safely.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+&lt;/p&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;JdbcTemplate jdbc = new JdbcTemplate();
+int count = jdbc.queryForObject("select count(*) from Users where name = '"+paramName+"'", Integer.class);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;JdbcTemplate jdbc = new JdbcTemplate();
+int count = jdbc.queryForObject("select count(*) from Users where name = ?", Integer.class, paramName);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+
+&lt;b&gt;References (Spring JDBC)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://docs.spring.io/spring-framework/docs/current/spring-framework-reference/html/jdbc.html"&gt;Spring Official Documentation: Data access with JDBC&lt;/a&gt;&lt;br/&gt;
+&lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SQL_INJECTION_JDBC' priority='CRITICAL'>
+    <name>Security - Potential JDBC Injection</name>
+    <configKey>SQL_INJECTION_JDBC</configKey>
+    <description>&lt;p&gt;
+The input values included in SQL queries need to be passed in safely.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+&lt;/p&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;Connection conn = [...];
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery("update COFFEES set SALES = "+nbSales+" where COF_NAME = '"+coffeeName+"'");&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;Connection conn = [...];
+conn.prepareStatement("update COFFEES set SALES = ? where COF_NAME = ?");
+updateSales.setInt(1, nbSales);
+updateSales.setString(2, coffeeName);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+
+&lt;b&gt;References (JDBC)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html"&gt;Oracle Documentation: The Java Tutorials &amp;gt; Prepared Statements&lt;/a&gt;&lt;br/&gt;
+&lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='LDAP_INJECTION' priority='CRITICAL'>
     <name>Security - Potential LDAP Injection</name>
     <configKey>LDAP_INJECTION</configKey>
@@ -2128,6 +2204,58 @@ class FileWriteUtil {
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>android</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='INSECURE_COOKIE' priority='MAJOR'>
+    <name>Security - Cookie without the secure flag</name>
+    <configKey>INSECURE_COOKIE</configKey>
+    <description>&lt;p&gt;
+A new cookie is created without the &lt;code&gt;Secure&lt;/code&gt; flag set.
+The &lt;code&gt;Secure&lt;/code&gt; flag is a directive to the browser to make sure that the cookie is not sent for insecure
+communication (&lt;code&gt;http://&lt;/code&gt;).
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Cookie cookie = new Cookie("userName",userName);
+response.addCookie(cookie);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution (Specific configuration):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Cookie cookie = new Cookie("userName",userName);
+cookie.setSecure(true);
+cookie.setHttpOnly(true);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution (Servlet 3.0 configuration):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+&amp;lt;web-app xmlns="http://java.sun.com/xml/ns/javaee" version="3.0"&amp;gt;
+[...]
+&amp;lt;session-config&amp;gt;
+ &amp;lt;cookie-config&amp;gt;
+  &amp;lt;http-only&amp;gt;true&amp;lt;/http-only&amp;gt;
+  &amp;lt;secure&amp;gt;true&amp;lt;/secure&amp;gt;
+ &amp;lt;/cookie-config&amp;gt;
+&amp;lt;/session-config&amp;gt;
+&amp;lt;/web-app&amp;gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/614.html"&gt;CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/315.html"&gt;CWE-315: Cleartext Storage of Sensitive Information in a Cookie&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/311.html"&gt;CWE-311: Missing Encryption of Sensitive Data&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SecureFlag"&gt;OWASP: Secure Flag&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.rapid7.com/db/vulnerabilities/http-cookie-secure-flag"&gt;Rapid7: Missing Secure Flag From SSL Cookie&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
 </rules>
