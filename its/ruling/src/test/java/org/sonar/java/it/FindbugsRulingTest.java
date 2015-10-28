@@ -45,8 +45,11 @@ public class FindbugsRulingTest {
   @Test
   public void test() throws Exception {
     File litsDifferencesFile = FileLocation.of("target/differences").getFile();
+    String projectKey = "org.apache.struts:struts-core";
+    String projectName = "Struts Core";
+    orchestrator.getServer().provisionProject(projectKey, projectName);
+    orchestrator.getServer().associateProjectToQualityProfile(projectKey, "java", "rules_findbugs");
     MavenBuild build = MavenBuild.create(FileLocation.of("../sources/struts-1.3.9/core/pom.xml").getFile())
-      .setProfile("rules_findbugs")
       .setProperty("sonar.scm.disabled", "true")
       .setProperty("sonar.analysis.mode", "preview")
       .setProperty("sonar.issuesReport.html.enable", "true")
