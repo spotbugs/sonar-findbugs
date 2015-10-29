@@ -24,7 +24,7 @@ plugin|ruling)
   fi
 
   cd its/$TEST
-  mvn -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="$SQ_VERSION" -Dmaven.test.redirectTestOutputToFile=false install
+  mvn package -DjavaVersion="LATEST_RELEASE" -Dsonar.runtimeVersion="$SQ_VERSION" -Dmaven.test.redirectTestOutputToFile=false
   ;;
 
 *)
