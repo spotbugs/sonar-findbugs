@@ -25,6 +25,7 @@ import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.findbugs.language.JavaByteCode;
 import org.sonar.plugins.findbugs.xml.Bug;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
@@ -37,7 +38,7 @@ public class FindbugsProfileExporter extends ProfileExporter {
 
   public FindbugsProfileExporter() {
     super(/* (Godin): actually exporter key: */FindbugsRulesDefinition.REPOSITORY_KEY, FindbugsConstants.PLUGIN_NAME);
-    setSupportedLanguages(Java.KEY);
+    setSupportedLanguages(JavaByteCode.KEY);
     setMimeType("application/xml");
   }
 

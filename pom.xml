@@ -164,7 +164,7 @@
     <dependency>
       <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-java-plugin</artifactId>
-      <type>sonar-plugin</type>
+      <!--<type>sonar-plugin</type>-->
       <version>${sonar-java.version}</version>
       <scope>provided</scope>
     </dependency>

@@ -29,6 +29,7 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
+import org.sonar.plugins.findbugs.language.JavaByteCode;
 import org.sonar.plugins.java.Java;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
@@ -71,7 +72,7 @@ public abstract class FindbugsTests {
   protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug) {
     RulesProfile profile = RulesProfile.create();
     profile.setName("FindBugs");
-    profile.setLanguage(Java.KEY);
+    profile.setLanguage(JavaByteCode.KEY);
     RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
     if (findbugs) {
       for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY))) {

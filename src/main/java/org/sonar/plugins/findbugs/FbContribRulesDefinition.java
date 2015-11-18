@@ -21,7 +21,7 @@ package org.sonar.plugins.findbugs;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
-import org.sonar.plugins.java.Java;
+import org.sonar.plugins.findbugs.language.JavaByteCode;
 
 public class FbContribRulesDefinition implements RulesDefinition {
 
@@ -31,7 +31,7 @@ public class FbContribRulesDefinition implements RulesDefinition {
   @Override
   public void define(Context context) {
     NewRepository repository = context
-      .createRepository(REPOSITORY_KEY, Java.KEY)
+      .createRepository(REPOSITORY_KEY, JavaByteCode.KEY)
       .setName(REPOSITORY_NAME);
 
     RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();

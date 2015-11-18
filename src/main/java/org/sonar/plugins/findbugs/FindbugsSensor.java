@@ -32,6 +32,8 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
+import org.sonar.plugins.findbugs.language.JavaByteCode;
+import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
@@ -45,6 +47,7 @@ public class FindbugsSensor implements Sensor {
   private RuleFinder ruleFinder;
   private FindbugsExecutor executor;
   private final JavaResourceLocator javaResourceLocator;
+  private final ByteCodeResourceLocator byteCodeResourceLocator;
   private final FileSystem fs;
   private final ResourcePerspectives perspectives;
 
@@ -55,12 +58,13 @@ public class FindbugsSensor implements Sensor {
     this.perspectives = perspectives;
     this.executor = executor;
     this.javaResourceLocator = javaResourceLocator;
+    this.byteCodeResourceLocator = new ByteCodeResourceLocator();
     this.fs = fs;
   }
 
   @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
+    return fs.hasFiles(fs.predicates().hasLanguage(JavaByteCode.KEY)) || fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
       && (hasActiveFindbugsRules() || hasActiveFbContribRules() || hasActiveFindSecBugsRules());
   }
 
@@ -78,12 +82,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void analyse(Project project, SensorContext context) {
-    if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
-      LOG.warn("Findbugs needs sources to be compiled."
-        + " Please build project before executing sonar or check the location of compiled classes to"
-        + " make it possible for Findbugs to analyse your project.");
-      return;
-    }
+
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
 
     for (ReportedBug bugInstance : collection) {
@@ -105,12 +104,36 @@ public class FindbugsSensor implements Sensor {
       String longMessage = bugInstance.getMessage();
       int line = bugInstance.getStartLine();
 
+      //Legacy
       Resource resource = javaResourceLocator.findResourceByClassName(className);
       if (resource != null) {
         insertIssue(rule, resource, line, longMessage);
+        continue;
+      }
+
+      //Regular Java class mapped to their original .java
+      resource = byteCodeResourceLocator.findJavaClassFile(className, project);
+      if (resource != null) {
+        insertIssue(rule, resource, line, longMessage);
+        continue;
+      }
+
+      //Precompiled JSP mapped to their original .jsp with the correct line of code if SMAP file is present.
+      resource = byteCodeResourceLocator.findTemplateFile(className, project);
+      if (resource != null) {
+        if(resource.getPath().endsWith(".jsp")) {
+          Integer jspLine = byteCodeResourceLocator.findJspLine(className, line, javaResourceLocator);
+          line = jspLine == null ?  1 : jspLine;
+        }
+        else {
+          line = 1;
+        }
+        insertIssue(rule, resource, line, longMessage);
+        continue;
       }
     }
   }
+
 
   private void insertIssue(Rule rule, Resource resource, int line, String message) {
     Issuable issuable = perspectives.as(Issuable.class, resource);

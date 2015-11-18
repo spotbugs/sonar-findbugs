@@ -21,6 +21,7 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.SonarPlugin;
+import org.sonar.plugins.findbugs.language.JavaByteCode;
 
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class FindbugsPlugin extends SonarPlugin {
     ImmutableList.Builder<Object> extensions = ImmutableList.builder();
     extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
     extensions.add(
+      JavaByteCode.class,
       FindbugsSensor.class,
       FindbugsConfiguration.class,
       FindbugsExecutor.class,
