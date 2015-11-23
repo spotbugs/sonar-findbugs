@@ -27,13 +27,9 @@ import org.sonar.api.resources.AbstractLanguage;
 import java.util.List;
 
 /**
- * This language cover all files that can be mapped from classes files.
+ * This language cover JavaServer Pages (JSP).
  *
- * Design consideration:
- * This language was created to avoid changes to the Official Java plugin.
- * FindBugs cover multiples languages (Groovy, Scala, Closure, etc) due the analysis being done on classes files.
- * By making this language, it avoid imposing the support for those derivative language for plugin that have focus
- * on Java.
+ * It may conflicts with the "web" language from the Web Plugin which supports multiples XML derived languages.
  */
 public class Jsp extends AbstractLanguage {
 

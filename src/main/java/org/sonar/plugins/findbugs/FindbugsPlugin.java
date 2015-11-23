@@ -22,6 +22,7 @@ package org.sonar.plugins.findbugs;
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.JspCodeColorizerFormat;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public class FindbugsPlugin extends SonarPlugin {
     extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
     extensions.add(
       Jsp.class,
+      JspCodeColorizerFormat.class,
       FindbugsSensor.class,
       FindbugsConfiguration.class,
       FindbugsExecutor.class,
