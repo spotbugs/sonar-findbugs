@@ -23,7 +23,6 @@ import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
-import org.sonar.plugins.findbugs.language.JavaByteCode;
 import org.sonar.plugins.java.Java;
 
 import java.util.List;
@@ -39,10 +38,10 @@ public class FindbugsRulesDefinitionTest {
     RulesDefinition.Repository repository = context.repository(FindbugsRulesDefinition.REPOSITORY_KEY);
 
     assertThat(repository.name()).isEqualTo(FindbugsRulesDefinition.REPOSITORY_NAME);
-    assertThat(repository.language()).isEqualTo(JavaByteCode.KEY);
+    assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
-    assertThat(rules).hasSize(442);
+    assertThat(rules).hasSize(441);
 
     List<String> rulesWithMissingSQALE = Lists.newLinkedList();
     for (Rule rule : rules) {

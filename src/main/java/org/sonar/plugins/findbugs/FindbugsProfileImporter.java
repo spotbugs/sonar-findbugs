@@ -32,7 +32,7 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.findbugs.language.JavaByteCode;
+import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.java.Java;
 
@@ -46,7 +46,7 @@ public class FindbugsProfileImporter extends ProfileImporter {
 
   public FindbugsProfileImporter(RuleFinder ruleFinder) {
     super(FindbugsRulesDefinition.REPOSITORY_KEY, FindbugsConstants.PLUGIN_NAME);
-    setSupportedLanguages(JavaByteCode.KEY);
+    setSupportedLanguages(Java.KEY, Jsp.KEY);
     this.ruleFinder = ruleFinder;
   }
 
@@ -77,6 +77,9 @@ public class FindbugsProfileImporter extends ProfileImporter {
         rule = ruleFinder.findByKey(FbContribRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
         if (rule == null) {
           rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
+          if (rule == null) {
+            rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
+          }
         }
       }
       if (rule != null) {
@@ -133,8 +136,8 @@ public class FindbugsProfileImporter extends ProfileImporter {
     return Iterables.concat(
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY)),
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FbContribRulesDefinition.REPOSITORY_KEY)),
-      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY))
-      );
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)),
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)));
   }
 
 }

@@ -111,21 +111,21 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_analyse_if_fbContrib_and_FindSecBug() {
     addJavaFileToFs();
-    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(false, true, true), null, perspectives, null, mockJavaResourceLocator(), fs);
+    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(false, true, true,false), null, perspectives, null, mockJavaResourceLocator(), fs);
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
   public void should_analyse_if_FindSecBug() {
     addJavaFileToFs();
-    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(false, false, true), null, perspectives, null, mockJavaResourceLocator(), fs);
+    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(false, false, true,false), null, perspectives, null, mockJavaResourceLocator(), fs);
     assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
   public void should_not_analyze_if_not_rules() {
     addJavaFileToFs();
-    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(false, false, false), null, perspectives, null, mockJavaResourceLocator(), fs);
+    FindbugsSensor sensor = new FindbugsSensor(createRulesProfileWithActiveRules(false, false, false,false), null, perspectives, null, mockJavaResourceLocator(), fs);
     assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 
@@ -196,7 +196,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(false, true, false), FakeRuleFinder.createWithAllRules(), perspectives, executor,
+    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(false, true, false, false), FakeRuleFinder.createWithAllRules(), perspectives, executor,
       javaResourceLocator, fs);
     analyser.analyse(project, context);
 
@@ -216,7 +216,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     FindbugsSensor analyser = new FindbugsSensor(
-      createRulesProfileWithActiveRules(false, false, true),
+      createRulesProfileWithActiveRules(false, false, true, false),
       FakeRuleFinder.createWithAllRules(),
       perspectives,
       executor,
@@ -239,7 +239,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(false, false, false), FakeRuleFinder.createWithAllRules(), perspectives, executor,
+    FindbugsSensor analyser = new FindbugsSensor(createRulesProfileWithActiveRules(false, false, false, false), FakeRuleFinder.createWithAllRules(), perspectives, executor,
       javaResourceLocator, fs);
     analyser.analyse(project, context);
 

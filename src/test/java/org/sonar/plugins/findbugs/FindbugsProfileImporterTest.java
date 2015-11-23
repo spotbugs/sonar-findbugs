@@ -99,7 +99,7 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new InputStreamReader(input), ValidationMessages.create());
     List<ActiveRule> results = profile.getActiveRules();
 
-    assertThat(results).hasSize(11);
+    assertThat(results).hasSize(10);
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 

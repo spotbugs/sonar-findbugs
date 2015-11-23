@@ -1,6 +1,6 @@
 <rules><!-- This file is auto-generated. -->
   <rule key='PREDICTABLE_RANDOM' priority='MAJOR'>
-    <name>Security - Predictable Pseudo Random Number Generator</name>
+    <name>Security - Predictable pseudorandom number generator</name>
     <configKey>PREDICTABLE_RANDOM</configKey>
     <description>&lt;p&gt;The use of a predictable random value can lead to vulnerabilities when used in certain security critical contexts. For example, when the value is used as:&lt;/p&gt;
 &lt;ul&gt;
@@ -42,7 +42,7 @@ String generateSecretToken() {
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_PARAMETER' priority='INFO'>
-    <name>Security - Untrusted Servlet Parameter</name>
+    <name>Security - Untrusted servlet parameter</name>
     <configKey>SERVLET_PARAMETER</configKey>
     <description>&lt;p&gt;The Servlet can read GET and POST parameters from various methods. The value obtained should be considered unsafe.
 You may need to validate or sanitize those values before passing them to sensitive APIs such as:&lt;/p&gt;
@@ -65,7 +65,7 @@ You may need to validate or sanitize those values before passing them to sensiti
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_CONTENT_TYPE' priority='INFO'>
-    <name>Security - Untrusted Content-Type Header</name>
+    <name>Security - Untrusted Content-Type header</name>
     <configKey>SERVLET_CONTENT_TYPE</configKey>
     <description>&lt;p&gt;
 The HTTP header Content-Type can be controlled by the client. As such, its value should not be used in any security critical decisions.
@@ -79,10 +79,10 @@ The HTTP header Content-Type can be controlled by the client. As such, its value
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_SERVER_NAME' priority='INFO'>
-    <name>Security - Untrusted Hostname Header</name>
+    <name>Security - Untrusted Hostname header</name>
     <configKey>SERVLET_SERVER_NAME</configKey>
-    <description>&lt;p&gt;The hostname header can be controlled by the client. As such, its value should not be used in any security critical decisions.
-Both &lt;code&gt;ServletRequest.getServerName()&lt;/code&gt; and &lt;code&gt;HttpServletRequest.getHeader("Host")&lt;/code&gt; have the same
+    <description>&lt;p&gt;The hostname header can be controlled by the client. As such, its value should not be used in any security critical decisions. 
+Both &lt;code&gt;ServletRequest.getServerName()&lt;/code&gt; and &lt;code&gt;HttpServletRequest.getHeader("Host")&lt;/code&gt; have the same 
 behavior which is to extract the &lt;code&gt;Host&lt;/code&gt; header.&lt;/p&gt;
 &lt;pre&gt;
 GET /testpage HTTP/1.1
@@ -102,14 +102,14 @@ decisions you make with respect to a request.
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_SESSION_ID' priority='INFO'>
-    <name>Security - Untrusted Session Cookie Value</name>
+    <name>Security - Untrusted session cookie value</name>
     <configKey>SERVLET_SESSION_ID</configKey>
     <description>&lt;p&gt;
 The method &lt;a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/HttpServletRequest.html#getRequestedSessionId()"&gt;&lt;code&gt;HttpServletRequest.getRequestedSessionId()&lt;/code&gt;&lt;/a&gt;
 typically returns the value of the cookie &lt;code&gt;JSESSIONID&lt;/code&gt;. This value is normally only accessed by the session management logic and not normal developer code.
 &lt;/p&gt;
 &lt;p&gt;
-The value passed to the client is generally an alphanumeric value (e.g., &lt;code&gt;JSESSIONID=jp6q31lq2myn&lt;/code&gt;). However, the value can be altered by the client.
+The value passed to the client is generally an alphanumeric value (e.g., &lt;code&gt;JSESSIONID=jp6q31lq2myn&lt;/code&gt;). However, the value can be altered by the client. 
 The following HTTP request illustrates the potential modification.
 &lt;pre&gt;
 GET /somePage HTTP/1.1
@@ -118,8 +118,8 @@ User-Agent: Mozilla/5.0
 Cookie: JSESSIONID=Any value of the user&amp;#39;s choice!!??'''&amp;quot;&amp;gt;
 &lt;/pre&gt;
 &lt;/p&gt;
-&lt;p&gt;As such, the JSESSIONID should only be used to see if its value matches an existing session ID. If it does not, the user should be
-considered an unauthenticated user. In addition, the session ID value should never be logged. If it is, then the log file could contain
+&lt;p&gt;As such, the JSESSIONID should only be used to see if its value matches an existing session ID. If it does not, the user should be 
+considered an unauthenticated user. In addition, the session ID value should never be logged. If it is, then the log file could contain 
 valid active session IDs, allowing an insider to hijack any sessions whose IDs have been logged and are still active.
 &lt;/p&gt;
 &lt;br/&gt;
@@ -133,14 +133,14 @@ valid active session IDs, allowing an insider to hijack any sessions whose IDs h
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_QUERY_STRING' priority='INFO'>
-    <name>Security - Untrusted Query String</name>
+    <name>Security - Untrusted query string</name>
     <configKey>SERVLET_QUERY_STRING</configKey>
     <description>&lt;p&gt;The query string is the concatenation of the GET parameter names and values. Parameters other than those intended can
 be passed in.&lt;/p&gt;
 &lt;p&gt;For the URL request &lt;code&gt;/app/servlet.htm?a=1&amp;b=2&lt;/code&gt;, the query string extract will be &lt;code&gt;a=1&amp;b=2&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Just as is true for individual parameter values retrieved via methods like &lt;code&gt;HttpServletRequest.getParameter()&lt;/code&gt;,
+&lt;p&gt;Just as is true for individual parameter values retrieved via methods like &lt;code&gt;HttpServletRequest.getParameter()&lt;/code&gt;, 
 the value obtained from &lt;code&gt;HttpServletRequest.getQueryString()&lt;/code&gt; should be considered unsafe.
-You may need to validate or sanitize anything pulled from the query string before passing it to sensitive APIs.
+You may need to validate or sanitize anything pulled from the query string before passing it to sensitive APIs. 
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -151,10 +151,10 @@ You may need to validate or sanitize anything pulled from the query string befor
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_HEADER' priority='INFO'>
-    <name>Security - HTTP Headers Untrusted</name>
+    <name>Security - HTTP headers untrusted</name>
     <configKey>SERVLET_HEADER</configKey>
-    <description>&lt;p&gt;Request headers can easily be altered by the requesting user. In general, no assumption should be made that
-the request came from a regular browser without modification by an attacker. As such, it is recommended that you
+    <description>&lt;p&gt;Request headers can easily be altered by the requesting user. In general, no assumption should be made that 
+the request came from a regular browser without modification by an attacker. As such, it is recommended that you 
 not trust this value in any security decisions you make with respect to a request.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -165,7 +165,7 @@ not trust this value in any security decisions you make with respect to a reques
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_HEADER_REFERER' priority='INFO'>
-    <name>Security - Untrusted Referer Header</name>
+    <name>Security - Untrusted Referer header</name>
     <configKey>SERVLET_HEADER_REFERER</configKey>
     <description>&lt;p&gt;
 Behavior:
@@ -190,7 +190,7 @@ Recommendations:
     <tag>security</tag>
   </rule>
   <rule key='SERVLET_HEADER_USER_AGENT' priority='INFO'>
-    <name>Security - Untrusted User-Agent Header</name>
+    <name>Security - Untrusted User-Agent header</name>
     <configKey>SERVLET_HEADER_USER_AGENT</configKey>
     <description>&lt;p&gt;The header "User-Agent" can easily be spoofed by the client. Adopting different behaviors based on the User-Agent (for
 crawler UA) is not recommended.&lt;/p&gt;
@@ -203,7 +203,7 @@ crawler UA) is not recommended.&lt;/p&gt;
     <tag>security</tag>
   </rule>
   <rule key='COOKIE_USAGE' priority='INFO'>
-    <name>Security - Potentially Sensitive Data in Cookie</name>
+    <name>Security - Potentially sensitive data in a cookie</name>
     <configKey>COOKIE_USAGE</configKey>
     <description>&lt;p&gt;The information stored in a custom cookie should not be sensitive or related to the session. In most cases, sensitive data should only be stored in session
 and referenced by the user's session cookie. See HttpSession (HttpServletRequest.getSession())&lt;/p&gt;
@@ -217,9 +217,9 @@ and referenced by the user's session cookie. See HttpSession (HttpServletRequest
     <tag>security</tag>
   </rule>
   <rule key='PATH_TRAVERSAL_IN' priority='MAJOR'>
-    <name>Security - Potential Path Traversal (File Read)</name>
+    <name>Security - Potential Path Traversal (file read)</name>
     <configKey>PATH_TRAVERSAL_IN</configKey>
-    <description>&lt;p&gt;A file is opened to read its content. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter.
+    <description>&lt;p&gt;A file is opened to read its content. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter. 
 If an unfiltered parameter is passed to this file API, files from an arbitrary filesystem location could be read.&lt;/p&gt;
 &lt;p&gt;This rule identifies &lt;b&gt;potential&lt;/b&gt; path traversal vulnerabilities. In many cases, the constructed file path cannot be controlled
 by the user. If that is the case, the reported instance is a false positive.&lt;/p&gt;
@@ -237,9 +237,9 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
     <tag>security</tag>
   </rule>
   <rule key='PATH_TRAVERSAL_OUT' priority='MAJOR'>
-    <name>Security - Potential Path Traversal (File Write)</name>
+    <name>Security - Potential Path Traversal (file write)</name>
     <configKey>PATH_TRAVERSAL_OUT</configKey>
-    <description>&lt;p&gt;A file is opened to write to its contents. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter.
+    <description>&lt;p&gt;A file is opened to write to its contents. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter. 
 If an unfiltered parameter is passed to this file API, files at an arbitrary filesystem location could be modified.&lt;/p&gt;
 &lt;p&gt;This rule identifies &lt;b&gt;potential&lt;/b&gt; path traversal vulnerabilities. In many cases, the constructed file path cannot be controlled
 by the user. If that is the case, the reported instance is a false positive.&lt;/p&gt;
@@ -273,16 +273,16 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
     <tag>security</tag>
   </rule>
   <rule key='WEAK_FILENAMEUTILS' priority='INFO'>
-    <name>Security - FilenameUtils Not Filtering Null Bytes</name>
+    <name>Security - FilenameUtils not filtering null bytes</name>
     <configKey>WEAK_FILENAMEUTILS</configKey>
     <description>&lt;p&gt;Some FilenameUtils' methods don't filter NULL bytes (&lt;code&gt;0x00&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;If a null byte is injected into a filename, if this filename is passed to the underlying OS, the file retrieved will be the
 name of the file that is specified prior to the NULL byte, since at the OS level, all strings are terminated by a null byte even
-though Java itself doesn't care about null bytes or treat them special. This OS behavior can be used to bypass filename validation
+though Java itself doesn't care about null bytes or treat them special. This OS behavior can be used to bypass filename validation 
 that looks at the end of the filename (e.g., endswith ".log") to make sure its a safe file to access.&lt;/p&gt;
 &lt;p&gt;To fix this, two things are recommended:
 &lt;ul&gt;
-&lt;li&gt;Upgrade to Java 7 update 40 or later, or Java 8+ since
+&lt;li&gt;Upgrade to Java 7 update 40 or later, or Java 8+ since  
 &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8014846"&gt;NULL byte injection in filenames is fixed in those versions&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;Strongly validate any filenames provided by untrusted users to make sure they are valid (i.e., don't contain null, don't include path characters, etc.)&lt;/li&gt;
 &lt;/ul&gt;
@@ -301,7 +301,7 @@ that looks at the end of the filename (e.g., endswith ".log") to make sure its a
     <tag>security</tag>
   </rule>
   <rule key='WEAK_TRUST_MANAGER' priority='MAJOR'>
-    <name>Security - TrustManager Implementation Empty</name>
+    <name>Security - TrustManager implementation empty</name>
     <configKey>WEAK_TRUST_MANAGER</configKey>
     <description>&lt;p&gt;Empty TrustManager implementations are often used to connect easily to a host that is not signed by a root
 &lt;a href="http://en.wikipedia.org/wiki/Certificate_authority"&gt;certificate authority&lt;/a&gt;. As a consequence, this is vulnerable to
@@ -311,7 +311,7 @@ since the client will trust any certificate.
 &lt;p&gt;
 A TrustManager allowing specific certificates (based on a truststore for example) should be built.
 Detailed information for a proper implementation is at:
-&lt;a href="http://stackoverflow.com/a/6378872/89769"&gt;[1]&lt;/a&gt;
+&lt;a href="http://stackoverflow.com/a/6378872/89769"&gt;[1]&lt;/a&gt; 
 &lt;a href="http://stackoverflow.com/a/5493452/89769"&gt;[2]&lt;/a&gt;
 &lt;/p&gt;
 &lt;br/&gt;
@@ -327,7 +327,7 @@ Detailed information for a proper implementation is at:
     <tag>security</tag>
   </rule>
   <rule key='JAXWS_ENDPOINT' priority='INFO'>
-    <name>Security - Found JAX-WS SOAP Endpoint</name>
+    <name>Security - Found JAX-WS SOAP endpoint</name>
     <configKey>JAXWS_ENDPOINT</configKey>
     <description>&lt;p&gt;This method is part of a SOAP Web Service (JSR224).&lt;/p&gt;
 &lt;p&gt;
@@ -349,7 +349,7 @@ Detailed information for a proper implementation is at:
     <tag>security</tag>
   </rule>
   <rule key='JAXRS_ENDPOINT' priority='INFO'>
-    <name>Security - Found JAX-RS REST Endpoint</name>
+    <name>Security - Found JAX-RS REST endpoint</name>
     <configKey>JAXRS_ENDPOINT</configKey>
     <description>&lt;p&gt;This method is part of a REST Web Service (JSR311).&lt;/p&gt;
 &lt;p&gt;
@@ -376,10 +376,10 @@ Detailed information for a proper implementation is at:
     <tag>security</tag>
   </rule>
   <rule key='TAPESTRY_ENDPOINT' priority='INFO'>
-    <name>Security - Found Tapestry Page</name>
+    <name>Security - Found Tapestry page</name>
     <configKey>TAPESTRY_ENDPOINT</configKey>
-    <description>&lt;p&gt;A Tapestry endpoint was discovered at application startup. Tapestry apps are structured with a backing Java class and a corresponding
-Tapestry Markup Language page (a .tml file) for each page. When a request is received, the GET/POST parameters are mapped to specific
+    <description>&lt;p&gt;A Tapestry endpoint was discovered at application startup. Tapestry apps are structured with a backing Java class and a corresponding 
+Tapestry Markup Language page (a .tml file) for each page. When a request is received, the GET/POST parameters are mapped to specific 
 inputs in the backing Java class. The mapping is either done with fieldName:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
     [...]
@@ -398,7 +398,7 @@ inputs in the backing Java class. The mapping is either done with fieldName:&lt;
     [...]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The page is mapped to the view &lt;code&gt;[/resources/package/PageName].tml.&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Each Tapestry page in this application should be researched to make sure all inputs that are automatically
+&lt;p&gt;Each Tapestry page in this application should be researched to make sure all inputs that are automatically 
 mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -410,11 +410,11 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
     <tag>security</tag>
   </rule>
   <rule key='WICKET_ENDPOINT' priority='INFO'>
-    <name>Security - Found Wicket Page</name>
+    <name>Security - Found Wicket WebPage</name>
     <configKey>WICKET_ENDPOINT</configKey>
-    <description>&lt;p&gt;This class represents a Wicket WebPage. Input is automatically read from a PageParameters instance passed to the constructor.
+    <description>&lt;p&gt;This class represents a Wicket WebPage. Input is automatically read from a PageParameters instance passed to the constructor. 
 The current page is mapped to the view [/package/WebPageName].html.&lt;/p&gt;
-&lt;p&gt;Each Wicket page in this application should be researched to make sure all inputs that are automatically
+&lt;p&gt;Each Wicket page in this application should be researched to make sure all inputs that are automatically 
 mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -426,7 +426,7 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
     <tag>security</tag>
   </rule>
   <rule key='WEAK_MESSAGE_DIGEST' priority='MAJOR'>
-    <name>Security - MessageDigest Is Weak</name>
+    <name>Security - Message digest is weak</name>
     <configKey>WEAK_MESSAGE_DIGEST</configKey>
     <description>&lt;p&gt;The algorithm used is not a recommended MessageDigest.&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST&lt;/a&gt; recommends the use of SHA-1, SHA-224*, SHA-256, SHA-384, SHA-512, SHA-512/224, or SHA-512/256.&lt;/p&gt;
@@ -444,7 +444,7 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
     <tag>security</tag>
   </rule>
   <rule key='CUSTOM_MESSAGE_DIGEST' priority='MAJOR'>
-    <name>Security - MessageDigest Is Custom</name>
+    <name>Security - Message digest is custom</name>
     <configKey>CUSTOM_MESSAGE_DIGEST</configKey>
     <description>&lt;p&gt;Implementing a custom MessageDigest is error-prone.&lt;/p&gt;
 &lt;p&gt;&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST&lt;/a&gt; recommends the use of SHA-1, SHA-224*, SHA-256, SHA-384, SHA-512, SHA-512/224, or SHA-512/256.&lt;/p&gt;
@@ -479,7 +479,7 @@ sha256Digest.update(password.getBytes());&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='FILE_UPLOAD_FILENAME' priority='INFO'>
-    <name>Security - Tainted Filename Read</name>
+    <name>Security - Tainted filename read</name>
     <configKey>FILE_UPLOAD_FILENAME</configKey>
     <description>&lt;p&gt;The filename provided by the FileUpload API can be tampered with by the client to reference unauthorized files.&lt;/p&gt;
 &lt;p&gt;For example:&lt;/p&gt;
@@ -487,8 +487,8 @@ sha256Digest.update(password.getBytes());&lt;/pre&gt;
 &lt;li&gt;&lt;code&gt;"../../../config/overide_file"&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;"shell.jsp\u0000expected.gif"&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Therefore, such values should not be passed directly to the filesystem API. If acceptable, the application should generate its
-own file names and use those. Otherwise, the provided filename should be properly validated to ensure it's properly structured,
+&lt;p&gt;Therefore, such values should not be passed directly to the filesystem API. If acceptable, the application should generate its 
+own file names and use those. Otherwise, the provided filename should be properly validated to ensure it's properly structured, 
 contains no unauthorized path characters (e.g., / \), and refers to an authorized file.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -509,17 +509,17 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
     <name>Security - Regex DOS (ReDOS)</name>
     <configKey>REDOS</configKey>
     <description>&lt;p&gt;
-    Regular expressions (regexs) are frequently subject to Denial of Service (DOS) attacks (called ReDOS). This is due to the fact that regex engines
+    Regular expressions (regexs) are frequently subject to Denial of Service (DOS) attacks (called ReDOS). This is due to the fact that regex engines 
     may take a large amount of time when analyzing certain strings, depending on how the regex is defined.
 &lt;p&gt;
-    For example, for the regex: &lt;b&gt;^(a+)+$&lt;/b&gt;, the input "&lt;code&gt;aaaaaaaaaaaaaaaaX&lt;/code&gt;" will cause the regex engine to analyze 65536
+    For example, for the regex: &lt;b&gt;^(a+)+$&lt;/b&gt;, the input "&lt;code&gt;aaaaaaaaaaaaaaaaX&lt;/code&gt;" will cause the regex engine to analyze 65536 
 different paths.&lt;sup&gt;[1] Example taken from OWASP references&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;
-Therefore, it is possible that a single request may cause a large amount of computation on the server side.
-The problem with this regex, and others like it, is that there are two different ways the same input character can be accepted by the
-Regex due to the + (or a *) inside the parenthesis, and the + (or a *) outside the parenthesis. The way this is written, either + could
-consume the character 'a'. To fix this, the regex should be rewritten to eliminate the ambiguity. For example, this could simply be
-rewritten as: &lt;b&gt;^a+$&lt;/b&gt;, which is presumably what the author meant anyway (any number of a's). Assuming that's what the original
+Therefore, it is possible that a single request may cause a large amount of computation on the server side. 
+The problem with this regex, and others like it, is that there are two different ways the same input character can be accepted by the 
+Regex due to the + (or a *) inside the parenthesis, and the + (or a *) outside the parenthesis. The way this is written, either + could 
+consume the character 'a'. To fix this, the regex should be rewritten to eliminate the ambiguity. For example, this could simply be 
+rewritten as: &lt;b&gt;^a+$&lt;/b&gt;, which is presumably what the author meant anyway (any number of a's). Assuming that's what the original 
 regex meant, this new regex can be evaluated quickly, and is not subject to ReDOS.
 &lt;/p&gt;
 &lt;br/&gt;
@@ -533,7 +533,7 @@ regex meant, this new regex can be evaluated quickly, and is not subject to ReDO
     <tag>security</tag>
   </rule>
   <rule key='XXE_SAXPARSER' priority='CRITICAL'>
-    <name>Security - XML Parsing Vulnerable to XXE (SAXParser)</name>
+    <name>Security - XML parsing vulnerable to XXE (SAXParser)</name>
     <configKey>XXE_SAXPARSER</configKey>
     <description>&lt;!--XXE_GENERIC_START--&gt;
 &lt;h3&gt;Attack&lt;/h3&gt;
@@ -613,7 +613,7 @@ parser.parse(inputStream, customHandler);&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='XXE_XMLREADER' priority='CRITICAL'>
-    <name>Security - XML Parsing Vulnerable to XXE (XMLReader)</name>
+    <name>Security - XML parsing vulnerable to XXE (XMLReader)</name>
     <configKey>XXE_XMLREADER</configKey>
     <description>&lt;!--XXE_GENERIC_START--&gt;
 &lt;h3&gt;Attack&lt;/h3&gt;
@@ -693,7 +693,7 @@ reader.parse(new InputSource(inputStream));&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='XXE_DOCUMENT' priority='CRITICAL'>
-    <name>Security - XML Parsing Vulnerable to XXE (DocumentBuilder)</name>
+    <name>Security - XML parsing vulnerable to XXE (DocumentBuilder)</name>
     <configKey>XXE_DOCUMENT</configKey>
     <description>&lt;!--XXE_GENERIC_START--&gt;
 &lt;h3&gt;Attack&lt;/h3&gt;
@@ -796,25 +796,25 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
     <tag>security</tag>
   </rule>
   <rule key='STRUTS1_ENDPOINT' priority='INFO'>
-    <name>Security - Found Struts 1 Action</name>
+    <name>Security - Found Struts 1 endpoint</name>
     <configKey>STRUTS1_ENDPOINT</configKey>
     <description>&lt;p&gt;This class is a Struts 1 Action.&lt;/p&gt;
-&lt;p&gt;Once a request is routed to this controller, a Form object will automatically be instantiated that contains the HTTP parameters.
+&lt;p&gt;Once a request is routed to this controller, a Form object will automatically be instantiated that contains the HTTP parameters. 
 The use of these parameters should be reviewed to make sure they are used safely.&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
   <rule key='STRUTS2_ENDPOINT' priority='INFO'>
-    <name>Security - Found Struts 2 Endpoint</name>
+    <name>Security - Found Struts 2 endpoint</name>
     <configKey>STRUTS2_ENDPOINT</configKey>
     <description>&lt;p&gt;In Struts 2, the endpoints are Plain Old Java Objects (POJOs) which means no Interface/Class needs to be implemented/extended.&lt;/p&gt;
 &lt;p&gt;When a request is routed to its controller (like the selected class), the supplied HTTP parameters are automatically mapped to setters for
-the class. Therefore, all setters of this class should be considered as untrusted input even if the form doesn't include those values.
+the class. Therefore, all setters of this class should be considered as untrusted input even if the form doesn't include those values. 
 An attacker can simply provide additional values in the request, and they will be set in the object anyway, as long as that object has
 such a setter. The use of these parameters should be reviewed to make sure they are used safely.&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
   <rule key='SPRING_ENDPOINT' priority='INFO'>
-    <name>Security - Found Spring Endpoint</name>
+    <name>Security - Found Spring endpoint</name>
     <configKey>SPRING_ENDPOINT</configKey>
     <description>&lt;p&gt;This class is a Spring Controller. All methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; are reachable remotely.
 This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.&lt;/p&gt;</description>
@@ -1152,10 +1152,99 @@ public void parseExpressionInterface(Person personObj,String property) {
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='HTTP_RESPONSE_SPLITTING' priority='INFO'>
+    <name>Security - Potential HTTP Response Splitting</name>
+    <configKey>HTTP_RESPONSE_SPLITTING</configKey>
+    <description>&lt;p&gt;
+    When an HTTP request contains unexpected CR and LF characters, the server may respond with an output stream
+    that is interpreted as two different HTTP responses (instead of one).
+    An attacker can control the second response and mount attacks such as cross-site scripting and cache poisoning attacks.
+    According to OWASP, the issue has been fixed in virtually all modern Java EE application servers, but it is still better to validate the input.
+    If you are concerned about this risk, you should test on the platform of concern to see
+    if the underlying platform allows for CR or LF characters to be injected into headers.
+    This weakness is reported with lower priority than SQL injection etc.,
+    if you are using a vulnerable platform, please check low-priority warnings too.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;String author = request.getParameter(AUTHOR_PARAMETER);
+// ...
+Cookie cookie = new Cookie("author", author);
+response.addCookie(cookie);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://www.owasp.org/index.php/HTTP_Response_Splitting"&gt;OWASP: HTTP Response Splitting&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/113.html"&gt;CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')&lt;/a&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/93.html"&gt;CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='CRLF_INJECTION_LOGS' priority='INFO'>
+    <name>Security - Potential CRLF Injection for logs</name>
+    <configKey>CRLF_INJECTION_LOGS</configKey>
+    <description>&lt;p&gt;
+    When data from untusted source are put into a logger and not neutralized correctly,
+    an attacker could forge log entries or include malicious content.
+    Inserted false entries could be used to skew statistics, distract the administrator
+    or even to implicate another party in the commission of a malicious act.
+    If the log file is processed automatically, the attacker can render the file unusable
+    by corrupting the format of the file or injecting unexpected characters.
+    An attacker may also inject code or other commands into the log file and take advantage
+    of a vulnerability in the log processing utility (e.g. command injection or XSS).
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;String val = request.getParameter("val");
+try {
+    number = Integer.parseInt(val);
+} catch (NumberFormatException) {
+    log.info("Failed to parse val = " + val);
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/117.html"&gt;CWE-117: Improper Output Neutralization for Logs&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/93.html"&gt;CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='EXTERNAL_CONFIG_CONTROL' priority='INFO'>
+    <name>Security - Potential external control of configuration</name>
+    <configKey>EXTERNAL_CONFIG_CONTROL</configKey>
+    <description>&lt;p&gt;
+    Allowing external control of system settings can disrupt service or cause an application
+    to behave in unexpected, and potentially malicious ways. 
+    An attacker could cause an error by providing a nonexistent catalog name
+    or connect to an unauthorized portion of the database.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;conn.setCatalog(request.getParameter("catalog"));&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/15.html"&gt;CWE-15: External Control of System or Configuration Setting&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='BAD_HEXA_CONVERSION' priority='MAJOR'>
     <name>Security - Bad hexadecimal concatenation</name>
     <configKey>BAD_HEXA_CONVERSION</configKey>
-    <description>&lt;p&gt;When converting a byte array containing a hash signature to a human readable string, a conversion mistake can be made if
+    <description>&lt;p&gt;When converting a byte array containing a hash signature to a human readable string, a conversion mistake can be made if 
 the array is read byte by byte. The following sample illustrates the use of Integer.toHexString() which will trim any leading zeroes
 from each byte of the computed hash value.
 &lt;pre&gt;
@@ -1170,7 +1259,7 @@ for(byte b :resultBytes) {
 return stringBuilder.toString();&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-This mistake weakens the hash value computed since it introduces more collisions.
+This mistake weakens the hash value computed since it introduces more collisions. 
 For example, the hash values "0x0679" and "0x6709" would both output as "679" for the above function.
 &lt;/p&gt;
 
@@ -1188,7 +1277,7 @@ stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='HAZELCAST_SYMMETRIC_ENCRYPTION' priority='MAJOR'>
-    <name>Security - Hazelcast Symmetric Encryption</name>
+    <name>Security - Hazelcast symmetric encryption</name>
     <configKey>HAZELCAST_SYMMETRIC_ENCRYPTION</configKey>
     <description>&lt;p&gt;The network communications for Hazelcast is configured to use a symmetric cipher (probably DES or blowfish).&lt;/p&gt;
 &lt;p&gt;Those ciphers alone do not provide integrity or secure authentication. The use of asymmetric encryption is preferred.&lt;/p&gt;
@@ -1206,10 +1295,10 @@ stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='NULL_CIPHER' priority='MAJOR'>
-    <name>Security - NullCipher Unsafe</name>
+    <name>Security - NullCipher is insecure</name>
     <configKey>NULL_CIPHER</configKey>
     <description>&lt;p&gt;
-The NullCipher is rarely used intentionally in production applications. It implements the Cipher interface by returning ciphertext
+The NullCipher is rarely used intentionally in production applications. It implements the Cipher interface by returning ciphertext 
 identical to the supplied plaintext. In a few contexts, such as testing, a NullCipher may be appropriate.
 &lt;/p&gt;
 &lt;p&gt;
@@ -1269,10 +1358,10 @@ to do this correctly.
     <tag>security</tag>
   </rule>
   <rule key='DES_USAGE' priority='MAJOR'>
-    <name>Security - DES / DESede Unsafe</name>
+    <name>Security - DES/DESede is insecure</name>
     <configKey>DES_USAGE</configKey>
     <description>&lt;p&gt;
-DES and DESede (3DES) are not considered strong ciphers for modern applications. Currently, NIST recommends the
+DES and DESede (3DES) are not considered strong ciphers for modern applications. Currently, NIST recommends the 
 usage of AES block ciphers instead of DES/3DES.
 &lt;/p&gt;
 &lt;p&gt;
@@ -1299,7 +1388,7 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='RSA_NO_PADDING' priority='MAJOR'>
-    <name>Security - RSA NoPadding Unsafe</name>
+    <name>Security - RSA with no padding is insecure</name>
     <configKey>RSA_NO_PADDING</configKey>
     <description>&lt;p&gt;
 The software uses the RSA algorithm but does not incorporate Optimal Asymmetric Encryption Padding (OAEP), which might weaken the encryption.
@@ -1365,7 +1454,7 @@ certainly shared in open source. To be managed safely, passwords and secret keys
 SecretKeySpec spec = new SecretKeySpec(key, "AES");
 Cipher aes = Cipher.getInstance("AES");
 aes.init(Cipher.ENCRYPT_MODE, spec);
-return aesCipher.doFinal(secretData);&lt;/pre&gt;
+return aesCipher.doFinal(secretData);&lt;/pre&gt; 
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -1376,7 +1465,7 @@ return aesCipher.doFinal(secretData);&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='STRUTS_FORM_VALIDATION' priority='INFO'>
-    <name>Security - Struts Form Without Input Validation</name>
+    <name>Security - Struts Form without input validation</name>
     <configKey>STRUTS_FORM_VALIDATION</configKey>
     <description>&lt;p&gt;
 Form inputs should have minimal input validation. Preventive validation helps provide defense in depth against a variety of risks.
@@ -1407,7 +1496,7 @@ public class RegistrationForm extends ValidatorForm {
     <tag>security</tag>
   </rule>
   <rule key='XSS_REQUEST_WRAPPER' priority='MAJOR'>
-    <name>Security - XSSRequestWrapper is Weak XSS Protection</name>
+    <name>Security - XSSRequestWrapper is a weak XSS protection</name>
     <configKey>XSS_REQUEST_WRAPPER</configKey>
     <description>&lt;p&gt;
 An implementation of &lt;code&gt;HttpServletRequestWrapper&lt;/code&gt; called &lt;code&gt;XSSRequestWrapper&lt;/code&gt; was published through
@@ -1448,7 +1537,7 @@ the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet.
     <tag>security</tag>
   </rule>
   <rule key='BLOWFISH_KEY_SIZE' priority='MAJOR'>
-    <name>Security - Blowfish Usage with Weak Key Size</name>
+    <name>Security - Blowfish usage with short key</name>
     <configKey>BLOWFISH_KEY_SIZE</configKey>
     <description>&lt;p&gt;
 The Blowfish cipher supports keysizes from 32 bits to 448 bits. A small key size makes the ciphertext vulnerable to brute force attacks.
@@ -1479,9 +1568,9 @@ keyGen.init(128);&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='RSA_KEY_SIZE' priority='MAJOR'>
-    <name>Security - RSA Usage with Weak Key Size</name>
+    <name>Security - RSA usage with short key</name>
     <configKey>RSA_KEY_SIZE</configKey>
-    <description>&lt;p&gt;"RSA Laboratories currently recommends key sizes of 1024 bits for corporate use and 2048 bits for extremely valuable keys
+    <description>&lt;p&gt;"RSA Laboratories currently recommends key sizes of 1024 bits for corporate use and 2048 bits for extremely valuable keys 
 like the root key pair used by a certifying authority". &lt;sup&gt;[1]&lt;/sup&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
@@ -1558,52 +1647,6 @@ keyGen.initialize(2048);
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='XSS_JSP_PRINT' priority='CRITICAL'>
-    <name>Security - Potential XSS in JSP</name>
-    <configKey>XSS_JSP_PRINT</configKey>
-    <description>&lt;p&gt;NOTE: If you want this rule to work, you have to precompile your JSPs (which usually isn't done in most build environments)
-and then provide FindBugs the path information to the generated class files and the original JSPs themselves. If you are seeing
-findings for this rule, you know you have your environment set up properly. Also, this XSS in JSP rule looks for similar issues,
-but looks for them in a different way than the existing 'XSS: JSP reflected cross site scripting vulnerability' rule in FindBugs.&lt;/p&gt;
-&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
-&lt;/p&gt;
-&lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
-    &lt;pre&gt;&lt;%
-String taintedInput = (String) request.getAttribute("input");
-%&gt;
-[...]
-&lt;%= taintedInput %&gt;&lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
-    &lt;b&gt;Solution:&lt;/b&gt;
-    &lt;pre&gt;
-&lt;%
-String taintedInput = (String) request.getAttribute("input");
-%&gt;
-[...]
-&lt;%= Encode.forHtml(taintedInput) %&gt;
-    &lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
-HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
-which explains these defenses in significant detail.
-&lt;/p&gt;
-&lt;br/&gt;
-&lt;p&gt;
-&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
-&lt;/p&gt;</description>
-    <tag>owasp-a3</tag>
-    <tag>wasc</tag>
-    <tag>cwe</tag>
-    <tag>security</tag>
-  </rule>
   <rule key='XSS_SERVLET' priority='CRITICAL'>
     <name>Security - Potential XSS in Servlet</name>
     <configKey>XSS_SERVLET</configKey>
@@ -1627,11 +1670,11 @@ A potential XSS was found. It could be used to execute unwanted JavaScript in a 
 }&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
+The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider: 
 HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
 which explains these defenses in significant detail.
 &lt;/p&gt;
-&lt;p&gt;Note that this XSS in Servlet rule looks for similar issues, but looks for them in a different way than the existing
+&lt;p&gt;Note that this XSS in Servlet rule looks for similar issues, but looks for them in a different way than the existing 
 'XSS: Servlet reflected cross site scripting vulnerability' and 'XSS: Servlet reflected cross site scripting vulnerability in error page' rules in FindBugs.
 &lt;/p&gt;
 &lt;br/&gt;
@@ -1737,11 +1780,11 @@ public void encrypt(String message) throws Exception {
     <tag>security</tag>
   </rule>
   <rule key='ECB_MODE' priority='MAJOR'>
-    <name>Security - ECB Mode Unsafe</name>
+    <name>Security - ECB mode is insecure</name>
     <configKey>ECB_MODE</configKey>
-    <description>&lt;p&gt;An authentication cipher mode which provides better confidentiality of the encrypted data should be used instead of Electronic Codebook (ECB) mode,
-which does not provide good confidentiality. Specifically, ECB mode produces the same output for the same input each time. So,
-for example, if a user is sending a password, the encrypted value is the same each time. This allows an attacker to intercept
+    <description>&lt;p&gt;An authentication cipher mode which provides better confidentiality of the encrypted data should be used instead of Electronic Codebook (ECB) mode, 
+which does not provide good confidentiality. Specifically, ECB mode produces the same output for the same input each time. So, 
+for example, if a user is sending a password, the encrypted value is the same each time. This allows an attacker to intercept 
 and replay the data.&lt;/p&gt;
 &lt;p&gt;
 To fix this, something like Galois/Counter Mode (GCM) should be used instead.
@@ -1771,7 +1814,7 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='PADDING_ORACLE' priority='MAJOR'>
-    <name>Security - Cipher is Susceptible to Padding Oracle</name>
+    <name>Security - Cipher is susceptible to Padding Oracle</name>
     <configKey>PADDING_ORACLE</configKey>
     <description>&lt;p&gt;
     This specific mode of CBC with PKCS5Padding is susceptible to padding oracle attacks. An adversary could potentially decrypt the
@@ -1805,14 +1848,14 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='CIPHER_INTEGRITY' priority='MAJOR'>
-    <name>Security - Cipher With No Integrity</name>
+    <name>Security - Cipher with no integrity</name>
     <configKey>CIPHER_INTEGRITY</configKey>
     <description>&lt;p&gt;
-    The ciphertext produced is susceptible to alteration by an adversary. This mean that the cipher provides no way to detect that the
+    The ciphertext produced is susceptible to alteration by an adversary. This mean that the cipher provides no way to detect that the 
     data has been tampered with. If the ciphertext can be controlled by an attacker, it could be altered without detection.
 &lt;/p&gt;
 &lt;p&gt;
-    The solution is to used a cipher that includes a Hash based Message Authentication Code (HMAC) to sign the data. Combining a HMAC function to the
+    The solution is to used a cipher that includes a Hash based Message Authentication Code (HMAC) to sign the data. Combining a HMAC function to the 
     existing cipher is prone to error &lt;sup&gt;&lt;a href="http://www.thoughtcrime.org/blog/the-cryptographic-doom-principle/"&gt;[1]&lt;/a&gt;&lt;/sup&gt;. Specifically,
     it is always recommended that you be able to verify the HMAC first, and only if the data is unmodified, do you then perform any cryptographic
     functions on the data.
@@ -1854,7 +1897,7 @@ In the example solution above, the GCM mode introduces an HMAC into the resultin
     <tag>security</tag>
   </rule>
   <rule key='ESAPI_ENCRYPTOR' priority='INFO'>
-    <name>Security - Usage of ESAPI Encryptor</name>
+    <name>Security - Use of ESAPI Encryptor</name>
     <configKey>ESAPI_ENCRYPTOR</configKey>
     <description>&lt;p&gt;
     The ESAPI has a small history of vulnerabilities within the cryptography component. Here is a quick validation list to
@@ -1865,7 +1908,7 @@ In the example solution above, the GCM mode introduces an HMAC into the resultin
     This issue is corrected in ESAPI version 2.1.0. Versions &lt;= 2.0.1 are vulnerable to a MAC bypass (CVE-2013-5679).&lt;br/&gt;
 &lt;/p&gt;
 &lt;p&gt;
-    For Maven users, the plugin &lt;a href="http://mojo.codehaus.org/versions-maven-plugin/"&gt;versions&lt;/a&gt; can called using the
+    For Maven users, the plugin &lt;a href="http://mojo.codehaus.org/versions-maven-plugin/"&gt;versions&lt;/a&gt; can called using the 
     following command. The effective version of ESAPI will be available in the output.&lt;br/&gt;
     &lt;pre&gt;$ mvn versions:display-dependency-updates&lt;/pre&gt;
     &lt;br/&gt;Output:&lt;br/&gt;
@@ -1932,7 +1975,7 @@ Encryptor.cipher_modes.additional_allowed=&lt;/pre&gt;
     <tag>security</tag>
   </rule>
   <rule key='ANDROID_EXTERNAL_FILE_ACCESS' priority='MAJOR'>
-    <name>Security - External File Access (Android)</name>
+    <name>Security - External file access (Android)</name>
     <configKey>ANDROID_EXTERNAL_FILE_ACCESS</configKey>
     <description>&lt;p&gt;
     The application write data to external storage (potentially SD card). There are multiple security implication to this
@@ -2043,7 +2086,7 @@ sendBroadcast(v1);
     <tag>security</tag>
   </rule>
   <rule key='ANDROID_WORLD_WRITABLE' priority='MAJOR'>
-    <name>Security - World Writable File (Android)</name>
+    <name>Security - World writable file (Android)</name>
     <configKey>ANDROID_WORLD_WRITABLE</configKey>
     <description>&lt;p&gt;
     The file written in this context is using the creation mode &lt;code&gt;MODE_WORLD_READABLE&lt;/code&gt;. It might not be the
@@ -2084,7 +2127,7 @@ create on external storage. See references below for implementation guidelines.
     <tag>security</tag>
   </rule>
   <rule key='ANDROID_GEOLOCATION' priority='INFO'>
-    <name>Security - WebView with Geolocation Activated (Android)</name>
+    <name>Security - WebView with geolocation activated (Android)</name>
     <configKey>ANDROID_GEOLOCATION</configKey>
     <description>&lt;p&gt;
     It is suggest to ask the user for a confirmation about obtaining its geolocation.
@@ -2126,7 +2169,7 @@ webView.setWebChromeClient(new WebChromeClient() {
     <tag>security</tag>
   </rule>
   <rule key='ANDROID_WEB_VIEW_JAVASCRIPT' priority='INFO'>
-    <name>Security - WebView with JavaScript Enabled (Android)</name>
+    <name>Security - WebView with JavaScript enabled (Android)</name>
     <configKey>ANDROID_WEB_VIEW_JAVASCRIPT</configKey>
     <description>&lt;p&gt;
     Enabling JavaScript for the WebView means that it is now susceptible to XSS. The page render should be inspected
@@ -2165,10 +2208,10 @@ function updateDescription(newDescription) {
     <tag>security</tag>
   </rule>
   <rule key='ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE' priority='INFO'>
-    <name>Security - WebView with Javascript Interface (Android)</name>
+    <name>Security - WebView with JavaScript interface (Android)</name>
     <configKey>ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE</configKey>
     <description>&lt;p&gt;
-    The use Javascript Interface could expose the WebView to risky API. If an XSS is trigger in the WebView, the class
+    The use JavaScript Interface could expose the WebView to risky API. If an XSS is trigger in the WebView, the class
     could be call by the malicious JavaScript code.
 &lt;/p&gt;
 
@@ -2254,6 +2297,53 @@ cookie.setHttpOnly(true);
 &lt;a href="https://cwe.mitre.org/data/definitions/311.html"&gt;CWE-311: Missing Encryption of Sensitive Data&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SecureFlag"&gt;OWASP: Secure Flag&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.rapid7.com/db/vulnerabilities/http-cookie-secure-flag"&gt;Rapid7: Missing Secure Flag From SSL Cookie&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='OBJECT_DESERIALIZATION' priority='CRITICAL'>
+    <name>Security - Object deserialization is used in {0}.{1}</name>
+    <configKey>OBJECT_DESERIALIZATION</configKey>
+    <description>&lt;p&gt;
+    Object deserialization of untrusted data can lead to remote code execution, if there is a class in classpath allow
+    the trigger of malicious operation.
+&lt;/p&gt;
+&lt;p&gt;
+    Libraries developers tend to fix class that provided potential malicious trigger. Their are still classes that are
+    known to trigger Denial of Service&lt;sup&gt;[1]&lt;/sup&gt;.
+&lt;/p&gt;
+&lt;p&gt;
+    Deserialization is a sensible operation that has a great history of vulnerabilities. The web application might
+    become vulnerable has soon as a new vulnerability is found in the Java Virtual Machine&lt;sup&gt;[2] [3]&lt;/sup&gt;.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+public UserData deserializeObject(InputStream receivedFile) throws IOException, ClassNotFoundException {
+
+    try (ObjectInputStream in = new ObjectInputStream(receivedFile)) {
+        return (UserData) in.readObject();
+    }
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+Avoid deserializing object provided by remote users.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/502.html"&gt;CWE-502: Deserialization of Untrusted Data&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data"&gt;Deserialization of untrusted data&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.oracle.com/technetwork/java/seccodeguide-139067.html#8"&gt;Serialization and Deserialization &lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://github.com/frohoff/ysoserial"&gt;A proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization&lt;/a&gt;&lt;br/&gt;
+[1] &lt;a href="https://gist.github.com/coekie/a27cc406fc9f3dc7a70d"&gt;Example of Denial of Service using the class java.util.HashSet&lt;/a&gt;&lt;br/&gt;
+[2] &lt;a href="https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2015-2590"&gt;OpenJDK: Deserialization issue in ObjectInputStream.readSerialData() (CVE-2015-2590)&lt;/a&gt;&lt;br/&gt;
+[3] &lt;a href="https://www.rapid7.com/db/modules/exploit/multi/browser/java_calendar_deserialize"&gt;Rapid7: Sun Java Calendar Deserialization Privilege Escalation (CVE-2008-5353)&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>

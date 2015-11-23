@@ -56,9 +56,6 @@
     <Bug pattern="VO_VOLATILE_REFERENCE_TO_ARRAY"/>
   </Match>
   <Match>
-    <Bug pattern="XSS_REQUEST_PARAMETER_TO_JSP_WRITER"/>
-  </Match>
-  <Match>
     <Bug pattern="DM_NUMBER_CTOR"/>
   </Match>
   <Match>

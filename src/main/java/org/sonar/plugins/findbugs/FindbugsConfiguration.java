@@ -40,7 +40,6 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.plugins.findbugs.language.JavaByteCode;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
@@ -49,7 +48,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -120,7 +118,7 @@ public class FindbugsConfiguration implements BatchExtension {
 
   private Iterable<File> getSourceFiles() {
     FilePredicates pred = fileSystem.predicates();
-    return fileSystem.files(pred.and(pred.hasType(Type.MAIN), pred.hasLanguage(JavaByteCode.KEY)));
+    return fileSystem.files(pred.and(pred.hasType(Type.MAIN), pred.hasLanguage(Java.KEY)));
   }
 
   @VisibleForTesting

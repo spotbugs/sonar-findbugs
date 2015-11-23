@@ -35,17 +35,17 @@ import java.util.List;
  * By making this language, it avoid imposing the support for those derivative language for plugin that have focus
  * on Java.
  */
-public class JavaByteCode extends AbstractLanguage {
+public class Jsp extends AbstractLanguage {
 
     /**
      * Java key
      */
-    public static final String KEY = "javab";
+    public static final String KEY = "jsp";
 
     /**
      * Java name
      */
-    public static final String NAME = "Java Bytecode";
+    public static final String NAME = "JSP";
 
 
     /**
@@ -56,7 +56,7 @@ public class JavaByteCode extends AbstractLanguage {
     /**
      * Default Java files knows suffixes
      */
-    public static final String DEFAULT_FILE_SUFFIXES = ".java,.jav,.jsp"; //TODO: .groovy,.gsp,.scala,.scala.html
+    public static final String DEFAULT_FILE_SUFFIXES = ".jsp"; //TODO: .groovy,.gsp,.scala,.scala.html
 
     /**
      * Key of the java version used for sources
@@ -71,7 +71,7 @@ public class JavaByteCode extends AbstractLanguage {
     /**
      * Default constructor
      */
-    public JavaByteCode(Settings settings) {
+    public Jsp(Settings settings) {
         super(KEY, NAME);
         this.settings = settings;
     }
@@ -83,7 +83,7 @@ public class JavaByteCode extends AbstractLanguage {
      */
     @Override
     public String[] getFileSuffixes() {
-        String[] suffixes = filterEmptyStrings(settings.getStringArray(JavaByteCode.FILE_SUFFIXES_KEY));
+        String[] suffixes = filterEmptyStrings(settings.getStringArray(Jsp.FILE_SUFFIXES_KEY));
         if (suffixes.length == 0) {
             suffixes = StringUtils.split(DEFAULT_FILE_SUFFIXES, ",");
         }

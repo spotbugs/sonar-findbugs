@@ -29,7 +29,6 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
-import org.sonar.plugins.findbugs.language.JavaByteCode;
 import org.sonar.plugins.java.Java;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
@@ -69,10 +68,11 @@ public abstract class FindbugsTests {
     return activeRules;
   }
 
-  protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug) {
+  protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug,
+                                                           boolean findbugsJsp) {
     RulesProfile profile = RulesProfile.create();
     profile.setName("FindBugs");
-    profile.setLanguage(JavaByteCode.KEY);
+    profile.setLanguage(Java.KEY);
     RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
     if (findbugs) {
       for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY))) {
@@ -90,11 +90,17 @@ public abstract class FindbugsTests {
         profile.activateRule(rule, null);
       }
     }
+    if (findbugsJsp) {
+      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY))) {
+        rule.setRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
+        profile.activateRule(rule, null);
+      }
+    }
     return profile;
   }
 
   protected RulesProfile createRulesProfileWithActiveRules() {
-    return createRulesProfileWithActiveRules(true, false, false);
+    return createRulesProfileWithActiveRules(true, false, false, false);
   }
 
   private void assertSimilarXml(File expectedFile, String xml) throws SAXException, IOException {

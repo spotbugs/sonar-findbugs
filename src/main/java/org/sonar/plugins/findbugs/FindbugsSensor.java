@@ -32,7 +32,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
-import org.sonar.plugins.findbugs.language.JavaByteCode;
+import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
@@ -64,7 +64,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return fs.hasFiles(fs.predicates().hasLanguage(JavaByteCode.KEY)) || fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
+    return (fs.hasFiles(fs.predicates().hasLanguage(Java.KEY)) || fs.hasFiles(fs.predicates().hasLanguage(Jsp.KEY)))
       && (hasActiveFindbugsRules() || hasActiveFbContribRules() || hasActiveFindSecBugsRules());
   }
 
@@ -80,6 +80,10 @@ public class FindbugsSensor implements Sensor {
     return !profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY).isEmpty();
   }
 
+  private boolean hasActiveFindSecBugsJspRules() {
+    return !profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY).isEmpty();
+  }
+
   @Override
   public void analyse(Project project, SensorContext context) {
 
@@ -91,11 +95,13 @@ public class FindbugsSensor implements Sensor {
         rule = ruleFinder.findByKey(FbContribRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
         if (rule == null) {
           rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
-
           if (rule == null) {
-            // ignore violations from report, if rule not activated in Sonar
-            LOG.warn("Findbugs rule '{}' is not active in Sonar.", bugInstance.getType());
-            continue;
+            rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
+            if (rule == null) {
+              // ignore violations from report, if rule not activated in Sonar
+              LOG.warn("Findbugs rule '{}' is not active in Sonar.", bugInstance.getType());
+              continue;
+            }
           }
         }
       }
@@ -131,6 +137,8 @@ public class FindbugsSensor implements Sensor {
         insertIssue(rule, resource, line, longMessage);
         continue;
       }
+
+      LOG.warn("The class '"+className+"' could not be match to its original source file. It might be a dynamically generated class.");
     }
   }
 

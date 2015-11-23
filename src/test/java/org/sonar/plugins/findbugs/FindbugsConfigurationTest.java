@@ -32,7 +32,6 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.plugins.findbugs.language.JavaByteCode;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
@@ -123,7 +122,7 @@ public class FindbugsConfigurationTest {
   @Test
   public void should_set_source_files() throws IOException {
     File file = temp.newFile("MyClass.java");
-    fs.add(new DefaultInputFile(file.getPath()).setAbsolutePath(file.getAbsolutePath()).setType(Type.MAIN).setLanguage(JavaByteCode.KEY));
+    fs.add(new DefaultInputFile(file.getPath()).setAbsolutePath(file.getAbsolutePath()).setType(Type.MAIN).setLanguage(Java.KEY));
     Project findbugsProject = conf.getFindbugsProject();
 
     assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());

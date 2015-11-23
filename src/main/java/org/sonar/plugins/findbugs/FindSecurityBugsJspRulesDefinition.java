@@ -21,27 +21,21 @@ package org.sonar.plugins.findbugs;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
-import org.sonar.plugins.java.Java;
-import org.sonar.squidbridge.rules.ExternalDescriptionLoader;
-import org.sonar.squidbridge.rules.SqaleXmlLoader;
+import org.sonar.plugins.findbugs.language.Jsp;
 
-public final class FindbugsRulesDefinition implements RulesDefinition {
+public class FindSecurityBugsJspRulesDefinition implements RulesDefinition {
 
-  public static final String REPOSITORY_KEY = "findbugs";
-  public static final String REPOSITORY_NAME = "FindBugs";
+    public static final String REPOSITORY_KEY = "findsecbugs-jsp";
+    public static final String REPOSITORY_JSP_NAME = "Find Security Bugs (JSP)";
 
-  @Override
-  public void define(Context context) {
-    NewRepository repository = context
-      .createRepository(REPOSITORY_KEY, Java.KEY)
-      .setName(REPOSITORY_NAME);
+    @Override
+    public void define(Context context) {
+        NewRepository repositoryJsp = context
+                .createRepository(REPOSITORY_KEY, Jsp.KEY)
+                .setName(REPOSITORY_JSP_NAME);
 
-    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
-    ruleLoader.load(repository, FindbugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules.xml"), "UTF-8");
-    ExternalDescriptionLoader.loadHtmlDescriptions(repository, "/org/sonar/l10n/findbugs/rules/findbugs");
-    SqaleXmlLoader.load(repository, "/com/sonar/sqale/findbugs-model.xml");
-
-    repository.done();
-  }
-
+        RulesDefinitionXmlLoader ruleLoaderJsp = new RulesDefinitionXmlLoader();
+        ruleLoaderJsp.load(repositoryJsp, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-jsp.xml"), "UTF-8");
+        repositoryJsp.done();
+    }
 }

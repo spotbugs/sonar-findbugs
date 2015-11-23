@@ -1,0 +1,150 @@
+<rules><!-- This file is auto-generated. -->
+
+  <rule key="XSS_REQUEST_PARAMETER_TO_JSP_WRITER" priority='MAJOR'>
+    <priority>CRITICAL</priority>
+    <name><![CDATA[Security - JSP reflected cross site scripting vulnerability]]></name>
+    <configKey><![CDATA[XSS_REQUEST_PARAMETER_TO_JSP_WRITER]]></configKey>
+    <description>
+&lt;p&gt;This code directly writes an HTTP parameter to Servlet output, which allows for a reflected cross site scripting
+vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/Cross-site_scripting"&gt;http://en.wikipedia.org/wiki/Cross-site_scripting&lt;/a&gt;
+for more information.&lt;/p&gt;
+&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of cross site scripting.
+If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
+vulnerabilities that FindBugs doesn't report. If you are concerned about cross site scripting, you should seriously
+consider using a commercial static analysis or pen-testing tool.
+&lt;/p&gt;
+    </description>
+    <tag>owasp-a3</tag>
+    <tag>cwe</tag>
+  </rule>
+
+  <rule key='JSP_INCLUDE' priority='MAJOR'>
+    <name>Security - Dynamic JSP inclusion</name>
+    <configKey>JSP_INCLUDE</configKey>
+    <description>&lt;p&gt;The inclusion of JSP file allow the entry of dynamic value. It may allow an attacker to control the JSP page included.
+If this is the case, an attacker will try to include a file on disk that he controls. By including arbitrary files, the
+attacker gets the ability to execute any code.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+    &lt;pre&gt;&lt;jsp:include page="${param.secret_param}" /&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+    &lt;pre&gt;&lt;c:if test="${param.secret_param == 'page1'}"&gt;
+    &lt;jsp:include page="page1.jsp" /&gt;
+&lt;/c:if&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://resources.infosecinstitute.com/file-inclusion-attacks/"&gt;InfosecInstitute: File Inclusion Attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>wasc</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='JSP_SPRING_EVAL' priority='MAJOR'>
+    <name>Security - Dynamic variable in Spring expression</name>
+    <configKey>JSP_SPRING_EVAL</configKey>
+    <description>&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+    &lt;pre&gt;&lt;%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %&gt;
+
+&lt;spring:eval expression="${param.lang}" var="lang" /&gt;&lt;/pre&gt;
+    &lt;br&gt;
+    &lt;pre&gt;&lt;%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %&gt;
+
+&lt;spring:eval expression="'${param.lang}'=='fr'" var="languageIsFrench" /&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+    &lt;pre&gt;&lt;c:set var="lang" value="${param.lang}"/&gt;&lt;/pre&gt;
+    &lt;br/&gt;
+    &lt;pre&gt;&lt;c:set var="languageIsFrench" value="${param.lang == 'fr'}"/&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://resources.infosecinstitute.com/file-inclusion-attacks/"&gt;InfosecInstitute: File Inclusion Attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>wasc</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='JSP_JSTL_OUT' priority='MAJOR'>
+    <name>Security - Escaping of special XML characters is disabled</name>
+    <configKey>JSP_JSTL_OUT</configKey>
+    <description>&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+    &lt;pre&gt;&lt;%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %&gt;
+
+&lt;c:out value="${param.test_param}" escapeXml="false"/&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+    &lt;pre&gt;&lt;%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %&gt;
+
+&lt;c:out value="${param.test_param}"/&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/c/out.html"&gt;JSTL Javadoc: Out tag&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a3</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='XSS_JSP_PRINT' priority='MAJOR'>
+    <name>Security - Potential XSS in JSP</name>
+    <configKey>XSS_JSP_PRINT</configKey>
+    <description>&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+    &lt;pre&gt;&lt;%
+String taintedInput = (String) request.getAttribute("input");
+%&gt;
+[...]
+&lt;%= taintedInput %&gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+    &lt;pre&gt;
+&lt;%
+String taintedInput = (String) request.getAttribute("input");
+%&gt;
+[...]
+&lt;%= Encode.forHtml(taintedInput) %&gt;
+    &lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
+HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
+which explains these defenses in significant detail.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a3</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+
+</rules>
