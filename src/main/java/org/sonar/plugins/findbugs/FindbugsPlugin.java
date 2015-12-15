@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableList;
 import org.sonar.api.SonarPlugin;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.JspCodeColorizerFormat;
+import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 
 import java.util.List;
 
@@ -47,7 +48,8 @@ public class FindbugsPlugin extends SonarPlugin {
       FindbugsRulesDefinition.class,
       FbContribRulesDefinition.class,
       FindSecurityBugsRulesDefinition.class,
-      FindSecurityBugsJspRulesDefinition.class);
+      FindSecurityBugsJspRulesDefinition.class,
+      ByteCodeResourceLocator.class);
     return extensions.build();
   }
 

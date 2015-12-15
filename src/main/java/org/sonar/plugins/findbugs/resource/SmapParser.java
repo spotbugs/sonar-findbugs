@@ -19,7 +19,10 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +31,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * SMAPSourceDebugExtension.java - Parse source debug extensions and
+ * This class is a highly modified version of Michael Schierl's "SmapParser.java".
+ * It was test with Jetty and WebLogic SMAP.
+ *
+ * =======
+ *
+ * SmapParser.java - Parse source debug extensions and
  * enhance stack traces.
  *
  * Copyright (c) 2012 Michael Schierl
@@ -69,50 +77,73 @@ import java.util.regex.Pattern;
  *
  * @author Michael Schierl
  */
-public class SMAPSourceDebugExtension {
+public class SmapParser {
 
-
-    private final Map<Integer, FileInfo> fileinfo = new HashMap<Integer, FileInfo>();
-    private final Map<Integer, List<Integer>> reverseLineMapping = new HashMap<Integer, List<Integer>>();
+    private String javaFilename;
+    private final Map<Integer, FileInfo> fileinfo = new HashMap<>();
+    private final Map<Integer, int[]> java2jsp = new HashMap<>();
 
     private static final Pattern LINE_INFO_PATTERN = Pattern.compile("([0-9]+)(?:#([0-9]+))?(?:,([0-9]+))?:([0-9]+)(?:,([0-9]+))?");
 
-    public SMAPSourceDebugExtension(String value) {
-        String[] lines = value.split("\n");
-        if (!lines[0].equals("SMAP") || !lines[3].startsWith("*S ") || !lines[4].equals("*F"))
-            throw new IllegalArgumentException(value);
-//        generatedFileName = lines[1];
-//        firstStratum = lines[3].substring(3);
-        int idx = 5;
-        while (!lines[idx].startsWith("*")) {
-            String infoLine = lines[idx++], path = null;
-            if (infoLine.startsWith("+ ")) {
-                path = lines[idx++];
-                infoLine = infoLine.substring(2);
+    private static String getLine(BufferedReader reader) throws IOException {
+        String s = reader.readLine();
+        //System.out.println("))"+s);
+        if (s == null) {
+            throw new IOException("EOF parsing SMAP");
+        }
+        return s;
+    }
+
+    public SmapParser(String smap) throws IOException {
+        //BufferedReader is use to support multiple types of line return
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(smap.getBytes())));
+
+        String header = getLine(reader); //SMAP
+        javaFilename = getLine(reader); //*****.java
+        String jsp = getLine(reader); //JSP or alternative script
+        String stratum = getLine(reader); //*S JSP
+        String f = getLine(reader); //*F
+
+        if (!header.equals("SMAP") || !stratum.startsWith("*S ") || !f.equals("*F"))
+            throw new IllegalArgumentException("Unexpected SMAP file format");
+
+        //Parse the file info section (*F)
+        String line;
+        while((line = getLine(reader)) != null && !line.equals("*L")) {
+            String path = null;
+            if (line.startsWith("+ ")) {
+                path = getLine(reader);
+                line = line.substring(2);
             }
-            int pos = infoLine.indexOf(" ");
-            int fileNum = Integer.parseInt(infoLine.substring(0, pos));
-            String name = infoLine.substring(pos + 1);
+
+            int pos = line.indexOf(" ");
+            int fileNum = Integer.parseInt(line.substring(0, pos));
+            String name = line.substring(pos + 1);
             fileinfo.put(fileNum, new FileInfo(name, path == null ? name : path));
         }
-        if (lines[idx].equals("*L")) {
-            idx++;
-            int lastLFI = 0;
-            while (!lines[idx].startsWith("*")) {
-                Matcher m = LINE_INFO_PATTERN.matcher(lines[idx++]);
+
+        //Parse the line number mapping section (*L)
+        int lastLFI = 0;
+        while((line = getLine(reader)) != null && !line.equals("*E")) {
+
+            if (!line.startsWith("*")) {
+
+                Matcher m = LINE_INFO_PATTERN.matcher(line);
                 if (!m.matches())
-                    throw new IllegalArgumentException(lines[idx - 1]);
+                    throw new IllegalArgumentException(line);
+
                 int inputStartLine = Integer.parseInt(m.group(1));
                 int lineFileID = m.group(2) == null ? lastLFI : Integer.parseInt(m.group(2));
                 int repeatCount = m.group(3) == null ? 1 : Integer.parseInt(m.group(3));
                 int outputStartLine = Integer.parseInt(m.group(4));
                 int outputLineIncrement = m.group(5) == null ? 1 : Integer.parseInt(m.group(5));
+
                 for (int i = 0; i < repeatCount; i++) {
-                    List<Integer> inputMapping = Arrays.asList( lineFileID, inputStartLine + i);
+                    int[] inputMapping = new int[]{ lineFileID, inputStartLine + i};
                     int baseOL = outputStartLine + i * outputLineIncrement;
                     for (int ol = baseOL; ol < baseOL + outputLineIncrement; ol++) {
-                        if (!reverseLineMapping.containsKey(ol))
-                            reverseLineMapping.put(ol, inputMapping);
+                        if (!java2jsp.containsKey(ol))
+                            java2jsp.put(ol, inputMapping);
                     }
                 }
                 lastLFI = lineFileID;
@@ -120,13 +151,22 @@ public class SMAPSourceDebugExtension {
         }
     }
 
-    public List<Integer> getJspLineNumber(Integer lineNo) {
+    public String getJavaFilename() {
+        return javaFilename;
+    }
 
-        return reverseLineMapping.get(lineNo);
+    public String getScriptFilename() {
+        FileInfo f = fileinfo.get(0);
+        return f.name;
+    }
+
+    public int[] getScriptLineNumber(Integer lineNo) {
+        return java2jsp.get(lineNo);
     }
 
     private static class FileInfo {
-        public final String name, path;
+        public final String name;
+        public final String path;
 
         public FileInfo(String name, String path) {
             this.name = name;

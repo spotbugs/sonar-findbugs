@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
+import edu.umd.cs.findbugs.BugInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;
@@ -37,6 +38,7 @@ import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import java.io.File;
 import java.util.Collection;
 
 public class FindbugsSensor implements Sensor {
@@ -52,13 +54,13 @@ public class FindbugsSensor implements Sensor {
   private final ResourcePerspectives perspectives;
 
   public FindbugsSensor(RulesProfile profile, RuleFinder ruleFinder, ResourcePerspectives perspectives,
-    FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs) {
+    FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs, ByteCodeResourceLocator byteCodeResourceLocator) {
     this.profile = profile;
     this.ruleFinder = ruleFinder;
     this.perspectives = perspectives;
     this.executor = executor;
     this.javaResourceLocator = javaResourceLocator;
-    this.byteCodeResourceLocator = new ByteCodeResourceLocator();
+    this.byteCodeResourceLocator = byteCodeResourceLocator;
     this.fs = fs;
   }
 
@@ -128,7 +130,8 @@ public class FindbugsSensor implements Sensor {
       resource = byteCodeResourceLocator.findTemplateFile(className, project);
       if (resource != null) {
         if(resource.getPath().endsWith(".jsp")) {
-          Integer jspLine = byteCodeResourceLocator.findJspLine(className, line, javaResourceLocator);
+          File classFile = findOriginalClassForBug(bugInstance.getClassName());
+          Integer jspLine = byteCodeResourceLocator.findJspLine(className, line, javaResourceLocator, classFile);
           line = jspLine == null ?  1 : jspLine;
         }
         else {
@@ -152,5 +155,27 @@ public class FindbugsSensor implements Sensor {
       }
       issuable.addIssue(builder.build());
     }
+  }
+
+  /**
+   *
+   * @param className Class name
+   * @return File handle of the original class file analyzed
+   */
+  private File findOriginalClassForBug(String className) {
+    String classFile = className.replaceAll("\\.","/").concat(".class");
+
+    for(File classPath : javaResourceLocator.classpath()) {
+      if(!classPath.isDirectory()) {
+        continue;
+      }
+
+      File testClassFile = new File(classPath, classFile);
+      if(testClassFile.exists()) {
+        return testClassFile;
+      }
+    }
+
+    return null;
   }
 }

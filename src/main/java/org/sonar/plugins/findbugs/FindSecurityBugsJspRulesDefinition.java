@@ -23,6 +23,11 @@ import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.findbugs.language.Jsp;
 
+/**
+ * This RulesDefinition build a separate repository from the FindSecurityBugsRulesDefinition to allow a separate ruleset
+ * for JSP language.
+ * @see FindSecurityBugsRulesDefinition
+ */
 public class FindSecurityBugsJspRulesDefinition implements RulesDefinition {
 
     public static final String REPOSITORY_KEY = "findsecbugs-jsp";

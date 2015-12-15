@@ -210,9 +210,7 @@ public class FindbugsExecutor implements BatchExtension {
       try {
         engine.execute();
         return null;
-      } catch (InterruptedException e) {
-        throw Throwables.propagate(e);
-      } catch (IOException e) {
+      } catch (InterruptedException | IOException e) {
         throw Throwables.propagate(e);
       } finally {
         engine.dispose();

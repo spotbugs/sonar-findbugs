@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
+import org.sonar.plugins.findbugs.ReportedBug;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -34,15 +35,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utility method related to mapped class name to various resources and extracting addition information.
+ */
 public class ByteCodeResourceLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
     /**
-     * JSP compiler choose an arbitrary package name when converting JSP files to classes files
+     * Find the file system location of a given class name.<br/>
+     * (ie : <code>test.SomeClass</code> ->  <code>src/main/java/test/SomeClass.java</code>)
+     *
+     * @param className Class name to look for
+     * @param project Sonar roject information which contains source locations
+     * @return Java source file that conrespond to the class name specified.
      */
-    private static final String[] KNOWN_JSP_PACKAGES = {"jsp/", "org/apache/jsp/", "jsp_servlet/"};
-
     public Resource findJavaClassFile(String className, Project project) {
         for(File sourceDir : project.getFileSystem().getSourceDirs()) {
             File potentialFile = new File(sourceDir, className.replaceAll("\\.","/")+".java");
@@ -54,57 +61,104 @@ public class ByteCodeResourceLocator {
         return null;
     }
 
+    /**
+     * JSP files are compile to class with pseudo packages and class name that vary based on the compiler used.
+     * Multiples patterns are test against the available sources files.<br/>
+     * (ie : <code>test.index_jsp</code> ->  <code>src/main/webapp/test/index.jsp</code>)
+     * <br/>
+     * Their is a certain level of guessing since their could always be a class following the same pattern of colliding
+     * precompiled jsp. (same pseudo package, same class format, etc.)
+     *
+     * @param className Class name of the precompiled jsp
+     * @param project Sonar roject information which contains source locations
+     * @return The
+     */
     public Resource findTemplateFile(String className, Project project) {
-        if(className.endsWith("_jsp")) {
+        List<String> potentialJspFilenames = new ArrayList<>();
+
+
+        //Weblogic APPC precompiled form
+        //Expected class name: "jsp_servlet._folder1._folder2.__helloworld"
+        if(className.startsWith("jsp_servlet")) {
+            String jspFile = className.substring(11).replaceFirst("\\.__([^\\.]+)$", "/$1\\.jsp").replace("._", "/");
+            potentialJspFilenames.add(jspFile);
+        }
+        //Jetty and Tomcat JSP precompiled form
+        //Expected class name: "jsp.folder1.folder2.hello_005fworld_jsp"
+        if (className.endsWith("_jsp")) {
             String jspFileFromClass = className.replaceAll("\\.", "/").replaceAll("_005f", "_").replaceAll("_jsp", ".jsp");
-            List<String> potentialJspFilenames = new ArrayList<>();
+
             potentialJspFilenames.add(jspFileFromClass);
 
-            for(String packageName : KNOWN_JSP_PACKAGES) {
+            for(String packageName : Arrays.asList("jsp/", "org/apache/jsp/")) {
                 if(jspFileFromClass.startsWith(packageName))
                     potentialJspFilenames.add(jspFileFromClass.substring(packageName.length()));
             }
+        }
 
-            //Source directories will include typically : /src/main/java and /src/main/webapp
-            for(File sourceDir : project.getFileSystem().getSourceDirs()) {
-                for(String jspFilename : potentialJspFilenames) {
+        //Source directories will include typically : /src/main/java and /src/main/webapp
+        for(File sourceDir : project.getFileSystem().getSourceDirs()) {
+            for(String jspFilename : potentialJspFilenames) {
 
-                    File jspFile = new File(sourceDir, jspFilename);
-                    if(jspFile.exists()) {
-                        org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(jspFile, project);
-                        return file;
-                    }
+                File jspFile = new File(sourceDir, jspFilename);
+                if(jspFile.exists()) {
+                    org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(jspFile, project);
+                    return file;
                 }
             }
-            LOG.warn("The source file for " + jspFileFromClass + " (" + className + ") was not found.");
         }
         return null;
     }
 
-    public Integer findJspLine(String className, int originalLine, JavaResourceLocator javaResourceLocator) {
-        for(File path : javaResourceLocator.classpath()) { //Include classes directories and jars
-            if(path.isDirectory()) { //Skip the jars
-                String relativeSmapFile = className.replaceAll("\\.","/")+".class.smap";
-                File smapFile = new File(path, relativeSmapFile);
-                if(smapFile.exists()) {
-                    try {
-                        InputStream smapInputStream = new FileInputStream(smapFile);
-                        SMAPSourceDebugExtension debugExtension = new SMAPSourceDebugExtension(IOUtils.toString(smapInputStream));
-                        List<Integer> jspLines= debugExtension.getJspLineNumber(originalLine);
-                        if(jspLines != null) {
-                            for(Integer l : jspLines) {
-                                if(l != 0) {
-                                    return l;
-                                }
-                            }
-                        }
-                    }
-                    catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+    /**
+     * Map Java line number to JSP line number based on SMAP
+     *
+     * The smap can be either embedded in the class file or alternatively place in separate file.
+     *
+     * @param className Class name
+     * @param originalLine Line of code of the auto-generated Java line (.jsp -> .java -> .class)
+     * @param javaResourceLocator Locator that can enumerate folders containing classes
+     * @param classFile (Optional)
+     * @return JSP line number
+     */
+    public Integer findJspLine(String className, int originalLine, JavaResourceLocator javaResourceLocator,
+                               File classFile) {
+        //Extract the SMAP (JSR45) from the class file (SourceDebugExtension section)
+        try (InputStream in = new FileInputStream(classFile)) {
+            DebugExtensionExtractor debug = new DebugExtensionExtractor();
+            return getJspLineNumberFromSmap(debug.getDebugExtFromClass(in), originalLine);
+        }
+        catch (IOException e) {
+            LOG.warn("An error occurs while opening classfile : " + classFile.getPath());
+        }
+        LOG.debug("No smap file found for the class: " + className);
+
+        //Extract the SMAP (JSR45) from the separated smap file
+        File smapFile = new File(classFile.getPath()+".smap");
+        if(smapFile.exists()) {
+            try (InputStream smapInputStream = new FileInputStream(smapFile)) {
+                return getJspLineNumberFromSmap(IOUtils.toString(smapInputStream), originalLine);
+            }
+            catch (IOException e) {
+                LOG.debug("Unable to open smap file : " + smapFile.getAbsolutePath());
+                throw new RuntimeException(e);
             }
         }
+
+        LOG.debug("No smap mapping found.");
         return null; //No smap file is present.
+    }
+
+    /**
+     *
+     * @param smap SMAP content (See smap.txt sample in test directories)
+     * @param originalLine Java source code line number
+     * @return JSP line number
+     * @throws IOException
+     */
+    private int getJspLineNumberFromSmap(String smap, Integer originalLine) throws IOException {
+        SmapParser parser = new SmapParser(smap);
+        int[] mapping = parser.getScriptLineNumber(originalLine);
+        return mapping[1];
     }
 }
