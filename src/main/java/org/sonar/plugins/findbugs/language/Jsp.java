@@ -34,12 +34,12 @@ import java.util.List;
 public class Jsp extends AbstractLanguage {
 
     /**
-     * Java key
+     * JSP key
      */
     public static final String KEY = "jsp";
 
     /**
-     * Java name
+     * JSP language name (Acronym chosen over "JavaServer Pages" to avoid visual glitch)
      */
     public static final String NAME = "JSP";
 
@@ -47,17 +47,12 @@ public class Jsp extends AbstractLanguage {
     /**
      * Key of the file suffix parameter
      */
-    public static final String FILE_SUFFIXES_KEY = "sonar.javab.file.suffixes";
+    public static final String FILE_SUFFIXES_KEY = "sonar.jsp.file.suffixes";
 
     /**
      * Default Java files knows suffixes
      */
-    public static final String DEFAULT_FILE_SUFFIXES = ".jsp"; //TODO: .groovy,.gsp,.scala,.scala.html
-
-    /**
-     * Key of the java version used for sources
-     */
-    public static final String SOURCE_VERSION = "sonar.javab.source";
+    public static final String DEFAULT_FILE_SUFFIXES = ".jsp";
 
     /**
      * Settings of the plugin.
@@ -79,7 +74,7 @@ public class Jsp extends AbstractLanguage {
      */
     @Override
     public String[] getFileSuffixes() {
-        String[] suffixes = filterEmptyStrings(settings.getStringArray(Jsp.FILE_SUFFIXES_KEY));
+        String[] suffixes = filterEmptyStrings(settings.getStringArray(FILE_SUFFIXES_KEY));
         if (suffixes.length == 0) {
             suffixes = StringUtils.split(DEFAULT_FILE_SUFFIXES, ",");
         }

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import edu.umd.cs.findbugs.BugInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.Sensor;

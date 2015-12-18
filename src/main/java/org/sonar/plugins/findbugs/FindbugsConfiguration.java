@@ -78,17 +78,17 @@ public class FindbugsConfiguration implements BatchExtension {
   public edu.umd.cs.findbugs.Project getFindbugsProject() throws IOException {
     edu.umd.cs.findbugs.Project findbugsProject = new edu.umd.cs.findbugs.Project();
 
-    for (File file : getSourceFiles()) {
+    /*for (File file : getSourceFiles()) {
       if(FilenameUtils.getExtension(file.getName()).equals("java")) {
         findbugsProject.addFile(file.getCanonicalPath());
       }
-    }
+    }*/
 
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
       //Will capture additional classes including precompiled JSP
-      if(file.getName().endsWith("classes")) { // will include "/target/classes" and other non-standard folders
+      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
         classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
       }
 

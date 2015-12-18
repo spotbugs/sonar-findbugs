@@ -120,16 +120,6 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
-  public void should_set_source_files() throws IOException {
-    File file = temp.newFile("MyClass.java");
-    fs.add(new DefaultInputFile(file.getPath()).setAbsolutePath(file.getAbsolutePath()).setType(Type.MAIN).setLanguage(Java.KEY));
-    Project findbugsProject = conf.getFindbugsProject();
-
-    assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
-    conf.stop();
-  }
-
-  @Test
   public void should_set_class_path() throws IOException {
     File classpath = temp.newFolder();
     when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));

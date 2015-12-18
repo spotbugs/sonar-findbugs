@@ -22,9 +22,9 @@ package org.sonar.plugins.findbugs.resource;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.BatchExtension;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
-import org.sonar.plugins.findbugs.ReportedBug;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -38,7 +38,8 @@ import java.util.List;
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
  */
-public class ByteCodeResourceLocator {
+public class ByteCodeResourceLocator implements BatchExtension {
+
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
