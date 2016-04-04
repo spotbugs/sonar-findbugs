@@ -2,11 +2,11 @@ Sonar Findbugs
 ==========
 
 ## Description / Features
-This plugin requires the (Java Plugin)[http://docs.sonarqube.org/display/PLUG/Java+Plugin], and uses (FindBugs)[http://findbugs.sourceforge.net/], (fb-contrib)[http://fb-contrib.sourceforge.net/] and (Find Security Bugs)[http://h3xstream.github.io/find-sec-bugs/] to provide coding rules.
+This plugin requires the [Java Plugin](http://docs.sonarqube.org/display/PLUG/Java+Plugin), and uses [FindBugs](http://findbugs.sourceforge.net/), [fb-contrib](http://fb-contrib.sourceforge.net/) and [Find Security Bugs](http://h3xstream.github.io/find-sec-bugs/) to provide coding rules.
 
 Since version 3.0, the plugin embed FindBugs 3.0.0 which supports analysis of Java 8 bytecode but requires Java 1.7 to run (see Compatibility section)
 
-A majority of the FindBugs rules have been rewritten in the Java plugin. Rewritten rules are marked "Deprecated" in the FindBugs plugin, but a (concise summary of replaced rules)[http://dist.sonarsource.com/reports/coverage/findbugs.html] is available.
+A majority of the FindBugs rules have been rewritten in the Java plugin. Rewritten rules are marked "Deprecated" in the FindBugs plugin, but a [concise summary of replaced rules](http://dist.sonarsource.com/reports/coverage/findbugs.html) is available.
 
 ## Usage
 In the quality profile, activate some rules from the FindBugs, fb-contrib or FindSecBugs rule repositories and run an analysis on your project.
