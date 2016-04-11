@@ -1,3 +1,0 @@
-[submodule "its/sources"]
-	path = its/sources
-	url = https://github.com/SonarSource/ruling_findbugs
