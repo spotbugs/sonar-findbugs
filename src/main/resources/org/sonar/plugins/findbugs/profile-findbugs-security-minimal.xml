@@ -45,6 +45,12 @@
     <Bug pattern='SQL_INJECTION_JPA' />
   </Match>
   <Match>
+    <Bug pattern='SQL_INJECTION_SPRING_JDBC' />
+  </Match>
+  <Match>
+    <Bug pattern='SQL_INJECTION_JDBC' />
+  </Match>
+  <Match>
     <Bug pattern='LDAP_INJECTION' />
   </Match>
   <Match>
@@ -115,6 +121,9 @@
   </Match>
   <Match>
     <Bug pattern='ANDROID_WORLD_WRITABLE' />
+  </Match>
+  <Match>
+    <Bug pattern='INSECURE_COOKIE' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
