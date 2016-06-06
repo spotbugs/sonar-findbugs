@@ -19,24 +19,31 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
+import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.findbugs.language.Jsp;
 
-import static org.fest.assertions.Assertions.assertThat;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
-public class FindbugsSecurityMinimalProfileTest {
+public class FindbugsSecurityJspProfile extends ProfileDefinition {
 
-  @Test
-  public void shouldCreateProfile() {
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityMinimalProfile secOnlyProfile = new FindbugsSecurityMinimalProfile(importer);
-    ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = secOnlyProfile.createProfile(validation);
-    // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
-    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(8);
-    // 62 rules total - 20 informational = 42 major or critical
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(41);
-    assertThat(validation.hasErrors()).isFalse();
-  }
+    private static final String FINDBUGS_SECURITY_JSP_PROFILE_NAME = "FindBugs Security JSP";
+    private final FindbugsProfileImporter importer;
+
+    public FindbugsSecurityJspProfile(FindbugsProfileImporter importer) {
+        this.importer = importer;
+    }
+
+    @Override
+    public RulesProfile createProfile(ValidationMessages messages) {
+        Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
+                "/org/sonar/plugins/findbugs/profile-findbugs-security-jsp.xml"));
+        RulesProfile profile = importer.importProfile(findbugsProfile, messages);
+        profile.setLanguage(Jsp.KEY);
+        profile.setName(FINDBUGS_SECURITY_JSP_PROFILE_NAME);
+        return profile;
+    }
+
 }

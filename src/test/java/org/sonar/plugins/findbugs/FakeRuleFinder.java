@@ -45,7 +45,7 @@ public class FakeRuleFinder {
   private FakeRuleFinder() {
   }
 
-  private static RuleFinder create(boolean findbugs, boolean fbContrib, boolean findSecBug) {
+  private static RuleFinder create(boolean findbugs, boolean fbContrib, boolean findSecBug, boolean findSecBugJsp) {
     RuleFinder ruleFinder = mock(RuleFinder.class);
     RulesDefinition.Context context = new RulesDefinition.Context();
 
@@ -55,34 +55,41 @@ public class FakeRuleFinder {
       configRuleFinderForRepo(ruleFinder, context, FindbugsRulesDefinition.REPOSITORY_KEY);
     }
 
+    if (fbContrib) {
+      RulesDefinition rulesDefinition = new FbContribRulesDefinition();
+      rulesDefinition.define(context);
+      configRuleFinderForRepo(ruleFinder, context, FbContribRulesDefinition.REPOSITORY_KEY);
+    }
+
     if (findSecBug) {
       RulesDefinition rulesDefinition = new FindSecurityBugsRulesDefinition();
       rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
     }
 
-    if (fbContrib) {
-      RulesDefinition rulesDefinition = new FbContribRulesDefinition();
+    if (findSecBugJsp) {
+      RulesDefinition rulesDefinition = new FindSecurityBugsJspRulesDefinition();
       rulesDefinition.define(context);
-      configRuleFinderForRepo(ruleFinder, context, FbContribRulesDefinition.REPOSITORY_KEY);
+      configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
     }
+
     return ruleFinder;
   }
 
   public static RuleFinder createWithAllRules() {
-    return create(true, true, true);
+    return create(true, true, true, true);
   }
 
   public static RuleFinder createWithOnlyFindbugsRules() {
-    return create(true, false, false);
+    return create(true, false, false,false);
   }
 
   public static RuleFinder createWithOnlyFbContribRules() {
-    return create(false, true, false);
+    return create(false, true, false,false);
   }
 
   public static RuleFinder createWithOnlyFindSecBugsRules() {
-    return create(false, false, true);
+    return create(false, false, true,false);
   }
 
   private static void configRuleFinderForRepo(RuleFinder ruleFinder, final Context context, final String repositoryKey) {

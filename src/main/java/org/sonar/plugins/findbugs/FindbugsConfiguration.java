@@ -23,9 +23,12 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
@@ -44,10 +47,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 public class FindbugsConfiguration implements BatchExtension {
+
+  private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
 
   private final FileSystem fileSystem;
   private final Settings settings;
@@ -71,18 +78,34 @@ public class FindbugsConfiguration implements BatchExtension {
   public edu.umd.cs.findbugs.Project getFindbugsProject() throws IOException {
     edu.umd.cs.findbugs.Project findbugsProject = new edu.umd.cs.findbugs.Project();
 
-    for (File file : getSourceFiles()) {
-      findbugsProject.addFile(file.getCanonicalPath());
+    /*for (File file : getSourceFiles()) {
+      if(FilenameUtils.getExtension(file.getName()).equals("java")) {
+        findbugsProject.addFile(file.getCanonicalPath());
+      }
+    }*/
+
+    List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+
+    for (File file : javaResourceLocator.classpath()) {
+      //Will capture additional classes including precompiled JSP
+      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
+        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
+      }
+
+      //Auxiliary dependencies
+      findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
 
-    Collection<File> classFilesToAnalyze = javaResourceLocator.classFilesToAnalyze();
     for (File classToAnalyze : classFilesToAnalyze) {
       findbugsProject.addFile(classToAnalyze.getCanonicalPath());
     }
 
-    for (File file : javaResourceLocator.classpath()) {
-      findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
+    if (classFilesToAnalyze.isEmpty()) {
+      LOG.warn("Findbugs needs sources to be compiled."
+        + " Please build project before executing sonar or check the location of compiled classes to"
+        + " make it possible for Findbugs to analyse your project.");
     }
+
     copyLibs();
     if (annotationsLib != null) {
       // Findbugs dependencies are packaged by Maven. They are not available during execution of unit tests.
@@ -105,6 +128,29 @@ public class FindbugsConfiguration implements BatchExtension {
     File file = new File(fileSystem.workDir(), "findbugs-include.xml");
     FileUtils.write(file, conf.toString(), CharEncoding.UTF_8);
     return file;
+  }
+
+  /**
+   * Scan the given folder for classes. It will catch classes from Java, JSP and more.
+   *
+   * @param folder Folder to scan
+   * @return
+   * @throws IOException
+   */
+  public static List<File> scanForAdditionalClasses(File folder) throws IOException {
+    List<File> allFiles = new ArrayList<File>();
+    Queue<File> dirs = new LinkedList<File>();
+    dirs.add(folder);
+    while (!dirs.isEmpty()) {
+      for (File f : dirs.poll().listFiles()) {
+        if (f.isDirectory()) {
+          dirs.add(f);
+        } else if (f.isFile()&& f.getName().endsWith(".class")) {
+          allFiles.add(f);
+        }
+      }
+    }
+    return allFiles;
   }
 
   @VisibleForTesting

@@ -68,7 +68,8 @@ public abstract class FindbugsTests {
     return activeRules;
   }
 
-  protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug) {
+  protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug,
+                                                           boolean findbugsJsp) {
     RulesProfile profile = RulesProfile.create();
     profile.setName("FindBugs");
     profile.setLanguage(Java.KEY);
@@ -89,11 +90,17 @@ public abstract class FindbugsTests {
         profile.activateRule(rule, null);
       }
     }
+    if (findbugsJsp) {
+      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY))) {
+        rule.setRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
+        profile.activateRule(rule, null);
+      }
+    }
     return profile;
   }
 
   protected RulesProfile createRulesProfileWithActiveRules() {
-    return createRulesProfileWithActiveRules(true, false, false);
+    return createRulesProfileWithActiveRules(true, false, false, false);
   }
 
   private void assertSimilarXml(File expectedFile, String xml) throws SAXException, IOException {

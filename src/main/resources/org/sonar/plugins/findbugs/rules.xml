@@ -158,14 +158,6 @@
     <tag>cwe</tag>
   </rule>
 
-  <rule key="XSS_REQUEST_PARAMETER_TO_JSP_WRITER">
-    <priority>CRITICAL</priority>
-    <name><![CDATA[Security - JSP reflected cross site scripting vulnerability]]></name>
-    <configKey><![CDATA[XSS_REQUEST_PARAMETER_TO_JSP_WRITER]]></configKey>
-    <tag>owasp-a3</tag>
-    <tag>cwe</tag>
-  </rule>
-
   <rule key="SW_SWING_METHODS_INVOKED_IN_SWING_THREAD">
     <priority>MAJOR</priority>
     <name><![CDATA[Bad practice - Certain swing methods needs to be invoked in Swing thread]]></name>

@@ -21,6 +21,9 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.SonarPlugin;
+import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.JspCodeColorizerFormat;
+import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 
 import java.util.List;
 
@@ -31,17 +34,22 @@ public class FindbugsPlugin extends SonarPlugin {
     ImmutableList.Builder<Object> extensions = ImmutableList.builder();
     extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
     extensions.add(
+      Jsp.class,
+      JspCodeColorizerFormat.class,
       FindbugsSensor.class,
       FindbugsConfiguration.class,
       FindbugsExecutor.class,
-      FindbugsRulesDefinition.class,
       FindbugsProfileExporter.class,
       FindbugsProfileImporter.class,
       FindbugsProfile.class,
       FindbugsSecurityAuditProfile.class,
       FindbugsSecurityMinimalProfile.class,
+      FindbugsSecurityJspProfile.class,
+      FindbugsRulesDefinition.class,
       FbContribRulesDefinition.class,
-      FindSecurityBugsRulesDefinition.class);
+      FindSecurityBugsRulesDefinition.class,
+      FindSecurityBugsJspRulesDefinition.class,
+      ByteCodeResourceLocator.class);
     return extensions.build();
   }
 

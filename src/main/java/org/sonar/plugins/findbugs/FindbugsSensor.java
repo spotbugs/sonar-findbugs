@@ -32,9 +32,12 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
+import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import java.io.File;
 import java.util.Collection;
 
 public class FindbugsSensor implements Sensor {
@@ -45,22 +48,24 @@ public class FindbugsSensor implements Sensor {
   private RuleFinder ruleFinder;
   private FindbugsExecutor executor;
   private final JavaResourceLocator javaResourceLocator;
+  private final ByteCodeResourceLocator byteCodeResourceLocator;
   private final FileSystem fs;
   private final ResourcePerspectives perspectives;
 
   public FindbugsSensor(RulesProfile profile, RuleFinder ruleFinder, ResourcePerspectives perspectives,
-    FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs) {
+    FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs, ByteCodeResourceLocator byteCodeResourceLocator) {
     this.profile = profile;
     this.ruleFinder = ruleFinder;
     this.perspectives = perspectives;
     this.executor = executor;
     this.javaResourceLocator = javaResourceLocator;
+    this.byteCodeResourceLocator = byteCodeResourceLocator;
     this.fs = fs;
   }
 
   @Override
   public boolean shouldExecuteOnProject(Project project) {
-    return fs.hasFiles(fs.predicates().hasLanguage(Java.KEY))
+    return (fs.hasFiles(fs.predicates().hasLanguage(Java.KEY)) || fs.hasFiles(fs.predicates().hasLanguage(Jsp.KEY)))
       && (hasActiveFindbugsRules() || hasActiveFbContribRules() || hasActiveFindSecBugsRules());
   }
 
@@ -76,14 +81,13 @@ public class FindbugsSensor implements Sensor {
     return !profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY).isEmpty();
   }
 
+  private boolean hasActiveFindSecBugsJspRules() {
+    return !profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY).isEmpty();
+  }
+
   @Override
   public void analyse(Project project, SensorContext context) {
-    if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
-      LOG.warn("Findbugs needs sources to be compiled."
-        + " Please build project before executing sonar or check the location of compiled classes to"
-        + " make it possible for Findbugs to analyse your project.");
-      return;
-    }
+
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
 
     for (ReportedBug bugInstance : collection) {
@@ -92,11 +96,13 @@ public class FindbugsSensor implements Sensor {
         rule = ruleFinder.findByKey(FbContribRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
         if (rule == null) {
           rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
-
           if (rule == null) {
-            // ignore violations from report, if rule not activated in Sonar
-            LOG.warn("Findbugs rule '{}' is not active in Sonar.", bugInstance.getType());
-            continue;
+            rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, bugInstance.getType());
+            if (rule == null) {
+              // ignore violations from report, if rule not activated in Sonar
+              LOG.warn("Findbugs rule '{}' is not active in Sonar.", bugInstance.getType());
+              continue;
+            }
           }
         }
       }
@@ -105,12 +111,39 @@ public class FindbugsSensor implements Sensor {
       String longMessage = bugInstance.getMessage();
       int line = bugInstance.getStartLine();
 
+      //Legacy
       Resource resource = javaResourceLocator.findResourceByClassName(className);
       if (resource != null) {
         insertIssue(rule, resource, line, longMessage);
+        continue;
       }
+
+      //Regular Java class mapped to their original .java
+      resource = byteCodeResourceLocator.findJavaClassFile(className, project);
+      if (resource != null) {
+        insertIssue(rule, resource, line, longMessage);
+        continue;
+      }
+
+      //Precompiled JSP mapped to their original .jsp with the correct line of code if SMAP file is present.
+      resource = byteCodeResourceLocator.findTemplateFile(className, project);
+      if (resource != null) {
+        if(resource.getPath().endsWith(".jsp")) {
+          File classFile = findOriginalClassForBug(bugInstance.getClassName());
+          Integer jspLine = byteCodeResourceLocator.findJspLine(className, line, javaResourceLocator, classFile);
+          line = jspLine == null ?  1 : jspLine;
+        }
+        else {
+          line = 1;
+        }
+        insertIssue(rule, resource, line, longMessage);
+        continue;
+      }
+
+      LOG.warn("The class '"+className+"' could not be match to its original source file. It might be a dynamically generated class.");
     }
   }
+
 
   private void insertIssue(Rule rule, Resource resource, int line, String message) {
     Issuable issuable = perspectives.as(Issuable.class, resource);
@@ -121,5 +154,27 @@ public class FindbugsSensor implements Sensor {
       }
       issuable.addIssue(builder.build());
     }
+  }
+
+  /**
+   *
+   * @param className Class name
+   * @return File handle of the original class file analyzed
+   */
+  private File findOriginalClassForBug(String className) {
+    String classFile = className.replaceAll("\\.","/").concat(".class");
+
+    for(File classPath : javaResourceLocator.classpath()) {
+      if(!classPath.isDirectory()) {
+        continue;
+      }
+
+      File testClassFile = new File(classPath, classFile);
+      if(testClassFile.exists()) {
+        return testClassFile;
+      }
+    }
+
+    return null;
   }
 }

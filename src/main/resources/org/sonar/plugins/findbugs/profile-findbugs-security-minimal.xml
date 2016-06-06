@@ -96,9 +96,6 @@
     <Bug pattern='UNVALIDATED_REDIRECT' />
   </Match>
   <Match>
-    <Bug pattern='XSS_JSP_PRINT' />
-  </Match>
-  <Match>
     <Bug pattern='XSS_SERVLET' />
   </Match>
   <Match>
@@ -130,9 +127,6 @@
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER' />
-  </Match>
-  <Match>
-    <Bug pattern='XSS_REQUEST_PARAMETER_TO_JSP_WRITER' />
   </Match>
   <Match>
     <Bug pattern='HRS_REQUEST_PARAMETER_TO_HTTP_HEADER' />
