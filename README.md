@@ -1,4 +1,4 @@
-Sonar Findbugs 
+Sonar Findbugs [![Build Status](https://travis-ci.org/SonarQubeCommunity/sonar-findbugs.svg?branch=master)](https://travis-ci.org/SonarQubeCommunity/sonar-findbugs)
 ==========
 
 ## Description / Features
