@@ -31,6 +31,7 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -123,8 +124,18 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
 
   private static ActiveRule anActiveRuleFromAnotherPlugin() {
     Rule rule = Rule.create();
-    rule.setPluginName("not-a-findbugs-plugin");
+    //rule.setPluginName("not-a-findbugs-plugin");
+    rule.setRepositoryKey("not-a-findbugs-plugin");
     ActiveRule activeRule = RulesProfile.create().activateRule(rule, RulePriority.CRITICAL);
     return activeRule;
+  }
+
+  protected List<ActiveRule> buildActiveRulesFixture(List<Rule> rules) {
+    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
+    ActiveRule activeRule1 = new ActiveRule(null, rules.get(0), RulePriority.CRITICAL);
+    activeRules.add(activeRule1);
+    ActiveRule activeRule2 = new ActiveRule(null, rules.get(1), RulePriority.MAJOR);
+    activeRules.add(activeRule2);
+    return activeRules;
   }
 }

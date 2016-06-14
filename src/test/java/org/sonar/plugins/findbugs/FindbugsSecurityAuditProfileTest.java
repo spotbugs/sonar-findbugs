@@ -22,6 +22,7 @@ package org.sonar.plugins.findbugs;
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 
 import static org.fest.assertions.Assertions.assertThat;
 

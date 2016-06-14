@@ -17,17 +17,23 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.rule;
 
 import com.google.common.collect.Lists;
 import org.hamcrest.CustomTypeSafeMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
+import org.sonar.api.batch.rule.ActiveRule;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Context;
+import org.sonar.plugins.findbugs.FbContribRulesDefinition;
+import org.sonar.plugins.findbugs.FindSecurityBugsJspRulesDefinition;
+import org.sonar.plugins.findbugs.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.FindbugsRulesDefinition;
 
 import java.util.List;
 

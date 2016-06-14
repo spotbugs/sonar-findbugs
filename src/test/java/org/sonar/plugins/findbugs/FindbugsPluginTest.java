@@ -20,14 +20,32 @@
 package org.sonar.plugins.findbugs;
 
 import org.junit.Test;
+import org.mockito.Matchers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.sonar.api.Plugin;
+import org.sonar.api.utils.Version;
 
+import java.util.Collection;
+
+import static junit.framework.TestCase.assertEquals;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 public class FindbugsPluginTest {
 
   @Test
   public void testGetExtensions() {
-    assertThat(new FindbugsPlugin().getExtensions()).hasSize(20);
+
+    Plugin.Context ctx = new FindbugsPlugin.Context(Version.parse("1.33.7"));
+
+    FindbugsPlugin plugin = new FindbugsPlugin();
+    plugin.define(ctx);
+
+    assertEquals(20, ctx.getExtensions().size());
   }
 
 }

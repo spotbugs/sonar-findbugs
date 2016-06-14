@@ -23,6 +23,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.java.api.JavaResourceLocator;
@@ -48,18 +50,25 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * (ie : <code>test.SomeClass</code> ->  <code>src/main/java/test/SomeClass.java</code>)
      *
      * @param className Class name to look for
-     * @param project Sonar roject information which contains source locations
+     * @param fs File system
      * @return Java source file that conrespond to the class name specified.
      */
-    public Resource findJavaClassFile(String className, Project project) {
-        for(File sourceDir : project.getFileSystem().getSourceDirs()) {
-            File potentialFile = new File(sourceDir, className.replaceAll("\\.","/")+".java");
-            if(potentialFile.exists()) {
-                org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(potentialFile, project);
-                return file;
-            }
+    public InputFile findJavaClassFile(String className, FileSystem fs) {
+        Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath("src/main/java/"+className.replaceAll("\\.","/")+".java"));
+
+        for(InputFile f: files) {
+            return f;
         }
         return null;
+
+//        for(File sourceDir : proj.) {
+//            File potentialFile = new File(sourceDir, );
+//            if(potentialFile.exists()) {
+//                org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(potentialFile, project);
+//                return file;
+//            }
+//        }
+//        return null;
     }
 
     /**
@@ -71,10 +80,10 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * precompiled jsp. (same pseudo package, same class format, etc.)
      *
      * @param className Class name of the precompiled jsp
-     * @param project Sonar roject information which contains source locations
+     * @param fs File system
      * @return The
      */
-    public Resource findTemplateFile(String className, Project project) {
+    public InputFile findTemplateFile(String className, FileSystem fs) {
         List<String> potentialJspFilenames = new ArrayList<>();
 
 
@@ -98,13 +107,12 @@ public class ByteCodeResourceLocator implements BatchExtension {
         }
 
         //Source directories will include typically : /src/main/java and /src/main/webapp
-        for(File sourceDir : project.getFileSystem().getSourceDirs()) {
-            for(String jspFilename : potentialJspFilenames) {
 
-                File jspFile = new File(sourceDir, jspFilename);
-                if(jspFile.exists()) {
-                    org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(jspFile, project);
-                    return file;
+        for(String sourceDir : Arrays.asList("src/main/webapp/","src/main/resources","src/main/java")) {
+            for (String jspFilename : potentialJspFilenames) {
+                Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+jspFilename));
+                for (InputFile f : files) {
+                    return f;
                 }
             }
         }
@@ -118,12 +126,10 @@ public class ByteCodeResourceLocator implements BatchExtension {
      *
      * @param className Class name
      * @param originalLine Line of code of the auto-generated Java line (.jsp -> .java -> .class)
-     * @param javaResourceLocator Locator that can enumerate folders containing classes
      * @param classFile (Optional)
      * @return JSP line number
      */
-    public Integer findJspLine(String className, int originalLine, JavaResourceLocator javaResourceLocator,
-                               File classFile) {
+    public Integer findJspLine(String className, int originalLine, File classFile) {
         //Extract the SMAP (JSR45) from the class file (SourceDebugExtension section)
         try (InputStream in = new FileInputStream(classFile)) {
             DebugExtensionExtractor debug = new DebugExtensionExtractor();

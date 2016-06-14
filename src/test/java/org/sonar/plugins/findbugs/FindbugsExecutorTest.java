@@ -86,8 +86,7 @@ public class FindbugsExecutorTest {
 
   @Test(expected = SonarException.class)
   public void shoulFailIfNoCompiledClasses() throws Exception {
-    DefaultFileSystem fs = new DefaultFileSystem();
-    fs.setBaseDir(new File("."));
+    DefaultFileSystem fs = new DefaultFileSystem(new File("."));
     Settings settings = new Settings();
     settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
     FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings, null, null, null);

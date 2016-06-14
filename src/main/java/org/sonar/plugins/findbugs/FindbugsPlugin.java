@@ -19,38 +19,33 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.JspCodeColorizerFormat;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 
-import java.util.List;
+import java.util.Arrays;
 
-public class FindbugsPlugin extends SonarPlugin {
+public class FindbugsPlugin implements Plugin {
 
   @Override
-  public List getExtensions() {
-    ImmutableList.Builder<Object> extensions = ImmutableList.builder();
-    extensions.addAll(FindbugsConfiguration.getPropertyDefinitions());
-    extensions.add(
-      Jsp.class,
-      JspCodeColorizerFormat.class,
-      FindbugsSensor.class,
-      FindbugsConfiguration.class,
-      FindbugsExecutor.class,
-      FindbugsProfileExporter.class,
-      FindbugsProfileImporter.class,
-      FindbugsProfile.class,
-      FindbugsSecurityAuditProfile.class,
-      FindbugsSecurityMinimalProfile.class,
-      FindbugsSecurityJspProfile.class,
-      FindbugsRulesDefinition.class,
-      FbContribRulesDefinition.class,
-      FindSecurityBugsRulesDefinition.class,
-      FindSecurityBugsJspRulesDefinition.class,
-      ByteCodeResourceLocator.class);
-    return extensions.build();
+  public void define(Context context) {
+    context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
+    context.addExtensions(Arrays.asList(Jsp.class,
+            JspCodeColorizerFormat.class,
+            FindbugsSensor.class,
+            FindbugsConfiguration.class,
+            FindbugsExecutor.class,
+            FindbugsProfileExporter.class,
+            FindbugsProfileImporter.class,
+            FindbugsProfile.class,
+            FindbugsSecurityAuditProfile.class,
+            FindbugsSecurityMinimalProfile.class,
+            FindbugsSecurityJspProfile.class,
+            FindbugsRulesDefinition.class,
+            FbContribRulesDefinition.class,
+            FindSecurityBugsRulesDefinition.class,
+            FindSecurityBugsJspRulesDefinition.class,
+            ByteCodeResourceLocator.class));
   }
-
 }

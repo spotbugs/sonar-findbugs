@@ -26,6 +26,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -60,8 +62,7 @@ public class FindbugsConfigurationTest {
   public void setUp() throws Exception {
     baseDir = temp.newFolder("findbugs");
 
-    fs = new DefaultFileSystem();
-    fs.setBaseDir(baseDir);
+    fs = new DefaultFileSystem(baseDir);
     fs.setWorkDir(temp.newFolder());
 
     settings = new Settings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
