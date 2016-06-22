@@ -20,7 +20,6 @@
 package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
-import com.sonar.sslr.api.typed.Input;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
 import edu.umd.cs.findbugs.MethodAnnotation;
@@ -37,17 +36,10 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.batch.sensor.issue.internal.DefaultIssue;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issuable.IssueBuilder;
-import org.sonar.api.issue.Issue;
-import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
-import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -56,11 +48,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
@@ -124,7 +113,6 @@ public class FindbugsSensorTest extends FindbugsTests {
 
   @Test
   public void should_execute_findbugs() throws Exception {
-    //FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -162,7 +150,6 @@ public class FindbugsSensorTest extends FindbugsTests {
 
   @Test
   public void should_execute_findbugs_even_if_only_fbcontrib() throws Exception {
-//    FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
     BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -181,12 +168,11 @@ public class FindbugsSensorTest extends FindbugsTests {
 
   @Test
   public void should_execute_findbugs_even_if_only_findsecbug() throws Exception {
-    //FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
     BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, true)).thenReturn(collection);
-    //JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
+
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(createRulesProfileWithActiveRules(false, false, true, false));
@@ -200,13 +186,11 @@ public class FindbugsSensorTest extends FindbugsTests {
 
   @Test
   public void should_execute_findbugs_but_not_find_violation() throws Exception {
-    //FindbugsExecutor executor = mock(FindbugsExecutor.class);
 
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
 
-    //JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(createRulesProfileWithActiveRules(false, false, false, false));

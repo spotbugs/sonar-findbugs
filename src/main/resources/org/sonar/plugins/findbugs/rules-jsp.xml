@@ -1,47 +1,5 @@
 <rules><!-- This file is auto-generated. -->
-  <rule key="XSS_REQUEST_PARAMETER_TO_JSP_WRITER" priority='CRITICAL'>
-    <name>Security - JSP reflected cross site scripting vulnerability</name>
-    <configKey>XSS_REQUEST_PARAMETER_TO_JSP_WRITER</configKey>
-    <description>
-&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
-&lt;/p&gt;
-&lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
-    &lt;pre&gt;&lt;%
-String taintedInput = (String) request.getAttribute("input");
-%&gt;
-[...]
-&amp;lt;%= taintedInput %&amp;gt;&lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
-    &lt;b&gt;Solution:&lt;/b&gt;
-    &lt;pre&gt;
-&amp;lt;%
-String taintedInput = (String) request.getAttribute("input");
-%&amp;gt;
-[...]
-&amp;lt;%= Encode.forHtml(taintedInput) %&amp;gt;
-    &lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
-HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
-which explains these defenses in significant detail.
-&lt;/p&gt;
-&lt;br/&gt;
-&lt;p&gt;
-&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
-&lt;/p&gt;
-    </description>
-    <tag>owasp-a3</tag>
-    <tag>cwe</tag>
-  </rule>
-  <rule key='JSP_INCLUDE' priority='CRITICAL'>
+  <rule key='JSP_INCLUDE' priority='INFO'>
     <name>Security - Dynamic JSP inclusion</name>
     <configKey>JSP_INCLUDE</configKey>
     <description>&lt;p&gt;The inclusion of JSP file allow the entry of dynamic value. It may allow an attacker to control the JSP page included.
@@ -65,13 +23,13 @@ attacker gets the ability to execute any code.
 &lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>wasc</tag>
-    <tag>jsp</tag>
     <tag>security</tag>
   </rule>
-  <rule key='JSP_SPRING_EVAL' priority='CRITICAL'>
+  <rule key='JSP_SPRING_EVAL' priority='INFO'>
     <name>Security - Dynamic variable in Spring expression</name>
     <configKey>JSP_SPRING_EVAL</configKey>
-    <description>&lt;p&gt;&lt;/p&gt;
+    <description>&lt;p&gt;A Spring expression is built with a dynamic value. The source of the value(s) should be verified to avoid that unfiltered values fall into this risky code evaluation.
+&lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;
     &lt;pre&gt;&amp;lt;%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %&amp;gt;
@@ -91,14 +49,15 @@ attacker gets the ability to execute any code.
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://resources.infosecinstitute.com/file-inclusion-attacks/"&gt;InfosecInstitute: File Inclusion Attacks&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
-    <tag>wasc</tag>
-    <tag>jsp</tag>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='JSP_JSTL_OUT' priority='MAJOR'>
+  <rule key='JSP_JSTL_OUT' priority='INFO'>
     <name>Security - Escaping of special XML characters is disabled</name>
     <configKey>JSP_JSTL_OUT</configKey>
     <description>&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
@@ -127,10 +86,9 @@ attacker gets the ability to execute any code.
     <tag>owasp-a3</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>jsp</tag>
     <tag>security</tag>
   </rule>
-  <rule key='XSS_JSP_PRINT' priority='MAJOR'>
+  <rule key='XSS_JSP_PRINT' priority='INFO'>
     <name>Security - Potential XSS in JSP</name>
     <configKey>XSS_JSP_PRINT</configKey>
     <description>&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
@@ -154,7 +112,7 @@ String taintedInput = (String) request.getAttribute("input");
     &lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
+The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider: 
 HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
 which explains these defenses in significant detail.
 &lt;/p&gt;
@@ -170,7 +128,43 @@ which explains these defenses in significant detail.
     <tag>owasp-a3</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
-    <tag>jsp</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='JSP_XSLT' priority='INFO'>
+    <name>Security - A malicious XSLT could be provided</name>
+    <configKey>JSP_XSLT</configKey>
+    <description>&lt;p&gt;
+    "XSLT (Extensible Stylesheet Language Transformations) is a language for transforming XML documents into other XML documents".&lt;sup&gt;[1]&lt;/sup&gt;&lt;br/&gt;
+    It is possible to attach malicious behavior to those stylesheets. Therefore, if an attacker can control the content or the source of the
+    stylesheet, he might be able to trigger remote code execution.&lt;sup&gt;[2]&lt;/sup&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+&amp;#x3C;x:transform xml=&amp;#x22;${xmlData}&amp;#x22; xslt=&amp;#x22;${xsltControlledByUser}&amp;#x22; /&amp;#x3E;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+The solution would be to make sure the stylesheet is loaded from a safe sources and make sure that vulnerabilities such as
+Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+[1] &lt;a href="https://en.wikipedia.org/wiki/XSLT"&gt;Wikipedia: XSLT (Extensible Stylesheet Language Transformations)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://prezi.com/y_fuybfudgnd/offensive-xslt/"&gt;Offensive XSLT&lt;/a&gt; by Nicolas Gregoire&lt;br/&gt;
+[2] &lt;a href="http://www.agarri.fr/kom/archives/2012/07/02/from_xslt_code_execution_to_meterpreter_shells/index.html"&gt;From XSLT code execution to Meterpreter shells&lt;/a&gt; by Nicolas Gregoire&lt;br/&gt;
+&lt;a href="http://xhe.myxwiki.org/xwiki/bin/view/Main/"&gt;XSLT Hacking Encyclopedia&lt;/a&gt; by Nicolas Gregoire&lt;br/&gt;
+&lt;a href="http://www.acunetix.com/blog/articles/the-hidden-dangers-of-xsltprocessor-remote-xsl-injection/"&gt;Acunetix.com : The hidden dangers of XSLTProcessor - Remote XSL injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.w3.org/TR/xslt"&gt;w3.org XSL Transformations (XSLT) Version 1.0&lt;/a&gt; : w3c specification&lt;br/&gt;
+[3] &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br/&gt;
+[4] &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>owasp-a4</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
 </rules>

@@ -4,8 +4,8 @@
     <configKey>PREDICTABLE_RANDOM</configKey>
     <description>&lt;p&gt;The use of a predictable random value can lead to vulnerabilities when used in certain security critical contexts. For example, when the value is used as:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;a CSRF token&lt;/li&gt;
-&lt;li&gt;a password reset token (sent by email)&lt;/li&gt;
+&lt;li&gt;a CSRF token: a predictable token can lead to a CSRF attack as an attacker will know the value of the token&lt;/li&gt;
+&lt;li&gt;a password reset token (sent by email): a predictable password token can lead to an account takeover, since an attacker will guess the URL of the change password form&lt;/li&gt;
 &lt;li&gt;any other secret value&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;
@@ -224,6 +224,42 @@ If an unfiltered parameter is passed to this file API, files from an arbitrary f
 &lt;p&gt;This rule identifies &lt;b&gt;potential&lt;/b&gt; path traversal vulnerabilities. In many cases, the constructed file path cannot be controlled
 by the user. If that is the case, the reported instance is a false positive.&lt;/p&gt;
 &lt;br/&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;@GET
+@Path("/images/{image}")
+@Produces("images/*")
+public Response getImage(@javax.ws.rs.PathParam("image") String image) {
+    File file = new File("resources/images/", image); //Weak point
+
+    if (!file.exists()) {
+        return Response.status(Status.NOT_FOUND).build();
+    }
+
+    return Response.ok().entity(new FileInputStream(file)).build();
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;import org.apache.commons.io.FilenameUtils;
+
+@GET
+@Path("/images/{image}")
+@Produces("images/*")
+public Response getImage(@javax.ws.rs.PathParam("image") String image) {
+    File file = new File("resources/images/", FilenameUtils.getName(image)); //Fix
+
+    if (!file.exists()) {
+        return Response.status(Status.NOT_FOUND).build();
+    }
+
+    return Response.ok().entity(new FileInputStream(file)).build();
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br/&gt;
@@ -261,6 +297,13 @@ by the user. If that is the case, the reported instance is a false positive.&lt;
     <configKey>COMMAND_INJECTION</configKey>
     <description>&lt;p&gt;The highlighted API is used to execute a system command. If unfiltered input is passed to this API, it can lead to arbitrary command execution.&lt;/p&gt;
 &lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;import java.lang.Runtime;
+
+Runtime r = Runtime.getRuntime();
+r.exec("/bin/sh -c some_tool" + input);&lt;/pre&gt;
+&lt;/p&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Command_Injection"&gt;OWASP: Command Injection&lt;/a&gt;&lt;br/&gt;
@@ -301,7 +344,7 @@ that looks at the end of the filename (e.g., endswith ".log") to make sure its a
     <tag>security</tag>
   </rule>
   <rule key='WEAK_TRUST_MANAGER' priority='MAJOR'>
-    <name>Security - TrustManager implementation empty</name>
+    <name>Security - TrustManager that accept any certificates</name>
     <configKey>WEAK_TRUST_MANAGER</configKey>
     <description>&lt;p&gt;Empty TrustManager implementations are often used to connect easily to a host that is not signed by a root
 &lt;a href="http://en.wikipedia.org/wiki/Certificate_authority"&gt;certificate authority&lt;/a&gt;. As a consequence, this is vulnerable to
@@ -310,9 +353,92 @@ since the client will trust any certificate.
 &lt;/p&gt;
 &lt;p&gt;
 A TrustManager allowing specific certificates (based on a truststore for example) should be built.
-Detailed information for a proper implementation is at:
+Detailed information for a proper implementation is available at:
 &lt;a href="http://stackoverflow.com/a/6378872/89769"&gt;[1]&lt;/a&gt; 
 &lt;a href="http://stackoverflow.com/a/5493452/89769"&gt;[2]&lt;/a&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;class TrustAllManager implements X509TrustManager {
+
+    @Override
+    public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+        //Trust any client connecting (no certificate validation)
+    }
+
+    @Override
+    public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+        //Trust any remote server (no certificate validation)
+    }
+
+    @Override
+    public X509Certificate[] getAcceptedIssuers() {
+        return null;
+    }
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (TrustMangager based on a keystore):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;KeyStore ks = //Load keystore containing the certificates trusted
+
+SSLContext sc = SSLContext.getInstance("TLS");
+
+TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+tmf.init(ks);
+
+sc.init(kmf.getKeyManagers(), tmf.getTrustManagers(),null);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/295.html"&gt;CWE-295: Improper Certificate Validation&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='WEAK_HOSTNAME_VERIFIER' priority='MAJOR'>
+    <name>Security - HostnameVerifier that accept any signed certificates</name>
+    <configKey>WEAK_HOSTNAME_VERIFIER</configKey>
+    <description>&lt;p&gt;A &lt;code&gt;HostnameVerifier&lt;/code&gt; that accept any host are often use because of certificate reuse on many hosts.
+As a consequence, this is vulnerable to
+&lt;a href="http://en.wikipedia.org/wiki/Man-in-the-middle_attack"&gt;Man-in-the-middle attacks&lt;/a&gt;
+since the client will trust any certificate.
+&lt;/p&gt;
+&lt;p&gt;
+A TrustManager allowing specific certificates (based on a truststore for example) should be built.
+Wildcard certificates should be created for reused on multiples subdomains.
+Detailed information for a proper implementation is available at:
+&lt;a href="http://stackoverflow.com/a/6378872/89769"&gt;[1]&lt;/a&gt;
+&lt;a href="http://stackoverflow.com/a/5493452/89769"&gt;[2]&lt;/a&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;public class AllHosts implements HostnameVerifier {
+    public boolean verify(final String hostname, final SSLSession session) {
+        return true;
+    }
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (TrustMangager based on a keystore):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;KeyStore ks = //Load keystore containing the certificates trusted
+
+SSLContext sc = SSLContext.getInstance("TLS");
+
+TrustManagerFactory tmf = TrustManagerFactory.getInstance("SunX509");
+tmf.init(ks);
+
+sc.init(kmf.getKeyManagers(), tmf.getTrustManagers(),null);
+&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -425,17 +551,130 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='WEAK_MESSAGE_DIGEST' priority='MAJOR'>
-    <name>Security - Message digest is weak</name>
-    <configKey>WEAK_MESSAGE_DIGEST</configKey>
-    <description>&lt;p&gt;The algorithm used is not a recommended MessageDigest.&lt;/p&gt;
-&lt;p&gt;&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST&lt;/a&gt; recommends the use of SHA-1, SHA-224*, SHA-256, SHA-384, SHA-512, SHA-512/224, or SHA-512/256.&lt;/p&gt;
-&lt;p&gt;&lt;small&gt;* SHA-224 algorithm is not provided by &lt;a href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/SunProviders.html#SUNProvider"&gt; SUN provider.&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
-&lt;p&gt;Upgrade your implementation to use one of the approved algorithms. Use an algorithm that is sufficiently strong for your specific security needs.&lt;/p&gt;
+  <rule key='WEAK_MESSAGE_DIGEST_MD5' priority='MAJOR'>
+    <name>Security - MD2, MD4 and MD5 are weak hash functions</name>
+    <configKey>WEAK_MESSAGE_DIGEST_MD5</configKey>
+    <description>&lt;p&gt;The algorithms MD2, MD4 and MD5 are not a recommended MessageDigest. &lt;b&gt;PBKDF2&lt;/b&gt; should be use to hash password for example.&lt;/p&gt;
+
+&lt;blockquote&gt;
+    "The security of the MD5 hash function is severely compromised. A collision attack exists that can find collisions
+    within seconds on a computer with a 2.6 GHz Pentium 4 processor (complexity of 2&lt;sup&gt;24.1&lt;/sup&gt;).[1] Further, there is also a
+    chosen-prefix collision attack that can produce a collision for two inputs with specified prefixes within hours, using
+    off-the-shelf computing hardware (complexity 2&lt;sup&gt;39&lt;/sup&gt;).[2]"&lt;br/&gt;
+    - &lt;a href="https://en.wikipedia.org/wiki/MD5#Security"&gt;Wikipedia: MD5 - Security&lt;/a&gt;
+&lt;/blockquote&gt;
+
+&lt;blockquote&gt;
+    "&lt;b&gt;SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256&lt;/b&gt;:&lt;br/&gt;
+    The use of these hash functions is acceptable for all hash function applications."&lt;br/&gt;
+    - &lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Transitions: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths p.15&lt;/a&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+    "The main idea of a PBKDF is to slow dictionary or brute force attacks on the passwords by increasing the time
+    needed to test each password. An attacker with a list of likely passwords can evaluate the PBKDF using the known
+    iteration counter and the salt. Since an attacker has to spend a significant amount of computing time for each try,
+    it becomes harder to apply the dictionary or brute force attacks."&lt;br/&gt;
+- &lt;a href="http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf"&gt;NIST: Recommendation for Password-Based Key Derivation  p.12&lt;/a&gt;
+&lt;/blockquote&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;MessageDigest md5Digest = MessageDigest.getInstance("MD5");
+    md5Digest.update(password.getBytes());
+    byte[] hashValue = md5Digest.digest();&lt;/pre&gt;
+    &lt;br/&gt;
+    &lt;pre&gt;byte[] hashValue = DigestUtils.getMd5Digest().digest(password.getBytes());&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (Using bouncy castle):&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;public static byte[] getEncryptedPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
+    gen.init(password.getBytes("UTF-8"), salt.getBytes(), 4096);
+    return ((KeyParameter) gen.generateDerivedParameters(256)).getKey();
+}&lt;/pre&gt;
+    &lt;br/&gt;
+    &lt;b&gt;Solution (Java 8 and later):&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;public static byte[] getEncryptedPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 4096, 256 * 8);
+    SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+    return f.generateSecret(spec).getEncoded();
+}&lt;/pre&gt;
+&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST Approved Hashing Algorithms&lt;/a&gt;&lt;br/&gt;
+[1] &lt;a href="http://www.win.tue.nl/hashclash/On%20Collisions%20for%20MD5%20-%20M.M.J.%20Stevens.pdf"&gt;On Collisions for MD5&lt;/a&gt;: Master Thesis by M.M.J. Stevens&lt;br/&gt;
+[2] &lt;a href="http://homepages.cwi.nl/~stevens/papers/stJOC%20-%20Chosen-Prefix%20Collisions%20for%20MD5%20and%20Applications.pdf"&gt;Chosen-prefix collisions for MD5 and applications&lt;/a&gt;: Paper written by Marc Stevens&lt;br/&gt;
+&lt;a href="https://en.wikipedia.org/wiki/MD5"&gt;Wikipedia: MD5&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Transitions: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf"&gt;NIST: Recommendation for Password-Based Key Derivation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://stackoverflow.com/questions/22580853/reliable-implementation-of-pbkdf2-hmac-sha256-for-java"&gt;Stackoverflow: Reliable implementation of PBKDF2-HMAC-SHA256 for Java&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='WEAK_MESSAGE_DIGEST_SHA1' priority='MAJOR'>
+    <name>Security - SHA-1 is a weak hash function</name>
+    <configKey>WEAK_MESSAGE_DIGEST_SHA1</configKey>
+    <description>&lt;p&gt;The algorithms SHA-1 is not a recommended algorithm for hash password, for signature verification and other
+uses. &lt;b&gt;PBKDF2&lt;/b&gt; should be use to hash password for example.&lt;/p&gt;
+
+&lt;blockquote&gt;
+    "&lt;b&gt;SHA-1 for digital signature generation:&lt;/b&gt;&lt;br/&gt;
+    SHA-1 may only be used for digital signature generation where specifically allowed by NIST protocol-specific guidance.
+    For all other applications, &lt;u&gt;SHA-1 shall not be used for digital signature generation&lt;/u&gt;.&lt;br/&gt;
+    &lt;b&gt;SHA-1 for digital signature verification:&lt;/b&gt;&lt;br/&gt;
+    For digital signature verification, &lt;u&gt;SHA-1 is allowed for legacy-use&lt;/u&gt;.&lt;br/&gt;
+    [...]&lt;br/&gt;
+    &lt;b&gt;SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256&lt;/b&gt;:&lt;br/&gt;
+    The use of these hash functions is acceptable for all hash function applications."&lt;br/&gt;
+    - &lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Transitions: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths p.15&lt;/a&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+    "The main idea of a PBKDF is to slow dictionary or brute force attacks on the passwords by increasing the time
+    needed to test each password. An attacker with a list of likely passwords can evaluate the PBKDF using the known
+    iteration counter and the salt. Since an attacker has to spend a significant amount of computing time for each try,
+    it becomes harder to apply the dictionary or brute force attacks."&lt;br/&gt;
+- &lt;a href="http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf"&gt;NIST: Recommendation for Password-Based Key Derivation  p.12&lt;/a&gt;
+
+&lt;/blockquote&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;MessageDigest sha1Digest = MessageDigest.getInstance("SHA1");
+    sha1Digest.update(password.getBytes());
+    byte[] hashValue = sha1Digest.digest();&lt;/pre&gt;
+    &lt;br/&gt;
+    &lt;pre&gt;byte[] hashValue = DigestUtils.getSha1Digest().digest(password.getBytes());&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (Using bouncy castle):&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;public static byte[] getEncryptedPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    PKCS5S2ParametersGenerator gen = new PKCS5S2ParametersGenerator(new SHA256Digest());
+    gen.init(password.getBytes("UTF-8"), salt.getBytes(), 4096);
+    return ((KeyParameter) gen.generateDerivedParameters(256)).getKey();
+}&lt;/pre&gt;
+    &lt;br/&gt;
+    &lt;b&gt;Solution (Java 8 and later):&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;public static byte[] getEncryptedPassword(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 4096, 256 * 8);
+    SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+    return f.generateSecret(spec).getEncoded();
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://community.qualys.com/blogs/securitylabs/2014/09/09/sha1-deprecation-what-you-need-to-know"&gt;Qualys blog: SHA1 Deprecation: What You Need to Know&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://googleonlinesecurity.blogspot.ca/2014/09/gradually-sunsetting-sha-1.html"&gt;Google Online Security Blog: Gradually sunsetting SHA-1&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Transitions: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://csrc.nist.gov/publications/nistpubs/800-132/nist-sp800-132.pdf"&gt;NIST: Recommendation for Password-Based Key Derivation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://stackoverflow.com/questions/22580853/reliable-implementation-of-pbkdf2-hmac-sha256-for-java"&gt;Stackoverflow: Reliable implementation of PBKDF2-HMAC-SHA256 for Java&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
@@ -447,8 +686,18 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
     <name>Security - Message digest is custom</name>
     <configKey>CUSTOM_MESSAGE_DIGEST</configKey>
     <description>&lt;p&gt;Implementing a custom MessageDigest is error-prone.&lt;/p&gt;
-&lt;p&gt;&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST&lt;/a&gt; recommends the use of SHA-1, SHA-224*, SHA-256, SHA-384, SHA-512, SHA-512/224, or SHA-512/256.&lt;/p&gt;
-&lt;p&gt;&lt;small&gt;* SHA-224 algorithm is not provided by &lt;a href="http://docs.oracle.com/javase/6/docs/technotes/guides/security/SunProviders.html#SUNProvider"&gt; SUN provider.&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/secure_hashing.html"&gt;NIST&lt;/a&gt; recommends the use of SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, or SHA-512/256.&lt;/p&gt;
+&lt;blockquote&gt;
+    "&lt;b&gt;SHA-1 for digital signature generation:&lt;/b&gt;&lt;br/&gt;
+    SHA-1 may only be used for digital signature generation where specifically allowed by NIST protocol-specific guidance.
+    For all other applications, &lt;u&gt;SHA-1 shall not be used for digital signature generation&lt;/u&gt;.&lt;br/&gt;
+    &lt;b&gt;SHA-1 for digital signature verification:&lt;/b&gt;&lt;br/&gt;
+    For digital signature verification, &lt;u&gt;SHA-1 is allowed for legacy-use&lt;/u&gt;.&lt;br/&gt;
+    [...]&lt;br/&gt;
+    &lt;b&gt;SHA-224, SHA-256, SHA-384, SHA-512, SHA-512/224, and SHA-512/256&lt;/b&gt;:&lt;br/&gt;
+    The use of these hash functions is acceptable for all hash function applications."&lt;br/&gt;
+    - &lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Transitions: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths p.15&lt;/a&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
 &lt;pre&gt;MyProprietaryMessageDigest extends MessageDigest {
@@ -554,13 +803,13 @@ from an untrusted source.&lt;/p&gt;
 &amp;lt;!DOCTYPE lolz [
  &amp;lt;!ENTITY lol &amp;quot;lol&amp;quot;&amp;gt;
  &amp;lt;!ELEMENT lolz (#PCDATA)&amp;gt;
- &amp;lt;!ENTITY lol1 &amp;quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;quot;&amp;gt;
- &amp;lt;!ENTITY lol2 &amp;quot;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;quot;&amp;gt;
- &amp;lt;!ENTITY lol3 &amp;quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol1 &amp;quot;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol2 &amp;quot;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol3 &amp;quot;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;quot;&amp;gt;
 [...]
- &amp;lt;!ENTITY lol9 &amp;quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol9 &amp;quot;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;quot;&amp;gt;
 ]&amp;gt;
-&amp;lt;lolz&amp;gt;&amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
+&amp;lt;lolz&amp;gt;&amp;amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
 &lt;/p&gt;
 
 &lt;h3&gt;Solution&lt;/h3&gt;
@@ -576,9 +825,13 @@ SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 
 parser.parse(inputStream, customHandler);&lt;/pre&gt;
 &lt;/p&gt;
+&lt;br/&gt;
+The following snippets show 2 available solutions, you can set one or the two solutions. If you want to be more secure, it is highly recommended to implement the two following snippet code.
+&lt;br/&gt;&lt;br/&gt;
 
 &lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
+This setting will protect you against Denial of Service attack.
 &lt;pre&gt;
 SAXParserFactory spf = SAXParserFactory.newInstance();
 spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -589,6 +842,7 @@ parser.parse(inputStream, customHandler);&lt;/pre&gt;
 
 &lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
+By disabling DTD, almost all XXE attacks will be prevented.
 &lt;pre&gt;
 SAXParserFactory spf = SAXParserFactory.newInstance();
 spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -606,6 +860,7 @@ parser.parse(inputStream, customHandler);&lt;/pre&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
@@ -634,13 +889,13 @@ from an untrusted source.&lt;/p&gt;
 &amp;lt;!DOCTYPE lolz [
  &amp;lt;!ENTITY lol &amp;quot;lol&amp;quot;&amp;gt;
  &amp;lt;!ELEMENT lolz (#PCDATA)&amp;gt;
- &amp;lt;!ENTITY lol1 &amp;quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;quot;&amp;gt;
- &amp;lt;!ENTITY lol2 &amp;quot;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;quot;&amp;gt;
- &amp;lt;!ENTITY lol3 &amp;quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol1 &amp;quot;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol2 &amp;quot;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol3 &amp;quot;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;quot;&amp;gt;
 [...]
- &amp;lt;!ENTITY lol9 &amp;quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol9 &amp;quot;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;quot;&amp;gt;
 ]&amp;gt;
-&amp;lt;lolz&amp;gt;&amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
+&amp;lt;lolz&amp;gt;&amp;amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
 &lt;/p&gt;
 
 &lt;h3&gt;Solution&lt;/h3&gt;
@@ -656,9 +911,14 @@ XMLReader reader = XMLReaderFactory.createXMLReader();
 reader.setContentHandler(customHandler);
 reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 &lt;/p&gt;
+&lt;br/&gt;
+
+The following snippets show 2 available solutions, you can set one or the two solutions. If you want to be more secure, it is highly recommended to implement the two following snippet code.
+&lt;br/&gt;&lt;br/&gt;
 
 &lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
+This setting will protect you against Denial of Service attack.
 &lt;pre&gt;
 XMLReader reader = XMLReaderFactory.createXMLReader();
 reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -669,6 +929,7 @@ reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 
 &lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
+By disabling DTD, almost all XXE attacks will be prevented.
 &lt;pre&gt;
 XMLReader reader = XMLReaderFactory.createXMLReader();
 reader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -686,6 +947,7 @@ reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces-j/features.html"&gt;Xerces complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
@@ -714,13 +976,13 @@ from an untrusted source.&lt;/p&gt;
 &amp;lt;!DOCTYPE lolz [
  &amp;lt;!ENTITY lol &amp;quot;lol&amp;quot;&amp;gt;
  &amp;lt;!ELEMENT lolz (#PCDATA)&amp;gt;
- &amp;lt;!ENTITY lol1 &amp;quot;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;quot;&amp;gt;
- &amp;lt;!ENTITY lol2 &amp;quot;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;quot;&amp;gt;
- &amp;lt;!ENTITY lol3 &amp;quot;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol1 &amp;quot;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol2 &amp;quot;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol3 &amp;quot;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;quot;&amp;gt;
 [...]
- &amp;lt;!ENTITY lol9 &amp;quot;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol9 &amp;quot;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;quot;&amp;gt;
 ]&amp;gt;
-&amp;lt;lolz&amp;gt;&amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
+&amp;lt;lolz&amp;gt;&amp;amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
 &lt;/p&gt;
 
 &lt;h3&gt;Solution&lt;/h3&gt;
@@ -736,9 +998,14 @@ DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 
 Document doc = db.parse(input);&lt;/pre&gt;
 &lt;/p&gt;
+&lt;br/&gt;
+
+The following snippets show 2 available solutions, you can set one or the two solutions. If you want to be more secure, it is highly recommended to implement the two following snippet code.
+&lt;br/&gt;&lt;br/&gt;
 
 &lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
+This setting will protect you against Denial of Service attack.
 &lt;pre&gt;
 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -749,6 +1016,7 @@ Document doc = db.parse(input);&lt;/pre&gt;
 
 &lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
+By disabling DTD, almost all XXE attacks will be prevented.
 &lt;pre&gt;
 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 dbf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
@@ -766,6 +1034,7 @@ Document doc = db.parse(input);&lt;/pre&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces2-j/features.html"&gt;Xerces2 complete features list&lt;/a&gt;
 &lt;/p&gt;</description>
@@ -926,7 +1195,7 @@ Bind variables in prepared statements can be used to easily mitigate the risk of
     &lt;pre&gt;
 EntityManager pm = getEM();
 
-TypedQuery&lt;UserEntity&gt; q = em.createQuery(
+TypedQuery&amp;lt;UserEntity&amp;gt; q = em.createQuery(
     String.format("select * from Users where name = %s", username),
     UserEntity.class);
 
@@ -935,7 +1204,7 @@ UserEntity res = q.getSingleResult();&lt;/pre&gt;
 &lt;p&gt;
     &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
     &lt;pre&gt;
-TypedQuery&lt;UserEntity&gt; q = em.createQuery(
+TypedQuery&amp;lt;UserEntity&amp;gt; q = em.createQuery(
     "select * from Users where name = usernameParam",UserEntity.class)
     .setParameter("usernameParam", username);
 
@@ -1044,7 +1313,7 @@ Therefore, the primary defense against LDAP injection is strong input validation
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
-    &lt;pre&gt;NamingEnumeration&lt;SearchResult&gt; answers = context.search("dc=People,dc=example,dc=com",
+    &lt;pre&gt;NamingEnumeration&amp;lt;SearchResult&amp;gt; answers = context.search("dc=People,dc=example,dc=com",
         "(uid=" + username + ")", ctrls);&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
@@ -1141,11 +1410,84 @@ public void parseExpressionInterface(Person personObj,String property) {
 &lt;br/&gt;
 &lt;p&gt;
     &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-    &lt;a href="http://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/expressions.html"&gt;Spring Expression Language (SpEL) - Official Documentation&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.mindedsecurity.com/fileshare/ExpressionLanguageInjection.pdf"&gt;Minded Security: Expression Language Injection&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be used to test sandboxing rules.&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='EL_INJECTION' priority='CRITICAL'>
+    <name>Security - Potential code injection when using Expression Language (EL)</name>
+    <configKey>EL_INJECTION</configKey>
+    <description>&lt;p&gt;
+    A expression is built with a dynamic value. The source of the value(s) should be verified to avoid
+    that unfiltered values fall into this risky code evaluation.
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Code at risk:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;public void evaluateExpression(String expression) {
+    FacesContext context = FacesContext.getCurrentInstance();
+    ExpressionFactory expressionFactory = context.getApplication().getExpressionFactory();
+    ELContext elContext = context.getELContext();
+    ValueExpression vex = expressionFactory.createValueExpression(elContext, expression, String.class);
+    return (String) vex.getValue(elContext);
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="http://blog.mindedsecurity.com/2015/11/reliable-os-shell-with-el-expression.html"&gt;Minded Security: Abusing EL for executing OS commands&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://docs.oracle.com/javaee/6/tutorial/doc/gjddd.html"&gt;The Java EE 6 Tutorial: Expression Language&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.mindedsecurity.com/fileshare/ExpressionLanguageInjection.pdf"&gt;Minded Security: Expression Language Injection&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://danamodio.com/appsec/research/spring-remote-code-with-expression-language-injection/"&gt;Dan Amodio's blog: Remote Code with Expression Language Injection&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://blog.h3xstream.com/2014/11/remote-code-execution-by-design.html"&gt;Remote Code Execution .. by design&lt;/a&gt;: Example of malicious payload. The samples given could be used to test sandboxing rules.&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SEAM_LOG_INJECTION' priority='CRITICAL'>
+    <name>Security - Potential code injection in Seam logging call</name>
+    <configKey>SEAM_LOG_INJECTION</configKey>
+    <description>&lt;p&gt;
+    Seam Logging API support an expression language to introduce bean property to log messages. The expression language can
+    also be the source to unwanted code execution.
+&lt;/p&gt;
+&lt;p&gt;
+    In this context, an expression is built with a dynamic value. The source of the value(s) should be verified to avoid
+    that unfiltered values fall into this risky code evaluation.
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Code at risk:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;public void logUser(User user) {
+    log.info("Current logged in user : " + user.getUsername());
+    //...
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;public void logUser(User user) {
+    log.info("Current logged in user : #0", user.getUsername());
+    //...
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://issues.jboss.org/browse/JBSEAM-5130"&gt;JBSEAM-5130: Issue documenting the risk&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://docs.jboss.org/seam/2.3.1.Final/reference/html_single/#d0e4185"&gt;JBoss Seam: Logging (Official documentation)&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://docs.oracle.com/javaee/6/tutorial/doc/gjddd.html"&gt;The Java EE 6 Tutorial: Expression Language&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
+
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
@@ -1248,7 +1590,7 @@ try {
 the array is read byte by byte. The following sample illustrates the use of Integer.toHexString() which will trim any leading zeroes
 from each byte of the computed hash value.
 &lt;pre&gt;
-MessageDigest md = MessageDigest.getInstance("SHA-1");
+MessageDigest md = MessageDigest.getInstance("SHA-256");
 byte[] resultBytes = md.digest(password.getBytes("UTF-8"));
 
 StringBuilder stringBuilder = new StringBuilder();
@@ -1265,8 +1607,7 @@ For example, the hash values "0x0679" and "0x6709" would both output as "679" fo
 
 &lt;p&gt;
 In this situation, the use of toHexString() should be replaced with String.format() as follows:
-&lt;pre&gt;
-stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
+&lt;pre&gt;stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -1285,7 +1626,7 @@ stringBuilder.append( String.format( "%02X", b ) );&lt;/pre&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://www.hazelcast.com/documentation.jsp#Encryption"&gt;Hazelcast Documentation: Encryption (see second part)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://docs.hazelcast.org/docs/3.5/manual/html/encryption.html"&gt;Hazelcast Documentation: Encryption&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
@@ -1439,7 +1780,7 @@ props.put(Context.SECURITY_CREDENTIALS, "p@ssw0rd");&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='HARD_CODE_KEY' priority='INFO'>
+  <rule key='HARD_CODE_KEY' priority='MAJOR'>
     <name>Security - Hard Coded Key</name>
     <configKey>HARD_CODE_KEY</configKey>
     <description>&lt;p&gt;
@@ -1507,7 +1848,7 @@ various blog sites. &lt;sup&gt;&lt;a href="http://java.dzone.com/articles/strong
 The filtering is weak for a few reasons:
 &lt;ul&gt;
 &lt;li&gt;It covers only parameters not headers and side-channel inputs&lt;/li&gt;
-&lt;li&gt;The replace chain can be bypass easily (see example below)&lt;/li&gt;
+&lt;li&gt;The replace chain can be bypassed easily (see example below)&lt;/li&gt;
 &lt;li&gt;It's a black list of very specific bad patterns (rather than a white list of good/valid input)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/p&gt;
@@ -1570,8 +1911,14 @@ keyGen.init(128);&lt;/pre&gt;
   <rule key='RSA_KEY_SIZE' priority='MAJOR'>
     <name>Security - RSA usage with short key</name>
     <configKey>RSA_KEY_SIZE</configKey>
-    <description>&lt;p&gt;"RSA Laboratories currently recommends key sizes of 1024 bits for corporate use and 2048 bits for extremely valuable keys 
-like the root key pair used by a certifying authority". &lt;sup&gt;[1]&lt;/sup&gt;&lt;/p&gt;
+    <description>&lt;p&gt;
+    NIST recommend the use of &lt;u&gt;2048 bits and higher&lt;/u&gt; keys for the RSA algorithm.
+&lt;/p&gt;
+&lt;blockquote&gt;
+    "Digital Signature Verification | RSA: 1024 &amp;le; len(n) &amp;lt; 2048 | Legacy-use"&lt;br/&gt;
+    "Digital Signature Verification | RSA: len(n) &amp;ge; 2048 | Acceptable"&lt;br/&gt;
+    - &lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths p.7&lt;/a&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
 &lt;pre&gt;
@@ -1590,7 +1937,9 @@ keyGen.initialize(2048);
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-[1] &lt;a href="http://www.emc.com/emc-plus/rsa-labs/standards-initiatives/how-large-a-key-should-be-used.htm"&gt;RSA Laboratories: 3.1.5 How large a key should be used in the RSA cryptosystem?&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://csrc.nist.gov/groups/ST/toolkit/key_management.html"&gt;NIST: Latest publication on key management&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar1.pdf"&gt;NIST: Recommendation for Transitioning the Use of Cryptographic Algorithms and Key Lengths p.7&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.emc.com/emc-plus/rsa-labs/standards-initiatives/how-large-a-key-should-be-used.htm"&gt;RSA Laboratories: 3.1.5 How large a key should be used in the RSA cryptosystem?&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://en.wikipedia.org/wiki/Key_size#Asymmetric%5Falgorithm%5Fkey%5Flengths"&gt;Wikipedia: Asymmetric algorithm key lengths&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.keylength.com/en/compare/"&gt;Keylength.com (BlueKrypt): Aggregate key length recommendations.&lt;/a&gt;
@@ -1609,8 +1958,8 @@ keyGen.initialize(2048);
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Scenario&lt;/b&gt;&lt;br/&gt;
-    1. A user is tricked into visiting the malicious URL: http://website.com/login?redirect=http://evil.vvebsite.com/fake/login&lt;br/&gt;
-    2. The user is redirected to a fake login page that looks like a site they trust. (http://evil.vvebsite.com/fake/login)&lt;br/&gt;
+    1. A user is tricked into visiting the malicious URL: &lt;code&gt;http://website.com/login?redirect=http://evil.vvebsite.com/fake/login&lt;/code&gt;&lt;br/&gt;
+    2. The user is redirected to a fake login page that looks like a site they trust. (&lt;code&gt;http://evil.vvebsite.com/fake/login&lt;/code&gt;)&lt;br/&gt;
     3. The user enters his credentials.&lt;br/&gt;
     4. The evil site steals the user's credentials and redirects him to the original website.&lt;br/&gt;
     &lt;br/&gt;
@@ -1647,7 +1996,7 @@ keyGen.initialize(2048);
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='XSS_SERVLET' priority='CRITICAL'>
+  <rule key='XSS_SERVLET' priority='MAJOR'>
     <name>Security - Potential XSS in Servlet</name>
     <configKey>XSS_SERVLET</configKey>
     <description>&lt;p&gt;
@@ -1860,7 +2209,12 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     it is always recommended that you be able to verify the HMAC first, and only if the data is unmodified, do you then perform any cryptographic
     functions on the data.
 &lt;/p&gt;
-&lt;p&gt;
+&lt;p&gt;The following modes are vulnerable because they don't provide a HMAC:&lt;br/&gt;
+    - CBC&lt;br/&gt;
+    - OFB&lt;br/&gt;
+    - CTR&lt;br/&gt;
+    - ECB&lt;br/&gt;&lt;br/&gt;
+    The following snippets code are some examples of vulnerable code.&lt;br/&gt;&lt;br/&gt;
     &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
     &lt;i&gt;AES in CBC mode&lt;/i&gt;&lt;br/&gt;
 
@@ -1908,7 +2262,7 @@ In the example solution above, the GCM mode introduces an HMAC into the resultin
     This issue is corrected in ESAPI version 2.1.0. Versions &lt;= 2.0.1 are vulnerable to a MAC bypass (CVE-2013-5679).&lt;br/&gt;
 &lt;/p&gt;
 &lt;p&gt;
-    For Maven users, the plugin &lt;a href="http://mojo.codehaus.org/versions-maven-plugin/"&gt;versions&lt;/a&gt; can called using the 
+    For Maven users, the plugin &lt;a href="http://mojo.codehaus.org/versions-maven-plugin/"&gt;versions&lt;/a&gt; can be called using the
     following command. The effective version of ESAPI will be available in the output.&lt;br/&gt;
     &lt;pre&gt;$ mvn versions:display-dependency-updates&lt;/pre&gt;
     &lt;br/&gt;Output:&lt;br/&gt;
@@ -2016,7 +2370,7 @@ fos.write(string.getBytes());
     <name>Security - Broadcast (Android)</name>
     <configKey>ANDROID_BROADCAST</configKey>
     <description>&lt;p&gt;
-    Broadcast intents can be listen by any application with the appropriate permission. It is suggest to avoid transmitting
+    Broadcast intents can be listen by any application with the appropriate permission. It is suggested to avoid transmitting
     sensitive information when possible.
 &lt;/p&gt;
 &lt;p&gt;
@@ -2052,7 +2406,7 @@ sendBroadcast(v1);
 
     &amp;lt;receiver
         android:name="my.app.BroadcastReceiver"
-        android:permission="com.secure.PERMISSION"&amp;gt; &amp;lt;!-- Permission enforcement --&amp;gt;
+        android:permission="my.app.PERMISSION"&amp;gt; &amp;lt;!-- Permission enforcement --&amp;gt;
         &amp;lt;intent-filter&gt;
             &amp;lt;action android:name="com.secure.action.UserConnected" /&amp;gt;
         &amp;lt;/intent-filter&amp;gt;
@@ -2063,11 +2417,14 @@ sendBroadcast(v1);
 &lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Configuration (receiver)&lt;sup&gt;[1] Source: StackOverflow&lt;/sup&gt;:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Configuration (sender)&lt;sup&gt;[1] Source: StackOverflow&lt;/sup&gt;:&lt;/b&gt;&lt;br/&gt;
 &lt;pre&gt;
 &amp;lt;manifest&amp;gt;
     &amp;lt;!-- We declare we own the permission to send broadcast to the above receiver --&amp;gt;
-    &amp;lt;uses-permission android:name="my.app.PERMISSION" /&amp;gt;
+    &amp;lt;uses-permission android:name="my.app.PERMISSION"/&amp;gt;
+
+    &amp;lt;!-- With the following configuration, both the sender and the receiver apps need to be signed by the same developer certificate. --&amp;gt;
+    &amp;lt;permission android:name="my.app.PERMISSION" android:protectionLevel="signature"/&amp;gt;
 &amp;lt;/manifest&amp;gt;
 &lt;/pre&gt;
 &lt;/p&gt;
@@ -2130,7 +2487,7 @@ create on external storage. See references below for implementation guidelines.
     <name>Security - WebView with geolocation activated (Android)</name>
     <configKey>ANDROID_GEOLOCATION</configKey>
     <description>&lt;p&gt;
-    It is suggest to ask the user for a confirmation about obtaining its geolocation.
+    It is suggested to ask the user for a confirmation about obtaining its geolocation.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
@@ -2144,7 +2501,7 @@ webView.setWebChromeClient(new WebChromeClient() {
 &lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Suggest code:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Suggested code:&lt;/b&gt;&lt;br/&gt;
 
     Limit the sampling of geolocation and ask the user for confirmation.
 &lt;pre&gt;
@@ -2183,11 +2540,11 @@ webSettings.setJavaScriptEnabled(true);
 
 &lt;p&gt;
     &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
-Enabling is JavaScript is not a bad practice. It just means that the backend code need to be audit for potential XSS.
+Enabling JavaScript is not a bad practice. It just means that the backend code need to be audited for potential XSS.
 The XSS can also be introduce client-side with DOM XSS.
 &lt;pre&gt;
 function updateDescription(newDescription) {
-    $("#userDescription").html("&lt;p&gt;"+newDescription+"&lt;/p&gt;");
+    $("#userDescription").html("&amp;lt;p&amp;gt;"+newDescription+"&amp;lt;/p&amp;gt;");
 }
 &lt;/pre&gt;
 &lt;/p&gt;
@@ -2211,8 +2568,8 @@ function updateDescription(newDescription) {
     <name>Security - WebView with JavaScript interface (Android)</name>
     <configKey>ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE</configKey>
     <description>&lt;p&gt;
-    The use JavaScript Interface could expose the WebView to risky API. If an XSS is trigger in the WebView, the class
-    could be call by the malicious JavaScript code.
+    The use of JavaScript Interface could expose the WebView to risky API. If an XSS is triggered in the WebView, the class
+    could be called by the malicious JavaScript code.
 &lt;/p&gt;
 
 &lt;p&gt;
@@ -2270,7 +2627,7 @@ response.addCookie(cookie);
 &lt;b&gt;Solution (Specific configuration):&lt;/b&gt;&lt;br/&gt;
 &lt;pre&gt;
 Cookie cookie = new Cookie("userName",userName);
-cookie.setSecure(true);
+cookie.setSecure(true); // Secure flag
 cookie.setHttpOnly(true);
 &lt;/pre&gt;
 &lt;/p&gt;
@@ -2301,15 +2658,65 @@ cookie.setHttpOnly(true);
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='HTTPONLY_COOKIE' priority='MAJOR'>
+    <name>Security - Cookie without the HttpOnly flag</name>
+    <configKey>HTTPONLY_COOKIE</configKey>
+    <description>&lt;p&gt;
+A new cookie is created without the &lt;code&gt;HttpOnly&lt;/code&gt; flag set.
+The &lt;code&gt;HttpOnly&lt;/code&gt; flag is a directive to the browser to make sure that the cookie can not be red by
+malicious script. When a user is the target of a "Cross-Site Scripting", the attacker would benefit greatly from getting
+the session id for example.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Cookie cookie = new Cookie("email",userName);
+response.addCookie(cookie);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution (Specific configuration):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Cookie cookie = new Cookie("email",userName);
+cookie.setSecure(true);
+cookie.setHttpOnly(true); //HttpOnly flag
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution (Servlet 3.0 configuration):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+&amp;lt;web-app xmlns="http://java.sun.com/xml/ns/javaee" version="3.0"&amp;gt;
+[...]
+&amp;lt;session-config&amp;gt;
+ &amp;lt;cookie-config&amp;gt;
+  &amp;lt;http-only&amp;gt;true&amp;lt;/http-only&amp;gt;
+  &amp;lt;secure&amp;gt;true&amp;lt;/secure&amp;gt;
+ &amp;lt;/cookie-config&amp;gt;
+&amp;lt;/session-config&amp;gt;
+&amp;lt;/web-app&amp;gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;Reference&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://blog.codinghorror.com/protecting-your-cookies-httponly/"&gt;Coding Horror blog: Protecting Your Cookies: HttpOnly&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/HttpOnly"&gt;OWASP: HttpOnly&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.rapid7.com/db/vulnerabilities/http-cookie-http-only-flag"&gt;Rapid7: Missing HttpOnly Flag From Cookie&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
   <rule key='OBJECT_DESERIALIZATION' priority='CRITICAL'>
-    <name>Security - Object deserialization is used in {0}.{1}</name>
+    <name>Security - Object deserialization is used in {1}</name>
     <configKey>OBJECT_DESERIALIZATION</configKey>
     <description>&lt;p&gt;
-    Object deserialization of untrusted data can lead to remote code execution, if there is a class in classpath allow
+    Object deserialization of untrusted data can lead to remote code execution, if there is a class in classpath that allows
     the trigger of malicious operation.
 &lt;/p&gt;
 &lt;p&gt;
-    Libraries developers tend to fix class that provided potential malicious trigger. Their are still classes that are
+    Libraries developers tend to fix class that provided potential malicious trigger. There are still classes that are
     known to trigger Denial of Service&lt;sup&gt;[1]&lt;/sup&gt;.
 &lt;/p&gt;
 &lt;p&gt;
@@ -2330,7 +2737,7 @@ public UserData deserializeObject(InputStream receivedFile) throws IOException, 
 &lt;/p&gt;
 
 &lt;p&gt;
-&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;
 &lt;p&gt;
 Avoid deserializing object provided by remote users.
 &lt;/p&gt;
@@ -2340,12 +2747,100 @@ Avoid deserializing object provided by remote users.
 &lt;a href="https://cwe.mitre.org/data/definitions/502.html"&gt;CWE-502: Deserialization of Untrusted Data&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data"&gt;Deserialization of untrusted data&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.oracle.com/technetwork/java/seccodeguide-139067.html#8"&gt;Serialization and Deserialization &lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://github.com/frohoff/ysoserial"&gt;A proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://github.com/frohoff/ysoserial"&gt;A tool for generating payloads that exploit unsafe Java object deserialization&lt;/a&gt;&lt;br/&gt;
 [1] &lt;a href="https://gist.github.com/coekie/a27cc406fc9f3dc7a70d"&gt;Example of Denial of Service using the class java.util.HashSet&lt;/a&gt;&lt;br/&gt;
 [2] &lt;a href="https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2015-2590"&gt;OpenJDK: Deserialization issue in ObjectInputStream.readSerialData() (CVE-2015-2590)&lt;/a&gt;&lt;br/&gt;
 [3] &lt;a href="https://www.rapid7.com/db/modules/exploit/multi/browser/java_calendar_deserialize"&gt;Rapid7: Sun Java Calendar Deserialization Privilege Escalation (CVE-2008-5353)&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='TRUST_BOUNDARY_VIOLATION' priority='MAJOR'>
+    <name>Security - Trust Boundary Violation</name>
+    <configKey>TRUST_BOUNDARY_VIOLATION</configKey>
+    <description>&lt;p&gt;
+    "A trust boundary can be thought of as line drawn through a program. On one side of the line, data is untrusted.
+    On the other side of the line, data is assumed to be trustworthy. The purpose of validation logic is to allow data
+    to safely cross the trust boundary - to move from untrusted to trusted. A trust boundary violation occurs when a
+    program blurs the line between what is trusted and what is untrusted. By combining trusted and untrusted data in the
+    same data structure, it becomes easier for programmers to mistakenly trust unvalidated data." &lt;sup&gt;[1]&lt;/sup&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+public void doSomething(HttpServletRequest req, String activateProperty) {
+    //..
+
+    req.getSession().setAttribute(activateProperty,"true");
+
+}
+&lt;/pre&gt;
+&lt;br/&gt;
+&lt;pre&gt;
+public void loginEvent(HttpServletRequest req, String userSubmitted) {
+    //..
+
+    req.getSession().setAttribute("user",userSubmitted);
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+The solution would be to add validation prior setting a new session attribute. When possible, prefer data from
+safe location rather than using direct user input.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+[1] &lt;a href="https://cwe.mitre.org/data/definitions/501.html"&gt;CWE-501: Trust Boundary Violation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Trust_Boundary_Violation"&gt;OWASP : Trust Boundary Violation&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='MALICIOUS_XSLT' priority='CRITICAL'>
+    <name>Security - A malicious XSLT could be provided</name>
+    <configKey>MALICIOUS_XSLT</configKey>
+    <description>&lt;p&gt;
+    "XSLT (Extensible Stylesheet Language Transformations) is a language for transforming XML documents into other XML documents".&lt;sup&gt;[1]&lt;/sup&gt;&lt;br/&gt;
+    It is possible to attach malicious behavior to those stylesheets. Therefore, if an attacker can control the content or the source of the
+    stylesheet, he might be able to trigger remote code execution.&lt;sup&gt;[2]&lt;/sup&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Source xslt = new StreamSource(new FileInputStream(inputUserFile)); //Dangerous source to validate
+
+Transformer transformer = TransformerFactory.newInstance().newTransformer(xslt);
+
+Source text = new StreamSource(new FileInputStream("/data_2_process.xml"));
+transformer.transform(text, new StreamResult(...));
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+The solution would be to make sure the stylesheet is loaded from a safe sources and make sure that vulnerabilities such as
+Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+[1] &lt;a href="https://en.wikipedia.org/wiki/XSLT"&gt;Wikipedia: XSLT (Extensible Stylesheet Language Transformations)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://prezi.com/y_fuybfudgnd/offensive-xslt/"&gt;Offensive XSLT&lt;/a&gt; by Nicolas Gregoire&lt;br/&gt;
+[2] &lt;a href="http://www.agarri.fr/kom/archives/2012/07/02/from_xslt_code_execution_to_meterpreter_shells/index.html"&gt;From XSLT code execution to Meterpreter shells&lt;/a&gt; by Nicolas Gregoire&lt;br/&gt;
+&lt;a href="http://xhe.myxwiki.org/xwiki/bin/view/Main/"&gt;XSLT Hacking Encyclopedia&lt;/a&gt; by Nicolas Gregoire&lt;br/&gt;
+&lt;a href="http://www.acunetix.com/blog/articles/the-hidden-dangers-of-xsltprocessor-remote-xsl-injection/"&gt;Acunetix.com : The hidden dangers of XSLTProcessor - Remote XSL injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.w3.org/TR/xslt"&gt;w3.org XSL Transformations (XSLT) Version 1.0&lt;/a&gt; : w3c specification&lt;br/&gt;
+[3] &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br/&gt;
+[4] &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>owasp-a4</tag>
+    <tag>wasc</tag>
     <tag>security</tag>
   </rule>
 </rules>

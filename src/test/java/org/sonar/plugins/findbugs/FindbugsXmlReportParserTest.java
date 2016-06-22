@@ -48,7 +48,7 @@ public class FindbugsXmlReportParserTest {
   @Test
   public void createFindbugsXmlReportParserWithUnexistedReportFile() {
     File xmlReport = new File("doesntExist.xml");
-    thrown.expect(SonarException.class);
+    thrown.expect(IllegalStateException.class);
     thrown.expectMessage("The findbugs XML report can't be found at '" + xmlReport.getAbsolutePath() + "'");
     new FindbugsXmlReportParser(xmlReport);
   }
@@ -82,7 +82,7 @@ public class FindbugsXmlReportParserTest {
     try {
       return new File(getClass().getResource(filename).toURI());
     } catch (URISyntaxException e) {
-      throw new SonarException("Unable to open file " + filename, e);
+      throw new IllegalStateException("Unable to open file " + filename, e);
     }
   }
 }

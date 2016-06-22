@@ -27,7 +27,6 @@ import org.junit.rules.TemporaryFolder;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.config.Settings;
-import org.sonar.api.utils.SonarException;
 
 import java.io.File;
 import java.util.Locale;
@@ -76,7 +75,7 @@ public class FindbugsExecutorTest {
     assertThat(report).contains("synthetic=\"true\"");
   }
 
-  @Test(expected = SonarException.class)
+  @Test(expected = IllegalStateException.class)
   public void shouldTerminateAfterTimeout() throws Exception {
     FindbugsConfiguration conf = mockConf();
     when(conf.getTimeout()).thenReturn(1L);
@@ -84,7 +83,7 @@ public class FindbugsExecutorTest {
     new FindbugsExecutor(conf).execute();
   }
 
-  @Test(expected = SonarException.class)
+  @Test(expected = IllegalStateException.class)
   public void shoulFailIfNoCompiledClasses() throws Exception {
     DefaultFileSystem fs = new DefaultFileSystem(new File("."));
     Settings settings = new Settings();

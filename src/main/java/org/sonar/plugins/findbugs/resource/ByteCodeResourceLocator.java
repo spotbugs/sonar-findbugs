@@ -29,6 +29,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -54,6 +55,11 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * @return Java source file that conrespond to the class name specified.
      */
     public InputFile findJavaClassFile(String className, FileSystem fs) {
+        int indexDollarSign = className.indexOf("$");
+        if(indexDollarSign != -1) {
+            className = className.substring(0, indexDollarSign); //Remove innerClass from the class name
+        }
+
         Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath("src/main/java/"+className.replaceAll("\\.","/")+".java"));
 
         for(InputFile f: files) {
@@ -96,7 +102,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
         //Jetty and Tomcat JSP precompiled form
         //Expected class name: "jsp.folder1.folder2.hello_005fworld_jsp"
         if (className.endsWith("_jsp")) {
-            String jspFileFromClass = className.replaceAll("\\.", "/").replaceAll("_005f", "_").replaceAll("_jsp", ".jsp");
+            String jspFileFromClass = JasperUtils.decodeJspClassName(className);
 
             potentialJspFilenames.add(jspFileFromClass);
 

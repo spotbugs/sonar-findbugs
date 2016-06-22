@@ -22,15 +22,16 @@ package org.sonar.plugins.findbugs;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import edu.umd.cs.findbugs.Project;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
@@ -51,7 +52,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class FindbugsConfiguration implements BatchExtension {
+@BatchSide
+public class FindbugsConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
 
@@ -74,8 +76,8 @@ public class FindbugsConfiguration implements BatchExtension {
     return new File(fileSystem.workDir(), "findbugs-result.xml");
   }
 
-  public edu.umd.cs.findbugs.Project getFindbugsProject() throws IOException {
-    edu.umd.cs.findbugs.Project findbugsProject = new edu.umd.cs.findbugs.Project();
+  public Project getFindbugsProject() throws IOException {
+    Project findbugsProject = new Project();
 
     /*for (File file : getSourceFiles()) {
       if(FilenameUtils.getExtension(file.getName()).equals("java")) {
@@ -95,14 +97,28 @@ public class FindbugsConfiguration implements BatchExtension {
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
 
+    boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
+    boolean hasPrecompiledJsp = false;
     for (File classToAnalyze : classFilesToAnalyze) {
-      findbugsProject.addFile(classToAnalyze.getCanonicalPath());
+      String absolutePath = classToAnalyze.getCanonicalPath();
+      if(hasJspFiles && !hasPrecompiledJsp
+              && (absolutePath.endsWith("_jsp.class") || //Jasper
+                  absolutePath.contains("/jsp_servlet/")) //WebLogic
+              ) {
+        hasPrecompiledJsp = true;
+      }
+      findbugsProject.addFile(absolutePath);
     }
 
     if (classFilesToAnalyze.isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
-        + " Please build project before executing sonar or check the location of compiled classes to"
-        + " make it possible for Findbugs to analyse your project.");
+              + " Please build project before executing sonar or check the location of compiled classes to"
+              + " make it possible for Findbugs to analyse your project.");
+    }
+
+    if(hasJspFiles && !hasPrecompiledJsp) {
+      LOG.warn("JSP files were found in the current project but FindBugs requires their precompiled form. " +
+              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation");
     }
 
     copyLibs();

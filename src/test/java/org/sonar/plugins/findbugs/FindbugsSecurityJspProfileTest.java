@@ -26,9 +26,6 @@ import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-/**
- * Created by Philippe on 2015-11-23.
- */
 public class FindbugsSecurityJspProfileTest {
 
   @Test
@@ -38,7 +35,9 @@ public class FindbugsSecurityJspProfileTest {
     ValidationMessages validation = ValidationMessages.create();
     RulesProfile profile = secJspProfile.createProfile(validation);
 
+    //There are 5 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
+    assertThat(validation.getErrors()).isEmpty();
+    assertThat(validation.getWarnings()).isEmpty();
     assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(5);
-    assertThat(validation.hasErrors()).isFalse();
   }
 }

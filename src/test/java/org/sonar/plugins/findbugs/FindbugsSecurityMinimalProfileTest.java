@@ -34,10 +34,13 @@ public class FindbugsSecurityMinimalProfileTest {
     FindbugsSecurityMinimalProfile secOnlyProfile = new FindbugsSecurityMinimalProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
     RulesProfile profile = secOnlyProfile.createProfile(validation);
+
+
+    assertThat(validation.getErrors()).isEmpty();
+    assertThat(validation.getWarnings()).isEmpty();
     // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
     assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(8);
     // 62 rules total - 20 informational = 42 major or critical
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(41);
-    assertThat(validation.hasErrors()).isFalse();
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(49);
   }
 }

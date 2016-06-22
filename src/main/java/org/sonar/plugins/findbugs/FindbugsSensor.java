@@ -81,7 +81,7 @@ public class FindbugsSensor implements Sensor {
   @Override
   public void execute(SensorContext context) {
 
-    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
+    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules() || hasActiveFindSecBugsJspRules());
 
     for (ReportedBug bugInstance : collection) {
 
@@ -104,13 +104,9 @@ public class FindbugsSensor implements Sensor {
       String longMessage = bugInstance.getMessage();
       int line = bugInstance.getStartLine();
 
+
+
       InputFile resource = null;
-      //Legacy
-//      resource = javaResourceLocator.findResourceByClassName(className);
-//      if (resource != null) {
-//        insertIssue(rule, resource, line, longMessage);
-//        continue;
-//      }
 
       //Regular Java class mapped to their original .java
       resource = byteCodeResourceLocator.findJavaClassFile(className, this.fs);

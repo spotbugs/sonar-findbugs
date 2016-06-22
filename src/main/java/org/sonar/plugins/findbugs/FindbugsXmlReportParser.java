@@ -24,8 +24,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMInputCursor;
-import org.sonar.api.utils.SonarException;
-import org.sonar.api.utils.XmlParserException;
 
 import javax.annotation.CheckForNull;
 import javax.xml.stream.XMLInputFactory;
@@ -43,7 +41,7 @@ class FindbugsXmlReportParser {
     this.findbugsXmlReport = findbugsXmlReport;
     findbugsXmlReportPath = findbugsXmlReport.getAbsolutePath();
     if (!findbugsXmlReport.exists()) {
-      throw new SonarException("The findbugs XML report can't be found at '" + findbugsXmlReportPath + "'");
+      throw new IllegalStateException("The findbugs XML report can't be found at '" + findbugsXmlReportPath + "'");
     }
   }
 
@@ -80,7 +78,7 @@ class FindbugsXmlReportParser {
       }
       cursor.getStreamReader().closeCompletely();
     } catch (XMLStreamException e) {
-      throw new XmlParserException("Unable to parse the Findbugs XML Report '" + findbugsXmlReportPath + "'", e);
+      throw new IllegalStateException("Unable to parse the Findbugs XML Report '" + findbugsXmlReportPath + "'", e);
     }
     return result;
   }
