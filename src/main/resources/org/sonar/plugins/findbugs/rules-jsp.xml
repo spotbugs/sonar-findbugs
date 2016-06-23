@@ -1,5 +1,5 @@
 <rules><!-- This file is auto-generated. -->
-  <rule key='JSP_INCLUDE' priority='INFO'>
+  <rule key='JSP_INCLUDE' priority='CRITICAL'>
     <name>Security - Dynamic JSP inclusion</name>
     <configKey>JSP_INCLUDE</configKey>
     <description>&lt;p&gt;The inclusion of JSP file allow the entry of dynamic value. It may allow an attacker to control the JSP page included.
@@ -23,9 +23,10 @@ attacker gets the ability to execute any code.
 &lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>wasc</tag>
+    <tag>jsp</tag>
     <tag>security</tag>
   </rule>
-  <rule key='JSP_SPRING_EVAL' priority='INFO'>
+  <rule key='JSP_SPRING_EVAL' priority='CRITICAL'>
     <name>Security - Dynamic variable in Spring expression</name>
     <configKey>JSP_SPRING_EVAL</configKey>
     <description>&lt;p&gt;A Spring expression is built with a dynamic value. The source of the value(s) should be verified to avoid that unfiltered values fall into this risky code evaluation.
@@ -55,9 +56,10 @@ attacker gets the ability to execute any code.
     <tag>owasp-a1</tag>
     <tag>injection</tag>
     <tag>cwe</tag>
+    <tag>jsp</tag>
     <tag>security</tag>
   </rule>
-  <rule key='JSP_JSTL_OUT' priority='INFO'>
+  <rule key='JSP_JSTL_OUT' priority='MAJOR'>
     <name>Security - Escaping of special XML characters is disabled</name>
     <configKey>JSP_JSTL_OUT</configKey>
     <description>&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
@@ -86,9 +88,10 @@ attacker gets the ability to execute any code.
     <tag>owasp-a3</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>jsp</tag>
     <tag>security</tag>
   </rule>
-  <rule key='XSS_JSP_PRINT' priority='INFO'>
+  <rule key='XSS_JSP_PRINT' priority='MAJOR'>
     <name>Security - Potential XSS in JSP</name>
     <configKey>XSS_JSP_PRINT</configKey>
     <description>&lt;p&gt;A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
@@ -128,9 +131,10 @@ which explains these defenses in significant detail.
     <tag>owasp-a3</tag>
     <tag>wasc</tag>
     <tag>cwe</tag>
+    <tag>jsp</tag>
     <tag>security</tag>
   </rule>
-  <rule key='JSP_XSLT' priority='INFO'>
+  <rule key='JSP_XSLT' priority='CRITICAL'>
     <name>Security - A malicious XSLT could be provided</name>
     <configKey>JSP_XSLT</configKey>
     <description>&lt;p&gt;
@@ -165,6 +169,23 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
     <tag>injection</tag>
     <tag>owasp-a4</tag>
     <tag>wasc</tag>
+    <tag>jsp</tag>
     <tag>security</tag>
+  </rule>
+  <rule key='XSS_REQUEST_PARAMETER_TO_JSP_WRITER' priority='MAJOR'>
+    <name>Security - JSP reflected cross site scripting vulnerability</name>
+    <configKey>XSS_REQUEST_PARAMETER_TO_JSP_WRITER</configKey>
+    <description>&lt;p&gt;This code directly writes an HTTP parameter to JSP output, which allows for a cross site scripting
+vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/Cross-site_scripting"&gt;http://en.wikipedia.org/wiki/Cross-site_scripting&lt;/a&gt;
+for more information.&lt;/p&gt;
+&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of cross site scripting.
+If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
+vulnerabilities that FindBugs doesn't report. If you are concerned about cross site scripting, you should seriously
+consider using a commercial static analysis or pen-testing tool.
+&lt;/p&gt;</description>
+    <tag>owasp-a3</tag>
+    <tag>jsp</tag>
+    <tag>security</tag>
+    <status>DEPRECATED</status>
   </rule>
 </rules>

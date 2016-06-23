@@ -4,25 +4,31 @@ import java.awt.event.KeyEvent;
 
 public class JasperUtils {
 
-  public static String decodeJspClassName(String value) {
-    //This function is replacing this operation and is expected to support all special characters instead only 2.
-    //Prior implementation : .replaceAll("\\.", "/").replaceAll("_005f", "_").replaceAll("_002d","-").replaceAll("_jsp", ".jsp")
-
-    value = value.replaceAll("\\.", "/");
+  /**
+   * Transform a class name from a precompiled JSP and return the file name of the source file (*.jsp).
+   * @param className Class name of the JSP class
+   * @return JSP file name
+   */
+  public static String decodeJspClassName(String className) {
+    className = className.replaceAll("\\.", "/");
 
     for(char ch = Character.MIN_VALUE; ch < 128 ; ch++) {
-      if(isPrintableChar(ch) && !Character.isJavaIdentifierPart(ch) || ch == '_') {
-        //System.out.println("Code "+ ((int)ch)+":");
-        //System.out.println(ch);
+      //Condition minimize the number of replace operations
+      if((isPrintableChar(ch) && !Character.isJavaIdentifierPart(ch)) || ch == '_') {
 
-        //The replaceAll operation are highly ineffective for large string
-        //In was implemented this way because is
-        value = value.replace(mangleChar(ch),""+ch);
+        //The replaceAll operation is highly ineffective for large string
+        //In was implemented this way because it is simpler to maintain.
+        className = className.replace(mangleChar(ch),""+ch);
       }
     }
-    return value.replaceAll("_jsp", ".jsp");
+    return className.replaceAll("_jsp", ".jsp");
   }
 
+  /**
+   * Encode special char to make sure it will be compliant to the class name restriction.
+   * @param ch Special character
+   * @return Encoded format (_XXXX)
+   */
   public static final String mangleChar(char ch)
   {
     char[] result = new char[5];
@@ -34,6 +40,11 @@ public class JasperUtils {
     return new String(result);
   }
 
+  /**
+   * Detect if the character is printable
+   * @param c Character to test
+   * @return
+   */
   public static boolean isPrintableChar( char c ) {
     Character.UnicodeBlock block = Character.UnicodeBlock.of( c );
     return (!Character.isISOControl(c)) &&

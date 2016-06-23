@@ -1,7 +1,7 @@
 <FindBugsFilter><!-- This file is auto-generated. -->
-  <!--<Match>
+  <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_JSP_WRITER' />
-  </Match>-->
+  </Match>
   <Match>
     <Bug pattern='XSS_JSP_PRINT' />
   </Match>
