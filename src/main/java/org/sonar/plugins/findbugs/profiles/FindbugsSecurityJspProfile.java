@@ -17,36 +17,34 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.profiles;
 
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.java.Java;
+import org.sonar.plugins.findbugs.FindbugsProfileImporter;
+import org.sonar.plugins.findbugs.language.Jsp;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-/**
- * Security rules with only the issue that require immediate analysis. It is intend for periodic scan that will trigger
- * a moderate number of false positive.
- */
-public class FindbugsSecurityMinimalProfile extends ProfileDefinition {
+public class FindbugsSecurityJspProfile extends ProfileDefinition {
 
-  private static final String FINDBUGS_SECURITY_AUDIT_PROFILE_NAME = "FindBugs Security Minimal";
-  private final FindbugsProfileImporter importer;
+    private static final String FINDBUGS_SECURITY_JSP_PROFILE_NAME = "FindBugs Security JSP";
+    private final FindbugsProfileImporter importer;
 
-  public FindbugsSecurityMinimalProfile(FindbugsProfileImporter importer) {
-    this.importer = importer;
-  }
+    public FindbugsSecurityJspProfile(FindbugsProfileImporter importer) {
+        this.importer = importer;
+    }
 
-  @Override
-  public RulesProfile createProfile(ValidationMessages messages) {
-    Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
-      "/org/sonar/plugins/findbugs/profile-findbugs-security-minimal.xml"));
-    RulesProfile profile = importer.importProfile(findbugsProfile, messages);
-    profile.setLanguage(Java.KEY);
-    profile.setName(FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
-    return profile;
-  }
+    @Override
+    public RulesProfile createProfile(ValidationMessages messages) {
+        Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
+                "/org/sonar/plugins/findbugs/profile-findbugs-security-jsp.xml"));
+        RulesProfile profile = importer.importProfile(findbugsProfile, messages);
+        profile.setLanguage(Jsp.KEY);
+        profile.setName(FINDBUGS_SECURITY_JSP_PROFILE_NAME);
+        return profile;
+    }
+
 }

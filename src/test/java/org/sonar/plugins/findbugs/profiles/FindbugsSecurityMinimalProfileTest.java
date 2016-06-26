@@ -17,27 +17,34 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.findbugs.FindbugsProfileImporter;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityMinimalProfile;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FindbugsSecurityJspProfileTest {
+public class FindbugsSecurityMinimalProfileTest {
 
   @Test
   public void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityJspProfile secJspProfile = new FindbugsSecurityJspProfile(importer);
+    FindbugsSecurityMinimalProfile secOnlyProfile = new FindbugsSecurityMinimalProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = secJspProfile.createProfile(validation);
+    RulesProfile profile = secOnlyProfile.createProfile(validation);
 
-    //There are 5 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
+
     assertThat(validation.getErrors()).isEmpty();
     assertThat(validation.getWarnings()).isEmpty();
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(6);
+    // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(8);
+    // 62 rules total - 20 informational = 42 major or critical
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(49);
   }
 }

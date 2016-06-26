@@ -17,26 +17,26 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.rules;
 
-import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
+import org.sonar.plugins.java.Java;
 
-import static org.fest.assertions.Assertions.assertThat;
+public class FbContribRulesDefinition implements RulesDefinition {
 
-public class FindbugsProfileTest {
+  public static final String REPOSITORY_KEY = "fb-contrib";
+  public static final String REPOSITORY_NAME = "FindBugs Contrib";
 
-  @Test
-  public void shouldCreateProfile() {
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsProfile findbugsProfile = new FindbugsProfile(importer);
-    ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = findbugsProfile.createProfile(validation);
-    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY))
-      .hasSize(378);
-    assertThat(validation.hasErrors()).isFalse();
+  @Override
+  public void define(Context context) {
+    NewRepository repository = context
+      .createRepository(REPOSITORY_KEY, Java.KEY)
+      .setName(REPOSITORY_NAME);
+
+    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
+    ruleLoader.load(repository, FbContribRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-fbcontrib.xml"), "UTF-8");
+    repository.done();
   }
 
 }

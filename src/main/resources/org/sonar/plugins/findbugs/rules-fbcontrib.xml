@@ -298,7 +298,7 @@
 			this code was written, and should be revisited.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
-  <rule key='STS_SPURIOUS_THREAD_STATES' priority='INFO'>
+  <rule key='STS_SPURIOUS_THREAD_STATES' priority='MAJOR'>
     <name>Multi-threading - Method calls wait, notify or notifyAll on a Thread instance</name>
     <configKey>STS_SPURIOUS_THREAD_STATES</configKey>
     <description>&lt;p&gt;This method invokes the methods wait, notify or notifyAll on a Thread instance.
@@ -1510,7 +1510,7 @@
 			use assertTrue, or assertFalse, instead.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
-  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL' priority='MAJOR'>
+  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL' priority='CRITICAL'>
     <name>Correctness - JUnit test method asserts that an autoboxed value is not null</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL</configKey>
     <description>&lt;p&gt;This method asserts that a primitive value that was autoboxed into a boxed primitive was not
@@ -1602,7 +1602,7 @@
 			use assertTrue, or assertFalse, instead.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
-  <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_IMPOSSIBLE_NULL' priority='MAJOR'>
+  <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_IMPOSSIBLE_NULL' priority='CRITICAL'>
     <name>Correctness - TestNG test method asserts that an autoboxed value is not null</name>
     <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_IMPOSSIBLE_NULL</configKey>
     <description>&lt;p&gt;This method asserts that a primitive value that was autoboxed into a boxed primitive was not
@@ -2030,42 +2030,42 @@
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_THREAD_PRIORITIES' priority='INFO'>
+  <rule key='MDM_THREAD_PRIORITIES' priority='MAJOR'>
     <name>Multi-threading - Method uses suspicious thread priorities</name>
     <configKey>MDM_THREAD_PRIORITIES</configKey>
     <description>&lt;p&gt;Getting or setting thread priorities is not portable and could cause or mask race conditions.&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_THREAD_YIELD' priority='INFO'>
+  <rule key='MDM_THREAD_YIELD' priority='MAJOR'>
     <name>Multi-threading - Method attempts to manually schedule threads</name>
     <configKey>MDM_THREAD_YIELD</configKey>
     <description>&lt;p&gt;Manual thread scheduling with &lt;code&gt;Thread.sleep()&lt;/code&gt; or &lt;code&gt;Thread.yield()&lt;/code&gt; has no guaranteed semantics and is often used to mask race conditions.&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_WAIT_WITHOUT_TIMEOUT' priority='INFO'>
+  <rule key='MDM_WAIT_WITHOUT_TIMEOUT' priority='MAJOR'>
     <name>Multi-threading - Method sleeps without timeout</name>
     <configKey>MDM_WAIT_WITHOUT_TIMEOUT</configKey>
     <description>&lt;p&gt;Calling one of the following methods without timeout could block forever. Consider using a timeout to detect deadlocks or performance problems. Methods: Thread.join(), Object.wait(), Condition.await(), Lock.lock(), Lock.lockInterruptibly(), ReentrantLock.lock(), ReentrantLock.lockInterruptibly()&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_THREAD_FAIRNESS' priority='INFO'>
+  <rule key='MDM_THREAD_FAIRNESS' priority='MAJOR'>
     <name>Multi-threading - Method ignores Lock's fairness settings by calling tryLock()</name>
     <configKey>MDM_THREAD_FAIRNESS</configKey>
     <description>&lt;p&gt;Calling &lt;code&gt;Lock.tryLock()&lt;/code&gt; or &lt;code&gt;ReentrantLock.tryLock()&lt;/code&gt; without a timeout does not honor the lock's fairness setting. If you want to honor the fairness setting for this lock, then use &lt;code&gt;tryLock(0, TimeUnit.SECONDS)&lt;/code&gt; which is almost equivalent (it also detects interruption).&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_SIGNAL_NOT_SIGNALALL' priority='INFO'>
+  <rule key='MDM_SIGNAL_NOT_SIGNALALL' priority='MAJOR'>
     <name>Multi-threading - Method calls Condition.signal() rather than Condition.signalAll()</name>
     <configKey>MDM_SIGNAL_NOT_SIGNALALL</configKey>
     <description>&lt;p&gt;&lt;code&gt;Condition.signalAll()&lt;/code&gt; is preferred over &lt;code&gt;Condition.signal()&lt;/code&gt;. Calling &lt;code&gt;signal()&lt;/code&gt; only wakes up one thread, meaning that the thread woken up might not be the one waiting for the condition that the caller just satisfied.&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_LOCK_ISLOCKED' priority='INFO'>
+  <rule key='MDM_LOCK_ISLOCKED' priority='MAJOR'>
     <name>Multi-threading - Method tests if a lock is locked</name>
     <configKey>MDM_LOCK_ISLOCKED</configKey>
     <description>&lt;p&gt;Calling &lt;code&gt;ReentrantLock.isLocked()&lt;/code&gt; or &lt;code&gt;ReentrantLock.isHeldByCurrentThread()&lt;/code&gt; might indicate race conditions or incorrect locking. These methods are designed for use in debug code or monitoring of the system state, not for synchronization control.&lt;/p&gt;</description>
@@ -2083,7 +2083,7 @@
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MDM_SETDEFAULTLOCALE' priority='INFO'>
+  <rule key='MDM_SETDEFAULTLOCALE' priority='MAJOR'>
     <name>Multi-threading - Method calls Locale.setDefault()</name>
     <configKey>MDM_SETDEFAULTLOCALE</configKey>
     <description>&lt;p&gt;Do not use the &lt;code&gt;Locale.setDefault()&lt;/code&gt; method to change the default locale. It changes the JVM's default locale for all threads and makes your applications unsafe to threads. It does not affect the host locale. Since changing the JVM's default locale may affect many different areas of functionality, this method should only be used if the caller is prepared to reinitialize locale-sensitive code running within the same Java Virtual Machine, such as the user interface.&lt;/p&gt;</description>

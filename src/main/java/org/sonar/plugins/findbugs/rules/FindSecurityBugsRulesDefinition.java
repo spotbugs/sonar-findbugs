@@ -17,16 +17,16 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.rules;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.java.Java;
 
-public class FbContribRulesDefinition implements RulesDefinition {
+public final class FindSecurityBugsRulesDefinition implements RulesDefinition {
 
-  public static final String REPOSITORY_KEY = "fb-contrib";
-  public static final String REPOSITORY_NAME = "FindBugs Contrib";
+  public static final String REPOSITORY_KEY = "findsecbugs";
+  public static final String REPOSITORY_NAME = "Find Security Bugs";
 
   @Override
   public void define(Context context) {
@@ -35,8 +35,8 @@ public class FbContribRulesDefinition implements RulesDefinition {
       .setName(REPOSITORY_NAME);
 
     RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
-    ruleLoader.load(repository, FbContribRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-fbcontrib.xml"), "UTF-8");
+    ruleLoader.load(repository, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-findsecbugs.xml"), "UTF-8");
     repository.done();
-  }
 
+  }
 }
