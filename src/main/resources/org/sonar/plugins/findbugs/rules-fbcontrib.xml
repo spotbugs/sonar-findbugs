@@ -149,7 +149,7 @@
     <configKey>DRE_DECLARED_RUNTIME_EXCEPTION</configKey>
     <description>&lt;p&gt;This method declares a RuntimeException derived class in its throws clause.
 			This may indicate a misunderstanding as to how unchecked exceptions are handled.
-			If is felt that a RuntimeException is so prevalent that it should be declared, it
+			If it is felt that a RuntimeException is so prevalent that it should be declared, it
 			is probably a better idea to prevent the occurrence in code.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -522,9 +522,9 @@
     <tag>style</tag>
   </rule>
   <rule key='COM_PARENT_DELEGATED_CALL' priority='INFO'>
-    <name>Style - Method merely delegates to it's superclass's version</name>
+    <name>Style - Method merely delegates to its superclass's version</name>
     <configKey>COM_PARENT_DELEGATED_CALL</configKey>
-    <description>&lt;p&gt;This method is implemented to just delegate it's implementation by calling
+    <description>&lt;p&gt;This method is implemented to just delegate its implementation by calling
 			the superclass method with the same signature. This method can just be removed.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -980,12 +980,12 @@
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='SC_SUSPICIOUS_COMPARATOR_RETURN_VALUES' priority='MAJOR'>
+  <rule key='SCRV_SUSPICIOUS_COMPARATOR_RETURN_VALUES' priority='MAJOR'>
     <name>Correctness - Comparator method doesn't seem to return all ordering values</name>
-    <configKey>SC_SUSPICIOUS_COMPARATOR_RETURN_VALUES</configKey>
+    <configKey>SCRV_SUSPICIOUS_COMPARATOR_RETURN_VALUES</configKey>
     <description>&lt;p&gt;This compareTo or compare method returns constant values for to represent less than,
-			equals and greater than. However it does not return each type. Given that comparators
-			are transitive, this seems incorrect.&lt;/p&gt;</description>
+			equals and greater than. However it does not return each type, or it unconditionally returns a non zero value. 
+			Given that comparators are transitive, this seems incorrect.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1232,7 +1232,7 @@
   <rule key='SPP_USE_GET0' priority='MAJOR'>
     <name>Performance - Method uses iterator().next() on a List to get the first item</name>
     <configKey>SPP_USE_GET0</configKey>
-    <description>&lt;p&gt;This Method calls myList.iterator().next() on a List to get the first item. It is more performant
+    <description>&lt;p&gt;This method calls myList.iterator().next() on a List to get the first item. It is more performant
 			to just use myList.get(0).&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -1332,8 +1332,19 @@
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='SPP_NULL_CHECK_ON_OPTIONAL' priority='MAJOR'>
+    <name>Correctness - Method checks an Optional reference for null or non nullness</name>
+    <configKey>SPP_NULL_CHECK_ON_OPTIONAL</configKey>
+    <description>This method uses an Optional variable, and checks the reference value for whether it is null or not null.
+			Since the point of the Optional class is to avoid 'the null reference problem', having code that needs to 
+			check the reference itself is self defeating, and therefore makes the use of the Optional variable useless.
+			You should never use a variable of type Optional that has a value of null, and so there should be no need to
+			check for it.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='BAS_BLOATED_ASSIGNMENT_SCOPE' priority='MAJOR'>
-    <name>Performance - Method assigns a variable in a larger scope then is needed</name>
+    <name>Performance - Method assigns a variable in a larger scope than is needed</name>
     <configKey>BAS_BLOATED_ASSIGNMENT_SCOPE</configKey>
     <description>&lt;p&gt;&lt;em&gt;THIS DETECTOR IS HIGHLY EXPERIMENTAL AND IS LIKELY TO CREATE A LOT OF FUD&lt;/em&gt;&lt;/p&gt;
 			&lt;p&gt;This method assigns a value to a variable in an outer scope compared to where the variable is actually used.
@@ -1478,7 +1489,7 @@
     <tag>style</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_ACTUAL_CONSTANT' priority='INFO'>
-    <name>Style - Junit test method passes constant to second (actual) assertion parameter</name>
+    <name>Style - JUnit test method passes constant to second (actual) assertion parameter</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_ACTUAL_CONSTANT</configKey>
     <description>&lt;p&gt;This method calls assert passing a constant value as the second of the two values. The assert
 			method assumes that the expected value is the first parameter, and so it appears that the order
@@ -1486,21 +1497,21 @@
     <tag>style</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_INEXACT_DOUBLE' priority='INFO'>
-    <name>Style - Junit test method asserts that two doubles are exactly equal</name>
+    <name>Style - JUnit test method asserts that two doubles are exactly equal</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_INEXACT_DOUBLE</configKey>
     <description>&lt;p&gt;This method calls assert with two doubles or Doubles. Due to the imprecision of doubles, you
 			should be using the assert method that takes a range parameter that gives a range of error.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT' priority='INFO'>
-    <name>Style - Junit test method asserts that a value is true or false</name>
+    <name>Style - JUnit test method asserts that a value is true or false</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT</configKey>
     <description>&lt;p&gt;This method asserts that a value is equal to true or false. It is simpler to just
 			use assertTrue, or assertFalse, instead.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL' priority='MAJOR'>
-    <name>Correctness - Junit test method asserts that an auto-boxed value is not null</name>
+    <name>Correctness - JUnit test method asserts that an autoboxed value is not null</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_IMPOSSIBLE_NULL</configKey>
     <description>&lt;p&gt;This method asserts that a primitive value that was autoboxed into a boxed primitive was not
 			null. This will never happen, as primitives are never null, and thus the autoboxed value isn't
@@ -1509,30 +1520,63 @@
     <tag>bug</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_ASSERT_USED' priority='MAJOR'>
-    <name>Correctness - Junit test method uses Java asserts rather than a junit assertion</name>
+    <name>Correctness - JUnit test method uses Java asserts rather than a JUnit assertion</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_ASSERT_USED</configKey>
     <description>&lt;p&gt;This method uses a Java assert to assure that a certain state is in effect. As this is
-			a junit test it makes more sense to either check this condition with a junit assert, or allow
+			a JUnit test it makes more sense to either check this condition with a JUnit assert, or allow
 			a following exception to occur.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_NULL' priority='MAJOR'>
+    <name>Correctness - JUnit test method passes null Assert.assertEquals</name>
+    <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_NULL</configKey>
+    <description>&lt;p&gt;This method compares an object's equality to null. It is better to use the Assert.assertNull
+			method so that the JUnit failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_NOT_NULL' priority='MAJOR'>
+    <name>Correctness - JUnit test method passes null Assert.assertNotEquals</name>
+    <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_NOT_NULL</configKey>
+    <description>&lt;p&gt;This method compares an object's inequality to null. It is better to use the Assert.assertNotNull
+			method so that the JUnit failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_EQUALS' priority='MAJOR'>
-    <name>Correctness - Junit test method passes boolean expression to Assert.assertTrue</name>
+    <name>Correctness - JUnit test method passes boolean expression to Assert.assertFalse / Assert.assertTrue</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_EQUALS</configKey>
-    <description>&lt;p&gt;This method evaluates a boolean expression and passes that to Assert.assertTrue. It is better
-			to pass the two values that are being equated to the Assert.assertEquals method so that the
-			junit failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <description>&lt;p&gt;This method evaluates a boolean expression and passes that to Assert.assertFalse / Assert.assertTrue.
+			It is better to pass the two values that are being equated to the Assert.assertEquals method so that the
+			JUnit failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_NOT_EQUALS' priority='MAJOR'>
+    <name>Correctness - JUnit test method passes boolean expression to Assert.assertFalse / Assert.assertTrue</name>
+    <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_USE_ASSERT_NOT_EQUALS</configKey>
+    <description>&lt;p&gt;This method evaluates a boolean expression and passes that to Assert.assertFalse / Assert.assertTrue.
+			It is better to pass the two values that are being equated to the Assert.assertNotEquals method so that the
+			JUnit failure method is more meaningful of the intended test.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_NO_ASSERT' priority='MAJOR'>
-    <name>Correctness - Junit test method appears to have no assertions</name>
+    <name>Correctness - JUnit test method appears to have no assertions</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_NO_ASSERT</configKey>
     <description>&lt;p&gt;This JUnit test method has no assertions. While a unit test could still be valid if it relies on whether
 			or not an exception is thrown, it is usually a sign of a weak test if there are no assertions. It is also
 			possible that assertions occur in a called method that is not seen by this detector, but this makes the logic of 
 			this test more difficult to reason about.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_USING_DEPRECATED' priority='MAJOR'>
+    <name>Correctness - JUnit 4 test using deprecated junit.framework.* classes</name>
+    <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_USING_DEPRECATED</configKey>
+    <description>&lt;p&gt;This JUnit 4 test is still using classes from the junit.framework.* package. You should switch them
+			over to the corresponding org.junit.* set of classes, instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1559,7 +1603,7 @@
     <tag>style</tag>
   </rule>
   <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_IMPOSSIBLE_NULL' priority='MAJOR'>
-    <name>Correctness - TestNG test method asserts that an auto-boxed value is not null</name>
+    <name>Correctness - TestNG test method asserts that an autoboxed value is not null</name>
     <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_IMPOSSIBLE_NULL</configKey>
     <description>&lt;p&gt;This method asserts that a primitive value that was autoboxed into a boxed primitive was not
 			null. This will never happen, as primitives are never null, and thus the autoboxed value isn't
@@ -1568,19 +1612,44 @@
     <tag>bug</tag>
   </rule>
   <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_ASSERT_USED' priority='MAJOR'>
-    <name>Correctness - TestNG test method uses Java asserts rather than a testng assertion</name>
+    <name>Correctness - TestNG test method uses Java asserts rather than a TestNG assertion</name>
     <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_ASSERT_USED</configKey>
     <description>&lt;p&gt;This method uses a Java assert to assure that a certain state is in effect. As this is
-			a testng test it makes more sense to either check this condition with a testng assert, or allow
+			a TestNG test it makes more sense to either check this condition with a TestNG assert, or allow
 			a following exception to occur.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_NULL' priority='MAJOR'>
+    <name>Correctness - TestNG test method passes null Assert.assertEquals</name>
+    <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_NULL</configKey>
+    <description>&lt;p&gt;This method compares an object's equality to null. It is better to use the Assert.assertNull
+			method so that the TestNG failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_NOT_NULL' priority='MAJOR'>
+    <name>Correctness - TestNG test method passes null Assert.assertNotEquals</name>
+    <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_NOT_NULL</configKey>
+    <description>&lt;p&gt;This method compares an object's inequality to null. It is better to use the Assert.assertNotNull
+			method so that the TestNG failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_EQUALS' priority='MAJOR'>
-    <name>Correctness - TestNG test method passes boolean expression to Assert.assertTrue</name>
+    <name>Correctness - TestNG test method passes boolean expression to Assert.assertFalse / Assert.assertTrue</name>
     <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_EQUALS</configKey>
-    <description>&lt;p&gt;This method evaluates a boolean expression and passes that to Assert.assertTrue. It is better
-			to pass the two values that are being equated to the Assert.assertEquals method so that the
+    <description>&lt;p&gt;This method evaluates a boolean expression and passes that to Assert.assertFalse / Assert.assertTrue.
+			It is better to pass the two values that are being equated to the Assert.assertEquals method so that the
+			TestNG failure method is more meaningful of the intended test.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_NOT_EQUALS' priority='MAJOR'>
+    <name>Correctness - TestNG test method passes boolean expression to Assert.assertFalse / Assert.assertTrue</name>
+    <configKey>UTAO_TESTNG_ASSERTION_ODDITIES_USE_ASSERT_NOT_EQUALS</configKey>
+    <description>&lt;p&gt;This method evaluates a boolean expression and passes that to Assert.assertFalse / Assert.assertTrue.
+			It is better to pass the two values that are being equated to the Assert.assertNotEquals method so that the
 			TestNG failure method is more meaningful of the intended test.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -1619,7 +1688,7 @@
     <description>&lt;p&gt;This method catches an exception and generates a new exception of type java.lang.Exception, passing the
 			original exception as the new Exception's cause.  If the original Exception was actually an java.lang.Error, this
 			is dubious as you should not be handling errors. If the original exception is a more specific exception, there is no
-			reason to wrap it in an exception of the java.lang.Exception class, and just obfuscates the type of error that is occuring.
+			reason to wrap it in an exception of the java.lang.Exception class, and just obfuscates the type of error that is occurring.
 			&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -1691,8 +1760,9 @@
   <rule key='LO_EXCEPTION_WITH_LOGGER_PARMS' priority='MAJOR'>
     <name>Correctness - Method creates exception with logger parameter markers in message</name>
     <configKey>LO_EXCEPTION_WITH_LOGGER_PARMS</configKey>
-    <description>&lt;p&gt;This method creates a standard exception passing a message string which contains an SLF4J style
-	       parameter marker '{}'. This marker will not be translated as it is not processed by the Exception class.
+    <description>&lt;p&gt;This method passes a standard exception as a logger parameter, and expects this exception to be substituted in
+	        an SLF4J style parameter marker '{}'. This marker will not be translated as SLF4J doesn't process the Exception class
+	        for markers.
 	       &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -1715,7 +1785,7 @@
 			to change or removal. You should not be using these classes.&lt;/p&gt;
 			Packages that shouldn't be used are:
 			&lt;ul&gt;
-				&lt;li&gt;com.sun.xxx&lt;/li&gt;
+				&lt;li&gt;sun.xxx&lt;/li&gt;
 				&lt;li&gt;org.apache.xerces.xxx&lt;/li&gt;
 				&lt;li&gt;org.apache.xalan.xxx&lt;/li&gt;
 			&lt;/ul&gt;</description>
@@ -1732,9 +1802,9 @@
 			type functionality, which seems dubious when done on a collection&lt;/p&gt;
 			&lt;p&gt;Finally, as a collection is often modified, problems will occur if the collection is
 			contained in a set, because the hashCode, equals or compareTo values will change while the
-			collection is in the set&lt;/p&gt;
+			collection is in the set.&lt;/p&gt;
 			&lt;p&gt;If you wish to maintain a collection of collections, it is probably better to use a List
-			as the outer collection&lt;/p&gt;</description>
+			as the outer collection.&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
@@ -1771,15 +1841,6 @@
     <description>&lt;p&gt;This class appears to implement the old style type safe enum pattern that was used in place of
 			real enums. Since this class is compiled with Java 1.5 or better, it would be simpler and more
 			easy to understand if it was just switched over to an enum.&lt;/p&gt;</description>
-    <tag>style</tag>
-  </rule>
-  <rule key='SMA_STUTTERED_METHOD_ARGUMENTS' priority='INFO'>
-    <name>Style - Code calls a method passing the same value to two different arguments</name>
-    <configKey>SMA_STUTTERED_METHOD_ARGUMENTS</configKey>
-    <description>&lt;p&gt;This method calls a method passing the same value for two or more of the parameters.
-			Often this is a cut/paste bug, but if not, it is confusing why you would pass the same value for two
-			different parameters. Perhaps an alternative method that just takes one parameter should be overridden
-			in this case.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='TBP_TRISTATE_BOOLEAN_PATTERN' priority='INFO'>
@@ -1965,7 +2026,7 @@
   <rule key='MDM_SECURERANDOM' priority='MAJOR'>
     <name>Correctness - Method calls deprecated SecureRandom method</name>
     <configKey>MDM_SECURERANDOM</configKey>
-    <description>&lt;p&gt;The &lt;code&gt;In JDK 1.5 or less, SecureRandom()&lt;/code&gt; constructors and &lt;code&gt;SecureRandom.getSeed()&lt;/code&gt; method are recommended against using. Call &lt;code&gt;SecureRandom.getInstance()&lt;/code&gt; and &lt;code&gt;SecureRandom.getInstance().generateSeed()&lt;/code&gt; instead.&lt;/p&gt;</description>
+    <description>&lt;p&gt;In JDK 1.5 or less, the &lt;code&gt;SecureRandom()&lt;/code&gt; constructors and &lt;code&gt;SecureRandom.getSeed()&lt;/code&gt; method are recommended against using. Call &lt;code&gt;SecureRandom.getInstance()&lt;/code&gt; and &lt;code&gt;SecureRandom.getInstance().generateSeed()&lt;/code&gt; instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -2018,7 +2079,7 @@
 
 			&lt;p&gt;As per the Java specifications, "UTF-8", "US-ASCII", "UTF-16" and "ISO-8859-1" will all be valid &lt;a href = "http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html#standard"&gt;encoding charsets&lt;/a&gt;.  If you aren't sure, try "UTF-8".&lt;/p&gt;
 
-			&lt;p&gt;&lt;b&gt;New in Java 1.7&lt;/b&gt;, You can specify an encoding from &lt;code&gt;StandardCharsets&lt;/code&gt;, like &lt;code&gt;StandardCharsets.UTF_8&lt;/code&gt;.  These are generally preferrable because you don't have to deal with &lt;code&gt;UnsupportedEncodingException&lt;/code&gt;.&lt;/p&gt;</description>
+			&lt;p&gt;&lt;b&gt;New in Java 1.7&lt;/b&gt;, you can specify an encoding from &lt;code&gt;StandardCharsets&lt;/code&gt;, like &lt;code&gt;StandardCharsets.UTF_8&lt;/code&gt;.  These are generally preferrable because you don't have to deal with &lt;code&gt;UnsupportedEncodingException&lt;/code&gt;.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -2168,7 +2229,7 @@
   <rule key='CCNE_COMPARE_CLASS_EQUALS_NAME' priority='MAJOR'>
     <name>Correctness - Method compares class name instead of comparing class</name>
     <configKey>CCNE_COMPARE_CLASS_EQUALS_NAME</configKey>
-    <description>&lt;p&gt;In a JVM, Two classes are the same class (and consequently the same type) if
+    <description>&lt;p&gt;In a JVM, two classes are the same class (and consequently the same type) if
 			they are loaded by the same class loader, and they have the same fully
 			qualified name [JVMSpec 1999].
 
@@ -2194,7 +2255,7 @@
     <tag>style</tag>
   </rule>
   <rule key='CU_CLONE_USABILITY_MISMATCHED_RETURN' priority='INFO'>
-    <name>Style - Clone method declares it returns a type different then the owning class</name>
+    <name>Style - Clone method declares it returns a type different than the owning class</name>
     <configKey>CU_CLONE_USABILITY_MISMATCHED_RETURN</configKey>
     <description>&lt;p&gt;This class implements the Cloneable interface but defines its clone method to return a type
 			that is different than the class itself, or any interfaces that the class implements.&lt;/p&gt;</description>
@@ -2228,7 +2289,7 @@
 			and thus needlessly causes intermediate reallocations of the collection.&lt;/p&gt;
 			&lt;p&gt;You can use the constructor that takes an initial size and that will be much better, but
 			due to the loadFactor of Maps and Sets, even this will not be a correct estimate.&lt;/p&gt;
-			&lt;p&gt;If you are using guava, use its methods that allocate maps and sets with a predetermined size,
+			&lt;p&gt;If you are using Guava, use its methods that allocate maps and sets with a predetermined size,
 			to get the best chance for no reallocations, such as:
 			&lt;ul&gt;
 			    &lt;li&gt;Sets.newHashSetWithExpectedSize(int)&lt;/li&gt;
@@ -2319,7 +2380,7 @@
     <name>Correctness - This method attempts to modify collection that appears to possibly be immutable</name>
     <configKey>MUC_MODIFYING_UNMODIFIABLE_COLLECTION</configKey>
     <description>&lt;p&gt;This method attempts to modify a collection that it got from a source that could potentially have created an
-            immutable collection, thru Arrays.asList, Collections.unmodifiableXXX, or one of guava's methods. Doing so will cause
+            immutable collection, through Arrays.asList, Collections.unmodifiableXXX, or one of Guava's methods. Doing so will cause
             an exception, as these collections are not mutable.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -2563,9 +2624,9 @@
     		&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
-  <rule key='CIS_TOSTRING_STORED_IN_FIELD' priority='INFO'>
+  <rule key='STT_TOSTRING_STORED_IN_FIELD' priority='INFO'>
     <name>Style - This method stores the value of a toString() call into a field</name>
-    <configKey>CIS_TOSTRING_STORED_IN_FIELD</configKey>
+    <configKey>STT_TOSTRING_STORED_IN_FIELD</configKey>
     <description>&lt;p&gt;This method calls the toString() method on an object and stores the value in a field. Doing this
             throws away the type safety of having the object defined by a Class. Using String makes it very easy to
             use the wrong type of value, and the compiler will not catch these mistakes. You should delay converting
@@ -2573,9 +2634,9 @@
             &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
-  <rule key='CIS_STRING_PARSING_A_FIELD' priority='INFO'>
+  <rule key='STT_STRING_PARSING_A_FIELD' priority='INFO'>
     <name>Style - This method parses a String that is a field</name>
-    <configKey>CIS_STRING_PARSING_A_FIELD</configKey>
+    <configKey>STT_STRING_PARSING_A_FIELD</configKey>
     <description>&lt;p&gt;This method calls a parsing method (indexOf, lastIndexOf, startsWith, endsWith, substring, indexOf) on a String
             that is a field, or comes from a collection that is a field. This implies that the String in question is holding 
             multiple parts of information inside the string, which would be more maintainable and type safe if that value was a
@@ -2593,13 +2654,218 @@
     <tag>bug</tag>
   </rule>
   <rule key='CRF_CONFLATING_RESOURCES_AND_FILES' priority='MAJOR'>
-    <name>Correctness - This method accesses URL resources using the File api</name>
+    <name>Correctness - This method accesses URL resources using the File API</name>
     <configKey>CRF_CONFLATING_RESOURCES_AND_FILES</configKey>
-    <description>&lt;p&gt;This method fetches a resource from a URL, and uses the File api to manipulate it. If this resource is a 
-    		classpath resource, it will work if the resource is a file in a directory. If however the file is inside a jar file
-    		this will fail. Use the URL.openStream api instead to access the data of the classpath resource.
+    <description>&lt;p&gt;This method fetches a resource from a URL, and uses the File API to manipulate it. If this resource is a
+    		classpath resource, it will work if the resource is a file in a directory. If however the file is inside a JAR file
+    		this will fail. To avoid this confusing inconsistency, use the URL.openStream API instead to access the data of the classpath resource.
     		&lt;/p&gt;</description>
     <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_NO_EQUALS' priority='INFO'>
+    <name>Style - Class does not implement an equals method</name>
+    <configKey>IMC_IMMATURE_CLASS_NO_EQUALS</configKey>
+    <description>&lt;p&gt;This class which has instance fields has no equals(Object o) method. It is possible that this
+    		class is never used in a context where this is required, it is often assumed, however, from clients 
+    		of this class that it is, so it is good to add such methods when you create them.
+    		&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_NO_HASHCODE' priority='INFO'>
+    <name>Style - Class does not implement a hashCode method</name>
+    <configKey>IMC_IMMATURE_CLASS_NO_HASHCODE</configKey>
+    <description>&lt;p&gt;This class which has instance fields has no hashCode() method. It is possible that this
+    		class is never used in a context where this is required, it is often assumed, however, from clients 
+    		of this class that it is, so it is good to add such methods when you create them.
+    		&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_NO_PACKAGE' priority='INFO'>
+    <name>Style - Class is defined in the default package</name>
+    <configKey>IMC_IMMATURE_CLASS_NO_PACKAGE</configKey>
+    <description>&lt;p&gt;This class has been created in the default package. Classes should be defined in a 
+    		proper package structure, typically defined by the reverse of the domain name of the 
+    		owner of the code base. Putting code in the default (no) package limits it usefulness, and
+    		leaves it open to name collisions.
+    		&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_NO_TOSTRING' priority='INFO'>
+    <name>Style - Class does not implement a toString method</name>
+    <configKey>IMC_IMMATURE_CLASS_NO_TOSTRING</configKey>
+    <description>&lt;p&gt;This class, which has instance fields, has no toString() method which will make debugging with this
+    		class more difficult than it could be. Consider adding a toString() method. Using libraries like commons-lang3 
+    		ToStringBuilder makes this process easy.
+    		&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_IDE_GENERATED_PARAMETER_NAMES' priority='INFO'>
+    <name>Style - Method uses IDE generated parameter names</name>
+    <configKey>IMC_IMMATURE_CLASS_IDE_GENERATED_PARAMETER_NAMES</configKey>
+    <description>&lt;p&gt;This method appears to have been generated from an interface or super class using an IDE.
+    		As such the IDE generated generic names (arg0, arg1, arg2) for parameters for this method,
+    		and the author of this method did not change them to be meaningful. For better understandability
+    		it is recommended that you name these parameters with regard to their function.</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_PRINTSTACKTRACE' priority='INFO'>
+    <name>Style - Method prints the stack trace to the console</name>
+    <configKey>IMC_IMMATURE_CLASS_PRINTSTACKTRACE</configKey>
+    <description>&lt;p&gt;This method prints a stack trace to the console. This is non configurable, and causes an 
+    		application to look unprofessional. Switch to using loggers so that users can control what 
+    		is logged and where.</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='JXI_GET_ENDPOINT_CONSUMES_CONTENT' priority='MAJOR'>
+    <name>Correctness - JAX-RS Method implements a GET request but consumes input</name>
+    <configKey>JXI_GET_ENDPOINT_CONSUMES_CONTENT</configKey>
+    <description>&lt;p&gt;This JAX-RS endpoint is annotated to be used as @GET requests, but also documents that it
+    		consumes JSON or XML data. Since a GET request pulls parameters from the URL, and not
+    		the body of request, this pattern is problematic. If you wish to consume JSON or XML data,
+    		this request should be annotated with @POST.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JXI_INVALID_CONTEXT_PARAMETER_TYPE' priority='MAJOR'>
+    <name>Correctness - JAX-RS Method specifies an invalid @Context parameter type</name>
+    <configKey>JXI_INVALID_CONTEXT_PARAMETER_TYPE</configKey>
+    <description>&lt;p&gt;This JAX-RS endpoint annotates a parameter with a @Context annotation. This annotation can supply values
+    		for the following types:
+    		&lt;ul&gt;
+	    		&lt;li&gt;javax.ws.rs.core.UriInfo&lt;/li&gt;
+		        &lt;li&gt;javax.ws.rs.core.HttpHeaders&lt;/li&gt;
+		        &lt;li&gt;javax.ws.rs.core.Request&lt;/li&gt;
+		        &lt;li&gt;javax.ws.rs.core.SecurityContext&lt;/li&gt;
+		        &lt;li&gt;javax.ws.rs.ext.Providers&lt;/li&gt;
+		        &lt;li&gt;javax.servlet.ServletConfig&lt;/li&gt;
+		        &lt;li&gt;javax.servlet.ServletContext&lt;/li&gt;
+		        &lt;li&gt;javax.servlet.HttpServletRequest&lt;/li&gt;
+		        &lt;li&gt;javax.servlet.HttpServletResponse&lt;/li&gt;
+		    &lt;/ul&gt;
+		    It is possible that your container can supply additional types, but these types are not standard and may
+		    not be supported on other application servers.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JXI_PARM_PARAM_NOT_FOUND_IN_PATH' priority='MAJOR'>
+    <name>Correctness - JAX-RS Method specifies non-resolveable @PathParam</name>
+    <configKey>JXI_PARM_PARAM_NOT_FOUND_IN_PATH</configKey>
+    <description>&lt;p&gt;This JAX-RS endpoint has a @PathParam specified that is not found in the @Path annotation
+    		and thus can not determine from where to populate that parameter.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JXI_UNDEFINED_PARAMETER_SOURCE_IN_ENDPOINT' priority='MAJOR'>
+    <name>Correctness - JAX-RS Method defines a parameter that has no @*Param or @Context annotation, or @Consumes method annotation</name>
+    <configKey>JXI_UNDEFINED_PARAMETER_SOURCE_IN_ENDPOINT</configKey>
+    <description>&lt;p&gt;This JAX-RS endpoint declares parameters without specifying where the value of this parameter comes from.
+    		You can specify this by using one of several 'Param' annotations (@PathParam, @CookieParam, @FormParam @HeaderParam @MatrixParam @QueryParam),
+    		by adding a @Context parameter annotation, or you can declare that the method @Consumes an XML or JSON stream.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_TRANSACTION_ON_NON_PUBLIC_METHOD' priority='MAJOR'>
+    <name>Correctness - Method has a Spring @Transactional annotation on it, but is non-public</name>
+    <configKey>JPAI_TRANSACTION_ON_NON_PUBLIC_METHOD</configKey>
+    <description>&lt;p&gt;This method specifies a Spring @Transactional annotation but the method is defined as being non public.
+    		Spring only creates transactional boundaries on methods that are public, and so this annotation not doing 
+    		anything for this method. Make the method public, or place the annotation on a more appropriate method.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_HC_EQUALS_ON_MANAGED_ENTITY' priority='MAJOR'>
+    <name>Correctness - JPA Entity with Generated @Id defined with hashCode/equals</name>
+    <configKey>JPAI_HC_EQUALS_ON_MANAGED_ENTITY</configKey>
+    <description>&lt;p&gt;This class is defined to be a JPA Entity, and has an @Id field that is generated by the JPA provider.
+    		Since you do not control when that Id is created directly, it is risky to implement hashCode/equals for this
+    		class, and especially for use with Collections, as the data behind the algorithms will not be immutable, and
+    		thus cause problems when those fields change, and the object is in the collection. It is usually safer
+    		to not define hashCode and equals for entity objects, but treat them as objects for IdentityHashSet/Maps instead.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_NON_PROXIED_TRANSACTION_CALL' priority='MAJOR'>
+    <name>Correctness - Method annotated with @Transactional is called from a non Spring proxy</name>
+    <configKey>JPAI_NON_PROXIED_TRANSACTION_CALL</configKey>
+    <description>&lt;p&gt;This method call is to a method that has a @Transactional annotation on it. However since this call is from the
+    		same class, it is not going through any Spring proxy, and thus the transactional quality of this method is completely
+    		lost. @Transactional method must always be called through a Spring bean that is autowired.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_INEFFICIENT_EAGER_FETCH' priority='MAJOR'>
+    <name>Correctness - OneToMany join specifies 1+n EAGER join</name>
+    <configKey>JPAI_INEFFICIENT_EAGER_FETCH</configKey>
+    <description>&lt;p&gt;This JPA entity specifies a @OneToMany join with a fetch type of EAGER. By Default EAGER joins perform
+    	select operations on each element returned from the original query in sequence, thus producing 1 + n queries.
+    	If you are going to use EAGER joins, it is wise to specify a Join type by using @Fetch annotations in
+    	Hibernate or @JoinFetch/@BatchFetch annotations (or hints) in EclipseLink, for example. Even so, These
+    	annotations may only apply in limited cases, such as in the use of find.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_IGNORED_MERGE_RESULT' priority='MAJOR'>
+    <name>Correctness - Method ignores the return value of EntityManager.merge</name>
+    <configKey>JPAI_IGNORED_MERGE_RESULT</configKey>
+    <description>&lt;p&gt;This method calls EntityManager.merge, and throws away the resultant value. This result is the 
+    		managed entity version of the potentially unmanaged object that was passed to merge. You should use
+    		the returned managed entity for any further use.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_NON_SPECIFIED_TRANSACTION_EXCEPTION_HANDLING' priority='MAJOR'>
+    <name>Correctness - Method does not specify how to handle transaction when exception is thrown</name>
+    <configKey>JPAI_NON_SPECIFIED_TRANSACTION_EXCEPTION_HANDLING</configKey>
+    <description>&lt;p&gt;This method declares that it throws one or more non-runtime exceptions. It also is annotated with a
+    		@Transactional annotation but fails to describe whether to rollback the transaction or not based on this
+    		thrown exception. use 'rollbackFor' or 'noRollbackFor' attributes of the Transactional annotation to 
+    		document this.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='JPAI_UNNECESSARY_TRANSACTION_EXCEPTION_HANDLING' priority='MAJOR'>
+    <name>Correctness - Method declares handling a transactional exception that won't be thrown</name>
+    <configKey>JPAI_UNNECESSARY_TRANSACTION_EXCEPTION_HANDLING</configKey>
+    <description>&lt;p&gt;This method declares that it either rolls back or does not rollback a transaction based on an
+    		expected exception being thrown. However this exception, nor any derived exceptions can not be thrown from this method, and so the
+    		annotation is useless.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='SEO_SUBOPTIMAL_EXPRESSION_ORDER' priority='MAJOR'>
+    <name>Performance - Method orders expressions in a conditional in a sub optimal way</name>
+    <configKey>SEO_SUBOPTIMAL_EXPRESSION_ORDER</configKey>
+    <description>&lt;p&gt;This method builds a conditional expression, for example, in an if or while statement where the expressions contain both simple
+			local variable comparisons, as well as comparisons on method calls. The expression orders these so that the method calls
+			come before the simple local variable comparisons. This causes method calls to be executed in conditions when they
+			do not need to be, and thus potentially causes a lot of code to be executed for nothing. By ordering the expressions so that
+			the simple conditions containing local variable conditions are first, you eliminate this waste. This assumes that the method
+			calls do not have side effects. If the method do have side effects, it is probably a better idea to pull these calls out of
+			the condition and execute them first, assigning a value to a local variable. In this way you give a hint that the call may have
+			side effects.&lt;/p&gt;</description>
+    <tag>performance</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IOI_DOUBLE_BUFFER_COPY' priority='MAJOR'>
+    <name>Performance - Method passes a Buffered Stream/Reader/Writer to a already buffering copy method</name>
+    <configKey>IOI_DOUBLE_BUFFER_COPY</configKey>
+    <description>&lt;p&gt;This method copies data from input to output using streams or reader/writers using a well known copy method, from java.nio, commons-io, 
+    		springframework, guava or poi. These methods are efficient in that they copy these files using buffers. However this method is also 
+    		buffering the streams, causing a double buffering to occur. So data first goes to one buffer, then is copied too another buffer, before
+    		making it to the destination (or vice-versa). This just causes the copy operation to be inefficent both from a time perspective, as well
+    		as a memory allocation one. When using these copy methods, do not pass buffered streams/readers/writers.</description>
+    <tag>performance</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IOI_COPY_WITH_READER' priority='MAJOR'>
+    <name>Performance - Method performs bulk stream copy with a java.io.Reader derived input</name>
+    <configKey>IOI_COPY_WITH_READER</configKey>
+    <description>&lt;p&gt;This method copies data from a java.io.Reader derived class to an output class, using a bulk copy method
+    		supplied by java.nio, commons-io, springframework, guava or poi. Since you are copying the entire stream, you
+    		don't care about it's contents, and thus using a Reader is wasteful as a reader has to do the hard work of
+    		converting byte data to characters, when there is no need to do this. Use stream based inputs for better performance.&lt;/p&gt;</description>
+    <tag>performance</tag>
     <tag>bug</tag>
   </rule>
 </rules>
