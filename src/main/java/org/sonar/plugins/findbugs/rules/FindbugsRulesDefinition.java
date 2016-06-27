@@ -17,16 +17,18 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.rules;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.java.Java;
+import org.sonar.squidbridge.rules.ExternalDescriptionLoader;
+import org.sonar.squidbridge.rules.SqaleXmlLoader;
 
-public class FbContribRulesDefinition implements RulesDefinition {
+public final class FindbugsRulesDefinition implements RulesDefinition {
 
-  public static final String REPOSITORY_KEY = "fb-contrib";
-  public static final String REPOSITORY_NAME = "FindBugs Contrib";
+  public static final String REPOSITORY_KEY = "findbugs";
+  public static final String REPOSITORY_NAME = "FindBugs";
 
   @Override
   public void define(Context context) {
@@ -34,9 +36,17 @@ public class FbContribRulesDefinition implements RulesDefinition {
       .createRepository(REPOSITORY_KEY, Java.KEY)
       .setName(REPOSITORY_NAME);
 
-    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
-    ruleLoader.load(repository, FbContribRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-fbcontrib.xml"), "UTF-8");
+
+    RulesDefinitionXmlLoader ruleLoaderJsp = new RulesDefinitionXmlLoader();
+    ruleLoaderJsp.load(repository, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-findbugs.xml"), "UTF-8");
+    SqaleXmlLoader.load(repository, "/com/sonar/sqale/findbugs-model.xml");
     repository.done();
+
+//    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
+//    ruleLoader.load(repository, FindbugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules.xml"), "UTF-8");
+//    ExternalDescriptionLoader.loadHtmlDescriptions(repository, "/org/sonar/l10n/findbugs/rules/findbugs");
+//    SqaleXmlLoader.load(repository, "/com/sonar/sqale/findbugs-model.xml");
+//    repository.done();
   }
 
 }

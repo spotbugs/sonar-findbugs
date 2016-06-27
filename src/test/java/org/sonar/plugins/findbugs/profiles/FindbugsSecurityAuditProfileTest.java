@@ -17,27 +17,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.findbugs.FindbugsProfileImporter;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
+import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-/**
- * Created by Philippe on 2015-11-23.
- */
-public class FindbugsSecurityJspProfileTest {
+public class FindbugsSecurityAuditProfileTest {
 
   @Test
   public void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityJspProfile secJspProfile = new FindbugsSecurityJspProfile(importer);
+    FindbugsSecurityAuditProfile secOnlyProfile = new FindbugsSecurityAuditProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = secJspProfile.createProfile(validation);
+    RulesProfile profile = secOnlyProfile.createProfile(validation);
 
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(5);
-    assertThat(validation.hasErrors()).isFalse();
+    // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
+    assertThat(validation.getErrors()).isEmpty();
+    assertThat(validation.getWarnings()).isEmpty();
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(8);
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(76);
   }
 }

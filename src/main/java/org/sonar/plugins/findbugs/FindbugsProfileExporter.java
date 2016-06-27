@@ -25,7 +25,11 @@ import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.Bug;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
@@ -58,7 +62,7 @@ public class FindbugsProfileExporter extends ProfileExporter {
     }
   }
 
-  protected static FindBugsFilter buildFindbugsFilter(Iterable<ActiveRule> activeRules) {
+  public static FindBugsFilter buildFindbugsFilter(Iterable<ActiveRule> activeRules) {
     FindBugsFilter root = new FindBugsFilter();
     for (ActiveRule activeRule : activeRules) {
       if (FindbugsRulesDefinition.REPOSITORY_KEY.equals(activeRule.getRepositoryKey()) ||

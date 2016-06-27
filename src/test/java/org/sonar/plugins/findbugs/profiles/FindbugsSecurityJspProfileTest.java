@@ -17,25 +17,32 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.findbugs;
+package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.findbugs.FindbugsProfileImporter;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityJspProfile;
+import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 
 import static org.fest.assertions.Assertions.assertThat;
 
-public class FindbugsProfileTest {
+public class FindbugsSecurityJspProfileTest {
 
   @Test
   public void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsProfile findbugsProfile = new FindbugsProfile(importer);
+    FindbugsSecurityJspProfile secJspProfile = new FindbugsSecurityJspProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = findbugsProfile.createProfile(validation);
-    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY))
-      .hasSize(378);
-    assertThat(validation.hasErrors()).isFalse();
-  }
+    RulesProfile profile = secJspProfile.createProfile(validation);
 
+    //There are 6 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
+    assertThat(validation.getErrors()).isEmpty();
+    assertThat(validation.getWarnings()).isEmpty();
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(5);
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(1);
+  }
 }

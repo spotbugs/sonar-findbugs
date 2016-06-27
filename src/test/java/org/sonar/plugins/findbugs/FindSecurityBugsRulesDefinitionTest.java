@@ -22,6 +22,7 @@ package org.sonar.plugins.findbugs;
 import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.java.Java;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class FindSecurityBugsRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
-    assertThat(rules).hasSize(69);
+    assertThat(rules).hasSize(76);
 
     for (Rule rule : rules) {
       assertThat(rule.key()).isNotNull();

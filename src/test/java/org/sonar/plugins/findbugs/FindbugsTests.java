@@ -24,11 +24,14 @@ import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Assert;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
+import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
+import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.Java;
 import org.sonar.test.TestUtils;
 import org.xml.sax.SAXException;
@@ -57,15 +60,6 @@ public abstract class FindbugsTests {
     rules.add(rule2);
 
     return rules;
-  }
-
-  protected List<ActiveRule> buildActiveRulesFixture(List<Rule> rules) {
-    List<ActiveRule> activeRules = new ArrayList<ActiveRule>();
-    ActiveRule activeRule1 = new ActiveRule(null, rules.get(0), RulePriority.CRITICAL);
-    activeRules.add(activeRule1);
-    ActiveRule activeRule2 = new ActiveRule(null, rules.get(1), RulePriority.MAJOR);
-    activeRules.add(activeRule2);
-    return activeRules;
   }
 
   protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug,

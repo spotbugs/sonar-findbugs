@@ -39,9 +39,10 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
+import org.sonar.api.batch.BatchSide;
 import org.sonar.api.utils.SonarException;
 import org.sonar.api.utils.TimeProfiler;
+import org.sonar.api.utils.log.Profiler;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +63,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class FindbugsExecutor implements BatchExtension {
+@BatchSide
+public class FindbugsExecutor {
 
   private static final String FINDBUGS_CORE_PLUGIN_ID = "edu.umd.cs.findbugs.plugins.core";
 
@@ -159,9 +161,9 @@ public class FindbugsExecutor implements BatchExtension {
 
       return toReportedBugs(xmlBugReporter.getBugCollection());
     } catch (TimeoutException e) {
-      throw new SonarException("Can not execute Findbugs with a timeout threshold value of " + configuration.getTimeout() + " milliseconds", e);
+      throw new IllegalStateException("Can not execute Findbugs with a timeout threshold value of " + configuration.getTimeout() + " milliseconds", e);
     } catch (Exception e) {
-      throw new SonarException("Can not execute Findbugs", e);
+      throw new IllegalStateException("Can not execute Findbugs", e);
     } finally {
       // we set back the original security manager BEFORE shutting down the executor service, otherwise there's a problem with Java 5
       System.setSecurityManager(currentSecurityManager);
@@ -238,9 +240,9 @@ public class FindbugsExecutor implements BatchExtension {
         pluginJarPathList.add(configuration.getFindSecBugsJar().getAbsolutePath());
       }
     } catch (IOException e) {
-      throw new SonarException(e);
+      throw new IllegalStateException(e);
     } catch (URISyntaxException e) {
-      throw new SonarException(e);
+      throw new IllegalStateException(e);
     }
     List<Plugin> customPluginList = Lists.newArrayList();
 

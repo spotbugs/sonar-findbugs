@@ -87,7 +87,6 @@ public class SmapParser {
 
     private static String getLine(BufferedReader reader) throws IOException {
         String s = reader.readLine();
-        //System.out.println("))"+s);
         if (s == null) {
             throw new IOException("EOF parsing SMAP");
         }

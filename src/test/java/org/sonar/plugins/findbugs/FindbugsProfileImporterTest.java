@@ -26,6 +26,8 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 
@@ -78,7 +80,7 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new InputStreamReader(input), ValidationMessages.create());
     List<ActiveRule> results = profile.getActiveRules();
 
-    assertThat(results).hasSize(18);
+    assertThat(results).hasSize(20);
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "EC_INCOMPATIBLE_ARRAY_COMPARE")).isNotNull();
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY")).isNotNull();
   }
@@ -89,7 +91,7 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new InputStreamReader(input), ValidationMessages.create());
     List<ActiveRule> results = profile.getActiveRules();
 
-    assertThat(results).hasSize(180);
+    assertThat(results).hasSize(159);
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
   }
 
@@ -99,12 +101,12 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new InputStreamReader(input), ValidationMessages.create());
     List<ActiveRule> results = profile.getActiveRules();
 
-    assertThat(results).hasSize(10);
+    assertThat(results).hasSize(13);
     assertThat(profile.getActiveRule(FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 
   @Test
-  public void shouldBuilModuleTreeFromXml() throws IOException {
+  public void shouldBuildModuleTreeFromXml() throws IOException {
     InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/test_module_tree.xml");
 
     XStream xStream = FindBugsFilter.createXStream();
@@ -135,6 +137,7 @@ public class FindbugsProfileImporterTest {
     List<ActiveRule> results = profile.getActiveRules();
 
     assertThat(results).hasSize(1);
+    assertThat(messages.getErrors()).isEmpty();
     assertThat(messages.getWarnings()).hasSize(1);
   }
 
@@ -145,7 +148,8 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), messages);
     List<ActiveRule> results = profile.getActiveRules();
 
-    assertThat(results).hasSize(139);
+    assertThat(results).hasSize(159);
+    assertThat(messages.getErrors()).isEmpty();
     assertThat(messages.getWarnings()).hasSize(1);
   }
 
@@ -156,7 +160,8 @@ public class FindbugsProfileImporterTest {
     RulesProfile profile = importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), messages);
     List<ActiveRule> results = profile.getActiveRules();
 
-    assertThat(results).hasSize(10);
+    assertThat(results).hasSize(12);
+    assertThat(messages.getErrors()).isEmpty();
     assertThat(messages.getWarnings()).hasSize(1);
   }
 }
