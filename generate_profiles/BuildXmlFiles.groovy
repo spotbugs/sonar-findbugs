@@ -2,6 +2,11 @@ import groovy.text.SimpleTemplateEngine
 import groovy.xml.MarkupBuilder
 import groovy.util.Node
 
+@Grapes([
+    @Grab(group='com.google.code.findbugs'  , module='findbugs', version='3.0.1'),
+    @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='6.6.1'),
+    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.4.6')]
+)
 
 //Includes all the bugs that are bundle with FindBugs by default
 findBugsPatterns = ["XSS_REQUEST_PARAMETER_TO_SEND_ERROR",
@@ -144,15 +149,25 @@ def getSonarPriority(String type,String category, String description) {
 
 //Plugin definition
 class Plugin {
-    String file = ""
+    String groupId = ""
+    String artifactId = ""
+    String version = ""
     private Node fbConfXml = null;
 
+    private String getFile() {
+        def homeDir = System.getProperty("user.home");
+        if(!(new File(homeDir+"/.groovy")).exists()) {
+            println "[WARN] Unable to find groovy cache directory. Expected \$home/.groovy";
+        }
+        homeDir + "/.groovy/grapes/"+groupId+"/"+artifactId+"/jars/"+artifactId+"-"+version+".jar"
+    }
+
     InputStream getMessages() {
-        URL urlMsg1 = new URL("jar:file:deps/"+file+"!/messages.xml")
+        URL urlMsg1 = new URL("jar:file:"+getFile()+"!/messages.xml")
         return urlMsg1.openStream()
     }
     InputStream getFindbugsConf() {
-        URL urlMsg1 = new URL("jar:file:deps/"+file+"!/findbugs.xml")
+        URL urlMsg1 = new URL("jar:file:"+getFile()+"!/findbugs.xml")
         return urlMsg1.openStream()
     }
     String getCategory(String bugType) {
@@ -176,9 +191,9 @@ String getFindBugsCategory(List<Plugin> plugins, String bugType) {
     return "EXPERIMENTAL"
 }
 
-FSB = new Plugin(file:"findsecbugs-plugin-1.4.6.jar")
-FB = new Plugin(file:"findbugs-3.0.1.jar")
-CONTRIB = new Plugin(file:"fb-contrib-6.6.1.jar")
+FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs' , artifactId: 'findsecbugs-plugin', version:'1.4.6')
+FB = new Plugin(groupId: 'com.google.code.findbugs' , artifactId: 'findbugs', version:'3.0.1')
+CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib' , artifactId: 'fb-contrib', version:'6.6.1')
 
 /**
  *
