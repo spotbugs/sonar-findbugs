@@ -17,7 +17,7 @@ public class FindbugsContribProfileTest {
     FindbugsContribProfile findbugsProfile = new FindbugsContribProfile(importer);
     ValidationMessages validation = ValidationMessages.create();
     RulesProfile profile = findbugsProfile.createProfile(validation);
-    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(453);
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(452);
     assertThat(profile.getActiveRulesByRepository(FbContribRulesDefinition.REPOSITORY_KEY)).hasSize(257);
     assertThat(validation.hasErrors()).isFalse();
   }

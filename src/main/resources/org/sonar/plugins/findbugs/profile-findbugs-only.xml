@@ -45,9 +45,6 @@
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
   </Match>
   <Match>
-    <Bug pattern='XSS_REQUEST_PARAMETER_TO_JSP_WRITER' />
-  </Match>
-  <Match>
     <Bug pattern='SW_SWING_METHODS_INVOKED_IN_SWING_THREAD' />
   </Match>
   <Match>
