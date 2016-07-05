@@ -42,7 +42,7 @@ public class FindbugsRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
-    assertThat(rules).hasSize(453);
+    assertThat(rules).hasSize(452);
 
     List<String> rulesWithMissingSQALE = Lists.newLinkedList();
     for (Rule rule : rules) {

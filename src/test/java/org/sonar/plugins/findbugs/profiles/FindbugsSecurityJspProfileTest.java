@@ -42,7 +42,7 @@ public class FindbugsSecurityJspProfileTest {
     //There are 6 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
     assertThat(validation.getErrors()).isEmpty();
     assertThat(validation.getWarnings()).isEmpty();
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(5);
-    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(1);
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(6);
+    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(0);
   }
 }

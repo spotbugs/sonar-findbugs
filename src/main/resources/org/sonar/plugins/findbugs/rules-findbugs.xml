@@ -161,22 +161,6 @@ consider using a commercial static analysis or pen-testing tool.
     <tag>owasp-a3</tag>
     <tag>security</tag>
   </rule>
-  <rule key='XSS_REQUEST_PARAMETER_TO_JSP_WRITER' priority='MAJOR'>
-    <name>Security - JSP reflected cross site scripting vulnerability</name>
-    <configKey>XSS_REQUEST_PARAMETER_TO_JSP_WRITER</configKey>
-    <description>&lt;p&gt;This code directly writes an HTTP parameter to JSP output, which allows for a cross site scripting
-vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/Cross-site_scripting"&gt;http://en.wikipedia.org/wiki/Cross-site_scripting&lt;/a&gt;
-for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of cross site scripting.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
-vulnerabilities that FindBugs doesn't report. If you are concerned about cross site scripting, you should seriously
-consider using a commercial static analysis or pen-testing tool.
-&lt;/p&gt;</description>
-    <tag>owasp-a3</tag>
-    <tag>jsp</tag>
-    <tag>security</tag>
-    <status>DEPRECATED</status>
-  </rule>
   <rule key='SW_SWING_METHODS_INVOKED_IN_SWING_THREAD' priority='MAJOR'>
     <name>Bad practice - Certain swing methods needs to be invoked in Swing thread</name>
     <configKey>SW_SWING_METHODS_INVOKED_IN_SWING_THREAD</configKey>

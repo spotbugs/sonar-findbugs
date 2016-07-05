@@ -202,7 +202,7 @@ CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib' , artifactId: 'fb-con
  * @param includedBugs Bug type to include
  * @return
  */
-def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBugs) {
+def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBugs,List<String> excludedBugs = []) {
 
 
     //Output file
@@ -223,7 +223,7 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 
             //if(rulesSetName == 'jsp') println pattern.attribute("type")
 
-            if(includedBugs.isEmpty() || includedBugs.contains(pattern.attribute("type"))) {
+            if((includedBugs.isEmpty() || includedBugs.contains(pattern.attribute("type"))) && !excludedBugs.contains(pattern.attribute("type"))) {
                 //if(rulesSetName == 'jsp') println "-INCLUDED"
 
                 rule(key: pattern.attribute("type"),
@@ -309,17 +309,19 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
     }
 }
 
+def excludedJspRules = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER"];
+
 //FindBugs
-writeRules("findbugs", [FB], [])
+writeRules("findbugs", [FB], [], excludedJspRules)
 //Find Security Bugs
 writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs)
-writeRules("jsp", [FSB], majorJspBugs + criticalJspBugs)
+writeRules("jsp", [FSB,FB], majorJspBugs + criticalJspBugs)
 //FB-contrib
 writeRules("fbcontrib", [CONTRIB], [])
 
 ////////////// Generate the profile files
 
-def writeProfile(String profileName,List<String> includedBugs) {
+def writeProfile(String profileName,List<String> includedBugs,List<String> excludedBugs = []) {
 
     File f = new File("out_sonar","profile-"+profileName+".xml")
     printf("Building profile %s (%s)%n",profileName,f.getCanonicalPath())
@@ -333,8 +335,10 @@ def writeProfile(String profileName,List<String> includedBugs) {
 
         includedBugs.forEach { patternName ->
 
-            Match {
-                Bug(pattern: patternName)
+            if(!excludedBugs.contains(patternName)) {
+                Match {
+                    Bug(pattern: patternName)
+                }
             }
         }
 
@@ -360,8 +364,8 @@ def getAllPatternsFromPlugin(Plugin plugin) {
 }
 
 
-writeProfile("findbugs-only", getAllPatternsFromPlugin(FB));
-writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB));
+writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), excludedJspRules);
+writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), excludedJspRules);
 writeProfile("findbugs-security-audit", informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns)
 writeProfile("findbugs-security-minimal", cryptoBugs + majorBugs + criticalBugs + findBugsPatterns)
 writeProfile("findbugs-security-jsp", majorJspBugs + criticalJspBugs)
