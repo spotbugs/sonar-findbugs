@@ -114,6 +114,10 @@ public class FindbugsConfiguration {
       LOG.warn("Findbugs needs sources to be compiled."
               + " Please build project before executing sonar or check the location of compiled classes to"
               + " make it possible for Findbugs to analyse your project.");
+
+      if(hasSourceFiles()) { //This exclude test source files
+        throw new IllegalStateException("This project contains Java source files that are not compiled.");
+      }
     }
 
     if(hasJspFiles && !hasPrecompiledJsp) {
@@ -131,9 +135,9 @@ public class FindbugsConfiguration {
     return findbugsProject;
   }
 
-  private Iterable<File> getSourceFiles() {
+  private boolean hasSourceFiles() {
     FilePredicates pred = fileSystem.predicates();
-    return fileSystem.files(pred.and(pred.hasType(Type.MAIN), pred.hasLanguage(Java.KEY)));
+    return fileSystem.hasFiles(pred.and(pred.hasType(Type.MAIN), pred.hasLanguage(Java.KEY)));
   }
 
   @VisibleForTesting
