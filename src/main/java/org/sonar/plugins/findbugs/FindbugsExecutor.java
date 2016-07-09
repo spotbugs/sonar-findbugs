@@ -100,7 +100,6 @@ public class FindbugsExecutor {
   }
 
   public Collection<ReportedBug> execute(boolean useFbContrib, boolean useFindSecBugs) {
-    TimeProfiler profiler = new TimeProfiler().start("Execute Findbugs " + FindbugsVersion.getVersion());
     // We keep a handle on the current security manager because FB plays with it and we need to restore it before shutting down the executor
     // service
     SecurityManager currentSecurityManager = System.getSecurityManager();
@@ -118,6 +117,12 @@ public class FindbugsExecutor {
       final FindBugs2 engine = new FindBugs2();
 
       Project project = configuration.getFindbugsProject();
+
+      if(project.getFileCount() == 0) {
+        LOG.info("Findbugs analysis skipped for this project.");
+        return new ArrayList<>();
+      }
+
       customPlugins = loadFindbugsPlugins(useFbContrib,useFindSecBugs);
 
       disableUpdateChecksOnEveryPlugin();
@@ -156,8 +161,6 @@ public class FindbugsExecutor {
       engine.finishSettings();
 
       executorService.submit(new FindbugsTask(engine)).get(configuration.getTimeout(), TimeUnit.MILLISECONDS);
-
-      profiler.stop();
 
       return toReportedBugs(xmlBugReporter.getBugCollection());
     } catch (TimeoutException e) {
@@ -251,7 +254,7 @@ public class FindbugsExecutor {
         Plugin plugin = Plugin.addCustomPlugin(new File(path).toURI(), contextClassLoader);
         if (plugin != null) {
           customPluginList.add(plugin);
-          LOG.info("Found findbugs plugin: " + path);
+          LOG.info("Loading findbugs plugin: " + path);
         }
       } catch (PluginException e) {
         LOG.warn("Failed to load plugin for custom detector: " + path);
