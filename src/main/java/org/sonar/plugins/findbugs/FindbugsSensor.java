@@ -19,6 +19,9 @@
  */
 package org.sonar.plugins.findbugs;
 
+import java.io.File;
+import java.util.Collection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.fs.FileSystem;
@@ -39,9 +42,6 @@ import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
-
-import java.io.File;
-import java.util.Collection;
 
 public class FindbugsSensor implements Sensor {
 
@@ -84,6 +84,9 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
+    if(!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules() && !hasActiveFindSecBugsJspRules()){
+      return;
+    }
 
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules() || hasActiveFindSecBugsJspRules());
 
