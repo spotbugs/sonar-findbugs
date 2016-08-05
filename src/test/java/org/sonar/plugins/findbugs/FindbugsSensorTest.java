@@ -182,11 +182,25 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_not_execute_findbugs_if_no_active() throws Exception {
+  public void should_execute_findbugs_but_not_find_violation() throws Exception {
 
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
+
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+
+    pico.addComponent(createRulesProfileWithActiveRules(true, false, false, false));
+
+    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
+    analyser.execute(sensorContext);
+
+    verify(executor).execute(false, false);
+    verify(sensorContext, never()).newIssue();
+  }
+
+  @Test
+  public void should_not_execute_findbugs_if_no_active() throws Exception {
 
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
