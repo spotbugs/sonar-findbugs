@@ -10,44 +10,53 @@ import org.sonar.api.batch.fs.InputFile;
 
 import java.util.ArrayList;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class ByteCodeResourceLocatorTest {
-  FileSystem fs;
-  FilePredicates predicates;
+
+  //File system that return mock input files
+//  FileSystem fs;
+//  FilePredicates predicates;
+
+  //File system that return no Input files
+  FileSystem fsEmpty;
+  FilePredicates predicatesEmpty;
 
   @Before
   public void setUp() {
 
-    fs = mock(FileSystem.class);
-    predicates = mock(FilePredicates.class);
-    when(fs.predicates()).thenReturn(predicates);
+    //Not used for the moment
+//    fs = mock(FileSystem.class);
+//    predicates = mock(FilePredicates.class);
+//    when(fs.predicates()).thenReturn(predicates);
+
+    fsEmpty = mock(FileSystem.class);
+    predicatesEmpty = mock(FilePredicates.class);
+    when(fsEmpty.predicates()).thenReturn(predicatesEmpty);
+    when(fsEmpty.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
   }
 
 
   @Test
   public void findJavaClassFile_normalClassName() {
-    //No Input file need to be return for the test
-    when(fs.inputFiles(Matchers.<FilePredicate>any())).thenReturn(new ArrayList<InputFile>());
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    locator.findJavaClassFile("com.helloworld.ThisIsATest",fs);
+    locator.findJavaClassFile("com.helloworld.ThisIsATest", fsEmpty);
 
-    verify(predicates,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
+    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
   }
 
   @Test
   public void findJavaClassFile_withInnerClass() {
-    //No Input file need to be return for the test
-    when(fs.inputFiles(Matchers.<FilePredicate>any())).thenReturn(new ArrayList<InputFile>());
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    locator.findJavaClassFile("com.helloworld.ThisIsATest$InnerClass",fs);
+    locator.findJavaClassFile("com.helloworld.ThisIsATest$InnerClass",fsEmpty);
 
-    verify(predicates,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
+    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
   }
 
   @Test
@@ -55,12 +64,9 @@ public class ByteCodeResourceLocatorTest {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
 
-    //No Input file need to be return for the test
-    when(fs.inputFiles(Matchers.<FilePredicate>any())).thenReturn(new ArrayList<InputFile>());
+    locator.findTemplateFile("jsp_servlet._folder1._folder2.__helloworld", fsEmpty);
 
-    locator.findTemplateFile("jsp_servlet._folder1._folder2.__helloworld", fs);
-
-    verify(predicates,times(1)).hasRelativePath("src/main/webapp//folder1/folder2/helloworld.jsp");
+    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/webapp//folder1/folder2/helloworld.jsp");
   }
 
   @Test
@@ -72,17 +78,13 @@ public class ByteCodeResourceLocatorTest {
 
     for(String jspPage : pages) {
       String name = "org.apache.jsp." + JspUtils.makeJavaPackage(jspPage);
-      System.out.println(name);
+      System.out.println("Compiled class name: "+name);
 
       ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
+      locator.findTemplateFile(name, fsEmpty);
 
-      //No Input file need to be return for the test
-      when(fs.inputFiles(Matchers.<FilePredicate>any())).thenReturn(new ArrayList<InputFile>());
-
-      locator.findTemplateFile(name, fs);
-
-      System.out.println("Expecting: "+prefixSource + jspPage);
-      verify(predicates,times(1)).hasRelativePath(prefixSource + jspPage);
+      System.out.println("Expecting: "+ prefixSource + jspPage);
+      verify(predicatesEmpty,times(1)).hasRelativePath(prefixSource + jspPage);
     }
 
   }

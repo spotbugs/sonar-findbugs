@@ -127,10 +127,18 @@ public class FindbugsSensor implements Sensor {
           continue;
         }
 
-        //Class file (compiled bytecode with potential SMAP metadata)
+        //Locate the original class file
         File classFile = findOriginalClassForBug(bugInstance.getClassName());
 
+        //If the class was an outer class, the source file will not be analog to the class name.
+        //The original source file is available in the class file metadata.
+        resource = byteCodeResourceLocator.findJavaOuterClassFile(className, classFile, this.fs);
+        if (resource != null) {
+          insertIssue(rule, resource, line, longMessage);
+          continue;
+        }
 
+        //More advanced mapping if the original source is not Java files
         if (classFile != null) {
           //Attempt to load SMAP debug metadata
           SmapParser.SmapLocation location = byteCodeResourceLocator.extractSmapLocation(className, line, classFile);
