@@ -19,11 +19,17 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
 import edu.umd.cs.findbugs.MethodAnnotation;
 import edu.umd.cs.findbugs.SourceLineAnnotation;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.picocontainer.DefaultPicoContainer;
@@ -32,8 +38,8 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.resources.Resource;
@@ -42,20 +48,11 @@ import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
+import com.google.common.collect.Lists;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class FindbugsSensorTest extends FindbugsTests {
 
@@ -193,12 +190,26 @@ public class FindbugsSensorTest extends FindbugsTests {
 
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules(false, false, false, false));
+    pico.addComponent(createRulesProfileWithActiveRules(true, false, false, false));
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
     analyser.execute(sensorContext);
 
     verify(executor).execute(false, false);
+    verify(sensorContext, never()).newIssue();
+  }
+
+  @Test
+  public void should_not_execute_findbugs_if_no_active() throws Exception {
+
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+
+    pico.addComponent(createRulesProfileWithActiveRules(false, false, false, false));
+
+    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
+    analyser.execute(sensorContext);
+
+    verify(executor, never()).execute(false, false);
     verify(sensorContext, never()).newIssue();
   }
 
