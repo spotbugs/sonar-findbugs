@@ -19,17 +19,14 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
-import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -60,20 +57,19 @@ public class ByteCodeResourceLocator implements BatchExtension {
             className = className.substring(0, indexDollarSign); //Remove innerClass from the class name
         }
 
-        Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath("src/main/java/"+className.replaceAll("\\.","/")+".java"));
-
-        for(InputFile f: files) {
-            return f;
-        }
-        return null;
+        return buildInputFile(className.replaceAll("\\.","/")+".java", fs);
     }
 
-    public InputFile findSourceFile(File classFile, FileSystem fs) {
+    public InputFile findJavaOuterClassFile(String className, File classFile, FileSystem fs) {
         try (InputStream in = new FileInputStream(classFile)) {
             DebugExtensionExtractor debug = new DebugExtensionExtractor();
-            String sourceFile = debug.getDebugExtFromClass(in);
+            String source = debug.getDebugSourceFromClass(in);
 
-            return buildInputFile(sourceFile, fs);
+            if(source == null) return null;
+            String newClassName = FilenameUtils.getBaseName(source);
+            String packagePrefix = className.lastIndexOf(".") != -1 ? FilenameUtils.getBaseName(className) + "." : "";
+            String fullClassName = packagePrefix + newClassName;
+            return findJavaClassFile(fullClassName, fs);
         }
         catch (IOException e) {
             LOG.warn("An error occurs while opening classfile : " + classFile.getPath());
@@ -125,8 +121,9 @@ public class ByteCodeResourceLocator implements BatchExtension {
     }
 
     public InputFile buildInputFile(String fileName,FileSystem fs) {
-        for(String sourceDir : Arrays.asList("src/main/webapp/","src/main/resources","src/main/java","src")) {
-            Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+fileName));
+        for(String sourceDir : Arrays.asList("src/main/java","src/main/webapp","src/main/resources","src")) {
+            System.out.println("Source file tested : "+sourceDir+"/"+fileName);
+            Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
             for (InputFile f : files) {
                 return f;
             }
@@ -163,11 +160,11 @@ public class ByteCodeResourceLocator implements BatchExtension {
             }
             catch (IOException e) {
                 LOG.debug("Unable to open smap file : " + smapFile.getAbsolutePath());
-                throw new RuntimeException(e);
             }
         }
-
-        LOG.debug("No smap mapping found.");
+        else {
+            LOG.debug("No smap mapping found.");
+        }
         return null; //No smap file is present.
     }
 
@@ -182,4 +179,5 @@ public class ByteCodeResourceLocator implements BatchExtension {
         SmapParser parser = new SmapParser(smap);
         return parser.getSmapLocation(originalLine);
     }
+
 }
