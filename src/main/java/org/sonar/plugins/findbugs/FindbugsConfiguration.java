@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.Project;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
@@ -79,11 +80,11 @@ public class FindbugsConfiguration {
   public Project getFindbugsProject() throws IOException {
     Project findbugsProject = new Project();
 
-    /*for (File file : getSourceFiles()) {
+    for (File file : getSourceFiles()) { //The original source file are look at by some detectors
       if(FilenameUtils.getExtension(file.getName()).equals("java")) {
         findbugsProject.addFile(file.getCanonicalPath());
       }
-    }*/
+    }
 
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
@@ -135,9 +136,35 @@ public class FindbugsConfiguration {
     return findbugsProject;
   }
 
+  /**
+   * Return the complete list of Java files from the project (excluding test files)
+   * @return The list of Java files
+   */
+  private Iterable<File> getSourceFiles() {
+    FilePredicates pred = fileSystem.predicates();
+    return fileSystem.files(pred.and(
+            pred.hasType(Type.MAIN),
+            pred.hasLanguage(Java.KEY),
+            pred.not(pred.matchesPathPattern("**/package-info.java"))
+    ));
+  }
+
+  /**
+   * Determine if the project has Java source files. This is used to determine if the project has no compiled classes on
+   * purpose or because the compilation was omit from the process.
+   * @return If at least one Java file is present
+   */
   private boolean hasSourceFiles() {
     FilePredicates pred = fileSystem.predicates();
-    return fileSystem.hasFiles(pred.and(pred.hasType(Type.MAIN), pred.hasLanguage(Java.KEY)));
+    return fileSystem.hasFiles(
+            pred.and(
+                    pred.hasType(Type.MAIN),
+                    pred.hasLanguage(Java.KEY),
+                    //package-info.java will not generate any class files.
+                    //See: https://github.com/SonarQubeCommunity/sonar-findbugs/issues/36
+                    pred.not(pred.matchesPathPattern("**/package-info.java"))
+            )
+    );
   }
 
   @VisibleForTesting
