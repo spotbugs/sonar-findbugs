@@ -43,6 +43,14 @@ public class DebugExtensionExtractor {
         return visitor.debug;
     }
 
+    public String getDebugSourceFromClass(InputStream classIn) throws IOException {
+
+        AbstractClassVisitor visitor = new AbstractClassVisitor();
+        ClassReader classReader= new ClassReader(classIn);
+        classReader.accept(visitor, 0);
+
+        return visitor.source;
+    }
 
     private class AbstractClassVisitor extends ClassVisitor {
 

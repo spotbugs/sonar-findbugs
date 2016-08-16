@@ -154,8 +154,8 @@ public class SmapParser {
         return javaFilename;
     }
 
-    public String getScriptFilename() {
-        FileInfo f = fileinfo.get(0);
+    public String getScriptFilename(int fileIndex) {
+        FileInfo f = fileinfo.get(fileIndex);
         return f.name;
     }
 
@@ -163,7 +163,13 @@ public class SmapParser {
         return java2jsp.get(lineNo);
     }
 
-    private static class FileInfo {
+    public SmapLocation getSmapLocation(Integer lineNo) {
+        int[] origSource =java2jsp.get(lineNo);
+        FileInfo info = fileinfo.get(origSource[0]);
+        return new SmapLocation(info,origSource[1], origSource[0] == 0);
+    }
+
+    public static class FileInfo {
         public final String name;
         public final String path;
 
@@ -171,5 +177,18 @@ public class SmapParser {
             this.name = name;
             this.path = path;
         }
+    }
+
+    public static class SmapLocation {
+        public final FileInfo fileInfo;
+        public final int line;
+        public final boolean isPrimaryFile;
+
+        public SmapLocation(FileInfo fileInfo, int line, boolean isPrimaryFile) {
+            this.fileInfo = fileInfo;
+            this.line = line;
+            this.isPrimaryFile = isPrimaryFile;
+        }
+
     }
 }

@@ -66,15 +66,19 @@ public class ByteCodeResourceLocator implements BatchExtension {
             return f;
         }
         return null;
+    }
 
-//        for(File sourceDir : proj.) {
-//            File potentialFile = new File(sourceDir, );
-//            if(potentialFile.exists()) {
-//                org.sonar.api.resources.File file = org.sonar.api.resources.File.fromIOFile(potentialFile, project);
-//                return file;
-//            }
-//        }
-//        return null;
+    public InputFile findSourceFile(File classFile, FileSystem fs) {
+        try (InputStream in = new FileInputStream(classFile)) {
+            DebugExtensionExtractor debug = new DebugExtensionExtractor();
+            String sourceFile = debug.getDebugExtFromClass(in);
+
+            return buildInputFile(sourceFile, fs);
+        }
+        catch (IOException e) {
+            LOG.warn("An error occurs while opening classfile : " + classFile.getPath());
+        }
+        return null;
     }
 
     /**
@@ -113,13 +117,18 @@ public class ByteCodeResourceLocator implements BatchExtension {
         }
 
         //Source directories will include typically : /src/main/java and /src/main/webapp
+        for (String jspFilename : potentialJspFilenames) {
+            InputFile file = buildInputFile(jspFilename, fs);
+            if(file != null) return file;
+        }
+        return null;
+    }
 
-        for(String sourceDir : Arrays.asList("src/main/webapp/","src/main/resources","src/main/java")) {
-            for (String jspFilename : potentialJspFilenames) {
-                Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+jspFilename));
-                for (InputFile f : files) {
-                    return f;
-                }
+    public InputFile buildInputFile(String fileName,FileSystem fs) {
+        for(String sourceDir : Arrays.asList("src/main/webapp/","src/main/resources","src/main/java","src")) {
+            Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+fileName));
+            for (InputFile f : files) {
+                return f;
             }
         }
         return null;
@@ -135,7 +144,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * @param classFile (Optional)
      * @return JSP line number
      */
-    public Integer findJspLine(String className, int originalLine, File classFile) {
+    public SmapParser.SmapLocation extractSmapLocation(String className, int originalLine, File classFile) {
         //Extract the SMAP (JSR45) from the class file (SourceDebugExtension section)
         try (InputStream in = new FileInputStream(classFile)) {
             DebugExtensionExtractor debug = new DebugExtensionExtractor();
@@ -169,9 +178,8 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * @return JSP line number
      * @throws IOException
      */
-    private int getJspLineNumberFromSmap(String smap, Integer originalLine) throws IOException {
+    private SmapParser.SmapLocation getJspLineNumberFromSmap(String smap, Integer originalLine) throws IOException {
         SmapParser parser = new SmapParser(smap);
-        int[] mapping = parser.getScriptLineNumber(originalLine);
-        return mapping[1];
+        return parser.getSmapLocation(originalLine);
     }
 }
