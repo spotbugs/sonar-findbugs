@@ -52,7 +52,7 @@ public class DebugExtensionExtractor {
         return visitor.source;
     }
 
-    private class AbstractClassVisitor extends ClassVisitor {
+    private static class AbstractClassVisitor extends ClassVisitor {
 
         protected String source;
         protected String debug;

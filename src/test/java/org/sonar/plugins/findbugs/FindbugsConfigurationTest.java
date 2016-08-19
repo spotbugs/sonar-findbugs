@@ -44,9 +44,6 @@ public class FindbugsConfigurationTest {
   @Rule
   public TemporaryFolder temp = new TemporaryFolder();
 
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
-
   private DefaultFileSystem fs;
   private Settings settings;
   private File baseDir;

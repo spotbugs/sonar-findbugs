@@ -94,8 +94,6 @@ public class FindbugsSensor implements Sensor {
 
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules() || hasActiveFindSecBugsJspRules());
 
-    Set<String> locationReported = new HashSet<>();
-
     for (ReportedBug bugInstance : collection) {
 
       try {
@@ -165,7 +163,7 @@ public class FindbugsSensor implements Sensor {
         LOG.warn("The class '" + className + "' could not be match to its original source file. It might be a dynamically generated class.");
       }
       catch (Exception e) {
-        String bugInstanceDebug = String.format("[BugInstance type=%s, line=%s]", bugInstance.getType(),bugInstance.getStartLine());
+        String bugInstanceDebug = String.format("[BugInstance type=%s, class=%s, line=%s]", bugInstance.getType(), bugInstance.getClassName(), bugInstance.getStartLine());
         LOG.warn("An error occurs while processing the bug instance "+bugInstanceDebug,e);
         //Continue to the bug without aborting the report
       }
