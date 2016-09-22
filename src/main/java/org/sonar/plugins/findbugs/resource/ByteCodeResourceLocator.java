@@ -27,6 +27,7 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -143,11 +144,14 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * @param classFile (Optional)
      * @return JSP line number
      */
+    @Nullable
     public SmapParser.SmapLocation extractSmapLocation(String className, int originalLine, File classFile) {
         //Extract the SMAP (JSR45) from the class file (SourceDebugExtension section)
         try (InputStream in = new FileInputStream(classFile)) {
             DebugExtensionExtractor debug = new DebugExtensionExtractor();
-            return getJspLineNumberFromSmap(debug.getDebugExtFromClass(in), originalLine);
+            String smap = debug.getDebugExtFromClass(in);
+            if(smap != null)
+                return getJspLineNumberFromSmap(smap, originalLine);
         }
         catch (IOException e) {
             LOG.warn("An error occurs while opening classfile : " + classFile.getPath());
