@@ -44,7 +44,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
-    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources","src"};
+    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "/src/java"};
 
     /**
      * Find the file system location of a given class name.<br/>
