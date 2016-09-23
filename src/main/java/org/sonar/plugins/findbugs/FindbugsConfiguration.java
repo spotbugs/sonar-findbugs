@@ -188,7 +188,9 @@ public class FindbugsConfiguration {
     Queue<File> dirs = new LinkedList<File>();
     dirs.add(folder);
     while (!dirs.isEmpty()) {
-      for (File f : dirs.poll().listFiles()) {
+      File dirPoll = dirs.poll();
+      if(dirPoll == null) break; //poll() result could be null if the queue is empty.
+      for (File f : dirPoll.listFiles()) {
         if (f.isDirectory()) {
           dirs.add(f);
         } else if (f.isFile()&& f.getName().endsWith(".class")) {
@@ -248,6 +250,7 @@ public class FindbugsConfiguration {
   /**
    * Invoked by PicoContainer to remove temporary files.
    */
+  @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
   public void stop() {
     if (jsr305Lib != null) {
       jsr305Lib.delete();

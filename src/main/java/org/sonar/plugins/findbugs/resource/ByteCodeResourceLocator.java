@@ -27,6 +27,7 @@ import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -42,6 +43,8 @@ public class ByteCodeResourceLocator implements BatchExtension {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
+
+    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "/src/java"};
 
     /**
      * Find the file system location of a given class name.<br/>
@@ -121,8 +124,8 @@ public class ByteCodeResourceLocator implements BatchExtension {
     }
 
     public InputFile buildInputFile(String fileName,FileSystem fs) {
-        for(String sourceDir : Arrays.asList("src/main/java","src/main/webapp","src/main/resources","src")) {
-            System.out.println("Source file tested : "+sourceDir+"/"+fileName);
+        for(String sourceDir : SOURCE_DIRECTORIES) {
+            //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
             Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
             for (InputFile f : files) {
                 return f;
@@ -141,11 +144,14 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * @param classFile (Optional)
      * @return JSP line number
      */
+    @Nullable
     public SmapParser.SmapLocation extractSmapLocation(String className, int originalLine, File classFile) {
         //Extract the SMAP (JSR45) from the class file (SourceDebugExtension section)
         try (InputStream in = new FileInputStream(classFile)) {
             DebugExtensionExtractor debug = new DebugExtensionExtractor();
-            return getJspLineNumberFromSmap(debug.getDebugExtFromClass(in), originalLine);
+            String smap = debug.getDebugExtFromClass(in);
+            if(smap != null)
+                return getJspLineNumberFromSmap(smap, originalLine);
         }
         catch (IOException e) {
             LOG.warn("An error occurs while opening classfile : " + classFile.getPath());

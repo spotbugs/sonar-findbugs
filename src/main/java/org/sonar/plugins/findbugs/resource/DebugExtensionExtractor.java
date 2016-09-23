@@ -23,6 +23,7 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Opcodes;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -34,25 +35,36 @@ import java.io.InputStream;
  */
 public class DebugExtensionExtractor {
 
+    @Nullable
     public String getDebugExtFromClass(InputStream classIn) throws IOException {
 
         AbstractClassVisitor visitor = new AbstractClassVisitor();
-        ClassReader classReader= new ClassReader(classIn);
-        classReader.accept(visitor, 0);
+        try {
+            ClassReader classReader = new ClassReader(classIn);
+            classReader.accept(visitor, 0);
 
-        return visitor.debug;
+            return visitor.debug;
+        }
+        catch (Exception e) {
+            throw new ClassMetadataLoadingException(e);
+        }
     }
 
     public String getDebugSourceFromClass(InputStream classIn) throws IOException {
 
         AbstractClassVisitor visitor = new AbstractClassVisitor();
-        ClassReader classReader= new ClassReader(classIn);
-        classReader.accept(visitor, 0);
+        try {
+            ClassReader classReader= new ClassReader(classIn);
+            classReader.accept(visitor, 0);
 
-        return visitor.source;
+            return visitor.source;
+        }
+        catch (Exception e) {
+            throw new ClassMetadataLoadingException(e);
+        }
     }
 
-    private class AbstractClassVisitor extends ClassVisitor {
+    private static class AbstractClassVisitor extends ClassVisitor {
 
         protected String source;
         protected String debug;

@@ -36,6 +36,7 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
+import org.sonar.plugins.findbugs.resource.ClassMetadataLoadingException;
 import org.sonar.plugins.findbugs.resource.SmapParser;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
@@ -94,8 +95,6 @@ public class FindbugsSensor implements Sensor {
 
     Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules() || hasActiveFindSecBugsJspRules());
 
-    Set<String> locationReported = new HashSet<>();
-
     for (ReportedBug bugInstance : collection) {
 
       try {
@@ -141,31 +140,37 @@ public class FindbugsSensor implements Sensor {
         //More advanced mapping if the original source is not Java files
         if (classFile != null) {
           //Attempt to load SMAP debug metadata
-          SmapParser.SmapLocation location = byteCodeResourceLocator.extractSmapLocation(className, line, classFile);
-          if (location != null) {
-            if (!location.isPrimaryFile) //Avoid reporting issue in double when a source file was include inline
-              continue;
+          try {
+            SmapParser.SmapLocation location = byteCodeResourceLocator.extractSmapLocation(className, line, classFile);
+            if (location != null) {
+              if (!location.isPrimaryFile) { //Avoid reporting issue in double when a source file was include inline
+                continue;
+              }
 
-            //SMAP was found
-            resource = byteCodeResourceLocator.buildInputFile(location.fileInfo.path, fs);
-            if (resource != null) {
-              insertIssue(rule, resource, location.line, longMessage);
-              continue;
+              //SMAP was found
+              resource = byteCodeResourceLocator.buildInputFile(location.fileInfo.path, fs);
+              if (resource != null) {
+                insertIssue(rule, resource, location.line, longMessage);
+                continue;
+              }
+            } else {
+              //SMAP was not found or unparsable.. The orgininal source file will be guess based on the class name
+              resource = byteCodeResourceLocator.findTemplateFile(className, this.fs);
+              if (resource != null) {
+                insertIssue(rule, resource, line, longMessage);
+                continue;
+              }
             }
-          } else {
-            //SMAP was not found or unparsable.. The orgininal source file will be guess based on the class name
-            resource = byteCodeResourceLocator.findTemplateFile(className, this.fs);
-            if (resource != null) {
-              insertIssue(rule, resource, line, longMessage);
-              continue;
-            }
+          }
+          catch (ClassMetadataLoadingException e) {
+            LOG.warn("Failed to load the class file metadata", e);
           }
         }
 
-        LOG.warn("The class '" + className + "' could not be match to its original source file. It might be a dynamically generated class.");
+        LOG.warn("The class '" + className + "' could not be matched to its original source file. It might be a dynamically generated class.");
       }
       catch (Exception e) {
-        String bugInstanceDebug = String.format("[BugInstance type=%s, line=%s]", bugInstance.getType(),bugInstance.getStartLine());
+        String bugInstanceDebug = String.format("[BugInstance type=%s, class=%s, line=%s]", bugInstance.getType(), bugInstance.getClassName(), bugInstance.getStartLine());
         LOG.warn("An error occurs while processing the bug instance "+bugInstanceDebug,e);
         //Continue to the bug without aborting the report
       }
