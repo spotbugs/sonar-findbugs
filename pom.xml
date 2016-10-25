@@ -52,7 +52,7 @@
 
     <sonar.version>5.6</sonar.version>
     <sonar-java.version>3.13.1</sonar-java.version>
-    <fbcontrib.version>6.6.1</fbcontrib.version>
+    <fbcontrib.version>6.8.0</fbcontrib.version>
     <findsecbugs.version>1.4.6</findsecbugs.version>
   </properties>
 
