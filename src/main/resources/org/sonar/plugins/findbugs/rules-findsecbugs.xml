@@ -826,12 +826,13 @@ SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 parser.parse(inputStream, customHandler);&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
-The following snippets show 2 available solutions, you can set one or the two solutions. If you want to be more secure, it is highly recommended to implement the two following snippet code.
-&lt;br/&gt;&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one feature or both.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
-This setting will protect you against Denial of Service attack.
+This setting will protect you against Denial of Service attack and remote file access.
 &lt;pre&gt;
 SAXParserFactory spf = SAXParserFactory.newInstance();
 spf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -912,13 +913,13 @@ reader.setContentHandler(customHandler);
 reader.parse(new InputSource(inputStream));&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
-
-The following snippets show 2 available solutions, you can set one or the two solutions. If you want to be more secure, it is highly recommended to implement the two following snippet code.
-&lt;br/&gt;&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one property or both.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
-This setting will protect you against Denial of Service attack.
+This setting will protect you against Denial of Service attack and remote file access.
 &lt;pre&gt;
 XMLReader reader = XMLReaderFactory.createXMLReader();
 reader.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -999,13 +1000,13 @@ DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 Document doc = db.parse(input);&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
-
-The following snippets show 2 available solutions, you can set one or the two solutions. If you want to be more secure, it is highly recommended to implement the two following snippet code.
-&lt;br/&gt;&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one feature or both.
+&lt;/p&gt;
 
 &lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
-This setting will protect you against Denial of Service attack.
+This setting will protect you against Denial of Service attack and remote file access.
 &lt;pre&gt;
 DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
