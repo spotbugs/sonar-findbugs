@@ -27,6 +27,7 @@ public class FbContribRulesDefinition implements RulesDefinition {
 
   public static final String REPOSITORY_KEY = "fb-contrib";
   public static final String REPOSITORY_NAME = "FindBugs Contrib";
+  public static final int RULE_COUNT = 263;
 
   @Override
   public void define(Context context) {

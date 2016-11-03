@@ -1,11 +1,9 @@
-import groovy.text.SimpleTemplateEngine
 import groovy.xml.MarkupBuilder
-import groovy.util.Node
 
 @Grapes([
     @Grab(group='com.google.code.findbugs'  , module='findbugs', version='3.0.1'),
-    @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='6.6.1'),
-    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.4.6')]
+    @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='6.8.0'),
+    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.5.0')]
 )
 
 //Includes all the bugs that are bundle with FindBugs by default
@@ -191,9 +189,9 @@ String getFindBugsCategory(List<Plugin> plugins, String bugType) {
     return "EXPERIMENTAL"
 }
 
-FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs' , artifactId: 'findsecbugs-plugin', version:'1.4.6')
-FB = new Plugin(groupId: 'com.google.code.findbugs' , artifactId: 'findbugs', version:'3.0.1')
-CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib' , artifactId: 'fb-contrib', version:'6.6.1')
+FB = new Plugin(groupId: 'com.google.code.findbugs', artifactId: 'findbugs', version: '3.0.1')
+CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '6.8.0')
+FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.5.0')
 
 /**
  *

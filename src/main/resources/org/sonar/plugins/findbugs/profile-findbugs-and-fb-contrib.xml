@@ -1815,6 +1815,9 @@
     <Bug pattern='LO_INVALID_FORMATTING_ANCHOR' />
   </Match>
   <Match>
+    <Bug pattern='LO_INVALID_STRING_FORMAT_NOTATION' />
+  </Match>
+  <Match>
     <Bug pattern='LO_INCORRECT_NUMBER_OF_ANCHOR_PARAMETERS' />
   </Match>
   <Match>
@@ -2016,7 +2019,7 @@
     <Bug pattern='UP_UNUSED_PARAMETER' />
   </Match>
   <Match>
-    <Bug pattern='CD_CIRCULAR_DEPENDENCY' />
+    <Bug pattern='FCCD_FIND_CLASS_CIRCULAR_DEPENDENCY' />
   </Match>
   <Match>
     <Bug pattern='MUC_MODIFYING_UNMODIFIABLE_COLLECTION' />
@@ -2128,5 +2131,17 @@
   </Match>
   <Match>
     <Bug pattern='IOI_COPY_WITH_READER' />
+  </Match>
+  <Match>
+    <Bug pattern='DMC_DUBIOUS_MAP_COLLECTION' />
+  </Match>
+  <Match>
+    <Bug pattern='BL_BURYING_LOGIC' />
+  </Match>
+  <Match>
+    <Bug pattern='WI_DUPLICATE_WIRED_TYPES' />
+  </Match>
+  <Match>
+    <Bug pattern='CCI_CONCURRENT_COLLECTION_ISSUES_USE_PUT_IS_RACY' />
   </Match>
 </FindBugsFilter>
