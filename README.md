@@ -27,3 +27,4 @@ Findbugs Plugin version|Embedded Findbugs version|Embedded Findsecbugs version|E
 3.2 | 3.0.1 | 1.3.0 | 6.0.0 | 1.7
 3.3 | 3.0.1 | 1.4.2 | 6.2.3 | 1.7
 3.4 | 3.0.1 | 1.4.6 | 6.6.1 | 1.8
+3.5 | 3.0.1 | 1.5.0 | 6.8.0 | 1.8
