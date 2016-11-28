@@ -18,7 +18,7 @@ public class JasperUtils {
 
         //The replaceAll operation is highly ineffective for large string
         //In was implemented this way because it is simpler to maintain.
-        className = className.replace(mangleChar(ch),""+ch);
+        className = className.replace(mangleChar(ch), Character.toString(ch));
       }
     }
     return className.replaceAll("_jsp", ".jsp");

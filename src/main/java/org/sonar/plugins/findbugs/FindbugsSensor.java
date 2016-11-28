@@ -117,10 +117,9 @@ public class FindbugsSensor implements Sensor {
         String longMessage = bugInstance.getMessage();
         int line = bugInstance.getStartLine();
 
-        InputFile resource = null;
 
         //Regular Java class mapped to their original .java
-        resource = byteCodeResourceLocator.findJavaClassFile(className, this.fs);
+        InputFile resource = byteCodeResourceLocator.findJavaClassFile(className, this.fs);
         if (resource != null) {
           insertIssue(rule, resource, line, longMessage);
           continue;

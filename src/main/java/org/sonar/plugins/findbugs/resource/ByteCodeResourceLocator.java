@@ -55,7 +55,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * @return Java source file that conrespond to the class name specified.
      */
     public InputFile findJavaClassFile(String className, FileSystem fs) {
-        int indexDollarSign = className.indexOf("$");
+        int indexDollarSign = className.indexOf('$');
         if(indexDollarSign != -1) {
             className = className.substring(0, indexDollarSign); //Remove innerClass from the class name
         }
@@ -70,12 +70,12 @@ public class ByteCodeResourceLocator implements BatchExtension {
 
             if(source == null) return null;
             String newClassName = FilenameUtils.getBaseName(source);
-            String packagePrefix = className.lastIndexOf(".") != -1 ? FilenameUtils.getBaseName(className) + "." : "";
+            String packagePrefix = className.lastIndexOf('.') != -1 ? FilenameUtils.getBaseName(className) + "." : "";
             String fullClassName = packagePrefix + newClassName;
             return findJavaClassFile(fullClassName, fs);
         }
         catch (IOException e) {
-            LOG.warn("An error occurs while opening classfile : " + classFile.getPath());
+            LOG.warn("An error occurs while opening classfile : {} ({})", classFile.getPath(), e.getMessage());
         }
         return null;
     }
@@ -154,7 +154,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
                 return getJspLineNumberFromSmap(smap, originalLine);
         }
         catch (IOException e) {
-            LOG.warn("An error occurs while opening classfile : " + classFile.getPath());
+            LOG.warn("An error occurs while opening classfile : {}", classFile.getPath());
         }
         LOG.debug("No smap file found for the class: " + className);
 
@@ -165,7 +165,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
                 return getJspLineNumberFromSmap(IOUtils.toString(smapInputStream), originalLine);
             }
             catch (IOException e) {
-                LOG.debug("Unable to open smap file : " + smapFile.getAbsolutePath());
+                LOG.debug("Unable to open smap file : {} ({})", smapFile.getAbsolutePath(), e.getMessage());
             }
         }
         else {

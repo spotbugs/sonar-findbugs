@@ -81,7 +81,7 @@ public class FindbugsConfiguration {
     Project findbugsProject = new Project();
 
     for (File file : getSourceFiles()) { //The original source file are look at by some detectors
-      if(FilenameUtils.getExtension(file.getName()).equals("java")) {
+      if("java".equals(FilenameUtils.getExtension(file.getName()))) {
         findbugsProject.addFile(file.getCanonicalPath());
       }
     }
