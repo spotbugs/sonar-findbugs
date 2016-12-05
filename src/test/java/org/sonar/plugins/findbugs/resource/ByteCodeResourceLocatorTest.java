@@ -1,6 +1,7 @@
 package org.sonar.plugins.findbugs.resource;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Matchers;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -47,7 +48,7 @@ public class ByteCodeResourceLocatorTest {
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     locator.findJavaClassFile("com.helloworld.ThisIsATest", fsEmpty);
 
-    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
+    verify(predicatesEmpty,times(1)).matchesPathPattern("**/com/helloworld/ThisIsATest.java");
   }
 
   @Test
@@ -56,38 +57,9 @@ public class ByteCodeResourceLocatorTest {
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     locator.findJavaClassFile("com.helloworld.ThisIsATest$InnerClass",fsEmpty);
 
-    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
+    verify(predicatesEmpty,times(1)).matchesPathPattern("**/com/helloworld/ThisIsATest.java");
   }
 
-  @Test
-  public void findTemplateFile_weblogicFileName() {
-
-    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-
-    locator.findTemplateFile("jsp_servlet._folder1._folder2.__helloworld", fsEmpty);
-
-    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/webapp//folder1/folder2/helloworld.jsp");
-  }
-
-  @Test
-  public void findTemplateFile_jasperFileName() {
-
-    String prefixSource = "src/main/webapp/org/apache/jsp/";
-
-    String[] pages = {"WEB-INF/pages/widgets/cookies_and_params.jsp", "lessons/DBCrossSiteScripting/DBCrossSiteScripting.jsp"};
-
-    for(String jspPage : pages) {
-      String name = "org.apache.jsp." + JspUtils.makeJavaPackage(jspPage);
-      System.out.println("Compiled class name: "+name);
-
-      ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-      locator.findTemplateFile(name, fsEmpty);
-
-      System.out.println("Expecting: "+ prefixSource + jspPage);
-      verify(predicatesEmpty,times(1)).hasRelativePath(prefixSource + jspPage);
-    }
-
-  }
-
+  
 
 }

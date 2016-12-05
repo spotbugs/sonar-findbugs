@@ -44,8 +44,6 @@ public class ByteCodeResourceLocator implements BatchExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
-    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "/src/java"};
-
     /**
      * Find the file system location of a given class name.<br/>
      * (ie : <code>test.SomeClass</code> ->  <code>src/main/java/test/SomeClass.java</code>)
@@ -59,7 +57,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
         if(indexDollarSign != -1) {
             className = className.substring(0, indexDollarSign); //Remove innerClass from the class name
         }
-
+        LOG.debug("Finding the java file for: {}", className.replaceAll("\\.","/")+".java");
         return buildInputFile(className.replaceAll("\\.","/")+".java", fs);
     }
 
@@ -124,12 +122,9 @@ public class ByteCodeResourceLocator implements BatchExtension {
     }
 
     public InputFile buildInputFile(String fileName,FileSystem fs) {
-        for(String sourceDir : SOURCE_DIRECTORIES) {
-            //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
-            Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
-            for (InputFile f : files) {
-                return f;
-            }
+        Iterable<InputFile> files = fs.inputFiles(fs.predicates().matchesPathPattern("**/"+fileName));
+        for (InputFile f : files) {
+            return f;
         }
         return null;
     }
