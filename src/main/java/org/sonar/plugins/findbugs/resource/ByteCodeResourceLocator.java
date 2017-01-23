@@ -124,6 +124,11 @@ public class ByteCodeResourceLocator implements BatchExtension {
     }
 
     public InputFile buildInputFile(String fileName,FileSystem fs) {
+        for (InputFile f : fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN))) {
+            if (f.relativePath().endsWith(fileName)) {
+                return f;
+            }
+        }
         for(String sourceDir : SOURCE_DIRECTORIES) {
             //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
             Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
