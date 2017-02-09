@@ -19,6 +19,8 @@
  */
 package org.sonar.plugins.findbugs;
 
+import static java.lang.String.format;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -114,16 +116,18 @@ public class FindbugsConfiguration {
     if (classFilesToAnalyze.isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
               + " Please build project before executing sonar or check the location of compiled classes to"
-              + " make it possible for Findbugs to analyse your project.");
+              + " make it possible for Findbugs to analyse your (sub)project ({}).", fileSystem.baseDir().getPath());
 
-      if(hasSourceFiles()) { //This exclude test source files
-        throw new IllegalStateException("This project contains Java source files that are not compiled.");
+      if (hasSourceFiles()) { //This excludes test source files
+        throw new IllegalStateException(format("One (sub)project contains Java source files that are not compiled (%s).",
+                fileSystem.baseDir().getPath()));
       }
     }
 
-    if(hasJspFiles && !hasPrecompiledJsp) {
-      LOG.warn("JSP files were found in the current project but FindBugs requires their precompiled form. " +
-              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation");
+    if (hasJspFiles && !hasPrecompiledJsp) {
+      LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
+              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
+              fileSystem.baseDir().getPath());
     }
 
     copyLibs();
