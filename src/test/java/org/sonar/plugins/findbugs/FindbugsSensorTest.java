@@ -72,6 +72,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     javaResourceLocator = mockJavaResourceLocator();
 
     InputFile dummyFile = mock(InputFile.class);
+    when(dummyFile.relativePath()).thenReturn("src/main/java/com/helloworld/DummyFile.java");
     //Will make sure that the lookup on the filesystem will always find a file.
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(Arrays.asList(dummyFile));
 
