@@ -195,20 +195,12 @@ public class FindbugsSensor implements Sensor {
    * @return File handle of the original class file analyzed
    */
   private File findOriginalClassForBug(String className) {
-    String classFile = className.replaceAll("\\.","/").concat(".class");
-
-    for(File classPath : javaResourceLocator.classpath()) {
-      if(!classPath.isDirectory()) {
-        continue;
-      }
-
-      File testClassFile = new File(classPath, classFile);
-      if(testClassFile.exists()) {
-        return testClassFile;
-      }
+    String sourceFile = javaResourceLocator.findSourceFileKeyByClassName(className);
+    if (sourceFile == null) {
+      return null;
     }
 
-    return null;
+    return new File(sourceFile);
   }
 
   @Override
