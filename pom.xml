@@ -47,8 +47,8 @@
   </scm>
 
   <properties>
-    <findbugs.version>3.0.1</findbugs.version>
-    <jdk.min.version>1.7</jdk.min.version>
+    <spotbugs.version>3.1.0-RC1</spotbugs.version>
+    <jdk.min.version>1.8</jdk.min.version>
 
     <sonar.version>5.6</sonar.version>
     <sonar-java.version>3.13.1</sonar-java.version>
@@ -63,9 +63,9 @@
     -->
 
     <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>findbugs</artifactId>
-      <version>${findbugs.version}</version>
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs</artifactId>
+      <version>${spotbugs.version}</version>
       <exclusions>
         <exclusion>
           <groupId>jdom</groupId>
@@ -84,18 +84,14 @@
           <artifactId>xom</artifactId>
         </exclusion>
         <exclusion>
-          <!-- For some reasons appeared as a transitive dependency of FindBugs 2.0.3, but not presented/used in zip-distribution -->
-          <groupId>com.apple</groupId>
-          <artifactId>AppleJavaExtensions</artifactId>
-        </exclusion>
-        <exclusion>
           <!-- For some reasons appeared as a transitive dependency of FindBugs 2.0.3 -->
           <groupId>net.jcip</groupId>
           <artifactId>jcip-annotations</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
-    
+
+
     <dependency>
       <groupId>org.sonarsource.sslr-squid-bridge</groupId>
       <artifactId>sslr-squid-bridge</artifactId>
