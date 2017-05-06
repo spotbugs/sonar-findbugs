@@ -50,8 +50,8 @@
     <spotbugs.version>3.1.0-RC1</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
 
-    <sonar.version>5.6</sonar.version>
-    <sonar-java.version>3.13.1</sonar-java.version>
+    <sonar.version>5.6.6</sonar.version>
+    <sonar-java.version>4.0</sonar-java.version>
     <fbcontrib.version>6.8.0</fbcontrib.version>
     <findsecbugs.version>1.5.0</findsecbugs.version>
   </properties>
@@ -68,20 +68,8 @@
       <version>${spotbugs.version}</version>
       <exclusions>
         <exclusion>
-          <groupId>jdom</groupId>
-          <artifactId>jdom</artifactId>
-        </exclusion>
-        <exclusion>
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xerces</groupId>
-          <artifactId>xercesImpl</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>xom</groupId>
-          <artifactId>xom</artifactId>
         </exclusion>
         <exclusion>
           <!-- For some reasons appeared as a transitive dependency of FindBugs 2.0.3 -->
@@ -90,40 +78,24 @@
         </exclusion>
       </exclusions>
     </dependency>
-
+    
 
     <dependency>
       <groupId>org.sonarsource.sslr-squid-bridge</groupId>
       <artifactId>sslr-squid-bridge</artifactId>
       <version>2.6.1</version>
       <exclusions>
-
         <exclusion>
           <groupId>org.codehaus.sonar</groupId>
           <artifactId>sonar-plugin-api</artifactId>
         </exclusion>
-
-
-        <!--<exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.slf4j</groupId>
-          <artifactId>log4j-over-slf4j</artifactId>
-        </exclusion>-->
-
-        <!--<exclusion>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        </exclusion>-->
       </exclusions>
     </dependency>
 
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.21</version>
+      <version>1.7.25</version>
       <scope>provided</scope>
     </dependency>
 
@@ -136,7 +108,7 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-      <version>2.4</version>
+      <version>2.5</version>
     </dependency>
 
 
@@ -165,6 +137,18 @@
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
       <version>1.4.9</version>
+      <exclusions>
+        <!-- we use stax -->
+        <exclusion>
+          <groupId>xmlpull</groupId>
+          <artifactId>xmlpull</artifactId>
+        </exclusion>
+        <!-- we use stax -->
+        <exclusion>
+          <groupId>xpp3</groupId>
+          <artifactId>xpp3_min</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -173,11 +157,6 @@
       <version>${sonar.version}</version>
       <scope>provided</scope>
       <exclusions>
-        <!-- allows to package dom4j into plugin -->
-        <exclusion>
-          <groupId>dom4j</groupId>
-          <artifactId>dom4j</artifactId>
-        </exclusion>
         <!-- allows to package xstream into plugin -->
         <exclusion>
           <groupId>com.thoughtworks.xstream</groupId>
@@ -193,16 +172,6 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- TODO http://jira.codehaus.org/browse/SONAR-2011
-    We need following dependency, otherwise we will receive compilation error
-    -->
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
-      <version>2.2.1</version>
-      <scope>provided</scope>
-    </dependency>
-
     <!-- unit tests -->
     <dependency>
       <groupId>junit</groupId>
@@ -212,8 +181,8 @@
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.10.19</version>
+      <artifactId>mockito-core</artifactId>
+      <version>2.7.22</version>
       <scope>test</scope>
     </dependency>
     <dependency>

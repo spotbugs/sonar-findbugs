@@ -20,7 +20,7 @@
 package org.sonar.plugins.findbugs.rule;
 
 import com.google.common.collect.Lists;
-import org.hamcrest.CustomTypeSafeMatcher;
+import org.mockito.ArgumentMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.rules.Rule;
@@ -100,9 +100,12 @@ public class FakeRuleFinder {
     final RulesDefinition.Repository repository = context.repository(repositoryKey);
     final List<Rule> rules = convert(repository.rules());
 
-    when(ruleFinder.findAll(argThat(new CustomTypeSafeMatcher<RuleQuery>("RuleQuery") {
+    when(ruleFinder.findAll(argThat(new ArgumentMatcher<RuleQuery>() {
       @Override
-      public boolean matchesSafely(RuleQuery ruleQuery) {
+      public boolean matches(RuleQuery ruleQuery) {
+        if (ruleQuery == null) {
+          return false;
+        }
         return repositoryKey.equals(ruleQuery.getRepositoryKey());
       }
     }))).thenReturn(rules);

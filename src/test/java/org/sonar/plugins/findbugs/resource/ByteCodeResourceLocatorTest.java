@@ -2,7 +2,6 @@ package org.sonar.plugins.findbugs.resource;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Matchers;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -13,7 +12,7 @@ import org.sonar.api.internal.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -95,7 +94,7 @@ public class ByteCodeResourceLocatorTest {
   @Test
   public void findRegularSourceFile() throws Exception {
     DefaultInputFile givenJavaFile = new DefaultInputFile("TestJavaClass", "app/src/main/java/com/helloworld/TestJavaClass.java");
-    when(fsEmpty.inputFiles(any(FilePredicate.class))).thenReturn(ImmutableList.<InputFile>of(givenJavaFile));
+    when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findJavaClassFile("com.helloworld.TestJavaClass$1", fsEmpty));
