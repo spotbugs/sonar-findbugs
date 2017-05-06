@@ -31,6 +31,9 @@ import java.util.List;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class FindbugsRulesDefinitionTest {
+
+  private static final int EXPERIMENTAL_RULE_COUNT = 3;
+
   @Test
   public void test() {
     FindbugsRulesDefinition definition = new FindbugsRulesDefinition();
@@ -42,7 +45,7 @@ public class FindbugsRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
-    assertThat(rules).hasSize(FindbugsRulesDefinition.RULE_COUNT);
+    assertThat(rules).hasSize(FindbugsRulesDefinition.RULE_COUNT + EXPERIMENTAL_RULE_COUNT);
 
     List<String> rulesWithMissingSQALE = Lists.newLinkedList();
     for (Rule rule : rules) {
