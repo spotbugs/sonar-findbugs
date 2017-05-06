@@ -21,7 +21,6 @@ package org.sonar.plugins.findbugs;
 
 import org.sonar.api.Plugin;
 import org.sonar.plugins.findbugs.language.Jsp;
-import org.sonar.plugins.findbugs.language.JspCodeColorizerFormat;
 import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
@@ -41,7 +40,6 @@ public class FindbugsPlugin implements Plugin {
   public void define(Context context) {
     context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
     context.addExtensions(Arrays.asList(Jsp.class,
-            JspCodeColorizerFormat.class,
             FindbugsSensor.class,
             FindbugsConfiguration.class,
             FindbugsExecutor.class,
