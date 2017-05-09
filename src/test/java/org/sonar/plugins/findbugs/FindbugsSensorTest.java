@@ -42,7 +42,6 @@ import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
@@ -104,7 +103,7 @@ public class FindbugsSensorTest extends FindbugsTests {
 
   private static JavaResourceLocator mockJavaResourceLocator() {
     JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
-    Resource resource = mock(Resource.class);
+    InputFile resource = mock(InputFile.class);
     when(javaResourceLocator.findResourceByClassName(anyString())).thenReturn(resource);
     return javaResourceLocator;
   }
