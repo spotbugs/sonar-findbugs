@@ -2,7 +2,7 @@
 
 ## Description / Features
 
-This plugin requires the [Java Plugin](http://docs.sonarqube.org/display/PLUG/Java+Plugin), and uses [FindBugs](http://findbugs.sourceforge.net/), [fb-contrib](http://fb-contrib.sourceforge.net/) and [Find Security Bugs](http://h3xstream.github.io/find-sec-bugs/) to provide coding rules.
+This plugin requires the [Java Plugin](http://docs.sonarqube.org/display/PLUG/Java+Plugin), and uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](http://fb-contrib.sourceforge.net/) and [Find Security Bugs](http://h3xstream.github.io/find-sec-bugs/) to provide coding rules.
 
 
 ## Usage

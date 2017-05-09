@@ -8,7 +8,7 @@
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Findbugs Plugin</name>
-  <description>FindBugs is a program that uses static analysis to look for bugs in Java code. It can detect a variety of common coding mistakes, including thread synchronization problems, misuse of API methods.</description>
+  <description>SpotBugs is a program that uses static analysis to look for bugs in Java code. It can detect a variety of common coding mistakes, including thread synchronization problems, misuse of API methods.</description>
   <url>https://github.com/SonarQubeCommunity/sonar-findbugs/</url>
   <issueManagement>
     <system>GitHub Issues</system>
@@ -272,7 +272,7 @@
             </manifestEntries>
           </archive>
           <pluginName>Findbugs</pluginName>
-          <pluginDescription><![CDATA[Analyze Java code with <a href="http://findbugs.sourceforge.net/">Findbugs</a> ${findbugs.version}.]]></pluginDescription>
+          <pluginDescription><![CDATA[Analyze Java code with <a href="https://spotbugs.github.io">SpotBugs</a> ${findbugs.version}.]]></pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>false</useChildFirstClassLoader>
           <requirePlugins>java:${sonar-java.version}</requirePlugins>
