@@ -1680,6 +1680,12 @@
     <Bug pattern='SPP_NULL_CHECK_ON_OPTIONAL' />
   </Match>
   <Match>
+    <Bug pattern='SPP_WRONG_COMMONS_TO_STRING_OBJECT' />
+  </Match>
+  <Match>
+    <Bug pattern='SPP_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR' />
+  </Match>
+  <Match>
     <Bug pattern='BAS_BLOATED_ASSIGNMENT_SCOPE' />
   </Match>
   <Match>
@@ -2091,6 +2097,9 @@
     <Bug pattern='IMC_IMMATURE_CLASS_PRINTSTACKTRACE' />
   </Match>
   <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_WRONG_FIELD_ORDER' />
+  </Match>
+  <Match>
     <Bug pattern='JXI_GET_ENDPOINT_CONSUMES_CONTENT' />
   </Match>
   <Match>
@@ -2143,5 +2152,32 @@
   </Match>
   <Match>
     <Bug pattern='CCI_CONCURRENT_COLLECTION_ISSUES_USE_PUT_IS_RACY' />
+  </Match>
+  <Match>
+    <Bug pattern='UTWR_USE_TRY_WITH_RESOURCES' />
+  </Match>
+  <Match>
+    <Bug pattern='SSCU_SUSPICIOUS_SHADED_CLASS_USE' />
+  </Match>
+  <Match>
+    <Bug pattern='USFW_UNSYNCHRONIZED_SINGLETON_FIELD_WRITES' />
+  </Match>
+  <Match>
+    <Bug pattern='OI_OPTIONAL_ISSUES_USES_IMMEDIATE_EXECUTION' />
+  </Match>
+  <Match>
+    <Bug pattern='OI_OPTIONAL_ISSUES_USES_DELAYED_EXECUTION' />
+  </Match>
+  <Match>
+    <Bug pattern='OI_OPTIONAL_ISSUES_CHECKING_REFERENCE' />
+  </Match>
+  <Match>
+    <Bug pattern='OI_OPTIONAL_ISSUES_PRIMITIVE_VARIANT_PREFERRED' />
+  </Match>
+  <Match>
+    <Bug pattern='UAC_UNNECESSARY_API_CONVERSION_DATE_TO_INSTANT' />
+  </Match>
+  <Match>
+    <Bug pattern='UAC_UNNECESSARY_API_CONVERSION_FILE_TO_PATH' />
   </Match>
 </FindBugsFilter>
