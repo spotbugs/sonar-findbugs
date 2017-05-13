@@ -2406,6 +2406,22 @@ dereferencing this value will generate a null pointer exception.
 &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='OBL_UNSATISFIED_OBLIGATION' priority='MAJOR'>
+    <name>Experimental - Method may fail to clean up stream or resource</name>
+    <configKey>OBL_UNSATISFIED_OBLIGATION</configKey>
+    <description>&lt;p&gt; This method may fail to clean up (close, dispose of)
+a stream, database object, or other resource requiring an explicit cleanup operation.
+&lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
+  <rule key='OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE' priority='MAJOR'>
+    <name>Experimental- Method may fail to clean up stream or resource on checked exception </name>
+    <configKey>OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE</configKey>
+    <description>&lt;p&gt; This method may fail to clean up (close, dispose of)
+a stream, database object, or other resource requiring an explicit cleanup operation.
+&lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
   <rule key='SIC_THREADLOCAL_DEADLY_EMBRACE' priority='MAJOR'>
     <name>Correctness - Deadly embrace of non-static inner class and thread local</name>
     <configKey>SIC_THREADLOCAL_DEADLY_EMBRACE</configKey>
@@ -3602,6 +3618,19 @@ any other thread from accessing the stored object until it is fully initialized.
 threads, it might be better to not set the static field until the value
 you are setting it to is fully populated/initialized.</description>
     <tag>multi-threading</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='LG_LOST_LOGGER_DUE_TO_WEAK_REFERENCE' priority='MAJOR'>
+    <name>Experimental - Potential lost logger changes due to weak reference in OpenJDK</name>
+    <configKey>LG_LOST_LOGGER_DUE_TO_WEAK_REFERENCE</configKey>
+    <description>&lt;p&gt; OpenJDK introduces a potential incompatibility. In
+particular, the java.util.logging.Logger behavior has changed. Instead of using
+strong references, it now uses weak references internally. That's a reasonable
+change, but unfortunately some code relies on the old behavior - when changing
+logger configuration, it simply drops the logger reference. That means that the
+garbage collector is free to reclaim that memory, which means that the logger
+configuration is lost.
+&lt;/p&gt;</description>
     <tag>bug</tag>
   </rule>
   <rule key='JLM_JSR166_LOCK_MONITORENTER' priority='MAJOR'>
