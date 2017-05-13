@@ -129,6 +129,7 @@ public class FindBugsFilter {
 
   public static XStream createXStream() {
     XStream xstream = new XStream(new StaxDriver());
+    xstream.denyTypes(new Class[] {void.class, Void.class});
     xstream.setClassLoader(FindBugsFilter.class.getClassLoader());
     xstream.processAnnotations(FindBugsFilter.class);
     xstream.processAnnotations(Match.class);
