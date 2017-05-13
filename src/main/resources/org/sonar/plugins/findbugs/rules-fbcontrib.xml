@@ -1377,6 +1377,27 @@ return "thisisaconstantstring";
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='SPP_WRONG_COMMONS_TO_STRING_OBJECT' priority='MAJOR'>
+    <name>Correctness - Method does not pass an object to commons-lang's ToStringBuilder</name>
+    <configKey>SPP_WRONG_COMMONS_TO_STRING_OBJECT</configKey>
+    <description>This method uses commons-lang, or commons-lang3's ToStringBuilder to attempt to output a representation of an object.
+			However, no object was passed, just the style specifier, and so the output will be of the ToStringStyle object itself.
+			Don't forget to include the object you wish to output as the first parameter, such as
+			&lt;pre&gt;
+			ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+			&lt;/pre&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='SPP_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR' priority='MAJOR'>
+    <name>Correctness - Method checks whether the keySet(), entrySet() or values() collection of a Map is null</name>
+    <configKey>SPP_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR</configKey>
+    <description>This method checks to see if the return value from a keySet(), entrySet() or values() method call on a Map is null.
+			For any valid functioning Map these collections will always be non-null, and so the call is superfluous. Maybe you intended
+			to check whether those sets where empty() instead.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='BAS_BLOATED_ASSIGNMENT_SCOPE' priority='MAJOR'>
     <name>Performance - Method assigns a variable in a larger scope than is needed</name>
     <configKey>BAS_BLOATED_ASSIGNMENT_SCOPE</configKey>
@@ -2423,6 +2444,7 @@ if (name != null) {
 			    &lt;li&gt;Sets.newHashSetWithExpectedSize(int)&lt;/li&gt;
 			    &lt;li&gt;Maps.newHashMapWithExpectedSize(int)&lt;/li&gt;
 			&lt;/ul&gt;
+			If not, a good estimate would be the expectedSize / {LOADING_FACTOR} which by default is 0.75
 			&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -2861,6 +2883,15 @@ for (Person p : people) {
     		is logged and where.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='IMC_IMMATURE_CLASS_WRONG_FIELD_ORDER' priority='INFO'>
+    <name>Style - Class orders instance fields before static fields</name>
+    <configKey>IMC_IMMATURE_CLASS_WRONG_FIELD_ORDER</configKey>
+    <description>&lt;p&gt;This class adds fields to the class in an order that is confusing, and not expected by 
+    		other developers. The standard is for static fields to be listed first, followed by instance 
+    		fields. when fields are listed out of order, developers may make assumptions about their
+    		behaviour that is incorrect and lead to bugs.&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
   <rule key='JXI_GET_ENDPOINT_CONSUMES_CONTENT' priority='MAJOR'>
     <name>Correctness - JAX-RS Method implements a GET request but consumes input</name>
     <configKey>JXI_GET_ENDPOINT_CONSUMES_CONTENT</configKey>
@@ -3037,16 +3068,16 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>BL_BURYING_LOGIC</configKey>
     <description>&lt;p&gt;Looks for relatively large if blocks of code, where you unconditionally return from them, and then follow that with an unconditional 
     		return of a small block. This places the bulk of the logic to the right indentation-wise, making it more difficult to read than needed. 
-    		It would be better to invert the logic of the if block, and immediately return, allowing the bulk of the logic to be move to the left, 
+    		It would be better to invert the logic of the if block, and immediately return, allowing the bulk of the logic to be move to the left 
     		for easier reading.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='WI_DUPLICATE_WIRED_TYPES' priority='MAJOR'>
     <name>Correctness - Class auto wires the same object into two separate fields in a class hierarchy</name>
     <configKey>WI_DUPLICATE_WIRED_TYPES</configKey>
-    <description>&lt;p&gt;this class has two fields in either itself or a parent class which autowire (without specialization, the same object
-    		for both fields. This is likely caused by a developer just not being aware that the field already is available for you use, 
-    		and just causes wasted space, and confusing code access the same object through two different pathways.&lt;/p&gt;</description>
+    <description>&lt;p&gt;this class has two fields in either itself or a parent class which autowire (without specialization), the same object
+    		for both fields. This is likely caused by a developer just not being aware that the field already is available for your use, 
+    		and just causes wasted space, and confusing code access to the same object through two different pathways.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3054,12 +3085,112 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <name>Correctness - Method gets and sets a value of a ConcurrentHashMap in a racy manner</name>
     <configKey>CCI_CONCURRENT_COLLECTION_ISSUES_USE_PUT_IS_RACY</configKey>
     <description>&lt;p&gt;This method retrieves the value of a key from a ConcurrentHashMap, where the value is itself a collection. It checks this
-    		value for null, and if it is so, creates a new collection and places in the map. This may cause thread race conditions
+    		value for null, and if it is so, creates a new collection and places it in the map. This may cause thread race conditions
     		where two threads overwrite each other's values. You should be using
     		&lt;code&gt;
     			ConcurrentHashMap.putIfAbsent(K, V)
     		&lt;/code&gt;
     		instead.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTWR_USE_TRY_WITH_RESOURCES' priority='INFO'>
+    <name>Style - Method manually handles closing an auto-closeable resource</name>
+    <configKey>UTWR_USE_TRY_WITH_RESOURCES</configKey>
+    <description>[
+    		&lt;p&gt;This method allocates and uses an auto closeable resources. However it manually closes the resource in a finally block.
+    		While this is correct management, it doesn't rely on the Idiomatic way available to JDK 7 and above, and allows for possible
+    		subtle problems, and complicates the reading of code by developers expecting the use of try-with-resources. 
+    		&lt;/p&gt;
+    		&lt;p&gt;Switch to using try with resources, as:
+    		&lt;pre&gt;
+    		    try (InputStream is = getAStream()) {
+    		        useTheStream(is);
+    		    }
+    		&lt;/pre&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='SSCU_SUSPICIOUS_SHADED_CLASS_USE' priority='MAJOR'>
+    <name>Correctness - Method calls a method from a class that has been shaded by a 3rdparty jar</name>
+    <configKey>SSCU_SUSPICIOUS_SHADED_CLASS_USE</configKey>
+    <description>&lt;p&gt;This method calls a method found in a 3rdparty library, which appears to be shaded from another 3rdparty library.
+    		This occurs when a jar includes other code using tools like the maven shade plugin. It is likely you wanted to use the
+    		"first-class" class from the original jar, rather than the class with the shaded package structure, but your IDE pulled in
+    		the wrong import.&lt;/p&gt;
+    		&lt;p&gt;An example might be, you attempted to use a method from the class:
+    		&lt;pre&gt;&lt;code&gt;
+    		com.google.common.collect.Sets
+    		&lt;/code&gt;&lt;/pre&gt;
+    		But instead, you import:
+    		&lt;pre&gt;&lt;code&gt;
+    		org.apache.jena.ext.com.google.common.collect.Sets
+    		&lt;/code&gt;&lt;/pre&gt;
+    		&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='USFW_UNSYNCHRONIZED_SINGLETON_FIELD_WRITES' priority='MAJOR'>
+    <name>Correctness - Method of Singleton class writes to a field in an unsynchronized manner</name>
+    <configKey>USFW_UNSYNCHRONIZED_SINGLETON_FIELD_WRITES</configKey>
+    <description>&lt;p&gt;This method writes to a field of this class. Since this class is seen as a Singleton this can produce race
+    		conditions, or cause non-visible changes to other threads, because the field isn't accessed synchronously.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='OI_OPTIONAL_ISSUES_USES_IMMEDIATE_EXECUTION' priority='MAJOR'>
+    <name>Correctness - Method uses immediate execution of a block of code that is often not used</name>
+    <configKey>OI_OPTIONAL_ISSUES_USES_IMMEDIATE_EXECUTION</configKey>
+    <description>&lt;p&gt;This method uses the Optional.orElse() method passing in some code that will execute immediately, whether 
+    		or not the else case of the Optional is needed. This may cause incorrect side effects to happen, or at the 
+    		minimum, code to execute for no reason. It would be better to use Optional.orElseGet()</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='OI_OPTIONAL_ISSUES_USES_DELAYED_EXECUTION' priority='MAJOR'>
+    <name>Correctness - Method uses delayed execution of a block of code that is trivial</name>
+    <configKey>OI_OPTIONAL_ISSUES_USES_DELAYED_EXECUTION</configKey>
+    <description>&lt;p&gt;This method uses the Optional.orElseGet() method passing in a simple variable or constant value.
+    		As this value takes not time to execute or causes no side effects, the use of Optional.orElseGet is
+    		unnecessary and potentially confusing. You can use Optional.orElse() instead.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='OI_OPTIONAL_ISSUES_CHECKING_REFERENCE' priority='MAJOR'>
+    <name>Correctness - Method checks an Optional reference for null</name>
+    <configKey>OI_OPTIONAL_ISSUES_CHECKING_REFERENCE</configKey>
+    <description>&lt;p&gt;This method compares an Optional reference variable against null. As the whole point of the
+    		Optional class is to avoid the null pointer exception, this use pattern is highly suspect. 
+    		The code should always make sure the Optional reference is valid, and should count on the apis
+    		of this class to check for the held reference instead.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='OI_OPTIONAL_ISSUES_PRIMITIVE_VARIANT_PREFERRED' priority='MAJOR'>
+    <name>Correctness - Method uses a java.util.Optional when use of OptionalInt, OptionalLong, OptionalDouble would be more clear</name>
+    <configKey>OI_OPTIONAL_ISSUES_PRIMITIVE_VARIANT_PREFERRED</configKey>
+    <description>&lt;p&gt;This method creates an Optional object to hold an int, double or long. In these cases it
+    		is more natural to use the Optional variants OptionalInt, OptionalDouble and OptionalLong.
+    		&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UAC_UNNECESSARY_API_CONVERSION_DATE_TO_INSTANT' priority='MAJOR'>
+    <name>Correctness - Method constructs a Date object, merely to convert it to an Instant object</name>
+    <configKey>UAC_UNNECESSARY_API_CONVERSION_DATE_TO_INSTANT</configKey>
+    <description>&lt;p&gt;This method creates a java.time.Instant object by first creating a java.util.Date object, and then calling
+    		toInstant() on it. It is simpler to just construct the Instant object directly, say by using
+    		{@code Instant.now()} to get the current time, of by using {@code Instant.parse(CharSequence)} to convert a String.
+    		&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UAC_UNNECESSARY_API_CONVERSION_FILE_TO_PATH' priority='MAJOR'>
+    <name>Correctness - Method constructs a File object, merely to convert it to a Path object</name>
+    <configKey>UAC_UNNECESSARY_API_CONVERSION_FILE_TO_PATH</configKey>
+    <description>&lt;p&gt;This method creates a java.nio.file.Path object by first creating a java.io.File object, and then calling
+    		toPath() on it. It is simpler to just construct the Path object directly, say by using
+    		{@code Path.get(String...)}.
+    		&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>

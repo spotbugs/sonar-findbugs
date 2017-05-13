@@ -1086,7 +1086,7 @@ such a setter. The use of these parameters should be reviewed to make sure they 
   <rule key='SPRING_ENDPOINT' priority='INFO'>
     <name>Security - Found Spring endpoint</name>
     <configKey>SPRING_ENDPOINT</configKey>
-    <description>&lt;p&gt;This class is a Spring Controller. All methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; are reachable remotely.
+    <description>&lt;p&gt;This class is a Spring Controller. All methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; (as well as its shortcut annotations &lt;code&gt;GetMapping&lt;/code&gt;, &lt;code&gt;PostMapping&lt;/code&gt;, &lt;code&gt;PutMapping&lt;/code&gt;, &lt;code&gt;DeleteMapping&lt;/code&gt;, and &lt;code&gt;PatchMapping&lt;/code&gt;) are reachable remotely.
 This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
@@ -1096,7 +1096,7 @@ This class should be analyzed to make sure that remotely exposed methods are saf
     <description>&lt;p&gt;
 The input values included in SQL queries need to be passed in safely.
 Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
-Alternatively to prepare statement, Hibernate Criteria can be used.
+Alternatively to prepare statements, Hibernate Criteria can be used.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
