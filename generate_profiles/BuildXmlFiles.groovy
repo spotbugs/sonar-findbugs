@@ -1,7 +1,7 @@
 import groovy.xml.MarkupBuilder
 
 @Grapes([
-    @Grab(group='com.google.code.findbugs'  , module='findbugs', version='3.0.1'),
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.0-RC1'),
     @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='7.0.0'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.6.0')]
 )
@@ -189,7 +189,7 @@ String getFindBugsCategory(List<Plugin> plugins, String bugType) {
     return "EXPERIMENTAL"
 }
 
-FB = new Plugin(groupId: 'com.google.code.findbugs', artifactId: 'findbugs', version: '3.0.1')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.0-RC1')
 CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '7.0.0')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.6.0')
 
@@ -216,7 +216,7 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 
             category = getFindBugsCategory(plugins, pattern.attribute("type"))
 
-            if(category == "EXPERIMENTAL" || category == "NOISE") return;
+            if(category == "NOISE" || pattern.attribute("type") in ["TESTING", "TESTING1", "TESTING2", "TESTING3", "UNKNOWN"]) return;
             if(category == "MT_CORRECTNESS") category = "MULTI-THREADING"
 
             //if(rulesSetName == 'jsp') println pattern.attribute("type")
