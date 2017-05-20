@@ -42,7 +42,7 @@ public class FbContribRulesDefinitionTest {
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
-    assertThat(rules).hasSize(FbContribRulesDefinition.RULE_COUNT);
+    assertThat(rules).hasSize(FbContribRulesDefinition.RULE_COUNT + FbContribRulesDefinition.DEACTIVED_RULE_COUNT);
 
     for (Rule rule : rules) {
       assertThat(rule.key()).isNotNull();

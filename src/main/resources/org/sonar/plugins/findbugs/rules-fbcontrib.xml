@@ -1852,6 +1852,22 @@ return new String[0];&lt;br/&gt;
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING' priority='INFO'>
+    <name>Experimental - Method passes a simple String.format result to an SLF4J's format string</name>
+    <configKey>LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING</configKey>
+    <description>&lt;p&gt;This method uses an SLF4J logger to log a string, which was produced through a call to String.format, where
+	       the format string passed was a constant string containing only simple format markers that could be directly handled
+	       by slf4j. Rather than doing
+	       &lt;pre&gt;
+	          logger.error("String.format("This %s is an error", s));
+	       &lt;pre&gt;
+	       do
+	       &lt;pre&gt;
+	          logger.error(This {} is an error", s);
+	       &lt;/pre&gt;
+	       &lt;/p&gt;</description>
+    <tag>experimental</tag>
+  </rule>
   <rule key='IICU_INCORRECT_INTERNAL_CLASS_USE' priority='MAJOR'>
     <name>Correctness - Class relies on internal API classes</name>
     <configKey>IICU_INCORRECT_INTERNAL_CLASS_USE</configKey>
@@ -3051,6 +3067,21 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		converting byte data to characters, when there is no need to do this. Use stream based inputs for better performance.&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
+  </rule>
+  <rule key='IOI_USE_OF_FILE_STREAM_CONSTRUCTORS' priority='INFO'>
+    <name>Experimental - Method uses a FileInputStream or FileOutputStream constructor</name>
+    <configKey>IOI_USE_OF_FILE_STREAM_CONSTRUCTORS</configKey>
+    <description>&lt;p&gt;This method creates and uses a java.io.FileInputStream or java.io.FileOutputStream object. Unfortunately both
+    		of these classes implement a finalize method, which means that objects created will likely hang around until a 
+    		full garbage collection occurs, which will leave excessive garbage on the heap for longer, and potentially much
+    		longer than expected. Java 7 introduced two ways to create streams for reading and writing files that do not have this concern.
+    		You should consider switching from these above classes to
+    		&lt;code&gt;
+    		InputStream is = java.nio.file.Files.newInputStream(myfile.toPath());
+    		OutputStream os = java.nio.file.Files.newOutputStream(myfile.toPath());
+    		&lt;/code&gt;
+    		&lt;/p&gt;</description>
+    <tag>experimental</tag>
   </rule>
   <rule key='DMC_DUBIOUS_MAP_COLLECTION' priority='MAJOR'>
     <name>Correctness - Class holds a map-type field, but uses it as only a List</name>
