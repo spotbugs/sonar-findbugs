@@ -21,6 +21,7 @@ package org.sonar.plugins.findbugs;
 
 import org.sonar.api.Plugin;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.JspSyntaxSensor;
 import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
@@ -39,7 +40,10 @@ public class FindbugsPlugin implements Plugin {
   @Override
   public void define(Context context) {
     context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
-    context.addExtensions(Arrays.asList(Jsp.class,
+    context.addExtensions(Arrays.asList(
+            Jsp.class,
+            JspSyntaxSensor.class,
+
             FindbugsSensor.class,
             FindbugsConfiguration.class,
             FindbugsExecutor.class,

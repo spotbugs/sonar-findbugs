@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.BatchExtension;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -34,7 +35,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
@@ -45,6 +49,32 @@ public class ByteCodeResourceLocator implements BatchExtension {
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
     private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "/src/java"};
+
+    /**
+     * findSourceFileKeyByClassName() is broken in SonarQube 6.3.1.. This method is fixing it.
+     * @param className
+     * @param javaResourceLocator
+     * @return
+     */
+    public String findSourceFileKeyByClassName(String className, JavaResourceLocator javaResourceLocator) {
+        String classFile = javaResourceLocator.findSourceFileKeyByClassName(className);
+        if(classFile != null) return classFile;
+
+        String fileName = className.replaceAll("\\.","/")+".class";
+
+        Collection<File> classPathEntries = javaResourceLocator.classpath();
+        for(File classPathEntry : classPathEntries) {
+            if(classPathEntry.isDirectory()) { //Skip jars in the classpath
+
+                File potentialLocation = new File(classPathEntry, fileName);
+                if(potentialLocation.exists()) {
+                    return potentialLocation.getPath();
+                }
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Find the file system location of a given class name.<br/>
@@ -64,6 +94,9 @@ public class ByteCodeResourceLocator implements BatchExtension {
     }
 
     public InputFile findJavaOuterClassFile(String className, File classFile, FileSystem fs) {
+        if(classFile == null) {
+            return null;
+        }
         try (InputStream in = new FileInputStream(classFile)) {
             DebugExtensionExtractor debug = new DebugExtensionExtractor();
             String source = debug.getDebugSourceFromClass(in);
@@ -124,15 +157,16 @@ public class ByteCodeResourceLocator implements BatchExtension {
     }
 
     public InputFile buildInputFile(String fileName,FileSystem fs) {
-        for (InputFile f : fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN))) {
-            if (f.relativePath().endsWith(fileName)) {
-                return f;
-            }
-        }
         for(String sourceDir : SOURCE_DIRECTORIES) {
             //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
             Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
             for (InputFile f : files) {
+                return f;
+            }
+        }
+        //Search for path _ending_ with the filename (https://github.com/SonarQubeCommunity/sonar-findbugs/issues/51)
+        for (InputFile f : fs.inputFiles(fs.predicates().hasType(InputFile.Type.MAIN))) {
+            if (f.relativePath().endsWith(fileName)) {
                 return f;
             }
         }
