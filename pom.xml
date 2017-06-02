@@ -4,7 +4,7 @@
 
   <groupId>org.sonarsource.sonar-findbugs-plugin</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>3.4.4</version>
+  <version>3.5</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Findbugs Plugin</name>
@@ -138,7 +138,7 @@
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.4.9</version>
+      <version>1.4.10</version>
       <exclusions>
         <!-- we use stax -->
         <exclusion>
