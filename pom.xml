@@ -54,6 +54,8 @@
     <sonar-java.version>4.0</sonar-java.version>
     <fbcontrib.version>7.0.0</fbcontrib.version>
     <findsecbugs.version>1.6.0</findsecbugs.version>
+
+
   </properties>
 
   <dependencies>
@@ -210,6 +212,15 @@
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+
+
+    <!-- Utilities use by the lexer -->
+    <dependency>
+      <groupId>org.sonarsource.sslr</groupId>
+      <artifactId>sslr-core</artifactId>
+      <version>1.21</version>
+    </dependency>
+
   </dependencies>
 
   <build>

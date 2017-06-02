@@ -45,9 +45,6 @@ import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class FindbugsSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsSensor.class);
@@ -195,7 +192,7 @@ public class FindbugsSensor implements Sensor {
    * @return File handle of the original class file analyzed
    */
   private File findOriginalClassForBug(String className) {
-    String sourceFile = javaResourceLocator.findSourceFileKeyByClassName(className);
+    String sourceFile = byteCodeResourceLocator.findSourceFileKeyByClassName(className,javaResourceLocator);
     if (sourceFile == null) {
       return null;
     }
