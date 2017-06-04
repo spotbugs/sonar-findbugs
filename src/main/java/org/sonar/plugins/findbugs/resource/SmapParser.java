@@ -115,7 +115,7 @@ public class SmapParser {
                 line = line.substring(2);
             }
 
-            int pos = line.indexOf(" ");
+            int pos = line.indexOf(' ');
             int fileNum = Integer.parseInt(line.substring(0, pos));
             String name = line.substring(pos + 1);
             fileinfo.put(fileNum, new FileInfo(name, path == null ? name : path));

@@ -47,19 +47,19 @@ public class ByteCodeResourceLocatorTest {
   public void findJavaClassFile_normalClassName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    locator.findJavaClassFile("com.helloworld.ThisIsATest", fsEmpty);
+    locator.findSourceFile("com/helloworld/ThisIsATest.java", fsEmpty);
 
     verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
   }
 
-  @Test
-  public void findJavaClassFile_withInnerClass() {
-
-    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    locator.findJavaClassFile("com.helloworld.ThisIsATest$InnerClass",fsEmpty);
-
-    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
-  }
+//  @Test
+//  public void findJavaClassFile_withInnerClass() {
+//
+//    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
+//    locator.findJavaClassFile("com.helloworld.ThisIsATest$InnerClass",fsEmpty);
+//
+//    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
+//  }
 
   @Test
   public void findTemplateFile_weblogicFileName() {
@@ -97,6 +97,6 @@ public class ByteCodeResourceLocatorTest {
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    assertEquals(givenJavaFile, locator.findJavaClassFile("com.helloworld.TestJavaClass$1", fsEmpty));
+    assertEquals(givenJavaFile, locator.findSourceFile("com/helloworld/TestJavaClass.java", fsEmpty));
   }
 }

@@ -49,6 +49,9 @@ public class FindbugsSensor implements Sensor {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsSensor.class);
 
+  public static final String[] REPOS = {FindbugsRulesDefinition.REPOSITORY_KEY, FbContribRulesDefinition.REPOSITORY_KEY,
+          FindSecurityBugsRulesDefinition.REPOSITORY_KEY, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY};
+
   private RulesProfile profile;
   private ActiveRules ruleFinder;
   private FindbugsExecutor executor;
@@ -95,10 +98,8 @@ public class FindbugsSensor implements Sensor {
     for (ReportedBug bugInstance : collection) {
 
       try {
-        String[] repos = {FindbugsRulesDefinition.REPOSITORY_KEY, FbContribRulesDefinition.REPOSITORY_KEY,
-                FindSecurityBugsRulesDefinition.REPOSITORY_KEY, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY};
         ActiveRule rule = null;
-        for (String repoKey : repos) {
+        for (String repoKey : REPOS) {
           rule = ruleFinder.findByInternalKey(repoKey, bugInstance.getType());
           if (rule != null) {
             break;
@@ -111,27 +112,32 @@ public class FindbugsSensor implements Sensor {
         }
 
         String className = bugInstance.getClassName();
+        String sourceFile = bugInstance.getSourceFile();
         String longMessage = bugInstance.getMessage();
         int line = bugInstance.getStartLine();
 
 
         //Regular Java class mapped to their original .java
-        InputFile resource = byteCodeResourceLocator.findJavaClassFile(className, this.fs);
+        InputFile resource = byteCodeResourceLocator.findSourceFile(sourceFile, this.fs);
         if (resource != null) {
           insertIssue(rule, resource, line, longMessage);
           continue;
         }
 
         //Locate the original class file
-        File classFile = findOriginalClassForBug(bugInstance.getClassName());
-
-        //If the class was an outer class, the source file will not be analog to the class name.
-        //The original source file is available in the class file metadata.
-        resource = byteCodeResourceLocator.findJavaOuterClassFile(className, classFile, this.fs);
-        if (resource != null) {
-          insertIssue(rule, resource, line, longMessage);
+        File classFile = findOriginalClassForBug(bugInstance.getClassFile());
+        if (classFile == null) {
+          LOG.warn("Unable to find the class "+bugInstance.getClassName());
           continue;
         }
+
+//        //If the class was an outer class, the source file will not be analog to the class name.
+//        //The original source file is available in the class file metadata.
+//        resource = byteCodeResourceLocator.findJavaOuterClassFile(className, classFile, this.fs);
+//        if (resource != null) {
+//          insertIssue(rule, resource, line, longMessage);
+//          continue;
+//        }
 
         //More advanced mapping if the original source is not Java files
         if (classFile != null) {
@@ -144,7 +150,7 @@ public class FindbugsSensor implements Sensor {
               }
 
               //SMAP was found
-              resource = byteCodeResourceLocator.buildInputFile(location.fileInfo.path, fs);
+              resource = byteCodeResourceLocator.findSourceFile(location.fileInfo.path, fs);
               if (resource != null) {
                 insertIssue(rule, resource, location.line, longMessage);
                 continue;

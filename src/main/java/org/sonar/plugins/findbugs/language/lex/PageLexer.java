@@ -45,9 +45,9 @@ public final class PageLexer {
   @SuppressWarnings("rawtypes")
   private static List tokenizers = Arrays.asList(
       /* HTML Comments */
-      new CommentTokenizer("<!--", "-->", true),
+      new CommentTokenizer("<!--", "-->", Boolean.TRUE),
       /* JSP Comments */
-      new CommentTokenizer("<%--", "--%>", false),
+      new CommentTokenizer("<%--", "--%>", Boolean.FALSE),
       /* HTML Directive */
       new DoctypeTokenizer("<!DOCTYPE", ">"),
       /* XML Directives */

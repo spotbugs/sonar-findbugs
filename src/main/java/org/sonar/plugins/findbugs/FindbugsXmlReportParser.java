@@ -119,7 +119,7 @@ class FindbugsXmlReportParser {
 
     public void parseStart(String attrValue) {
       try {
-        start = Integer.parseInt(attrValue);
+        start = Integer.valueOf(attrValue);
       } catch (NumberFormatException e) {
         start = null;
       }
@@ -127,7 +127,7 @@ class FindbugsXmlReportParser {
 
     public void parseEnd(String attrValue) {
       try {
-        end = Integer.parseInt(attrValue);
+        end = Integer.valueOf(attrValue);
       } catch (NumberFormatException e) {
         end = null;
       }

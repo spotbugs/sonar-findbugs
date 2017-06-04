@@ -58,7 +58,7 @@ import java.util.Queue;
 @BatchSide
 public class FindbugsConfiguration {
 
-  private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
 
   private final FileSystem fileSystem;
   private final Settings settings;

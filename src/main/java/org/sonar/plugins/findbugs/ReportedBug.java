@@ -21,18 +21,33 @@ package org.sonar.plugins.findbugs;
 
 import edu.umd.cs.findbugs.BugInstance;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class ReportedBug {
 
   private final String type;
   private final String message;
   private final String className;
   private final int startLine;
+  private final String sourceFile;
+  private final String classFile;
+
+  private static final Pattern SOURCE_FILE_PATTERN = Pattern.compile("^(.*)\\.java$");
 
   public ReportedBug(BugInstance bugInstance) {
     this.type = bugInstance.getType();
     this.message = bugInstance.getMessageWithoutPrefix();
     this.className = bugInstance.getPrimarySourceLineAnnotation().getClassName();
     this.startLine = bugInstance.getPrimarySourceLineAnnotation().getStartLine();
+    this.sourceFile = bugInstance.getPrimarySourceLineAnnotation().getSourcePath();
+    Matcher m = SOURCE_FILE_PATTERN.matcher(sourceFile);
+    if (m.find()) {
+      this.classFile = m.group(1).replaceAll("/",".");
+    }
+    else {
+      this.classFile = className;
+    }
   }
 
   public String getType() {
@@ -51,4 +66,7 @@ public class ReportedBug {
     return startLine;
   }
 
+  public String getSourceFile() { return sourceFile; }
+
+  public String getClassFile() { return classFile; }
 }
