@@ -30,6 +30,7 @@ import org.sonar.plugins.findbugs.FindbugsLevelUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class FindBugsFilter {
   private static final String PATTERN_SEPARATOR = ",";
   private static final String CODE_SEPARATOR = ",";
   private static final String CATEGORY_SEPARATOR = ",";
+  private static final Class[] ALL_XSTREAM_TYPES = {Bug.class, ClassFilter.class, FieldFilter.class, FindBugsFilter.class, LocalFilter.class, Match.class, MethodFilter.class, OrFilter.class, PackageFilter.class, Priority.class};
 
   @XStreamImplicit
   private List<Match> matchs;
@@ -129,18 +131,13 @@ public class FindBugsFilter {
 
   public static XStream createXStream() {
     XStream xstream = new XStream(new StaxDriver());
-    xstream.denyTypes(new Class[] {void.class, Void.class});
+    XStream.setupDefaultSecurity(xstream); //Setup the default hardening of types disallowed.
     xstream.setClassLoader(FindBugsFilter.class.getClassLoader());
-    xstream.processAnnotations(FindBugsFilter.class);
-    xstream.processAnnotations(Match.class);
-    xstream.processAnnotations(Bug.class);
-    xstream.processAnnotations(Priority.class);
-    xstream.processAnnotations(ClassFilter.class);
-    xstream.processAnnotations(PackageFilter.class);
-    xstream.processAnnotations(MethodFilter.class);
-    xstream.processAnnotations(FieldFilter.class);
-    xstream.processAnnotations(LocalFilter.class);
-    xstream.processAnnotations(OrFilter.class);
+
+    for (Class modelClass : ALL_XSTREAM_TYPES) {
+      xstream.processAnnotations(modelClass);
+      xstream.allowTypeHierarchy(modelClass); //Build a whitelist of the class allowed
+    }
     return xstream;
   }
 
