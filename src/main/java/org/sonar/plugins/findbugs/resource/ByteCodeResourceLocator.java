@@ -75,42 +75,14 @@ public class ByteCodeResourceLocator implements BatchExtension {
         return null;
     }
 
-
     /**
-     * Find the file system location of a given class name.<br/>
-     * (ie : <code>test.SomeClass</code> ->  <code>src/main/java/test/SomeClass.java</code>)
-     *
-     * @param className Class name to look for
+     * Find a Java source file based on the _exact_ filename passed.
+     * @param sourceFile Path to the source file (/package/MyClass.java)
      * @param fs File system
-     * @return Java source file that conrespond to the class name specified.
+     * @return The InputFile instance to the source file
      */
-    public InputFile findJavaClassFile(String className, FileSystem fs) {
-        int indexDollarSign = className.indexOf('$');
-        if(indexDollarSign != -1) {
-            className = className.substring(0, indexDollarSign); //Remove innerClass from the class name
-        }
-
-        return buildInputFile(className.replaceAll("\\.","/")+".java", fs);
-    }
-
-    public InputFile findJavaOuterClassFile(String className, File classFile, FileSystem fs) {
-        if(classFile == null) {
-            return null;
-        }
-        try (InputStream in = new FileInputStream(classFile)) {
-            DebugExtensionExtractor debug = new DebugExtensionExtractor();
-            String source = debug.getDebugSourceFromClass(in);
-
-            if(source == null) return null;
-            String newClassName = FilenameUtils.getBaseName(source);
-            String packagePrefix = className.lastIndexOf('.') != -1 ? FilenameUtils.getBaseName(className) + "." : "";
-            String fullClassName = packagePrefix + newClassName;
-            return findJavaClassFile(fullClassName, fs);
-        }
-        catch (IOException e) {
-            LOG.warn("An error occurs while opening classfile : {} ({})", classFile.getPath(), e.getMessage());
-        }
-        return null;
+    public InputFile findSourceFile(String sourceFile, FileSystem fs) {
+        return buildInputFile(sourceFile, fs);
     }
 
     /**
@@ -123,7 +95,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
      *
      * @param className Class name of the precompiled jsp
      * @param fs File system
-     * @return The
+     * @return The InputFile instance to the template file
      */
     public InputFile findTemplateFile(String className, FileSystem fs) {
         List<String> potentialJspFilenames = new ArrayList<>();
@@ -156,8 +128,14 @@ public class ByteCodeResourceLocator implements BatchExtension {
         return null;
     }
 
-    public InputFile buildInputFile(String fileName,FileSystem fs) {
-        for(String sourceDir : SOURCE_DIRECTORIES) {
+    /**
+     * Look in the potential source directories to find the given source file
+     * @param fileName Path to the source file (/package/MyClass.java)
+     * @param fs File system
+     * @return The InputFile instance to the source file
+     */
+    private InputFile buildInputFile(String fileName,FileSystem fs) {
+        for(String sourceDir : SOURCE_DIRECTORIES) { //Quick lookup to skip manual iteration (see next loop)
             //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
             Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
             for (InputFile f : files) {
