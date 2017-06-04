@@ -65,10 +65,12 @@ public class FindbugsProfileExporter extends ProfileExporter {
   public static FindBugsFilter buildFindbugsFilter(Iterable<ActiveRule> activeRules) {
     FindBugsFilter root = new FindBugsFilter();
     for (ActiveRule activeRule : activeRules) {
-      if (FindbugsRulesDefinition.REPOSITORY_KEY.equals(activeRule.getRepositoryKey()) ||
-        FbContribRulesDefinition.REPOSITORY_KEY.equals(activeRule.getRepositoryKey()) ||
-        FindSecurityBugsRulesDefinition.REPOSITORY_KEY.equals(activeRule.getRepositoryKey()) ||
-        FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY.equals(activeRule.getRepositoryKey())) {
+      String repoKey = activeRule.getRepositoryKey();
+
+      if (FindbugsRulesDefinition.REPOSITORY_KEY.equals(repoKey) ||
+        FbContribRulesDefinition.REPOSITORY_KEY.equals(repoKey) ||
+        FindSecurityBugsRulesDefinition.REPOSITORY_KEY.equals(repoKey) ||
+        FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY.equals(repoKey)) {
         Match child = new Match();
         child.setBug(new Bug(activeRule.getConfigKey()));
         root.addMatch(child);
