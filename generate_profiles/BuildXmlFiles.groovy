@@ -324,7 +324,7 @@ def writeProfile(String profileName,List<String> includedBugs,List<String> exclu
     File f = new File("out_sonar","profile-"+profileName+".xml")
     printf("Building profile %s (%s)%n",profileName,f.getCanonicalPath())
 
-
+    def countBugs=0;
 
     def xml = new MarkupBuilder(new PrintWriter(f))
     xml.FindBugsFilter {
@@ -336,11 +336,15 @@ def writeProfile(String profileName,List<String> includedBugs,List<String> exclu
             if(!excludedBugs.contains(patternName)) {
                 Match {
                     Bug(pattern: patternName)
+
+                    countBugs++
                 }
             }
         }
 
     }
+
+    return countBugs
 }
 
 
@@ -361,9 +365,11 @@ def getAllPatternsFromPlugin(Plugin plugin) {
     return patterns;
 }
 
-
+totalCount = 0
 writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), excludedJspRules);
-writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), excludedJspRules);
-writeProfile("findbugs-security-audit", informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns)
+totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), excludedJspRules);
+totalCount += writeProfile("findbugs-security-audit", informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns)
 writeProfile("findbugs-security-minimal", cryptoBugs + majorBugs + criticalBugs + findBugsPatterns)
-writeProfile("findbugs-security-jsp", majorJspBugs + criticalJspBugs)
+totalCount += writeProfile("findbugs-security-jsp", majorJspBugs + criticalJspBugs)
+
+println "Total bugs patterns "+totalCount
