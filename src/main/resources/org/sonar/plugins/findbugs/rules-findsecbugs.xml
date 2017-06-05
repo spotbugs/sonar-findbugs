@@ -1090,7 +1090,7 @@ such a setter. The use of these parameters should be reviewed to make sure they 
 This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
-  <rule key='SPRING_CSRF_PROTECTION_DISABLED' priority='CRITICAL'>
+  <rule key='SPRING_CSRF_PROTECTION_DISABLED' priority='MAJOR'>
     <name>Security - Spring CSRF protection disabled</name>
     <configKey>SPRING_CSRF_PROTECTION_DISABLED</configKey>
     <description>&lt;p&gt;Disabling Spring Security's CSRF protection is unsafe for standard web applications.&lt;/p&gt;
@@ -1117,7 +1117,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
-  <rule key='SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING' priority='CRITICAL'>
+  <rule key='SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING' priority='MAJOR'>
     <name>Security - Spring CSRF unrestricted RequestMapping</name>
     <configKey>SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING</configKey>
     <description>&lt;p&gt;Methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; are by default mapped to all the HTTP request methods.

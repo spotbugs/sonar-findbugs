@@ -93,6 +93,12 @@
     <Bug pattern='XSS_SERVLET' />
   </Match>
   <Match>
+    <Bug pattern='SPRING_CSRF_PROTECTION_DISABLED' />
+  </Match>
+  <Match>
+    <Bug pattern='SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING' />
+  </Match>
+  <Match>
     <Bug pattern='COMMAND_INJECTION' />
   </Match>
   <Match>
