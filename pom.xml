@@ -283,7 +283,7 @@
             </manifestEntries>
           </archive>
           <pluginName>Findbugs</pluginName>
-          <pluginDescription><![CDATA[Analyze Java code with <a href="https://spotbugs.github.io">SpotBugs</a> ${findbugs.version}.]]></pluginDescription>
+          <pluginDescription><![CDATA[Analyze Java code with <a href="https://spotbugs.github.io">SpotBugs</a> ${spotbugs.version}.]]></pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>false</useChildFirstClassLoader>
           <requirePlugins>java:${sonar-java.version}</requirePlugins>

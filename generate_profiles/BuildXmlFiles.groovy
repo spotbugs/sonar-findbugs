@@ -108,7 +108,9 @@ criticalBugs = [ //RCE or powerful function
         "EL_INJECTION",
         "SEAM_LOG_INJECTION",
         "OBJECT_DESERIALIZATION",
-        "MALICIOUS_XSLT"
+        "MALICIOUS_XSLT",
+        "SPRING_CSRF_PROTECTION_DISABLED",
+        "SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING"
 ]
 
 majorJspBugs = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER",
