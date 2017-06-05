@@ -1,4 +1,4 @@
-# Sonar Findbugs [![Build Status](https://travis-ci.org/SonarQubeCommunity/sonar-findbugs.svg?branch=master)](https://travis-ci.org/SonarQubeCommunity/sonar-findbugs) ![FindBugs Rules](https://img.shields.io/badge/FindBugs%20rules-818-brightgreen.svg?maxAge=2592000) [![Dependency Status](https://www.versioneye.com/user/projects/5755ce407757a0003bd4b22d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5755ce407757a0003bd4b22d)
+# Sonar Findbugs [![Build Status](https://travis-ci.org/SonarQubeCommunity/sonar-findbugs.svg?branch=master)](https://travis-ci.org/SonarQubeCommunity/sonar-findbugs) ![FindBugs Rules](https://img.shields.io/badge/FindBugs%20rules-820-brightgreen.svg?maxAge=2592000) [![Dependency Status](https://www.versioneye.com/user/projects/5755ce407757a0003bd4b22d/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5755ce407757a0003bd4b22d)
 
 ## Description / Features
 
