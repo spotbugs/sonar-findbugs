@@ -186,6 +186,5 @@ consider using a commercial static analysis or pen-testing tool.
     <tag>owasp-a3</tag>
     <tag>jsp</tag>
     <tag>security</tag>
-    <status>DEPRECATED</status>
   </rule>
 </rules>
