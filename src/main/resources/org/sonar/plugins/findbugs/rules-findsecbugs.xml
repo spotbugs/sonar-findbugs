@@ -1090,6 +1090,112 @@ such a setter. The use of these parameters should be reviewed to make sure they 
 This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
+  <rule key='SPRING_CSRF_PROTECTION_DISABLED' priority='CRITICAL'>
+    <name>Security - Spring CSRF protection disabled</name>
+    <configKey>SPRING_CSRF_PROTECTION_DISABLED</configKey>
+    <description>&lt;p&gt;Disabling Spring Security's CSRF protection is unsafe for standard web applications.&lt;/p&gt;
+&lt;p&gt;A valid use case for disabling this protection would be a service exposing state-changing operations
+that is guaranteed to be used only by non-browser clients.&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Insecure configuration:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;@EnableWebSecurity
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+    }
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html#when-to-use-csrf-protection"&gt;Spring Security Official Documentation: When to use CSRF protection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29"&gt;OWASP: Cross-Site Request Forgery&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet"&gt;OWASP: CSRF Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/352.html"&gt;CWE-352: Cross-Site Request Forgery (CSRF)&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING' priority='CRITICAL'>
+    <name>Security - Spring CSRF unrestricted RequestMapping</name>
+    <configKey>SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING</configKey>
+    <description>&lt;p&gt;Methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; are by default mapped to all the HTTP request methods.
+However, Spring Security's CSRF protection is not enabled by default
+for the HTTP request methods &lt;code&gt;GET&lt;/code&gt;, &lt;code&gt;HEAD&lt;/code&gt;, &lt;code&gt;TRACE&lt;/code&gt;, and &lt;code&gt;OPTIONS&lt;/code&gt;
+(as this could cause the tokens to be leaked).
+Therefore, state-changing methods annotated with &lt;code&gt;RequestMapping&lt;/code&gt; and not narrowing the mapping
+to the HTTP request methods &lt;code&gt;POST&lt;/code&gt;, &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;DELETE&lt;/code&gt;, or &lt;code&gt;PATCH&lt;/code&gt;
+are vulnerable to CSRF attacks.&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;@Controller
+public class UnsafeController {
+
+    @RequestMapping("/path")
+    public void writeData() {
+        // State-changing operations performed within this method.
+    }
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (Spring Framework 4.3 and later):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;@Controller
+public class SafeController {
+
+    /**
+     * For methods without side-effects use @GetMapping.
+     */
+    @GetMapping("/path")
+    public String readData() {
+        // No state-changing operations performed within this method.
+        return "";
+    }
+
+    /**
+     * For state-changing methods use either @PostMapping, @PutMapping, @DeleteMapping, or @PatchMapping.
+     */
+    @PostMapping("/path")
+    public void writeData() {
+        // State-changing operations performed within this method.
+    }
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (Before Spring Framework 4.3):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;@Controller
+public class SafeController {
+
+    /**
+     * For methods without side-effects use either
+     * RequestMethod.GET, RequestMethod.HEAD, RequestMethod.TRACE, or RequestMethod.OPTIONS.
+     */
+    @RequestMapping(value = "/path", method = RequestMethod.GET)
+    public String readData() {
+        // No state-changing operations performed within this method.
+        return "";
+    }
+
+    /**
+     * For state-changing methods use either
+     * RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, or RequestMethod.PATCH.
+     */
+    @RequestMapping(value = "/path", method = RequestMethod.POST)
+    public void writeData() {
+        // State-changing operations performed within this method.
+    }
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html#csrf-use-proper-verbs"&gt;Spring Security Official Documentation: Use proper HTTP verbs (CSRF protection)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29"&gt;OWASP: Cross-Site Request Forgery&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29_Prevention_Cheat_Sheet"&gt;OWASP: CSRF Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/352.html"&gt;CWE-352: Cross-Site Request Forgery (CSRF)&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='SQL_INJECTION_HIBERNATE' priority='CRITICAL'>
     <name>Security - Potential SQL/HQL Injection (Hibernate)</name>
     <configKey>SQL_INJECTION_HIBERNATE</configKey>
