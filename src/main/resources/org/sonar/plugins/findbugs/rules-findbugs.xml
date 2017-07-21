@@ -88,9 +88,9 @@ While ScheduledThreadPoolExecutor inherits from ThreadPoolExecutor, a few of the
     <description>&lt;p&gt;This code constructs an HTTP Cookie using an untrusted HTTP parameter. If this cookie is added to an HTTP response, it will allow a HTTP response splitting
 vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/HTTP_response_splitting"&gt;http://en.wikipedia.org/wiki/HTTP_response_splitting&lt;/a&gt;
 for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of HTTP response splitting.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
-vulnerabilities that FindBugs doesn't report. If you are concerned about HTTP response splitting, you should seriously
+&lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of HTTP response splitting.
+If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
+vulnerabilities that SpotBugs doesn't report. If you are concerned about HTTP response splitting, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
     <tag>security</tag>
@@ -101,9 +101,9 @@ consider using a commercial static analysis or pen-testing tool.
     <description>&lt;p&gt;This code directly writes an HTTP parameter to an HTTP header, which allows for a HTTP response splitting
 vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/HTTP_response_splitting"&gt;http://en.wikipedia.org/wiki/HTTP_response_splitting&lt;/a&gt;
 for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of HTTP response splitting.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
-vulnerabilities that FindBugs doesn't report. If you are concerned about HTTP response splitting, you should seriously
+&lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of HTTP response splitting.
+If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
+vulnerabilities that SpotBugs doesn't report. If you are concerned about HTTP response splitting, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
     <tag>security</tag>
@@ -115,9 +115,9 @@ consider using a commercial static analysis or pen-testing tool.
 
 See &lt;a href="http://cwe.mitre.org/data/definitions/23.html"&gt;http://cwe.mitre.org/data/definitions/23.html&lt;/a&gt;
 for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of relative path traversal.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
-vulnerabilities that FindBugs doesn't report. If you are concerned about relative path traversal, you should seriously
+&lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of relative path traversal.
+If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
+vulnerabilities that SpotBugs doesn't report. If you are concerned about relative path traversal, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -131,9 +131,9 @@ but it does not properly neutralize absolute path sequences such as "/abs/path" 
 
 See &lt;a href="http://cwe.mitre.org/data/definitions/36.html"&gt;http://cwe.mitre.org/data/definitions/36.html&lt;/a&gt;
 for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of absolute path traversal.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
-vulnerabilities that FindBugs doesn't report. If you are concerned about absolute path traversal, you should seriously
+&lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of absolute path traversal.
+If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more
+vulnerabilities that SpotBugs doesn't report. If you are concerned about absolute path traversal, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -145,9 +145,9 @@ consider using a commercial static analysis or pen-testing tool.
     <description>&lt;p&gt;This code directly writes an HTTP parameter to Servlet output, which allows for a reflected cross site scripting
 vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/Cross-site_scripting"&gt;http://en.wikipedia.org/wiki/Cross-site_scripting&lt;/a&gt;
 for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of cross site scripting.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
-vulnerabilities that FindBugs doesn't report. If you are concerned about cross site scripting, you should seriously
+&lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of cross site scripting.
+If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
+vulnerabilities that SpotBugs doesn't report. If you are concerned about cross site scripting, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
@@ -160,9 +160,9 @@ consider using a commercial static analysis or pen-testing tool.
 for a reflected cross site scripting
 vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/Cross-site_scripting"&gt;http://en.wikipedia.org/wiki/Cross-site_scripting&lt;/a&gt;
 for more information.&lt;/p&gt;
-&lt;p&gt;FindBugs looks only for the most blatant, obvious cases of cross site scripting.
-If FindBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
-vulnerabilities that FindBugs doesn't report. If you are concerned about cross site scripting, you should seriously
+&lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of cross site scripting.
+If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/em&gt; have more cross site scripting
+vulnerabilities that SpotBugs doesn't report. If you are concerned about cross site scripting, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
@@ -695,7 +695,7 @@ to immediately undo the work of the boxing.
   <rule key='DM_BOXED_PRIMITIVE_FOR_COMPARE' priority='MAJOR'>
     <name>Performance - Boxing a primitive to compare</name>
     <configKey>DM_BOXED_PRIMITIVE_FOR_COMPARE</configKey>
-    <description>&lt;p&gt;A boxed primitive is created just to call compareTo method. It's more efficient to use static compare method 
+    <description>&lt;p&gt;A boxed primitive is created just to call compareTo method. It's more efficient to use static compare method
   (for double and float since Java 1.4, for other primitive types since Java 1.7) which works on primitives directly.
   &lt;/p&gt;</description>
     <tag>performance</tag>
@@ -1093,8 +1093,8 @@ the  constant Integer.MIN_VALUE, which is an exceptionally bad practice.
     <name>Bad practice - compareTo()/compare() incorrectly handles float or double value</name>
     <configKey>CO_COMPARETO_INCORRECT_FLOATING</configKey>
     <description>&lt;p&gt;This method compares double or float values using pattern like this: val1 &amp;gt; val2 ? 1 : val1 &amp;lt; val2 ? -1 : 0.
-This pattern works incorrectly for -0.0 and NaN values which may result in incorrect sorting result or broken collection 
-(if compared values are used as keys). Consider using Double.compare or Float.compare static methods which handle all 
+This pattern works incorrectly for -0.0 and NaN values which may result in incorrect sorting result or broken collection
+(if compared values are used as keys). Consider using Double.compare or Float.compare static methods which handle all
 the special cases correctly.&lt;/p&gt;</description>
     <tag>bad-practice</tag>
   </rule>
@@ -1491,7 +1491,7 @@ This not necessarily a bug, but is worth examining
 abstract class A {
     int hashCode;
     abstract Object getValue();
-    
+
     A() {
         hashCode = getValue().hashCode();
     }
@@ -1548,7 +1548,7 @@ public class CircularClassInitialization {
     static class InnerClassSingleton extends CircularClassInitialization {
         static InnerClassSingleton singleton = new InnerClassSingleton();
     }
-    
+
     static CircularClassInitialization foo = InnerClassSingleton.singleton;
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -1591,7 +1591,7 @@ blocking and deadlock behavior. See &lt;a href="http://www.javalobby.org/java/fo
 &lt;pre&gt;&lt;code&gt;
 private static Boolean inited = Boolean.FALSE;
 ...
-synchronized(inited) { 
+synchronized(inited) {
     if (!inited) {
         init();
         inited = Boolean.TRUE;
@@ -1613,7 +1613,7 @@ such as an Integer.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
 private static final Integer fileLock = new Integer(1);
 ...
-synchronized(fileLock) { 
+synchronized(fileLock) {
     .. do something ..
 }
 ...
@@ -1638,7 +1638,7 @@ throughout the JVM, leading to very confusing behavior and potential deadlock.
 &lt;pre&gt;&lt;code&gt;
 private static Integer count = 0;
 ...
-synchronized(count) { 
+synchronized(count) {
     count++;
 }
 ...
@@ -1796,7 +1796,7 @@ could be changed by malicious code or
   <rule key='MS_MUTABLE_COLLECTION' priority='INFO'>
     <name>Malicious code - Field is a mutable collection</name>
     <configKey>MS_MUTABLE_COLLECTION</configKey>
-    <description>&lt;p&gt;A mutable collection instance is assigned to a final static field, 
+    <description>&lt;p&gt;A mutable collection instance is assigned to a final static field,
    thus can be changed by malicious code or by accident from another package.
    Consider wrapping this field into Collections.unmodifiableSet/List/Map/etc.
    to avoid this vulnerability.&lt;/p&gt;</description>
@@ -1805,9 +1805,9 @@ could be changed by malicious code or
   <rule key='MS_MUTABLE_COLLECTION_PKGPROTECT' priority='INFO'>
     <name>Malicious code - Field is a mutable collection which should be package protected</name>
     <configKey>MS_MUTABLE_COLLECTION_PKGPROTECT</configKey>
-    <description>&lt;p&gt;A mutable collection instance is assigned to a final static field, 
+    <description>&lt;p&gt;A mutable collection instance is assigned to a final static field,
    thus can be changed by malicious code or by accident from another package.
-   The field could be made package protected to avoid this vulnerability. 
+   The field could be made package protected to avoid this vulnerability.
    Alternatively you may wrap this field into Collections.unmodifiableSet/List/Map/etc.
    to avoid this vulnerability.&lt;/p&gt;</description>
     <tag>malicious-code</tag>
@@ -1842,7 +1842,7 @@ could be changed by malicious code or
   <rule key='ME_ENUM_FIELD_SETTER' priority='MAJOR'>
     <name>Bad practice - Public enum method unconditionally sets its field</name>
     <configKey>ME_ENUM_FIELD_SETTER</configKey>
-    <description>&lt;p&gt;This public method declared in public enum unconditionally sets enum field, thus this field can be changed by malicious code 
+    <description>&lt;p&gt;This public method declared in public enum unconditionally sets enum field, thus this field can be changed by malicious code
   or by accident from another package. Though mutable enum fields may be used for lazy initialization, it's a bad practice to expose them to the outer world.
   Consider removing this method or declaring it package-private.&lt;/p&gt;</description>
     <tag>bad-practice</tag>
@@ -1859,10 +1859,10 @@ you intend.
 &lt;/p&gt;
 &lt;p&gt;If you really intend to invoke the inherited method,
 invoke it by invoking the method on super (e.g., invoke super.foo(17)), and
-thus it will be clear to other readers of your code and to FindBugs
+thus it will be clear to other readers of your code and to SpotBugs
 that you want to invoke the inherited method, not the method in the outer class.
 &lt;/p&gt;
-&lt;p&gt;If you call &lt;code&gt;this.foo(17)&lt;/code&gt;, then the inherited method will be invoked. However, since FindBugs only looks at
+&lt;p&gt;If you call &lt;code&gt;this.foo(17)&lt;/code&gt;, then the inherited method will be invoked. However, since SpotBugs only looks at
 classfiles, it
 can't tell the difference between an invocation of &lt;code&gt;this.foo(17)&lt;/code&gt; and &lt;code&gt;foo(17)&lt;/code&gt;, it will still
 complain about a potential ambiguous invocation.
@@ -2555,14 +2555,14 @@ Probably something else was meant or the condition can be removed.&lt;/p&gt;</de
   <rule key='UC_USELESS_CONDITION_TYPE' priority='INFO'>
     <name>Style - Condition has no effect due to the variable type</name>
     <configKey>UC_USELESS_CONDITION_TYPE</configKey>
-    <description>&lt;p&gt;This condition always produces the same result due to the type range of the involved variable. 
+    <description>&lt;p&gt;This condition always produces the same result due to the type range of the involved variable.
 Probably something else was meant or the condition can be removed.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='UC_USELESS_OBJECT' priority='INFO'>
     <name>Style - Useless object created</name>
     <configKey>UC_USELESS_OBJECT</configKey>
-    <description>&lt;p&gt;Our analysis shows that this object is useless. 
+    <description>&lt;p&gt;Our analysis shows that this object is useless.
 It's created and modified, but its value never go outside of the method or produce any side-effect.
 Either there is a mistake and object was intended to be used or it can be removed.&lt;/p&gt;
 &lt;p&gt;This analysis rarely produces false-positives. Common false-positive cases include:&lt;/p&gt;
@@ -2633,7 +2633,7 @@ return value of &lt;code&gt;String.toLowerCase()&lt;/code&gt;).
 &lt;/p&gt;
 &lt;p&gt;We are guessing that ignoring the return value might be a bad idea just from
 a simple analysis of the body of the method. You can use a @CheckReturnValue annotation
-to instruct FindBugs as to whether ignoring the return value of this method
+to instruct SpotBugs as to whether ignoring the return value of this method
 is important or acceptable.
 &lt;/p&gt;
 &lt;p&gt;Please investigate this closely to decide whether it is OK to ignore the return value.
@@ -2644,7 +2644,7 @@ is important or acceptable.
     <name>Style - Return value of method without side effect is ignored</name>
     <configKey>RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT</configKey>
     <description>&lt;p&gt;This code calls a method and ignores the return value. However our analysis shows that
-the method (including its implementations in subclasses if any) does not produce any effect 
+the method (including its implementations in subclasses if any) does not produce any effect
 other than return value. Thus this call can be removed.
 &lt;/p&gt;
 &lt;p&gt;We are trying to reduce the false positives as much as possible, but in some cases this warning might be wrong.
@@ -2653,7 +2653,7 @@ Common false-positive cases include:&lt;/p&gt;
 &lt;p&gt;- The method is called to trigger the class loading which may have a side effect.&lt;/p&gt;
 &lt;p&gt;- The method is called just to get some exception.&lt;/p&gt;
 &lt;p&gt;If you feel that our assumption is incorrect, you can use a @CheckReturnValue annotation
-to instruct FindBugs that ignoring the return value of this method is acceptable.
+to instruct SpotBugs that ignoring the return value of this method is acceptable.
 &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -2750,10 +2750,10 @@ something that should be closed.</description>
     <configKey>NP_ALWAYS_NULL_EXCEPTION</configKey>
     <description>&lt;p&gt; A pointer which is null on an exception path is dereferenced here.&amp;nbsp;
 This will lead to a &lt;code&gt;NullPointerException&lt;/code&gt; when the code is executed.&amp;nbsp;
-Note that because FindBugs currently does not prune infeasible exception paths,
+Note that because SpotBugs currently does not prune infeasible exception paths,
 this may be a false warning.&lt;/p&gt;
 
-&lt;p&gt; Also note that FindBugs considers the default case of a switch statement to
+&lt;p&gt; Also note that SpotBugs considers the default case of a switch statement to
 be an exception path, since the default case is often infeasible.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -2774,7 +2774,7 @@ of the parameter or the annotation is wrong.
 a null value will be dereferenced, which
 would generate a &lt;code&gt;NullPointerException&lt;/code&gt; when the code is executed.
 Of course, the problem might be that the branch or statement is infeasible and that
-the null pointer exception can't ever be executed; deciding that is beyond the ability of FindBugs.
+the null pointer exception can't ever be executed; deciding that is beyond the ability of SpotBugs.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -2786,7 +2786,7 @@ the null pointer exception can't ever be executed; deciding that is beyond the a
 a null value will be dereferenced, which
 would generate a &lt;code&gt;NullPointerException&lt;/code&gt; when the code is executed.
 Of course, the problem might be that the branch or statement is infeasible and that
-the null pointer exception can't ever be executed; deciding that is beyond the ability of FindBugs.
+the null pointer exception can't ever be executed; deciding that is beyond the ability of SpotBugs.
 Due to the fact that this value had been previously tested for nullness,
 this is a definite possibility.
 &lt;/p&gt;</description>
@@ -2798,10 +2798,10 @@ this is a definite possibility.
     <description>&lt;p&gt; A reference value which is null on some exception control path is
 dereferenced here.&amp;nbsp; This may lead to a &lt;code&gt;NullPointerException&lt;/code&gt;
 when the code is executed.&amp;nbsp;
-Note that because FindBugs currently does not prune infeasible exception paths,
+Note that because SpotBugs currently does not prune infeasible exception paths,
 this may be a false warning.&lt;/p&gt;
 
-&lt;p&gt; Also note that FindBugs considers the default case of a switch statement to
+&lt;p&gt; Also note that SpotBugs considers the default case of a switch statement to
 be an exception path, since the default case is often infeasible.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3141,11 +3141,11 @@ different types.  The result of this comparison will always be false at runtime.
     <name>Correctness - Call to equals() comparing different types</name>
     <configKey>EC_UNRELATED_TYPES</configKey>
     <description>&lt;p&gt; This method calls equals(Object) on two references of different
-class types and analysis suggests they will be to objects of different classes 
+class types and analysis suggests they will be to objects of different classes
 at runtime. Further, examination of the equals methods that would be invoked suggest that either
-this call will always return false, or else the equals method is not be symmetric (which is 
+this call will always return false, or else the equals method is not be symmetric (which is
 a property required by the contract
-for equals in class Object). 
+for equals in class Object).
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3523,13 +3523,13 @@ to get &lt;code&gt;0xffffffff&lt;/code&gt;, and thus give the value
 &lt;p&gt;In particular, the following code for packing a byte array into an int is badly wrong: &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
 int result = 0;
-for(int i = 0; i &amp;lt; 4; i++) 
+for(int i = 0; i &amp;lt; 4; i++)
     result = ((result &amp;lt;&amp;lt; 8) + b[i]);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The following idiom will work instead: &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
 int result = 0;
-for(int i = 0; i &amp;lt; 4; i++) 
+for(int i = 0; i &amp;lt; 4; i++)
     result = ((result &amp;lt;&amp;lt; 8) + (b[i] &amp;amp; 0xff));
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>correctness</tag>
@@ -4037,7 +4037,7 @@ used.
 &lt;/p&gt;
 &lt;p&gt;
 Note that Sun's javac compiler often generates dead stores for
-final local variables.  Because FindBugs is a bytecode-based tool,
+final local variables.  Because SpotBugs is a bytecode-based tool,
 there is no easy way to eliminate these false positives.
 &lt;/p&gt;</description>
     <tag>style</tag>
@@ -4328,21 +4328,21 @@ just use the constant. Methods detected are:
 This code performs integer multiply and then converts the result to a long,
 as in:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
-long convertDaysToMilliseconds(int days) { return 1000*3600*24*days; } 
+long convertDaysToMilliseconds(int days) { return 1000*3600*24*days; }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;
 If the multiplication is done using long arithmetic, you can avoid
 the possibility that the result will overflow. For example, you
 could fix the above code to:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
-long convertDaysToMilliseconds(int days) { return 1000L*3600*24*days; } 
+long convertDaysToMilliseconds(int days) { return 1000L*3600*24*days; }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;
 or
 &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
 static final long MILLISECONDS_PER_DAY = 24L*3600*1000;
-long convertDaysToMilliseconds(int days) { return days * MILLISECONDS_PER_DAY; } 
+long convertDaysToMilliseconds(int days) { return days * MILLISECONDS_PER_DAY; }
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>style</tag>
   </rule>
@@ -4630,7 +4630,7 @@ This cast will always throw a ClassCastException.
     <configKey>BC_IMPOSSIBLE_CAST</configKey>
     <description>&lt;p&gt;
 This cast will always throw a ClassCastException.
-FindBugs tracks type information from instanceof checks,
+SpotBugs tracks type information from instanceof checks,
 and also uses more precise information about the types
 of values returned from methods and loaded from fields.
 Thus, it may have more precise information that just
@@ -4673,7 +4673,7 @@ since the Collection object has no reference to the declared generic type of the
 &lt;p&gt;There is one common/known exception to this. The &lt;code&gt;toArray()&lt;/code&gt;
 method of lists returned by &lt;code&gt;Arrays.asList(...)&lt;/code&gt; will return a covariantly
 typed array. For example, &lt;code&gt;Arrays.asArray(new String[] { "a" }).toArray()&lt;/code&gt;
-will return a &lt;code&gt;String []&lt;/code&gt;. FindBugs attempts to detect and suppress
+will return a &lt;code&gt;String []&lt;/code&gt;. SpotBugs attempts to detect and suppress
 such cases, but may miss some.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
@@ -4739,7 +4739,7 @@ cast will not fail.
     <description>&lt;p&gt;
 This code performs an unchecked cast of the return value of a method.
 The code might be calling the method in such a way that the cast is guaranteed to be
-safe, but FindBugs is unable to verify that the cast is safe.  Check that your program logic ensures that this
+safe, but SpotBugs is unable to verify that the cast is safe.  Check that your program logic ensures that this
 cast will not fail.
 &lt;/p&gt;</description>
     <tag>style</tag>
@@ -4826,7 +4826,7 @@ a signed and unsigned right shift (depending upon the size of the shift).
     <name>Correctness - Possible bad parsing of shift operation</name>
     <configKey>BSHIFT_WRONG_ADD_PRIORITY</configKey>
     <description>&lt;p&gt;
-The code performs an operation like (x &amp;lt;&amp;lt; 8 + y). Although this might be correct, probably it was meant 
+The code performs an operation like (x &amp;lt;&amp;lt; 8 + y). Although this might be correct, probably it was meant
 to perform (x &amp;lt;&amp;lt; 8) + y, but shift operation has
 a lower precedence, so it's actually parsed as x &amp;lt;&amp;lt; (8 + y).
 &lt;/p&gt;</description>
@@ -5491,17 +5491,17 @@ String constructComponentName() {
     <tag>experimental</tag>
   </rule>
   <rule key='FB_UNEXPECTED_WARNING' priority='MAJOR'>
-    <name>Correctness - Unexpected/undesired warning from FindBugs</name>
+    <name>Correctness - Unexpected/undesired warning from SpotBugs</name>
     <configKey>FB_UNEXPECTED_WARNING</configKey>
-    <description>&lt;p&gt;FindBugs generated a warning that, according to a @NoWarning annotated,
+    <description>&lt;p&gt;SpotBugs generated a warning that, according to a @NoWarning annotated,
             is unexpected or undesired.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
   <rule key='FB_MISSING_EXPECTED_WARNING' priority='MAJOR'>
-    <name>Correctness - Missing expected or desired warning from FindBugs</name>
+    <name>Correctness - Missing expected or desired warning from SpotBugs</name>
     <configKey>FB_MISSING_EXPECTED_WARNING</configKey>
-    <description>&lt;p&gt;FindBugs didn't generate generated a warning that, according to a @ExpectedWarning annotated,
+    <description>&lt;p&gt;SpotBugs didn't generate generated a warning that, according to a @ExpectedWarning annotated,
             is expected or desired.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
