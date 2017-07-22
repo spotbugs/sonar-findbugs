@@ -4,7 +4,7 @@
 
   <groupId>org.sonarsource.sonar-findbugs-plugin</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>3.5</version>
+  <version>3.6</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Findbugs Plugin</name>
@@ -47,7 +47,7 @@
   </scm>
 
   <properties>
-    <spotbugs.version>3.1.0-RC2</spotbugs.version>
+    <spotbugs.version>3.1.0-RC4</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
 
     <sonar.version>5.6.6</sonar.version>
@@ -303,7 +303,7 @@
             <configuration>
               <rules>
                 <requireFilesSize>
-                  <maxsize>12000000</maxsize>
+                  <maxsize>32000000</maxsize>
                   <minsize>8000000</minsize>
                   <files>
                     <file>${project.build.directory}/${project.build.finalName}.jar</file>
