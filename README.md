@@ -9,6 +9,19 @@ This plugin requires the [Java Plugin](http://docs.sonarqube.org/display/PLUG/Ja
 
 In the quality profile, activate some rules from the FindBugs, fb-contrib or FindSecBugs rule repositories and run an analysis on your project.
 
+
+### Configuration
+This plugin can be configured with sonar web interface (see General/Java section) or with project properties.
+
+**Confidence level** (sonar.findbugs.confidenceLevel): Specifies the confidence threshold (previously called "priority") for reporting issues. If set to "low", confidence is not used to filter bugs. If set to "medium" (the default), low confidence issues are supressed. If set to "high", only high confidence bugs are reported.
+
+**Effort** (sonar.findbugs.effort): Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases memory consumption.
+
+**Excludes** (sonar.findbugs.excludesFilters): Paths to findbugs filter-files with exclusions. 
+
+**Timeout** (sonar.findbugs.timeout): Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. The default is 600,000 milliseconds, which is ten minutes.
+
+
 ### Compiled code
 
 FindBugs requires the compiled classes to run.
@@ -28,3 +41,4 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 3.3                    | 3.0.1                            | 1.4.2                      | 6.2.3                     | 1.7
 3.4                    | 3.0.1                            | 1.4.6                      | 6.6.1                     | 1.8
 3.5                    | 3.1.0 RC1 (SpotBugs)             | 1.6.0                      | 7.0.0                     | 1.8
+3.6                    | 3.1.0 RC4 (SpotBugs)             | 1.6.0                      | 7.0.0                     | 1.8
