@@ -40,11 +40,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.BatchSide;
-import org.sonar.api.utils.SonarException;
-import org.sonar.api.utils.TimeProfiler;
-import org.sonar.api.utils.log.Profiler;
+import org.sonar.api.batch.fs.FileSystem;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -69,6 +68,9 @@ public class FindbugsExecutor {
   private static final String FINDBUGS_CORE_PLUGIN_ID = "edu.umd.cs.findbugs.plugins.core";
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
+  public static final String EXISTING_FINDBUGS_REPORT_PATH = "/target/findbugsXml.xml";
+
+  private FileSystem fs;
 
   /**
    * Map of priority level names to their numeric values.
@@ -86,8 +88,9 @@ public class FindbugsExecutor {
 
   private final FindbugsConfiguration configuration;
 
-  public FindbugsExecutor(FindbugsConfiguration configuration) {
+  public FindbugsExecutor(FindbugsConfiguration configuration, FileSystem fs) {
     this.configuration = configuration;
+    this.fs = fs;
   }
 
   @VisibleForTesting
@@ -160,8 +163,15 @@ public class FindbugsExecutor {
 
       engine.finishSettings();
 
-      executorService.submit(new FindbugsTask(engine)).get(configuration.getTimeout(), TimeUnit.MILLISECONDS);
-
+      //Avoid rescanning the project if FindBugs was run already
+      File findbugsReport = new File(fs.baseDir(), EXISTING_FINDBUGS_REPORT_PATH);
+      if(findbugsReport.exists() && findbugsReport.length() > 0) {
+        LOG.info("FindBugs report is already generated {}. Reusing the report.",xmlReport.getAbsolutePath());
+        xmlBugReporter.getBugCollection().readXML(new FileReader(findbugsReport));
+      }
+      else {
+        executorService.submit(new FindbugsTask(engine)).get(configuration.getTimeout(), TimeUnit.MILLISECONDS);
+      }
       return toReportedBugs(xmlBugReporter.getBugCollection());
     } catch (TimeoutException e) {
       throw new IllegalStateException("Can not execute Findbugs with a timeout threshold value of " + configuration.getTimeout() + " milliseconds", e);

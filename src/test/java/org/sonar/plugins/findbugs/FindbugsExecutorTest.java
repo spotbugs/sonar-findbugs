@@ -21,17 +21,24 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.CoreProperties;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.config.Settings;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Locale;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,6 +47,18 @@ public class FindbugsExecutorTest {
   @Rule
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+  FileSystem fsEmpty;
+  FilePredicates predicatesEmpty;
+
+  @Before
+  public void setUp() {
+    fsEmpty = mock(FileSystem.class);
+    predicatesEmpty = mock(FilePredicates.class);
+    when(fsEmpty.baseDir()).thenReturn(new File("./"));
+    when(fsEmpty.predicates()).thenReturn(predicatesEmpty);
+    when(fsEmpty.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
+  }
+
   @Test
   public void canGenerateXMLReport() throws Exception {
     FindbugsConfiguration conf = mockConf();
@@ -47,7 +66,7 @@ public class FindbugsExecutorTest {
     File reportFile = temporaryFolder.newFile("findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
 
-    new FindbugsExecutor(conf).execute();
+    new FindbugsExecutor(conf, fsEmpty).execute();
 
     assertThat(reportFile.exists()).isTrue();
     String report = FileUtils.readFileToString(reportFile);
@@ -64,7 +83,7 @@ public class FindbugsExecutorTest {
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
     when(conf.getConfidenceLevel()).thenReturn("low");
 
-    new FindbugsExecutor(conf).execute();
+    new FindbugsExecutor(conf, fsEmpty).execute();
 
     assertThat(reportFile.exists()).isTrue();
     String report = FileUtils.readFileToString(reportFile);
@@ -79,7 +98,7 @@ public class FindbugsExecutorTest {
     FindbugsConfiguration conf = mockConf();
     when(conf.getTimeout()).thenReturn(1L);
 
-    new FindbugsExecutor(conf).execute();
+    new FindbugsExecutor(conf, fsEmpty).execute();
   }
 
   @Test(expected = IllegalStateException.class)
@@ -89,7 +108,7 @@ public class FindbugsExecutorTest {
     settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
     FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings, null, null, null);
 
-    new FindbugsExecutor(conf).execute();
+    new FindbugsExecutor(conf, fsEmpty).execute();
   }
 
   private FindbugsConfiguration mockConf() throws Exception {
