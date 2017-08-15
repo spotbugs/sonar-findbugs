@@ -41,7 +41,10 @@ class FsbClassifier {
                             "ANDROID_BROADCAST",
                             "ANDROID_GEOLOCATION",
                             "ANDROID_WEB_VIEW_JAVASCRIPT",
-                            "ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE"]
+                            "ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE",
+                            "FORMAT_STRING_MANIPULATION",
+                            "DESERIALIZATION_GADGET", //Prone to false positive.. therefore only in audit profile
+  ]
 
   //All the cryptography related bugs. Usually with issues related to confidentiality or integrity of data in transit.
   static cryptoBugs = [
@@ -61,7 +64,11 @@ class FsbClassifier {
           "STATIC_IV",
           "ECB_MODE",
           "PADDING_ORACLE",
-          "CIPHER_INTEGRITY"
+          "CIPHER_INTEGRITY",
+          "SSL_CONTEXT",
+          "UNENCRYPTED_SERVER_SOCKET",
+          "DEFAULT_HTTP_CLIENT", //TLS 1.2 vs SSL
+          "INSECURE_SMTP_SSL"
   ]
 
   static majorBugsAuditOnly = [ //Mostly due to their high false-positive rate
@@ -86,7 +93,16 @@ class FsbClassifier {
           "TRUST_BOUNDARY_VIOLATION",
           "XSS_SERVLET",
           "SPRING_CSRF_PROTECTION_DISABLED",
-          "SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING"
+          "SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING",
+          "COOKIE_PERSISTENT",
+          "PLAY_UNVALIDATED_REDIRECT",
+          "SPRING_UNVALIDATED_REDIRECT",
+          "PERMISSIVE_CORS",
+          "LDAP_ANONYMOUS",
+          "URL_REWRITING",
+          "STRUTS_FILE_DISCLOSURE",
+          "SPRING_FILE_DISCLOSURE",
+          "HTTP_PARAMETER_POLLUTION",
   ]
 
   static criticalBugs = [ //RCE or powerful function
@@ -94,9 +110,14 @@ class FsbClassifier {
           "XXE_SAXPARSER",
           "XXE_XMLREADER",
           "XXE_DOCUMENT",
+          "XXE_XMLSTREAMREADER",
           "SQL_INJECTION_HIBERNATE",
           "SQL_INJECTION_JDO",
           "SQL_INJECTION_JPA",
+          "SQL_INJECTION",
+          "SQL_INJECTION_TURBINE",
+          "SQL_INJECTION_ANDROID",
+          "OGNL_INJECTION",
           "LDAP_INJECTION",
           "XPATH_INJECTION",
           "XML_DECODER",
@@ -107,7 +128,13 @@ class FsbClassifier {
           "EL_INJECTION",
           "SEAM_LOG_INJECTION",
           "OBJECT_DESERIALIZATION",
-          "MALICIOUS_XSLT"
+          "MALICIOUS_XSLT",
+          "JACKSON_UNSAFE_DESERIALIZATION",
+          "TEMPLATE_INJECTION_VELOCITY",
+          "TEMPLATE_INJECTION_FREEMARKER",
+          "AWS_QUERY_INJECTION",
+          "LDAP_ENTRY_POISONING",
+          "BEAN_PROPERTY_INJECTION"
   ]
 
   static majorJspBugs = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER",
@@ -116,17 +143,30 @@ class FsbClassifier {
   static //RCE from JSP specific functions (taglibs)
   criticalJspBugs = ["JSP_INCLUDE","JSP_SPRING_EVAL","JSP_XSLT"]
 
-  static exclusions = ['CUSTOM_INJECTION']
+  static exclusions = ['CUSTOM_INJECTION',
+                       'SCALA_SENSITIVE_DATA_EXPOSURE',
+                       'SCALA_PLAY_SSRF',
+                       'SCALA_XSS_TWIRL',
+                       'SCALA_XSS_MVC_API',
+                       'SCALA_PATH_TRAVERSAL_IN',
+                       'SCALA_COMMAND_INJECTION',
+                       "SCALA_SQL_INJECTION_SLICK",
+                       "SCALA_SQL_INJECTION_ANORM",
+                       "PREDICTABLE_RANDOM_SCALA"]
 
   static deprecatedRules = []
 
-  static String getPriorityFromType(String type) {
+  static String getPriorityFromType(String type,String category) {
     //FSB Specific
     if (type in criticalBugs || type in criticalJspBugs) return "CRITICAL";
     if (type in majorBugs || type in cryptoBugs || type in majorJspBugs) return "MAJOR";
     if (type in informationnalPatterns) return "INFO"
 
-    //println("Unknown priority for "+type)
+    if(category.equals("SECURITY")) {
+      //println("Unknown priority for "+type)
+      return "MAJOR"
+    }
+
     return null
   }
 
