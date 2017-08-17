@@ -20,24 +20,36 @@
 package org.sonar.plugins.findbugs;
 
 import org.sonar.api.Plugin;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.JspSyntaxSensor;
-import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
-import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
-import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
-import org.sonar.plugins.findbugs.profiles.FindbugsSecurityJspProfile;
-import org.sonar.plugins.findbugs.profiles.FindbugsSecurityMinimalProfile;
+import org.sonar.plugins.findbugs.profiles.*;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
-import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.*;
+import org.sonar.plugins.java.Java;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class FindbugsPlugin implements Plugin {
 
-  @Override
+    public static final String SUPPORTED_JVM_LANGUAGES[] = {
+            Java.KEY, Jsp.KEY, "scala", "clojure"
+    };
+
+    public static final String SUPPORTED_JVM_LANGUAGES_EXTENSIONS[] = {
+            Java.KEY, Jsp.KEY, "scala", "clj"
+    };
+
+    public static FilePredicate[] getSupportedLanguagesFilePredicate(FilePredicates pred) {
+        return Arrays.stream(SUPPORTED_JVM_LANGUAGES)
+                .map(s -> pred.hasLanguage(s))
+                .collect(Collectors.toList())
+                .toArray(new FilePredicate[SUPPORTED_JVM_LANGUAGES.length]);
+    }
+
+    @Override
   public void define(Context context) {
     context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
     context.addExtensions(Arrays.asList(

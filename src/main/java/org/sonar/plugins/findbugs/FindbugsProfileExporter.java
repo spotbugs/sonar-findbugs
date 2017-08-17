@@ -19,42 +19,38 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.Iterables;
 import com.thoughtworks.xstream.XStream;
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.SonarException;
-import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
-import org.sonar.plugins.findbugs.language.Jsp;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.Bug;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
-import org.sonar.plugins.java.Java;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.stream.Collectors;
 
 public class FindbugsProfileExporter extends ProfileExporter {
 
   public FindbugsProfileExporter() {
     super(/* (Godin): actually exporter key: */FindbugsRulesDefinition.REPOSITORY_KEY, FindbugsConstants.PLUGIN_NAME);
-    setSupportedLanguages(Java.KEY, Jsp.KEY);
+    setSupportedLanguages(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES);
     setMimeType("application/xml");
   }
 
   @Override
   public void exportProfile(RulesProfile profile, Writer writer) {
     try {
-      FindBugsFilter filter = buildFindbugsFilter(Iterables.concat(
-        profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY),
-        profile.getActiveRulesByRepository(FbContribRulesDefinition.REPOSITORY_KEY),
-        profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY),
-        profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)
-        ));
+      FindBugsFilter filter = buildFindbugsFilter(
+              profile.getActiveRules().stream().filter(activeRule ->
+                      activeRule.getRepositoryKey().contains("findbugs") ||
+                              activeRule.getRepositoryKey().contains("findsecbugs") ||
+                              activeRule.getRepositoryKey().contains("fb-contrib"))
+                      .collect(Collectors.toList())
+      );
       XStream xstream = FindBugsFilter.createXStream();
       writer.append(xstream.toXML(filter));
     } catch (IOException e) {
@@ -67,10 +63,7 @@ public class FindbugsProfileExporter extends ProfileExporter {
     for (ActiveRule activeRule : activeRules) {
       String repoKey = activeRule.getRepositoryKey();
 
-      if (FindbugsRulesDefinition.REPOSITORY_KEY.equals(repoKey) ||
-        FbContribRulesDefinition.REPOSITORY_KEY.equals(repoKey) ||
-        FindSecurityBugsRulesDefinition.REPOSITORY_KEY.equals(repoKey) ||
-        FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY.equals(repoKey)) {
+      if (repoKey.contains("findsecbugs") || repoKey.contains("findbugs") || repoKey.contains("fb-contrib")) {
         Match child = new Match();
         child.setBug(new Bug(activeRule.getConfigKey()));
         root.addMatch(child);

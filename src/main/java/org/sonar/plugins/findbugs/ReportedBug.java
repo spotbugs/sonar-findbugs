@@ -33,7 +33,7 @@ public class ReportedBug {
   private final String sourceFile;
   private final String classFile;
 
-  private static final Pattern SOURCE_FILE_PATTERN = Pattern.compile("^(.*)\\.java$");
+  private static final Pattern SOURCE_FILE_PATTERN = createSourceFilePattern();
 
   public ReportedBug(BugInstance bugInstance) {
     this.type = bugInstance.getType();
@@ -69,4 +69,19 @@ public class ReportedBug {
   public String getSourceFile() { return sourceFile; }
 
   public String getClassFile() { return classFile; }
+
+  private static Pattern createSourceFilePattern() {
+    StringBuffer extensions = new StringBuffer();
+
+    for (int i = 0; i < FindbugsPlugin.SUPPORTED_JVM_LANGUAGES_EXTENSIONS.length; i++) {
+      String extension = FindbugsPlugin.SUPPORTED_JVM_LANGUAGES_EXTENSIONS[i];
+      extensions.append(extension);
+      if(i< FindbugsPlugin.SUPPORTED_JVM_LANGUAGES_EXTENSIONS.length - 1 ) {
+        extensions.append("|");
+      }
+    }
+
+    String pattern = "^(.*)\\.(" + extensions + ")$";
+    return Pattern.compile(pattern);
+  }
 }
