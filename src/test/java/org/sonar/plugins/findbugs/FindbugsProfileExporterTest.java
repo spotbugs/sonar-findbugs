@@ -126,7 +126,7 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   private static ActiveRule anActiveRuleFromAnotherPlugin() {
     Rule rule = Rule.create();
     //rule.setPluginName("not-a-findbugs-plugin");
-    rule.setRepositoryKey("not-a-findbugs-plugin");
+    rule.setRepositoryKey("not-a-find-bugs-plugin");
     ActiveRule activeRule = RulesProfile.create().activateRule(rule, RulePriority.CRITICAL);
     return activeRule;
   }

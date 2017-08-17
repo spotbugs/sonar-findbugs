@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +35,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
@@ -48,7 +45,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
-    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "/src/java"};
+    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "src/java", "app", "src/main/scala"};
 
     /**
      * findSourceFileKeyByClassName() is broken in SonarQube 6.3.1.. This method is fixing it.

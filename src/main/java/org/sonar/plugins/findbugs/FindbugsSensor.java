@@ -20,7 +20,10 @@
 package org.sonar.plugins.findbugs;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +37,10 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.resource.ClassMetadataLoadingException;
 import org.sonar.plugins.findbugs.resource.SmapParser;
-import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
-import org.sonar.plugins.java.Java;
+import org.sonar.plugins.findbugs.rules.*;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 public class FindbugsSensor implements Sensor {
@@ -50,7 +48,10 @@ public class FindbugsSensor implements Sensor {
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsSensor.class);
 
   public static final String[] REPOS = {FindbugsRulesDefinition.REPOSITORY_KEY, FbContribRulesDefinition.REPOSITORY_KEY,
-          FindSecurityBugsRulesDefinition.REPOSITORY_KEY, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY};
+          FindSecurityBugsRulesDefinition.REPOSITORY_KEY, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY
+  };
+
+  private List<String> repositories = new ArrayList<String>();
 
   private RulesProfile profile;
   private ActiveRules ruleFinder;
@@ -69,37 +70,49 @@ public class FindbugsSensor implements Sensor {
     this.javaResourceLocator = javaResourceLocator;
     this.byteCodeResourceLocator = byteCodeResourceLocator;
     this.fs = fs;
+    registerRepositories(REPOS);
+  }
+
+  public void registerRepositories(String... repos) {
+    Collections.addAll(repositories, repos);
+  }
+
+  private boolean hasActiveRules(String repoSubstring) {
+    return profile.getActiveRules().stream().anyMatch(activeRule ->
+      activeRule.getRepositoryKey().contains(repoSubstring)
+    );
+  }
+
+  public List<String> getRepositories() {
+    return repositories;
   }
 
   private boolean hasActiveFindbugsRules() {
-    return !profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY).isEmpty();
+    return hasActiveRules("findbugs");
   }
 
   private boolean hasActiveFbContribRules() {
-    return !profile.getActiveRulesByRepository(FbContribRulesDefinition.REPOSITORY_KEY).isEmpty();
+    return hasActiveRules("fb-contrib");
   }
 
   private boolean hasActiveFindSecBugsRules() {
-    return !profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY).isEmpty();
-  }
-
-  private boolean hasActiveFindSecBugsJspRules() {
-    return !profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY).isEmpty();
+    return hasActiveRules("findsecbugs");
   }
 
   @Override
   public void execute(SensorContext context) {
-    if(!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules() && !hasActiveFindSecBugsJspRules()){
+
+    if(!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules()){
       return;
     }
 
-    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules() || hasActiveFindSecBugsJspRules());
+    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
 
     for (ReportedBug bugInstance : collection) {
 
       try {
         ActiveRule rule = null;
-        for (String repoKey : REPOS) {
+        for (String repoKey : getRepositories()) {
           rule = ruleFinder.findByInternalKey(repoKey, bugInstance.getType());
           if (rule != null) {
             break;
@@ -208,7 +221,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguages(Java.KEY, Jsp.KEY);
+    descriptor.onlyOnLanguages(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES);
     descriptor.name("FindBugs Sensor");
   }
 }
