@@ -51,7 +51,7 @@
     <jdk.min.version>1.8</jdk.min.version>
 
     <sonar.version>5.6.6</sonar.version>
-    <sonar-java.version>4.12.0.11033</sonar-java.version>
+    <sonar-java.version>4.0</sonar-java.version>
     <fbcontrib.version>7.0.3.sb</fbcontrib.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
 
@@ -104,7 +104,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>17.0</version>
+      <version>10.0.1</version>
     </dependency>
 
     <dependency>
