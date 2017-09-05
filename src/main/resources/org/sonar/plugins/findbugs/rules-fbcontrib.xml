@@ -1559,7 +1559,7 @@ return new String[0];&lt;br/&gt;
     <tag>style</tag>
   </rule>
   <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT' priority='INFO'>
-    <name>Style - JUnit test method asserts that a value is true or false</name>
+    <name>Style - JUnit test method asserts that a value is equal to true or false</name>
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_BOOLEAN_ASSERT</configKey>
     <description>&lt;p&gt;This method asserts that a value is equal to true or false. It is simpler to just
 			use assertTrue, or assertFalse, instead.&lt;/p&gt;</description>
@@ -2813,6 +2813,32 @@ public String requestInfo(URI u) {
             &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='STT_TOSTRING_MAP_KEYING' priority='INFO'>
+    <name>Style - This method uses a concatenated String as a map key</name>
+    <configKey>STT_TOSTRING_MAP_KEYING</configKey>
+    <description>&lt;p&gt;This method builds a key for a map, using a StringBuilder, either implicitly or explicitly. This means the type
+    		of the key is something more t han a String constant, it is a properly formatted String. However, there is no
+    		type based verification that all uses of this key will follow this formatting. It is much better to use a proper, simple,
+    		bean class that holds two (or more) fields so that it is clear what is expected for key use.
+    		&lt;/p&gt;
+    		&lt;p&gt;
+    		Example&lt;br/&gt;
+    			instead of 
+    			&lt;pre&gt;&lt;code&gt;
+    				V v = myMap.get(tableName + "-" + columnName);
+    			&lt;/code&gt;&lt;/pre&gt;
+    			use
+    			&lt;pre&gt;&lt;code&gt;
+    				V v = myMap.get(new ColumnSpec(tableName, columnName));
+    			&lt;/code&gt;&lt;/pre&gt;
+    			where ColumnSpec is a simple bean-like class of your creation. The advantages, are
+    			&lt;ul&gt;
+    				&lt;li&gt;The ColumnSpec fully describes what is expected, you need a tableName and columnName&lt;/li&gt;
+    				&lt;li&gt;There is no guessing by the programmer what the format is, was it tableName + "_" + columnName?&lt;/li&gt;
+    			&lt;/ul&gt;
+    			&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
   <rule key='SLS_SUSPICIOUS_LOOP_SEARCH' priority='MAJOR'>
     <name>Correctness - This method continues a loop after finding an equality condition</name>
     <configKey>SLS_SUSPICIOUS_LOOP_SEARCH</configKey>
@@ -2906,6 +2932,20 @@ for (Person p : people) {
     		other developers. The standard is for static fields to be listed first, followed by instance 
     		fields. when fields are listed out of order, developers may make assumptions about their
     		behaviour that is incorrect and lead to bugs.&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_UPPER_PACKAGE' priority='INFO'>
+    <name>Style - Class is defined in a package with upper case characters</name>
+    <configKey>IMC_IMMATURE_CLASS_UPPER_PACKAGE</configKey>
+    <description>&lt;p&gt;This class is defined within a package that uses upper case letters. Package names are
+    		expected to be in the form of alllowercase.&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_LOWER_CLASS' priority='INFO'>
+    <name>Style - Class does not start with an upper case letter</name>
+    <configKey>IMC_IMMATURE_CLASS_LOWER_CLASS</configKey>
+    <description>&lt;p&gt;This class has been given a name that does not start with an upper case letter.
+    		Classes should follow a pattern of uppercasing the first letter of each word, AsAnExample&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='JXI_GET_ENDPOINT_CONSUMES_CONTENT' priority='MAJOR'>
@@ -3068,8 +3108,8 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='IOI_USE_OF_FILE_STREAM_CONSTRUCTORS' priority='INFO'>
-    <name>Experimental - Method uses a FileInputStream or FileOutputStream constructor</name>
+  <rule key='IOI_USE_OF_FILE_STREAM_CONSTRUCTORS' priority='MAJOR'>
+    <name>Performance - Method uses a FileInputStream or FileOutputStream constructor</name>
     <configKey>IOI_USE_OF_FILE_STREAM_CONSTRUCTORS</configKey>
     <description>&lt;p&gt;This method creates and uses a java.io.FileInputStream or java.io.FileOutputStream object. Unfortunately both
     		of these classes implement a finalize method, which means that objects created will likely hang around until a 
@@ -3081,7 +3121,8 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		OutputStream os = java.nio.file.Files.newOutputStream(myfile.toPath());
     		&lt;/code&gt;
     		&lt;/p&gt;</description>
-    <tag>experimental</tag>
+    <tag>performance</tag>
+    <tag>bug</tag>
   </rule>
   <rule key='DMC_DUBIOUS_MAP_COLLECTION' priority='MAJOR'>
     <name>Correctness - Class holds a map-type field, but uses it as only a List</name>
@@ -3222,6 +3263,16 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		toPath() on it. It is simpler to just construct the Path object directly, say by using
     		{@code Path.get(String...)}.
     		&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='RFI_SET_ACCESSIBLE' priority='MAJOR'>
+    <name>Correctness - Method uses AccessibleObject.setAccessible to modify accessibility of classes</name>
+    <configKey>RFI_SET_ACCESSIBLE</configKey>
+    <description>&lt;p&gt;This method uses the reflective setAccessible method to alter the behavior of methods and fields in classes 
+    		in ways that were not expected to be accessed by the author. Doing so circumvents the protections that the author
+    		provided through the class definition, and may expose your application unexpected side effects and problems. This
+    		functionality is deprecated in Java 9, and in Java 10 it is expected that this functionality won't work at all.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
