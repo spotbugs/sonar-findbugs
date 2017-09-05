@@ -554,7 +554,7 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
   <rule key='WEAK_MESSAGE_DIGEST_MD5' priority='MAJOR'>
     <name>Security - MD2, MD4 and MD5 are weak hash functions</name>
     <configKey>WEAK_MESSAGE_DIGEST_MD5</configKey>
-    <description>&lt;p&gt;The algorithms MD2, MD4 and MD5 are not a recommended MessageDigest. &lt;b&gt;PBKDF2&lt;/b&gt; should be use to hash password for example.&lt;/p&gt;
+    <description>&lt;p&gt;The algorithms MD2, MD4 and MD5 are not a recommended MessageDigest. &lt;b&gt;PBKDF2&lt;/b&gt; should be used to hash password for example.&lt;/p&gt;
 
 &lt;blockquote&gt;
     "The security of the MD5 hash function is severely compromised. A collision attack exists that can find collisions
@@ -621,7 +621,7 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
     <name>Security - SHA-1 is a weak hash function</name>
     <configKey>WEAK_MESSAGE_DIGEST_SHA1</configKey>
     <description>&lt;p&gt;The algorithms SHA-1 is not a recommended algorithm for hash password, for signature verification and other
-uses. &lt;b&gt;PBKDF2&lt;/b&gt; should be use to hash password for example.&lt;/p&gt;
+uses. &lt;b&gt;PBKDF2&lt;/b&gt; should be used to hash password for example.&lt;/p&gt;
 
 &lt;blockquote&gt;
     "&lt;b&gt;SHA-1 for digital signature generation:&lt;/b&gt;&lt;br/&gt;
@@ -1638,7 +1638,7 @@ response.addCookie(cookie);&lt;/pre&gt;
     <name>Security - Potential CRLF Injection for logs</name>
     <configKey>CRLF_INJECTION_LOGS</configKey>
     <description>&lt;p&gt;
-    When data from untusted source are put into a logger and not neutralized correctly,
+    When data from an untrusted source is put into a logger and not neutralized correctly,
     an attacker could forge log entries or include malicious content.
     Inserted false entries could be used to skew statistics, distract the administrator
     or even to implicate another party in the commission of a malicious act.
@@ -1650,18 +1650,41 @@ response.addCookie(cookie);&lt;/pre&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
-&lt;pre&gt;String val = request.getParameter("val");
-try {
-    number = Integer.parseInt(val);
-} catch (NumberFormatException) {
-    log.info("Failed to parse val = " + val);
-}&lt;/pre&gt;
+&lt;pre&gt;String val = request.getParameter("user");
+String metadata = request.getParameter("metadata");
+[...]
+if(authenticated) {
+    log.info("User " + val + " (" + metadata + ") was authenticated successfully");
+}
+else {
+    log.info("User " + val + " (" + metadata + ") was not authenticated");
+}
+&lt;/pre&gt;
+
+A malicious user could send the metadata parameter with the value: &lt;code&gt;"Firefox) was authenticated successfully\r\n[INFO] User bbb (Internet Explorer"&lt;/code&gt;.
 &lt;/p&gt;
+
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+You can manually sanitize each parameter.
+&lt;pre&gt;
+log.info("User " + val.replaceAll("[\r\n]","") + " (" + userAgent.replaceAll("[\r\n]","") + ") was not authenticated");
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+You can also configure your logger service to replace new line for all message events. Here is sample configuration for LogBack &lt;a href="https://logback.qos.ch/manual/layouts.html#replace"&gt;using the replace function&lt;/a&gt;.
+&lt;pre&gt;
+&amp;lt;pattern&amp;gt;%-5level - %replace(%msg){'[\r\n]', ''}%n&amp;lt;/pattern&amp;gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+
 &lt;br/&gt;
 &lt;p&gt;
     &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/117.html"&gt;CWE-117: Improper Output Neutralization for Logs&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/93.html"&gt;CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://logback.qos.ch/manual/layouts.html#replace"&gt;CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
@@ -1989,7 +2012,7 @@ the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet.
     <configKey>BLOWFISH_KEY_SIZE</configKey>
     <description>&lt;p&gt;
 The Blowfish cipher supports keysizes from 32 bits to 448 bits. A small key size makes the ciphertext vulnerable to brute force attacks.
-At least 128 bits of entropy should be used when generating the key if the usage of Blowfish must be retained.
+At least 128 bits of entropy should be used when generating the key if use of Blowfish is required.
 &lt;/p&gt;
 &lt;p&gt;
 If the algorithm can be changed, the AES block cipher should be used instead.
@@ -2019,7 +2042,7 @@ keyGen.init(128);&lt;/pre&gt;
     <name>Security - RSA usage with short key</name>
     <configKey>RSA_KEY_SIZE</configKey>
     <description>&lt;p&gt;
-    NIST recommend the use of &lt;u&gt;2048 bits and higher&lt;/u&gt; keys for the RSA algorithm.
+    The NIST recommends the use of &lt;u&gt;2048 bits and higher&lt;/u&gt; keys for the RSA algorithm.
 &lt;/p&gt;
 &lt;blockquote&gt;
     "Digital Signature Verification | RSA: 1024 &amp;le; len(n) &amp;lt; 2048 | Legacy-use"&lt;br/&gt;
@@ -2828,7 +2851,7 @@ cookie.setHttpOnly(true); //HttpOnly flag
 &lt;/p&gt;
 &lt;p&gt;
     Deserialization is a sensible operation that has a great history of vulnerabilities. The web application might
-    become vulnerable has soon as a new vulnerability is found in the Java Virtual Machine&lt;sup&gt;[2] [3]&lt;/sup&gt;.
+    become vulnerable as soon as a new vulnerability is found in the Java Virtual Machine&lt;sup&gt;[2] [3]&lt;/sup&gt;.
 &lt;/p&gt;
 
 &lt;p&gt;

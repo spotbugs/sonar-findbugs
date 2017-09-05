@@ -2073,6 +2073,9 @@
     <Bug pattern='STT_STRING_PARSING_A_FIELD' />
   </Match>
   <Match>
+    <Bug pattern='STT_TOSTRING_MAP_KEYING' />
+  </Match>
+  <Match>
     <Bug pattern='SLS_SUSPICIOUS_LOOP_SEARCH' />
   </Match>
   <Match>
@@ -2098,6 +2101,12 @@
   </Match>
   <Match>
     <Bug pattern='IMC_IMMATURE_CLASS_WRONG_FIELD_ORDER' />
+  </Match>
+  <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_UPPER_PACKAGE' />
+  </Match>
+  <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_LOWER_CLASS' />
   </Match>
   <Match>
     <Bug pattern='JXI_GET_ENDPOINT_CONSUMES_CONTENT' />
@@ -2142,6 +2151,9 @@
     <Bug pattern='IOI_COPY_WITH_READER' />
   </Match>
   <Match>
+    <Bug pattern='IOI_USE_OF_FILE_STREAM_CONSTRUCTORS' />
+  </Match>
+  <Match>
     <Bug pattern='DMC_DUBIOUS_MAP_COLLECTION' />
   </Match>
   <Match>
@@ -2179,5 +2191,8 @@
   </Match>
   <Match>
     <Bug pattern='UAC_UNNECESSARY_API_CONVERSION_FILE_TO_PATH' />
+  </Match>
+  <Match>
+    <Bug pattern='RFI_SET_ACCESSIBLE' />
   </Match>
 </FindBugsFilter>

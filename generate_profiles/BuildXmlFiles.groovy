@@ -2,14 +2,14 @@ import groovy.xml.MarkupBuilder;
 import FsbClassifier;
 import static FsbClassifier.*;
 @Grapes([
-    @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.0-RC4'),
-    @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='7.0.0'),
-    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.6.0')]
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.0-RC5'),
+    @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='7.0.3.sb'),
+    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.7.1')]
 )
 
-FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.0-RC4')
-CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '7.0.0')
-FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.6.0')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.0-RC5')
+CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '7.0.3.sb')
+FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.7.1')
 
 
 ////////////// Generate rules files
