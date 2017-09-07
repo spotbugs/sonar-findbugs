@@ -40,9 +40,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.BatchSide;
-import org.sonar.api.utils.SonarException;
-import org.sonar.api.utils.TimeProfiler;
-import org.sonar.api.utils.log.Profiler;
 
 import java.io.File;
 import java.io.IOException;

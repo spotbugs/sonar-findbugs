@@ -52,6 +52,15 @@ public class ByteCodeResourceLocatorTest {
     verify(predicatesEmpty,times(1)).hasRelativePath("src/main/java/com/helloworld/ThisIsATest.java");
   }
 
+  @Test
+  public void findScalaClassFileNormalClassName() {
+
+    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
+    locator.findSourceFile("com/helloworld/ThisIsATest.scala", fsEmpty);
+
+    verify(predicatesEmpty,times(1)).hasRelativePath("src/main/scala/com/helloworld/ThisIsATest.scala");
+  }
+
 //  @Test
 //  public void findJavaClassFile_withInnerClass() {
 //
@@ -98,5 +107,14 @@ public class ByteCodeResourceLocatorTest {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findSourceFile("com/helloworld/TestJavaClass.java", fsEmpty));
+  }
+
+  @Test
+  public void findSourceFileFromScalaClassName() throws Exception {
+    DefaultInputFile givenJavaFile = new DefaultInputFile("TestOperationalProfileIccidModel", "src/main/scala/TestOperationalProfileIccidModel.scala");
+    when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
+
+    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
+    assertEquals(givenJavaFile, locator.findSourceFile("TestOperationalProfileIccidModel$TestOperationalProfileIccid$.class", fsEmpty));
   }
 }

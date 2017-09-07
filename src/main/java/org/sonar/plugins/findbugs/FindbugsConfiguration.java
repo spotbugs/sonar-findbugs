@@ -43,7 +43,6 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -148,7 +147,7 @@ public class FindbugsConfiguration {
     FilePredicates pred = fileSystem.predicates();
     return fileSystem.files(pred.and(
             pred.hasType(Type.MAIN),
-            pred.hasLanguage(Java.KEY),
+            pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
             pred.not(pred.matchesPathPattern("**/package-info.java"))
     ));
   }
@@ -163,7 +162,7 @@ public class FindbugsConfiguration {
     return fileSystem.hasFiles(
             pred.and(
                     pred.hasType(Type.MAIN),
-                    pred.hasLanguage(Java.KEY),
+                    pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
                     //package-info.java will not generate any class files.
                     //See: https://github.com/SonarQubeCommunity/sonar-findbugs/issues/36
                     pred.not(pred.matchesPathPattern("**/package-info.java"))
