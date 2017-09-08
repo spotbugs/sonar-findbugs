@@ -255,8 +255,8 @@ def getAllPatternsFromPlugin(Plugin plugin) {
 totalCount = 0
 writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), excludedJspRules);
 totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), excludedJspRules);
-totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions)
-writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions)
+totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns)
+writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions + findBugsPatterns)
 totalCount += writeProfile("findbugs-security-jsp", majorJspBugs + criticalJspBugs)
 
 
