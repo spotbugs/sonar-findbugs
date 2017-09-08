@@ -21,6 +21,11 @@ Building profile findbugs-security-jsp (C:\Code\workspace-java\sonar-findbugs\ge
 Total bugs patterns 820
 ```
 
+The generated XML files can be place in `src/main/resources/org/sonar/plugins/findbugs`.
+Prior committing the new rules, please review with a diff of the changes.
+ - Make sure you are not removing rules by mistake.
+ - Make sure you are not changing the indent of the entire files, new line to carriage return, etc.
+
 ## Update the plugin
 
 To update the description of a specific plugin, you must edit the script at two places before running it.
