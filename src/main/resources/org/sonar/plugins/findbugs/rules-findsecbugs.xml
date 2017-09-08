@@ -682,6 +682,84 @@ uses. &lt;b&gt;PBKDF2&lt;/b&gt; should be used to hash password for example.&lt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='DEFAULT_HTTP_CLIENT' priority='MAJOR'>
+    <name>Security - DefaultHttpClient with default constructor is not compatible with TLS 1.2</name>
+    <configKey>DEFAULT_HTTP_CLIENT</configKey>
+    <description>&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+    HttpClient client = new DefaultHttpClient();
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+
+Upgrade your implementation to use one of the recommended constructs and configure https.protocols JVM option to include TLSv1.2:&lt;/p&gt;
+
+&lt;p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Use &lt;a href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html"&gt;SystemDefaultHttpClient&lt;/a&gt; instead&lt;/li&gt;
+&lt;p&gt;
+    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+    HttpClient client = new SystemDefaultHttpClient();
+&lt;/pre&gt;
+&lt;/p&gt;
+  &lt;li&gt;Create an HttpClient based on SSLSocketFactory - get an SSLScoketFactory instance with &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/conn/ssl/SSLSocketFactory.html#getSystemSocketFactory()"&gt;getSystemSocketFactory()&lt;/a&gt; and use this instance for HttpClient creation&lt;/li&gt;
+  &lt;li&gt;Create an HttpClient based on SSLConnectionSocketFactory - get an instance with &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/conn/ssl/SSLConnectionSocketFactory.html#getSystemSocketFactory()"&gt;getSystemSocketFactory()&lt;/a&gt; and use this instance for HttpClient creation&lt;/li&gt;
+  &lt;li&gt;Use HttpClientBuilder - call &lt;a href="http://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/HttpClientBuilder.html#useSystemProperties()"&gt;useSystemProperties()&lt;/a&gt; before calling build()&lt;/li&gt;
+&lt;p&gt;
+    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+    HttpClient client = HttpClientBuilder.create().useSystemProperties().build();
+&lt;/pre&gt;
+&lt;/p&gt;
+  &lt;li&gt;HttpClients - call &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/HttpClients.html#createSystem()"&gt;createSystem()&lt;/a&gt; to create an instance&lt;/li&gt;
+&lt;p&gt;
+    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+    HttpClient client = HttpClients.createSystem();
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https"&gt;Diagnosing TLS, SSL, and HTTPS&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SSL_CONTEXT' priority='MAJOR'>
+    <name>Security - Weak SSLContext</name>
+    <configKey>SSL_CONTEXT</configKey>
+    <description>&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+    SSLContext.getInstance("SSL");
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+
+Upgrade your implementation to the following, and configure https.protocols JVM option to include TLSv1.2:&lt;/p&gt;
+&lt;pre&gt;
+    SSLContext.getInstance("TLS");
+&lt;/pre&gt;
+&lt;p&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://blogs.oracle.com/java-platform-group/entry/diagnosing_tls_ssl_and_https"&gt;Diagnosing TLS, SSL, and HTTPS&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='CUSTOM_MESSAGE_DIGEST' priority='MAJOR'>
     <name>Security - Message digest is custom</name>
     <configKey>CUSTOM_MESSAGE_DIGEST</configKey>
@@ -777,6 +855,95 @@ regex meant, this new regex can be evaluated quickly, and is not subject to ReDO
 &lt;a href="http://www.jroller.com/sebastianKuebeck/entry/detecting_and_preventing_redos_vulnerabilities"&gt;Sebastian Kubeck's Weblog: Detecting and Preventing ReDoS Vulnerabilities&lt;/a&gt;&lt;br/&gt;
 &lt;sup&gt;[1]&lt;/sup&gt; &lt;a href="https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS"&gt;OWASP: Regular expression Denial of Service&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/400.html"&gt;CWE-400: Uncontrolled Resource Consumption ('Resource Exhaustion')&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='XXE_XMLSTREAMREADER' priority='CRITICAL'>
+    <name>Security - XML parsing vulnerable to XXE (XMLStreamReader)</name>
+    <configKey>XXE_XMLSTREAMREADER</configKey>
+    <description>&lt;!--XXE_GENERIC_START--&gt;
+&lt;h3&gt;Attack&lt;/h3&gt;
+&lt;p&gt;XML External Entity (XXE) attacks can occur when an XML parser supports XML entities while processing XML received
+from an untrusted source.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Risk 1: Expose local file content (XXE: &lt;u&gt;X&lt;/u&gt;ML e&lt;u&gt;X&lt;/u&gt;ternal &lt;u&gt;E&lt;/u&gt;ntity)&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;ISO-8859-1&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE foo [
+   &amp;lt;!ENTITY xxe SYSTEM &amp;quot;file:///etc/passwd&amp;quot; &amp;gt; ]&amp;gt;
+&amp;lt;foo&amp;gt;&amp;amp;xxe;&amp;lt;/foo&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;b&gt;Risk 2: Denial of service (XEE: &lt;u&gt;X&lt;/u&gt;ml &lt;u&gt;E&lt;/u&gt;ntity &lt;u&gt;E&lt;/u&gt;xpansion)&lt;/b&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE lolz [
+ &amp;lt;!ENTITY lol &amp;quot;lol&amp;quot;&amp;gt;
+ &amp;lt;!ELEMENT lolz (#PCDATA)&amp;gt;
+ &amp;lt;!ENTITY lol1 &amp;quot;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol2 &amp;quot;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol3 &amp;quot;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;quot;&amp;gt;
+[...]
+ &amp;lt;!ENTITY lol9 &amp;quot;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;quot;&amp;gt;
+]&amp;gt;
+&amp;lt;lolz&amp;gt;&amp;amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;h3&gt;Solution&lt;/h3&gt;
+&lt;p&gt;
+In order to avoid exposing dangerous feature of the XML parser, you can do the following change to the code.
+&lt;/p&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;public void parseXML(InputStream input) throws XMLStreamException {
+
+    XMLInputFactory factory = XMLInputFactory.newFactory();
+    XMLStreamReader reader = factory.createXMLStreamReader(input);
+    [...]
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one property or both.
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution disabling External Entities:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;public void parseXML(InputStream input) throws XMLStreamException {
+
+    XMLInputFactory factory = XMLInputFactory.newFactory();
+    factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+    XMLStreamReader reader = factory.createXMLStreamReader(input);
+    [...]
+}&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;public void parseXML(InputStream input) throws XMLStreamException {
+
+    XMLInputFactory factory = XMLInputFactory.newFactory();
+    factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+    XMLStreamReader reader = factory.createXMLStreamReader(input);
+    [...]
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_START--&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/611.html"&gt;CWE-611: Improper Restriction of XML External Entity Reference ('XXE')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=61702260"&gt;CERT: IDS10-J. Prevent XML external entity attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing"&gt;OWASP.org: XML External Entity (XXE) Processing&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+&lt;a href="http://openjdk.java.net/jeps/185"&gt;JEP 185: Restrict Fetching of External XML Resources&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
@@ -1196,6 +1363,101 @@ public class SafeController {
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='SQL_INJECTION' priority='CRITICAL'>
+    <name>Security - Potential SQL Injection</name>
+    <configKey>SQL_INJECTION</configKey>
+    <description>&lt;p&gt;
+The input values included in SQL queries need to be passed in safely.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+Alternatively to prepare statements, each parameter can be escaped manually.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;
+createQuery("select * from User where id = '"+inputId+"'");
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+
+    &lt;pre&gt;
+import org.owasp.esapi.Encoder;
+
+createQuery("select * from User where id = '"+Encoder.encodeForSQL(inputId)+"'");
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SQL_INJECTION_TURBINE' priority='CRITICAL'>
+    <name>Security - Potential SQL Injection with Turbine</name>
+    <configKey>SQL_INJECTION_TURBINE</configKey>
+    <description>&lt;p&gt;
+The input values included in SQL queries need to be passed in safely.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+Turbine API provide a DSL to build query with Java code.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;
+List&amp;lt;Record&amp;gt; BasePeer.executeQuery( "select * from Customer where id=" + inputId );
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (using Criteria DSL):&lt;/b&gt;&lt;br/&gt;
+
+    &lt;pre&gt;
+Criteria c = new Criteria();
+c.add( CustomerPeer.ID, inputId );
+
+List&amp;lt;Customer&amp;gt; customers = CustomerPeer.doSelect( c );
+&lt;/pre&gt;
+
+    &lt;b&gt;Solution (using specialized method):&lt;/b&gt;&lt;br/&gt;
+
+&lt;pre&gt;
+Customer customer = CustomerPeer.retrieveByPK( new NumberKey( inputId ) );
+&lt;/pre&gt;
+
+    &lt;b&gt;Solution (using OWASP Encoder):&lt;/b&gt;&lt;br/&gt;
+
+    &lt;pre&gt;
+import org.owasp.esapi.Encoder;
+
+BasePeer.executeQuery("select * from Customer where id = '"+Encoder.encodeForSQL(inputId)+"'");
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References (Turbine)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://turbine.apache.org/turbine/turbine-2.1/howto/criteria-howto.html"&gt;Turbine Documentation: Criteria Howto&lt;/a&gt;&lt;br/&gt;
+&lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='SQL_INJECTION_HIBERNATE' priority='CRITICAL'>
     <name>Security - Potential SQL/HQL Injection (Hibernate)</name>
     <configKey>SQL_INJECTION_HIBERNATE</configKey>
@@ -1411,6 +1673,47 @@ updateSales.setString(2, coffeeName);&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='SQL_INJECTION_ANDROID' priority='CRITICAL'>
+    <name>Security - Potential Android SQL Injection</name>
+    <configKey>SQL_INJECTION_ANDROID</configKey>
+    <description>&lt;p&gt;
+The input values included in SQL queries need to be passed in safely.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+&lt;/p&gt;
+
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;String query = "SELECT * FROM  messages WHERE uid= '"+userInput+"'" ;
+Cursor cursor = this.getReadableDatabase().rawQuery(query,null);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;String query = "SELECT * FROM  messages WHERE uid= ?" ;
+Cursor cursor = this.getReadableDatabase().rawQuery(query,new String[] {userInput});&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+
+&lt;b&gt;References (Android SQLite)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://www.informit.com/articles/article.aspx?p=2268753&amp;seqNum=5"&gt;InformIT.com: Practical Advice for Building Secure Android Databases in SQLite&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.packtpub.com/books/content/knowing-sql-injection-attacks-and-securing-our-android-applications-them"&gt;Packtpub.com: Knowing the SQL-injection attacks and securing our Android applications from them&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://books.google.ca/books?id=SXlMAQAAQBAJ&amp;lpg=PR1&amp;pg=PA64#v=onepage&amp;q&amp;f=false"&gt;Android Database Support (Enterprise Android: Programming Android Database Applications for the Enterprise)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://stackoverflow.com/a/29797229/89769"&gt;Safe example of Insert, Select, Update and Delete queryies provided by Suragch&lt;/a&gt;&lt;br/&gt;
+
+&lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>android</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='LDAP_INJECTION' priority='CRITICAL'>
     <name>Security - Potential LDAP Injection</name>
     <configKey>LDAP_INJECTION</configKey>
@@ -1599,6 +1902,39 @@ public void parseExpressionInterface(Person personObj,String property) {
     <tag>owasp-a1</tag>
     <tag>injection</tag>
     <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='OGNL_INJECTION' priority='CRITICAL'>
+    <name>Security - Potential code injection when using OGNL expression</name>
+    <configKey>OGNL_INJECTION</configKey>
+    <description>&lt;p&gt;
+    A expression is built with a dynamic value. The source of the value(s) should be verified to avoid
+    that unfiltered values fall into this risky code evaluation.
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Code at risk:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+public void getUserProperty(String property) {
+  [...]
+  //The first argument is the dynamic expression.
+  return ognlUtil.getValue("user."+property, ctx, root, String.class);
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+In general, method evaluating OGNL expression should not received user input. It is intented to be used in static configurations and JSP.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://community.saas.hpe.com/t5/Security-Research/Struts-2-OGNL-Expression-Injections/ba-p/288881"&gt;HP Enterprise: Struts 2 OGNL Expression Injections by Alvaro Mu&amp;Atilde;&amp;plusmn;oz&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://blog.gdssecurity.com/labs/2017/3/27/an-analysis-of-cve-2017-5638.html"&gt;Gotham Digital Science: An Analysis Of CVE-2017-5638&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="http://struts.apache.org/docs/s2-016.html"&gt;Apache Struts2: Vulnerability S2-016&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://struts.apache.org/docs/ognl.html"&gt;Apache Struts 2 Documentation: OGNL&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>security</tag>
   </rule>
   <rule key='HTTP_RESPONSE_SPLITTING' priority='INFO'>
@@ -1810,6 +2146,41 @@ SSL Socket (Secure communication):
 &lt;pre&gt;Socket soc = SSLSocketFactory.getDefault().createSocket("www.google.com", 443);&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;Beyond using an SSL socket, you need to make sure your use of SSLSocketFactory does all the appropriate certificate validation checks to
+make sure you are not subject to man-in-the-middle attacks. Please read the OWASP Transport Layer Protection Cheat Sheet for details on how
+to do this correctly.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2010-A9"&gt;OWASP: Top 10 2010-A9-Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure"&gt;OWASP: Top 10 2013-A6-Sensitive Data Exposure&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"&gt;OWASP: Transport Layer Protection Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/319.html"&gt;CWE-319: Cleartext Transmission of Sensitive Information&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='UNENCRYPTED_SERVER_SOCKET' priority='MAJOR'>
+    <name>Security - Unencrypted Server Socket</name>
+    <configKey>UNENCRYPTED_SERVER_SOCKET</configKey>
+    <description>&lt;p&gt;
+The communication channel used is not encrypted. The traffic could be read by an attacker intercepting the network traffic.
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+Plain server socket (Cleartext communication):
+&lt;pre&gt;ServerSocket soc = new ServerSocket(1234);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+SSL Server Socket (Secure communication):
+&lt;pre&gt;ServerSocket soc = SSLServerSocketFactory.getDefault().createServerSocket(1234);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;Beyond using an SSL server socket, you need to make sure your use of SSLServerSocketFactory does all the appropriate certificate validation checks to
 make sure you are not subject to man-in-the-middle attacks. Please read the OWASP Transport Layer Protection Cheat Sheet for details on how
 to do this correctly.
 &lt;/p&gt;
@@ -2102,6 +2473,99 @@ keyGen.initialize(2048);
     [...]
     resp.sendRedirect(req.getParameter("redirectUrl"));
     [...]
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br/&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Don't accept redirection destinations from users&lt;/li&gt;
+        &lt;li&gt;Accept a destination key, and use it to look up the target (legal) destination&lt;/li&gt;
+        &lt;li&gt;Accept only relative paths&lt;/li&gt;
+        &lt;li&gt;White list URLs (if possible)&lt;/li&gt;
+        &lt;li&gt;Validate that the beginning of the URL is part of a white list&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246981/URL%20Redirector%20Abuse"&gt;WASC-38: URL Redirector Abuse&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A10-Unvalidated_Redirects_and_Forwards"&gt;OWASP: Top 10 2013-A10: Unvalidated Redirects and Forwards&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Unvalidated_Redirects_and_Forwards_Cheat_Sheet"&gt;OWASP: Unvalidated Redirects and Forwards Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/601.html"&gt;CWE-601: URL Redirection to Untrusted Site ('Open Redirect')&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='PLAY_UNVALIDATED_REDIRECT' priority='MAJOR'>
+    <name>Security - Unvalidated Redirect (Play Framework)</name>
+    <configKey>PLAY_UNVALIDATED_REDIRECT</configKey>
+    <description>&lt;p&gt;
+    Unvalidated redirects occur when an application redirects a user to a destination URL specified by a user supplied
+    parameter that is not validated. Such vulnerabilities can be used to facilitate phishing attacks.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Scenario&lt;/b&gt;&lt;br/&gt;
+    1. A user is tricked into visiting the malicious URL: &lt;code&gt;http://website.com/login?redirect=http://evil.vvebsite.com/fake/login&lt;/code&gt;&lt;br/&gt;
+    2. The user is redirected to a fake login page that looks like a site they trust. (&lt;code&gt;http://evil.vvebsite.com/fake/login&lt;/code&gt;)&lt;br/&gt;
+    3. The user enters his credentials.&lt;br/&gt;
+    4. The evil site steals the user's credentials and redirects him to the original website.&lt;br/&gt;
+    &lt;br/&gt;
+    This attack is plausible because most users don't double check the URL after the redirection. Also, redirection to
+    an authentication page is very common.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/br/&gt;
+    &lt;pre&gt;def login(redirectUrl:String) = Action {
+    [...]
+    Redirect(url)
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br/&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Don't accept redirection destinations from users&lt;/li&gt;
+        &lt;li&gt;Accept a destination key, and use it to look up the target (legal) destination&lt;/li&gt;
+        &lt;li&gt;Accept only relative paths&lt;/li&gt;
+        &lt;li&gt;White list URLs (if possible)&lt;/li&gt;
+        &lt;li&gt;Validate that the beginning of the URL is part of a white list&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246981/URL%20Redirector%20Abuse"&gt;WASC-38: URL Redirector Abuse&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A10-Unvalidated_Redirects_and_Forwards"&gt;OWASP: Top 10 2013-A10: Unvalidated Redirects and Forwards&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Unvalidated_Redirects_and_Forwards_Cheat_Sheet"&gt;OWASP: Unvalidated Redirects and Forwards Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/601.html"&gt;CWE-601: URL Redirection to Untrusted Site ('Open Redirect')&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SPRING_UNVALIDATED_REDIRECT' priority='MAJOR'>
+    <name>Security - Spring Unvalidated Redirect</name>
+    <configKey>SPRING_UNVALIDATED_REDIRECT</configKey>
+    <description>&lt;p&gt;
+    Unvalidated redirects occur when an application redirects a user to a destination URL specified by a user supplied
+    parameter that is not validated. Such vulnerabilities can be used to facilitate phishing attacks.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Scenario&lt;/b&gt;&lt;br/&gt;
+    1. A user is tricked into visiting the malicious URL: &lt;code&gt;http://website.com/login?redirect=http://evil.vvebsite.com/fake/login&lt;/code&gt;&lt;br/&gt;
+    2. The user is redirected to a fake login page that looks like a site they trust. (&lt;code&gt;http://evil.vvebsite.com/fake/login&lt;/code&gt;)&lt;br/&gt;
+    3. The user enters his credentials.&lt;br/&gt;
+    4. The evil site steals the user's credentials and redirects him to the original website.&lt;br/&gt;
+    &lt;br/&gt;
+    This attack is plausible because most users don't double check the URL after the redirection. Also, redirection to
+    an authentication page is very common.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/br/&gt;
+    &lt;pre&gt;@RequestMapping("/redirect")
+public String redirect(@RequestParam("url") String url) {
+    [...]
+    return "redirect:" + url;
 }&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -2885,6 +3349,79 @@ Avoid deserializing object provided by remote users.
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='JACKSON_UNSAFE_DESERIALIZATION' priority='CRITICAL'>
+    <name>Security - Unsafe Jackson deserialization configuration</name>
+    <configKey>JACKSON_UNSAFE_DESERIALIZATION</configKey>
+    <description>&lt;p&gt;When the Jackson databind library is used incorrectly the deserialization of untrusted data can lead to remote code execution, if there is a class in classpath that allows the trigger of malicious operation.
+
+&lt;p&gt;
+&lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+Explicitly define what types and subtypes you want to be available when using polymorphism through JsonTypeInfo.Id.NAME.
+Also, never call ObjectMapper.&lt;strong&gt;enableDefaultTyping&lt;/strong&gt; (and then readValue a type that holds a Object or Serializable or Comparable or a known deserialization type).
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+public class Example {
+    static class ABean {
+        public int id;
+        public Object obj;
+    }
+
+    static class AnotherBean {
+        @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS) // or JsonTypeInfo.Id.MINIMAL_CLASS
+        public Object obj;
+    }
+
+    public void example(String json) throws JsonMappingException {
+         ObjectMapper mapper = new ObjectMapper();
+         mapper.enableDefaultTyping();
+         mapper.readValue(json, ABean.class);
+    }
+
+    public void exampleTwo(String json) throws JsonMappingException {
+         ObjectMapper mapper = new ObjectMapper();
+         mapper.readValue(json, AnotherBean.class);
+    }
+
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://github.com/FasterXML/jackson-databind/issues/1599"&gt;Jackson Deserializer security vulnerability&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://github.com/mbechler/marshalsec"&gt;Java Unmarshaller Security - Turning your data into code execution&lt;/a&gt;&lt;br&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='DESERIALIZATION_GADGET' priority='INFO'>
+    <name>Security - This class could be used as deserialization gadget</name>
+    <configKey>DESERIALIZATION_GADGET</configKey>
+    <description>&lt;p&gt;
+Deserialization gadget are class that could be used by an attacker to take advantage of a remote API using Native Serialization.
+This class is either adding custom behavior to deserialization with the readObject method (Serializable) or can be called
+ from a serialized object (InvocationHandler).
+&lt;/p&gt;
+&lt;p&gt;
+This detector is intended to be used mostly by researcher. The real issue is using deserialization for remote operation.
+Removing gadget is an hardening practice to reduce the risk of being exploited.
+&lt;/p&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/502.html"&gt;CWE-502: Deserialization of Untrusted Data&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Deserialization_of_untrusted_data"&gt;Deserialization of untrusted data&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.oracle.com/technetwork/java/seccodeguide-139067.html#8"&gt;Serialization and Deserialization &lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://github.com/frohoff/ysoserial"&gt;A tool for generating payloads that exploit unsafe Java object deserialization&lt;/a&gt;&lt;br/&gt;
+[1] &lt;a href="https://gist.github.com/coekie/a27cc406fc9f3dc7a70d"&gt;Example of Denial of Service using the class java.util.HashSet&lt;/a&gt;&lt;br/&gt;
+[2] &lt;a href="https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2015-2590"&gt;OpenJDK: Deserialization issue in ObjectInputStream.readSerialData() (CVE-2015-2590)&lt;/a&gt;&lt;br/&gt;
+[3] &lt;a href="https://www.rapid7.com/db/modules/exploit/multi/browser/java_calendar_deserialize"&gt;Rapid7: Sun Java Calendar Deserialization Privilege Escalation (CVE-2008-5353)&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='TRUST_BOUNDARY_VIOLATION' priority='MAJOR'>
     <name>Security - Trust Boundary Violation</name>
     <configKey>TRUST_BOUNDARY_VIOLATION</configKey>
@@ -2971,6 +3508,429 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
     <tag>injection</tag>
     <tag>owasp-a4</tag>
     <tag>wasc</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='TEMPLATE_INJECTION_VELOCITY' priority='CRITICAL'>
+    <name>Security - Potential template injection with Velocity</name>
+    <configKey>TEMPLATE_INJECTION_VELOCITY</configKey>
+    <description>&lt;p&gt;
+Velocity template engine is powerful. It is possible to add logic including condition statements, loops and external calls.
+It is not design to be sandbox to templating operations. A malicious user in control of a template can run malicious code
+on the server-side. Velocity templates should be seen as scripts.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;[...]
+
+Velocity.evaluate(context, swOut, "test", userInput);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+&lt;br/&gt;
+Avoid letting end users manipulate templates with Velocity. If you need to expose template editing to your users,
+prefer logic-less template engines such as Handlebars or Moustache (See references).
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://blog.portswigger.net/2015/08/server-side-template-injection.html"&gt;PortSwigger: Server-Side Template Injection &lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://jknack.github.io/handlebars.java/"&gt;Handlebars.java&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='TEMPLATE_INJECTION_FREEMARKER' priority='CRITICAL'>
+    <name>Security - Potential template injection with Freemarker</name>
+    <configKey>TEMPLATE_INJECTION_FREEMARKER</configKey>
+    <description>&lt;p&gt;
+Freemarker template engine is powerful. It is possible to add logic including condition statements, loops and external calls.
+It is not design to be sandbox to templating operations. A malicious user in control of a template can run malicious code
+on the server-side. Freemarker templates should be seen as scripts.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;Template template = cfg.getTemplate(inputTemplate);
+[...]
+template.process(data, swOut);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+&lt;br/&gt;
+Avoid letting end users manipulate templates with Freemarker. If you need to expose template editing to your users,
+prefer logic-less template engines such as Handlebars or Moustache (See references).
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://blog.portswigger.net/2015/08/server-side-template-injection.html"&gt;PortSwigger: Server-Side Template Injection &lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://jknack.github.io/handlebars.java/"&gt;Handlebars.java&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='PERMISSIVE_CORS' priority='MAJOR'>
+    <name>Security - Overly permissive CORS policy</name>
+    <configKey>PERMISSIVE_CORS</configKey>
+    <description>&lt;p&gt;
+Prior to HTML5, Web browsers enforced the Same Origin Policy which ensures that in order for JavaScript to access the contents of a Web page, both the JavaScript and the Web page must originate from the same domain. Without the Same Origin Policy, a malicious website could serve up JavaScript that loads sensitive information from other websites using a client's credentials, cull through it, and communicate it back to the attacker. HTML5 makes it possible for JavaScript to access data across domains if a new HTTP header called Access-Control-Allow-Origin is defined. With this header, a Web server defines which other domains are allowed to access its domain using cross-origin requests. However, caution should be taken when defining the header because an overly permissive CORS policy will allow a malicious application to communicate with the victim application in an inappropriate way, leading to spoofing, data theft, relay and other attacks.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;response.addHeader("Access-Control-Allow-Origin", "*");&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+&lt;br/&gt;
+Avoid using * as the value of the Access-Control-Allow-Origin header, which indicates that the application's data is accessible to JavaScript running on any domain.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.w3.org/TR/cors/"&gt;W3C Cross-Origin Resource Sharing&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://enable-cors.org/"&gt;Enable Cross-Origin Resource Sharing&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='LDAP_ANONYMOUS' priority='MAJOR'>
+    <name>Security - Anonymous LDAP bind</name>
+    <configKey>LDAP_ANONYMOUS</configKey>
+    <description>&lt;p&gt;
+Without proper access control, executing an LDAP statement that contains a user-controlled value can allow an attacker to abuse poorly configured LDAP environment. All LDAP queries executed against ctx will be performed without authentication and access control. An attacker may be able to manipulate one of these queries in an unexpected way to gain access to records that would otherwise be protected by the directory's access control mechanism.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;...
+env.put(Context.SECURITY_AUTHENTICATION, "none");
+DirContext ctx = new InitialDirContext(env);
+...&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+&lt;br/&gt;
+Consider other modes of authentication to LDAP and ensure proper access control mechanism.
+
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://docs.oracle.com/javase/tutorial/jndi/ldap/auth_mechs.html"&gt;Ldap Authentication Mechanisms&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='LDAP_ENTRY_POISONING' priority='CRITICAL'>
+    <name>Security - LDAP Entry Poisoning</name>
+    <configKey>LDAP_ENTRY_POISONING</configKey>
+    <description>&lt;p&gt;
+JNDI API support the binding of serialize object in LDAP directories. If certain attributes are presented, the deserialization
+of object will be made in the application querying the directory (See Black Hat USA 2016 white paper for details).
+Object deserialization should be threated as risky operation that can lead to remote code execution.
+&lt;/p&gt;
+&lt;p&gt;
+The exploitation of the vulnerability will be possible if the attacker has an entry point in an LDAP base query, by adding
+attributes to an existing LDAP entry or by configuring the application to use a malicious LDAP server.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;
+DirContext ctx = new InitialDirContext();
+//[...]
+
+ctx.search(query, filter,
+        new SearchControls(scope, countLimit, timeLimit, attributes,
+            true, //Enable object deserialization if bound in directory
+            deref));
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+&lt;pre&gt;
+DirContext ctx = new InitialDirContext();
+//[...]
+
+ctx.search(query, filter,
+        new SearchControls(scope, countLimit, timeLimit, attributes,
+            false, //Disable
+            deref));
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE-wp.pdf"&gt;Black Hat USA 2016: A Journey From JNDI/LDAP Manipulation to Remote Code Execution Dream Land&lt;/a&gt;
+(&lt;a href="https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE.pdf"&gt;slides&lt;/a&gt; &amp;amp; &lt;a href="https://www.youtube.com/watch?v=Y8a5nB-vy78"&gt;video&lt;/a&gt;) by Alvaro Mu&amp;#xF1;oz and Oleksandr Mirosh&lt;br/&gt;
+&lt;a href="https://community.hpe.com/t5/Security-Research/Introducing-JNDI-Injection-and-LDAP-Entry-Poisoning/ba-p/6885118"&gt;HP Enterprise: Introducing JNDI Injection and LDAP Entry Poisoning&lt;/a&gt; by Alvaro Mu&amp;#xF1;oz&lt;br/&gt;
+&lt;a href="http://blog.trendmicro.com/trendlabs-security-intelligence/new-headaches-how-the-pawn-storm-zero-day-evaded-javas-click-to-play-protection/"&gt;TrendMicro: How The Pawn Storm Zero-Day Evaded Java's Click-to-Play Protection&lt;/a&gt; by Jack Tang
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='COOKIE_PERSISTENT' priority='MAJOR'>
+    <name>Security - Persistent Cookie Usage</name>
+    <configKey>COOKIE_PERSISTENT</configKey>
+    <description>&lt;p&gt;
+Storing sensitive data in a persistent cookie for an extended period of time can lead to a breach of confidentiality or account compromise. 
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Explanation:&lt;/b&gt;&lt;br/&gt;
+If private information is stored in persistent cookies, attackers have a larger time window in which to steal this data - especially since persistent cookies are often set to expire in the distant future. Persistent cookies are generally stored in a text file on the client and an attacker with access to the victim's machine can steal this information.&lt;br/&gt;
+Persistent cookies are often used to profile users as they interact with a site. Depending on what is done with this tracking data, it is possible to use persistent cookies to violate users' privacy.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt; The following code sets a cookie to expire in 1 year.&lt;br/&gt;
+&lt;pre&gt;[...]
+Cookie cookie = new Cookie("email", email);
+cookie.setMaxAge(60*60*24*365);
+[...]&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;ul&gt;
+    &lt;li&gt;Use persistent cookies only if necessary and limit their maximum age.&lt;/li&gt;
+    &lt;li&gt;Don't use persistent cookies for sensitive data.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/javax/servlet/http/Cookie.html#setMaxAge%28int%29"&gt;Class Cookie setMaxAge documentation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/539.html"&gt;CWE-539: Information Exposure Through Persistent Cookies&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='URL_REWRITING' priority='MAJOR'>
+    <name>Security - URL rewriting method</name>
+    <configKey>URL_REWRITING</configKey>
+    <description>&lt;p&gt;
+The implementation of this method includes the logic to determine whether the session ID needs to be encoded in the URL.&lt;br/&gt;
+URL rewriting has significant security risks. Since session ID appears in the URL, it may be easily seen by third parties. Session ID in the URL can be disclosed in many ways, for example:&lt;br/&gt;
+&lt;ul&gt;
+    &lt;li&gt;Log files,&lt;/li&gt;
+    &lt;li&gt;The browser history,&lt;/li&gt;
+    &lt;li&gt;By copy-and-pasting it into an e-mail or posting,&lt;/li&gt;
+    &lt;li&gt;The HTTP Referrer.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;out.println("Click &amp;lt;a href=" + 
+                res.encodeURL(HttpUtils.getRequestURL(req).toString()) + 
+                "&amp;gt;here&amp;lt;/a&amp;gt;");&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Avoid using those methods. If you are looking to encode a URL String or form parameters do not confuse the URL rewriting methods with the URLEncoder class.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2010-A3-Broken_Authentication_and_Session_Management"&gt;OWASP Top 10 2010-A3-Broken Authentication and Session Management&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='INSECURE_SMTP_SSL' priority='MAJOR'>
+    <name>Security - Insecure SMTP SSL connection</name>
+    <configKey>INSECURE_SMTP_SSL</configKey>
+    <description>&lt;p&gt;
+Server identity verification is disabled when making SSL connections. Some email libraries that enable SSL connections do not verify the server certificate by default. This is equivalent to trusting all certificates. When trying to connect to the server, this application would readily accept a certificate issued to "hackedserver.com". The application would now potentially leak sensitive user information on a broken SSL connection to the hacked server.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;...
+Email email = new SimpleEmail();
+email.setHostName("smtp.servermail.com");
+email.setSmtpPort(465);
+email.setAuthenticator(new DefaultAuthenticator(username, password));
+email.setSSLOnConnect(true);
+email.setFrom("user@gmail.com");
+email.setSubject("TestMail");
+email.setMsg("This is a test mail ... :-)");
+email.addTo("foo@bar.com");
+email.send();
+...&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Please add the following check to verify the server cerfiticate:
+&lt;pre&gt;email.setSSLCheckServerIdentity(true);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/297.html"&gt;CWE-297: Improper Validation of Certificate with Host Mismatch&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='AWS_QUERY_INJECTION' priority='CRITICAL'>
+    <name>Security - AWS Query Injection</name>
+    <configKey>AWS_QUERY_INJECTION</configKey>
+    <description>&lt;p&gt;
+Constructing SimpleDB queries containing user input can allow an attacker to view unauthorized records.&lt;br/&gt;
+The following example dynamically constructs and executes a SimpleDB select() query allowing the user to specify the productCategory. The attacker can modify the query, bypass the required authentication for customerID and view records matching any customer.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;...
+String customerID = getAuthenticatedCustomerID(customerName, customerCredentials);
+String productCategory = request.getParameter("productCategory");
+...
+AmazonSimpleDBClient sdbc = new AmazonSimpleDBClient(appAWSCredentials);
+String query = "select * from invoices where productCategory = '"
+            + productCategory + "' and customerID = '"
+            + customerID + "' order by '"
+            + sortColumn + "' asc";
+SelectResult sdbResult = sdbc.select(new SelectRequest(query));
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+This issue is analogical to SQL Injection. Sanitize user input before using it in a SimpleDB query.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/943.html"&gt;CWE-943: Improper Neutralization of Special Elements in Data Query Logic&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='BEAN_PROPERTY_INJECTION' priority='CRITICAL'>
+    <name>Security - JavaBeans Property Injection</name>
+    <configKey>BEAN_PROPERTY_INJECTION</configKey>
+    <description>&lt;p&gt;
+An attacker can set arbitrary bean properties that can compromise system integrity. Bean population functions allow to set a bean property or a nested property. An attacker can leverage this functionality to access special bean properties like class.classLoader that will allow him to override system properties and potentially execute arbitrary code.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;MyBean bean = ...;
+HashMap map = new HashMap();
+Enumeration names = request.getParameterNames();
+while (names.hasMoreElements()) {
+    String name = (String) names.nextElement();
+    map.put(name, request.getParameterValues(name));
+}
+BeanUtils.populate(bean, map);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Avoid using user controlled values to populate Bean property names.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/15.html"&gt;CWE-15: External Control of System or Configuration Setting&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='STRUTS_FILE_DISCLOSURE' priority='MAJOR'>
+    <name>Security - Struts File Disclosure</name>
+    <configKey>STRUTS_FILE_DISCLOSURE</configKey>
+    <description>&lt;p&gt;
+Constructing a server-side redirect path with user input could allow an attacker to download application binaries (including application classes or jar files) or view arbitrary files within protected directories.&lt;br/&gt;
+An attacker may be able to forge a request parameter to match sensitive file locations. For example, requesting "http://example.com/?returnURL=WEB-INF/applicationContext.xml" would display the application's applicationContext.xml file. The attacker would be able to locate and download the applicationContext.xml referenced in the other configuration files, and even class files or jar files, obtaining sensitive information and launching other types of attacks.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;... 
+String returnURL = request.getParameter("returnURL"); 
+Return new ActionForward(returnURL); 
+...&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Avoid constructing server-side redirects using user controlled input.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/552.html"&gt;CWE-552: Files or Directories Accessible to External Parties&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SPRING_FILE_DISCLOSURE' priority='MAJOR'>
+    <name>Security - Spring File Disclosure</name>
+    <configKey>SPRING_FILE_DISCLOSURE</configKey>
+    <description>&lt;p&gt;
+Constructing a server-side redirect path with user input could allow an attacker to download application binaries (including application classes or jar files) or view arbitrary files within protected directories.&lt;br/&gt;
+An attacker may be able to forge a request parameter to match sensitive file locations. For example, requesting "http://example.com/?returnURL=WEB-INF/applicationContext.xml" would display the application's applicationContext.xml file. The attacker would be able to locate and download the applicationContext.xml referenced in the other configuration files, and even class files or jar files, obtaining sensitive information and launching other types of attacks.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;... 
+String returnURL = request.getParameter("returnURL");
+return new ModelAndView(returnURL); 
+...&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Avoid constructing server-side redirects using user controlled input.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/552.html"&gt;CWE-552: Files or Directories Accessible to External Parties&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='FORMAT_STRING_MANIPULATION' priority='INFO'>
+    <name>Security - Format String Manipulation</name>
+    <configKey>FORMAT_STRING_MANIPULATION</configKey>
+    <description>&lt;p&gt;
+Allowing user input to control format parameters could enable an attacker to cause exceptions to be thrown or leak information.&lt;br/&gt;
+Attackers may be able to modify the format string argument, such that an exception is thrown. If this exception is left uncaught, it may crash the application. Alternatively, if sensitive information is used within the unused arguments, attackers may change the format string to reveal this information.&lt;br/&gt;
+The example code below lets the user specify the decimal points to which it shows the balance. The user can in fact specify anything causing an exception to be thrown which could lead to application failure. Even more critical within this example, if an attacker can specify the user input "2f %3$s %4$.2", the format string would be "The customer: %s %s has the balance %4$.2f %3$s %4$.2". This would then lead to the sensitive accountNo to be included within the resulting string.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;Formatter formatter = new Formatter(Locale.US);
+String format = "The customer: %s %s has the balance %4$." + userInput + "f";
+formatter.format(format, firstName, lastName, accountNo, balance);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Avoid using user controlled values in the format string argument.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/134.html"&gt;CWE-134: Use of Externally-Controlled Format String&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='HTTP_PARAMETER_POLLUTION' priority='MAJOR'>
+    <name>Security - HTTP Parameter Pollution</name>
+    <configKey>HTTP_PARAMETER_POLLUTION</configKey>
+    <description>&lt;p&gt;
+Concatenating unvalidated user input into a URL can allow an attacker to override the value of a request parameter. Attacker may be able to override existing parameter values, inject a new parameter or exploit variables out of a direct reach. HTTP Parameter Pollution (HPP) attacks consist of injecting encoded query string delimiters into other existing parameters. If a web application does not properly sanitize the user input, a malicious user may compromise the logic of the application to perform either client-side or server-side attacks.&lt;br/&gt;
+In the following example the programmer has not considered the possibility that an attacker could provide a lang such as en&amp;user_id=1, which would enable him to change the user_id at will.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;String lang = request.getParameter("lang");
+GetMethod get = new GetMethod("http://www.host.com");
+get.setQueryString("lang=" + lang + "&amp;user_id=" + user_id);
+get.execute();&lt;/pre&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Sanitize user input before using it in HTTP parameters.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://capec.mitre.org/data/definitions/460.html"&gt;CAPEC-460: HTTP Parameter Pollution (HPP)&lt;/a&gt;
+&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
 </rules>

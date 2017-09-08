@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.io.Files;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
 import edu.umd.cs.findbugs.MethodAnnotation;
@@ -32,6 +33,8 @@ import java.util.Collections;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -55,8 +58,7 @@ import static org.mockito.Mockito.*;
 
 public class FindbugsSensorTest extends FindbugsTests {
 
-  private DefaultFileSystem fs = spy(new DefaultFileSystem(new File(".")));
-
+  DefaultFileSystem fs;
   private ByteCodeResourceLocator byteCodeResourceLocator;
   private MutablePicoContainer pico;
   private SensorContext sensorContext;
@@ -70,10 +72,22 @@ public class FindbugsSensorTest extends FindbugsTests {
     executor = mock(FindbugsExecutor.class);
     javaResourceLocator = mockJavaResourceLocator();
 
+    DefaultFileSystem dfs = new DefaultFileSystem(new File("."));
+    dfs.setWorkDir(Files.createTempDir());
+    fs = spy(dfs);
+
     InputFile dummyFile = mock(InputFile.class);
     when(dummyFile.relativePath()).thenReturn("src/main/java/com/helloworld/DummyFile.java");
     //Will make sure that the lookup on the filesystem will always find a file.
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(Arrays.asList(dummyFile));
+    File tempDir = Files.createTempDir();
+    when(fs.workDir()).then(new Answer<Object>() {
+      @Override
+      public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+        return tempDir;
+      }
+    });
+    //when(fs.workDir()).thenReturn(tempDir);
 
     pico = new DefaultPicoContainer();
 

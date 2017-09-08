@@ -140,7 +140,7 @@ public class SmapParser {
                 for (int i = 0; i < repeatCount; i++) {
                     int[] inputMapping = new int[]{ lineFileID, inputStartLine + i};
                     int baseOL = outputStartLine + i * outputLineIncrement;
-                    for (int ol = baseOL; ol < baseOL + outputLineIncrement; ol++) {
+                    for (int ol = baseOL; ol < baseOL + outputLineIncrement + 1; ol++) {
                         if (!java2jsp.containsKey(ol))
                             java2jsp.put(ol, inputMapping);
                     }
@@ -165,6 +165,9 @@ public class SmapParser {
 
     public SmapLocation getSmapLocation(Integer lineNo) {
         int[] origSource =java2jsp.get(lineNo);
+        if(origSource == null) {
+            return null;
+        }
         FileInfo info = fileinfo.get(origSource[0]);
         return new SmapLocation(info,origSource[1], origSource[0] == 0);
     }

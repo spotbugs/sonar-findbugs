@@ -2,10 +2,12 @@ import groovy.xml.MarkupBuilder;
 import FsbClassifier;
 import static FsbClassifier.*;
 @Grapes([
+
     @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.0-RC5'),
     @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='7.0.3.sb'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.7.1')]
 )
+
 
 FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.0-RC5')
 CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '7.0.3.sb')
@@ -15,7 +17,7 @@ FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-
 ////////////// Generate rules files
 
 def getSonarPriority(String type,String category, String description) {
-    String priority = FsbClassifier.getPriorityFromType(type);
+    String priority = FsbClassifier.getPriorityFromType(type,category);
     if(priority != null) return priority
 
     //Findbugs critical base on the type or message
@@ -50,7 +52,9 @@ class Plugin {
         if(!(new File(homeDir+"/.groovy")).exists()) {
             println "[WARN] Unable to find groovy cache directory. Expected \$home/.groovy";
         }
-        homeDir + "/.groovy/grapes/"+groupId+"/"+artifactId+"/jars/"+artifactId+"-"+version+".jar"
+        def file = homeDir + "/.groovy/grapes/"+groupId+"/"+artifactId+"/jars/"+artifactId+"-"+version+".jar"
+        //println(file)
+        return file
     }
 
     InputStream getMessages() {
@@ -251,8 +255,12 @@ def getAllPatternsFromPlugin(Plugin plugin) {
 totalCount = 0
 writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), excludedJspRules);
 totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), excludedJspRules);
-totalCount += writeProfile("findbugs-security-audit", informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns)
-writeProfile("findbugs-security-minimal", cryptoBugs + majorBugs + criticalBugs + findBugsPatterns)
+totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns)
+writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions + findBugsPatterns)
 totalCount += writeProfile("findbugs-security-jsp", majorJspBugs + criticalJspBugs)
+
+
+//unclassifiedBugs = getAllPatternsFromPlugin(FSB) - (informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns + exclusions + criticalJspBugs + majorJspBugs)
+//unclassifiedBugs.each {b -> println(b)}
 
 println "Total bugs patterns "+totalCount

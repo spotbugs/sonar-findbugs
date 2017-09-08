@@ -39,7 +39,7 @@ public class FindbugsPlugin implements Plugin {
     };
 
     public static final String SUPPORTED_JVM_LANGUAGES_EXTENSIONS[] = {
-            Java.KEY, Jsp.KEY, "scala", "clj"
+            "java", "jsp", "scala", "clj"
     };
 
     public static FilePredicate[] getSupportedLanguagesFilePredicate(FilePredicates pred) {

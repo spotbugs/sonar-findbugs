@@ -21,6 +21,7 @@ package org.sonar.plugins.findbugs;
 
 import static java.lang.String.format;
 
+import org.apache.commons.lang.ArrayUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -81,11 +82,12 @@ public class FindbugsConfiguration {
   public Project getFindbugsProject() throws IOException {
     Project findbugsProject = new Project();
 
-    for (File file : getSourceFiles()) { //The original source file are look at by some detectors
-      if("java".equals(FilenameUtils.getExtension(file.getName()))) {
-        findbugsProject.addFile(file.getCanonicalPath());
-      }
-    }
+//    for (File file : getSourceFiles()) { //The original source file are look at by some detectors
+//      String ext = FilenameUtils.getExtension(file.getName());
+//      if(ArrayUtils.contains(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES_EXTENSIONS, ext)) {
+//        findbugsProject.addFile(file.getCanonicalPath());
+//      }
+//    }
 
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
