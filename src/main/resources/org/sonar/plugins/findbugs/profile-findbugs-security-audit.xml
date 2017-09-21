@@ -210,18 +210,6 @@
     <Bug pattern='SPRING_UNVALIDATED_REDIRECT' />
   </Match>
   <Match>
-    <Bug pattern='JSP_INCLUDE' />
-  </Match>
-  <Match>
-    <Bug pattern='JSP_SPRING_EVAL' />
-  </Match>
-  <Match>
-    <Bug pattern='JSP_JSTL_OUT' />
-  </Match>
-  <Match>
-    <Bug pattern='XSS_JSP_PRINT' />
-  </Match>
-  <Match>
     <Bug pattern='XSS_SERVLET' />
   </Match>
   <Match>
@@ -277,9 +265,6 @@
   </Match>
   <Match>
     <Bug pattern='TRUST_BOUNDARY_VIOLATION' />
-  </Match>
-  <Match>
-    <Bug pattern='JSP_XSLT' />
   </Match>
   <Match>
     <Bug pattern='MALICIOUS_XSLT' />
