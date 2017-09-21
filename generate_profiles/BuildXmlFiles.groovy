@@ -194,13 +194,13 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
     }
 }
 
-def excludedJspRules = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER"];
+def securityJspRules = majorJspBugs + criticalJspBugs
 
 //FindBugs
-writeRules("findbugs", [FB], [], excludedJspRules)
+writeRules("findbugs", [FB], [], securityJspRules)
 //Find Security Bugs
-writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs)
-writeRules("jsp", [FSB,FB], majorJspBugs + criticalJspBugs)
+writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, securityJspRules)
+writeRules("jsp", [FSB,FB], securityJspRules)
 //FB-contrib
 writeRules("fbcontrib", [CONTRIB], [])
 
@@ -246,18 +246,18 @@ def getAllPatternsFromPlugin(Plugin plugin) {
         if (category == "EXPERIMENTAL" || category == "NOISE") return;
         //if (category == "MT_CORRECTNESS") category = "MULTI-THREADING";
 
-        patterns << pattern.attribute("type");
+        patterns << pattern.attribute("type")
     }
 
     return patterns;
 }
 
 totalCount = 0
-writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), excludedJspRules);
-totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), excludedJspRules);
-totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns)
-writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions + findBugsPatterns)
-totalCount += writeProfile("findbugs-security-jsp", majorJspBugs + criticalJspBugs)
+writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), securityJspRules)
+totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), securityJspRules)
+totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns, securityJspRules)
+writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions + findBugsPatterns, securityJspRules)
+totalCount += writeProfile("findbugs-security-jsp", securityJspRules)
 
 
 //unclassifiedBugs = getAllPatternsFromPlugin(FSB) - (informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns + exclusions + criticalJspBugs + majorJspBugs)
