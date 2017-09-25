@@ -82,13 +82,6 @@ public class FindbugsConfiguration {
   public Project getFindbugsProject() throws IOException {
     Project findbugsProject = new Project();
 
-//    for (File file : getSourceFiles()) { //The original source file are look at by some detectors
-//      String ext = FilenameUtils.getExtension(file.getName());
-//      if(ArrayUtils.contains(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES_EXTENSIONS, ext)) {
-//        findbugsProject.addFile(file.getCanonicalPath());
-//      }
-//    }
-
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
@@ -111,7 +104,9 @@ public class FindbugsConfiguration {
               ) {
         hasPrecompiledJsp = true;
       }
-      findbugsProject.addFile(absolutePath);
+      if(!"module-info.class".equals(classToAnalyze.getName())) {
+        findbugsProject.addFile(absolutePath);
+      }
     }
 
     if (classFilesToAnalyze.isEmpty()) {
@@ -150,7 +145,8 @@ public class FindbugsConfiguration {
     return fileSystem.files(pred.and(
             pred.hasType(Type.MAIN),
             pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
-            pred.not(pred.matchesPathPattern("**/package-info.java"))
+            pred.not(pred.matchesPathPattern("**/package-info.java")),
+            pred.not(pred.matchesPathPattern("**/module-info.java"))
     ));
   }
 
@@ -167,7 +163,8 @@ public class FindbugsConfiguration {
                     pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
                     //package-info.java will not generate any class files.
                     //See: https://github.com/SonarQubeCommunity/sonar-findbugs/issues/36
-                    pred.not(pred.matchesPathPattern("**/package-info.java"))
+                    pred.not(pred.matchesPathPattern("**/package-info.java")),
+                    pred.not(pred.matchesPathPattern("**/module-info.java"))
             )
     );
   }
