@@ -1833,6 +1833,12 @@
     <Bug pattern='LO_APPENDED_STRING_IN_FORMAT_STRING' />
   </Match>
   <Match>
+    <Bug pattern='LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING' />
+  </Match>
+  <Match>
+    <Bug pattern='LO_TOSTRING_PARAMETER' />
+  </Match>
+  <Match>
     <Bug pattern='IICU_INCORRECT_INTERNAL_CLASS_USE' />
   </Match>
   <Match>
@@ -2185,6 +2191,9 @@
   </Match>
   <Match>
     <Bug pattern='OI_OPTIONAL_ISSUES_PRIMITIVE_VARIANT_PREFERRED' />
+  </Match>
+  <Match>
+    <Bug pattern='OI_OPTIONAL_ISSUES_USES_ORELSEGET_WITH_NULL' />
   </Match>
   <Match>
     <Bug pattern='UAC_UNNECESSARY_API_CONVERSION_DATE_TO_INSTANT' />
