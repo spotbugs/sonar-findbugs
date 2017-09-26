@@ -335,8 +335,7 @@ should be written to the JarFile between the calls to
     <description>&lt;p&gt;Array of covariant type is assigned to a field. This is confusing and may lead to ArrayStoreException at runtime
 if the reference of some other type will be stored in this array later like in the following code:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-Number[] arr = new Integer[10];
+&lt;pre&gt;&lt;code&gt;Number[] arr = new Integer[10];
 arr[0] = 1.0;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Consider changing the type of created array or the field type.&lt;/p&gt;</description>
@@ -348,8 +347,7 @@ arr[0] = 1.0;
     <description>&lt;p&gt;Array of covariant type is assigned to a local variable. This is confusing and may lead to ArrayStoreException at runtime
 if the reference of some other type will be stored in this array later like in the following code:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-Number[] arr = new Integer[10];
+&lt;pre&gt;&lt;code&gt;Number[] arr = new Integer[10];
 arr[0] = 1.0;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Consider changing the type of created array or the local variable type.&lt;/p&gt;</description>
@@ -881,8 +879,7 @@ on objects referenced by X, because they may already be getting finalized in a s
 the equals method). For example, the Foo class might have an equals method
 that looks like:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public boolean equals(Object o) {
+&lt;pre&gt;&lt;code&gt;public boolean equals(Object o) {
     if (o instanceof Foo)
         return name.equals(((Foo)o).name);
     else if (o instanceof String)
@@ -1023,8 +1020,7 @@ Plus, it means that the equals method is not symmetric.
 that equals is not reflexive, one of the requirements of the equals method.&lt;/p&gt;
 &lt;p&gt;The likely intended semantics are object identity: that an object is equal to itself. This is the behavior inherited from class &lt;code&gt;Object&lt;/code&gt;. If you need to override an equals inherited from a different
 superclass, you can use:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public boolean equals(Object o) {
+&lt;pre&gt;&lt;code&gt;public boolean equals(Object o) {
     return this == o;
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -1142,8 +1138,7 @@ fix this problem of highest importance.</description>
   than simple reference equality.)&lt;/p&gt;
 &lt;p&gt;If you don't think instances of this class will ever be inserted into a HashMap/HashTable,
 the recommended &lt;code&gt;hashCode&lt;/code&gt; implementation to use is:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public int hashCode() {
+&lt;pre&gt;&lt;code&gt;public int hashCode() {
     assert false : "hashCode not designed";
     return 42; // any arbitrary constant will do
 }
@@ -1190,8 +1185,7 @@ is "Note: this class has a natural ordering that is inconsistent with equals."
 
 &lt;p&gt;If you don't think instances of this class will ever be inserted into a HashMap/HashTable,
 the recommended &lt;code&gt;hashCode&lt;/code&gt; implementation to use is:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public int hashCode() {
+&lt;pre&gt;&lt;code&gt;public int hashCode() {
     assert false : "hashCode not designed";
     return 42; // any arbitrary constant will do
 }
@@ -1487,8 +1481,7 @@ This not necessarily a bug, but is worth examining
     <description>&lt;p&gt; This method is invoked in the constructor of the superclass. At this point,
     the fields of the class have not yet initialized.&lt;/p&gt;
 &lt;p&gt;To make this more concrete, consider the following classes:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-abstract class A {
+&lt;pre&gt;&lt;code&gt;abstract class A {
     int hashCode;
     abstract Object getValue();
 
@@ -1543,8 +1536,7 @@ an uninitialized value is read for &lt;code&gt;value&lt;/code&gt;.
     <description>&lt;p&gt; During the initialization of a class, the class makes an active use of a subclass.
 That subclass will not yet be initialized at the time of this use.
 For example, in the following code, &lt;code&gt;foo&lt;/code&gt; will be null.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public class CircularClassInitialization {
+&lt;pre&gt;&lt;code&gt;public class CircularClassInitialization {
     static class InnerClassSingleton extends CircularClassInitialization {
         static InnerClassSingleton singleton = new InnerClassSingleton();
     }
@@ -1568,8 +1560,7 @@ public class CircularClassInitialization {
     <name>Multi-threading - Synchronization on interned String </name>
     <configKey>DL_SYNCHRONIZATION_ON_SHARED_CONSTANT</configKey>
     <description>&lt;p&gt; The code synchronizes on interned String.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static String LOCK = "LOCK";
+&lt;pre&gt;&lt;code&gt;private static String LOCK = "LOCK";
 ...
 synchronized(LOCK) {
     ...
@@ -1588,8 +1579,7 @@ blocking and deadlock behavior. See &lt;a href="http://www.javalobby.org/java/fo
     <name>Multi-threading - Synchronization on Boolean</name>
     <configKey>DL_SYNCHRONIZATION_ON_BOOLEAN</configKey>
     <description>&lt;p&gt; The code synchronizes on a boxed primitive constant, such as a Boolean.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static Boolean inited = Boolean.FALSE;
+&lt;pre&gt;&lt;code&gt;private static Boolean inited = Boolean.FALSE;
 ...
 synchronized(inited) {
     if (!inited) {
@@ -1610,8 +1600,7 @@ and possible deadlock.&lt;/p&gt;
     <configKey>DL_SYNCHRONIZATION_ON_UNSHARED_BOXED_PRIMITIVE</configKey>
     <description>&lt;p&gt; The code synchronizes on an apparently unshared boxed primitive,
 such as an Integer.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static final Integer fileLock = new Integer(1);
+&lt;pre&gt;&lt;code&gt;private static final Integer fileLock = new Integer(1);
 ...
 synchronized(fileLock) {
     .. do something ..
@@ -1619,8 +1608,7 @@ synchronized(fileLock) {
 ...
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It would be much better, in this code, to redeclare fileLock as&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static final Object fileLock = new Object();
+&lt;pre&gt;&lt;code&gt;private static final Object fileLock = new Object();
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;
 The existing code might be OK, but it is confusing and a
@@ -1635,8 +1623,7 @@ throughout the JVM, leading to very confusing behavior and potential deadlock.
     <name>Multi-threading - Synchronization on boxed primitive</name>
     <configKey>DL_SYNCHRONIZATION_ON_BOXED_PRIMITIVE</configKey>
     <description>&lt;p&gt; The code synchronizes on a boxed primitive constant, such as an Integer.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static Integer count = 0;
+&lt;pre&gt;&lt;code&gt;private static Integer count = 0;
 ...
 synchronized(count) {
     count++;
@@ -1654,8 +1641,7 @@ and possible deadlock.&lt;/p&gt;
     <name>Multi-threading - Empty synchronized block</name>
     <configKey>ESync_EMPTY_SYNC</configKey>
     <description>&lt;p&gt; The code contains an empty synchronized block:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-synchronized() {
+&lt;pre&gt;&lt;code&gt;synchronized() {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Empty synchronized blocks are far more subtle and hard to use correctly
@@ -1700,8 +1686,7 @@ gets a lock on the referenced object, not on the field. This may not
 provide the mutual exclusion you need, and other threads might
 be obtaining locks on the referenced objects (for other purposes). An example
 of this pattern would be:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private Long myNtfSeqNbrCounter = new Long(0);
+&lt;pre&gt;&lt;code&gt;private Long myNtfSeqNbrCounter = new Long(0);
 private Long getNotificationSequenceNumber() {
      Long result = null;
      synchronized(myNtfSeqNbrCounter) {
@@ -1940,8 +1925,7 @@ You should try hard to eliminate one of them, unless you are forced to have both
     <configKey>NM_WRONG_PACKAGE</configKey>
     <description>&lt;p&gt; The method in the subclass doesn't override a similar method in a superclass because the type of a parameter doesn't exactly match
 the type of the corresponding parameter in the superclass. For example, if you have:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-import alpha.Foo;
+&lt;pre&gt;&lt;code&gt;import alpha.Foo;
 
 public class A {
     public int f(Foo x) { return 17; }
@@ -1966,8 +1950,7 @@ types are &lt;code&gt;Foo&lt;/code&gt;'s from different packages.
     <configKey>NM_WRONG_PACKAGE_INTENTIONAL</configKey>
     <description>&lt;p&gt; The method in the subclass doesn't override a similar method in a superclass because the type of a parameter doesn't exactly match
 the type of the corresponding parameter in the superclass. For example, if you have:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-import alpha.Foo;
+&lt;pre&gt;&lt;code&gt;import alpha.Foo;
 
 public class A {
     public int f(Foo x) { return 17; }
@@ -2664,16 +2647,14 @@ to instruct SpotBugs that ignoring the return value of this method is acceptable
 cause of this warning is to invoke a method on an immutable object,
 thinking that it updates the object. For example, in the following code
 fragment,&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-String dateString = getHeaderField(name);
+&lt;pre&gt;&lt;code&gt;String dateString = getHeaderField(name);
 dateString.trim();
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;the programmer seems to be thinking that the trim() method will update
 the String referenced by dateString. But since Strings are immutable, the trim()
 function returns a new String value, which is being ignored here. The code
 should be corrected to: &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-String dateString = getHeaderField(name);
+&lt;pre&gt;&lt;code&gt;String dateString = getHeaderField(name);
 dateString = dateString.trim();
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>correctness</tag>
@@ -2707,14 +2688,12 @@ will return other values.</description>
     <configKey>RV_EXCEPTION_NOT_THROWN</configKey>
     <description>&lt;p&gt; This code creates an exception (or error) object, but doesn't do anything with it. For example,
 something like &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-if (x &amp;lt; 0) {
+&lt;pre&gt;&lt;code&gt;if (x &amp;lt; 0) {
     new IllegalArgumentException("x must be nonnegative");
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;It was probably the intent of the programmer to throw the created exception:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-if (x &amp;lt; 0) {
+&lt;pre&gt;&lt;code&gt;if (x &amp;lt; 0) {
     throw new IllegalArgumentException("x must be nonnegative");
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -2975,8 +2954,7 @@ control flow continues onto the same place regardless of whether or not
 the branch is taken. For example,
 this is caused by having an empty statement
 block for an &lt;code&gt;if&lt;/code&gt; statement:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-if (argv.length == 0) {
+&lt;pre&gt;&lt;code&gt;if (argv.length == 0) {
     // TODO: handle this case
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -2990,8 +2968,7 @@ flow follows to the same or following line regardless of whether or not
 the branch is taken.
 Often, this is caused by inadvertently using an empty statement as the
 body of an &lt;code&gt;if&lt;/code&gt; statement, e.g.:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-if (argv.length == 1);
+&lt;pre&gt;&lt;code&gt;if (argv.length == 1);
     System.out.println("Hello, " + argv[0]);
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>style</tag>
@@ -3060,8 +3037,7 @@ of defensive programming.&lt;/p&gt;</description>
 but does not release it on all paths out of the method.  In general, the correct idiom
 for using a JSR-166 lock is:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-Lock l = ...;
+&lt;pre&gt;&lt;code&gt;Lock l = ...;
 l.lock();
 try {
     // do something
@@ -3079,8 +3055,7 @@ try {
 but does not release it on all exception paths out of the method.  In general, the correct idiom
 for using a JSR-166 lock is:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-Lock l = ...;
+&lt;pre&gt;&lt;code&gt;Lock l = ...;
 l.lock();
 try {
     // do something
@@ -3222,8 +3197,7 @@ an &lt;code&gt;IllegalMonitorStateException&lt;/code&gt; being thrown.&lt;/p&gt;
     <description>&lt;p&gt; This method contains a self assignment of a local variable, and there
 is a field with an identical name.
 assignment appears to have been ; e.g.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-    int foo;
+&lt;pre&gt;&lt;code&gt;    int foo;
     public void setFoo(int foo) {
         foo = foo;
     }
@@ -3236,8 +3210,7 @@ assignment appears to have been ; e.g.&lt;/p&gt;
     <name>Style - Self assignment of local variable</name>
     <configKey>SA_LOCAL_SELF_ASSIGNMENT</configKey>
     <description>&lt;p&gt; This method contains a self assignment of a local variable; e.g.&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public void foo() {
+&lt;pre&gt;&lt;code&gt;public void foo() {
     int x = 3;
     x = x;
 }
@@ -3252,8 +3225,7 @@ Such assignments are useless, and may indicate a logic error or typo.
     <configKey>SA_FIELD_SELF_ASSIGNMENT</configKey>
     <description>&lt;p&gt; This method contains a self assignment of a field; e.g.
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int x;
+&lt;pre&gt;&lt;code&gt;int x;
 public void foo() {
     x = x;
 }
@@ -3267,8 +3239,7 @@ public void foo() {
     <configKey>SA_FIELD_DOUBLE_ASSIGNMENT</configKey>
     <description>&lt;p&gt; This method contains a double assignment of a field; e.g.
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int x,y;
+&lt;pre&gt;&lt;code&gt;int x,y;
 public void foo() {
     x = x = 17;
 }
@@ -3281,8 +3252,7 @@ public void foo() {
     <configKey>SA_LOCAL_DOUBLE_ASSIGNMENT</configKey>
     <description>&lt;p&gt; This method contains a double assignment of a local variable; e.g.
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public void foo() {
+&lt;pre&gt;&lt;code&gt;public void foo() {
     int x,y;
     x = x = 17;
 }
@@ -3491,15 +3461,13 @@ to get &lt;code&gt;0xffffffff&lt;/code&gt;, and thus give the value
 &lt;/p&gt;
 
 &lt;p&gt;In particular, the following code for packing a byte array into an int is badly wrong: &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int result = 0;
+&lt;pre&gt;&lt;code&gt;int result = 0;
 for(int i = 0; i &amp;lt; 4; i++) {
     result = ((result &amp;lt;&amp;lt; 8) | b[i]);
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The following idiom will work instead: &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int result = 0;
+&lt;pre&gt;&lt;code&gt;int result = 0;
 for(int i = 0; i &amp;lt; 4; i++) {
     result = ((result &amp;lt;&amp;lt; 8) | (b[i] &amp;amp; 0xff));
 }
@@ -3521,14 +3489,12 @@ to get &lt;code&gt;0xffffffff&lt;/code&gt;, and thus give the value
 &lt;/p&gt;
 
 &lt;p&gt;In particular, the following code for packing a byte array into an int is badly wrong: &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int result = 0;
+&lt;pre&gt;&lt;code&gt;int result = 0;
 for(int i = 0; i &amp;lt; 4; i++)
     result = ((result &amp;lt;&amp;lt; 8) + b[i]);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The following idiom will work instead: &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int result = 0;
+&lt;pre&gt;&lt;code&gt;int result = 0;
 for(int i = 0; i &amp;lt; 4; i++)
     result = ((result &amp;lt;&amp;lt; 8) + (b[i] &amp;amp; 0xff));
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -3746,8 +3712,7 @@ In each iteration, the String is converted to a StringBuffer/StringBuilder,
 a StringBuffer (or StringBuilder in Java 1.5) explicitly.&lt;/p&gt;
 
 &lt;p&gt; For example:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-// This is bad
+&lt;pre&gt;&lt;code&gt;// This is bad
 String s = "";
 for (int i = 0; i &amp;lt; field.length; ++i) {
     s = s + field[i];
@@ -3871,14 +3836,12 @@ super.tearDown(), but doesn't.&lt;/p&gt;</description>
     <configKey>IJU_BAD_SUITE_METHOD</configKey>
     <description>&lt;p&gt; Class is a JUnit TestCase and defines a suite() method.
 However, the suite method needs to be declared as either&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public static junit.framework.Test suite()
+&lt;pre&gt;&lt;code&gt;public static junit.framework.Test suite()
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;
 or
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public static junit.framework.TestSuite suite()
+&lt;pre&gt;&lt;code&gt;public static junit.framework.TestSuite suite()
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -4135,8 +4098,7 @@ does not need to be created, just access the static methods directly using the c
   &lt;/p&gt;
   &lt;p&gt;A better approach is to either explicitly catch the specific exceptions that are thrown,
   or to explicitly catch RuntimeException exception, rethrow it, and then catch all non-Runtime Exceptions, as shown below:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-try {
+&lt;pre&gt;&lt;code&gt;try {
     ...
 } catch (RuntimeException e) {
     throw e;
@@ -4327,21 +4289,18 @@ just use the constant. Methods detected are:
     <description>&lt;p&gt;
 This code performs integer multiply and then converts the result to a long,
 as in:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-long convertDaysToMilliseconds(int days) { return 1000*3600*24*days; }
+&lt;pre&gt;&lt;code&gt;long convertDaysToMilliseconds(int days) { return 1000*3600*24*days; }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;
 If the multiplication is done using long arithmetic, you can avoid
 the possibility that the result will overflow. For example, you
 could fix the above code to:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-long convertDaysToMilliseconds(int days) { return 1000L*3600*24*days; }
+&lt;pre&gt;&lt;code&gt;long convertDaysToMilliseconds(int days) { return 1000L*3600*24*days; }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;
 or
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-static final long MILLISECONDS_PER_DAY = 24L*3600*1000;
+&lt;pre&gt;&lt;code&gt;static final long MILLISECONDS_PER_DAY = 24L*3600*1000;
 long convertDaysToMilliseconds(int days) { return days * MILLISECONDS_PER_DAY; }
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>style</tag>
@@ -4356,16 +4315,14 @@ An absolute time value is the number
 of milliseconds since the standard base time known as "the epoch", namely January 1, 1970, 00:00:00 GMT.
 For example, the following method, intended to convert seconds since the epoch into a Date, is badly
 broken:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-Date getDate(int seconds) { return new Date(seconds * 1000); }
+&lt;pre&gt;&lt;code&gt;Date getDate(int seconds) { return new Date(seconds * 1000); }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The multiplication is done using 32-bit arithmetic, and then converted to a 64-bit value.
 When a 32-bit value is converted to 64-bits and used to express an absolute time
 value, only dates in December 1969 and January 1970 can be represented.&lt;/p&gt;
 
 &lt;p&gt;Correct implementations for the above method are:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-// Fails for dates after 2037
+&lt;pre&gt;&lt;code&gt;// Fails for dates after 2037
 Date getDate(int seconds) { return new Date(seconds * 1000L); }
 
 // better, works for all dates
@@ -4420,8 +4377,7 @@ was cast to double suggests that this precision should have been retained.
 What was probably meant was to cast one or both of the operands to
 double &lt;em&gt;before&lt;/em&gt; performing the division.  Here is an example:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-int x = 2;
+&lt;pre&gt;&lt;code&gt;int x = 2;
 int y = 5;
 // Wrong: yields result 0.0
 double value1 = x / y;
@@ -4659,8 +4615,7 @@ downcast it to a subtype will always fail by throwing a ClassCastException.
     <description>&lt;p&gt;
 This code is casting the result of calling &lt;code&gt;toArray()&lt;/code&gt; on a collection
 to a type more specific than &lt;code&gt;Object[]&lt;/code&gt;, as in:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-String[] getAsArray(Collection&amp;lt;String&amp;gt; c) {
+&lt;pre&gt;&lt;code&gt;String[] getAsArray(Collection&amp;lt;String&amp;gt; c) {
     return (String[]) c.toArray();
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -5237,8 +5192,7 @@ and &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6178997"&gt;
         the return statement requires a @NonNegative value,
         but receives one that is marked as @Negative.
         &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public boolean example(@Negative Integer value1, @NonNegative Integer value2) {
+&lt;pre&gt;&lt;code&gt;public boolean example(@Negative Integer value1, @NonNegative Integer value2) {
     return value1.equals(value2);
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -5266,8 +5220,7 @@ public boolean example(@Negative Integer value1, @NonNegative Integer value2) {
         the return statement requires a @NonNegative value,
         but receives one that is marked as @Negative.
         &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public @NonNegative Integer example(@Negative Integer value) {
+&lt;pre&gt;&lt;code&gt;public @NonNegative Integer example(@Negative Integer value) {
     return value;
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -5379,8 +5332,7 @@ public @NonNegative Integer example(@Negative Integer value) {
      This instance method synchronizes on &lt;code&gt;this.getClass()&lt;/code&gt;. If this class is subclassed,
      subclasses will synchronize on the class object for the subclass, which isn't likely what was intended.
      For example, consider this code from java.awt.Label:&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static final String base = "label";
+&lt;pre&gt;&lt;code&gt;private static final String base = "label";
 private static int nameCounter = 0;
 
 String constructComponentName() {
@@ -5391,8 +5343,7 @@ String constructComponentName() {
 &lt;/code&gt;&lt;/pre&gt;
      &lt;p&gt;Subclasses of &lt;code&gt;Label&lt;/code&gt; won't synchronize on the same subclass, giving rise to a datarace.
      Instead, this code should be synchronizing on &lt;code&gt;Label.class&lt;/code&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-private static final String base = "label";
+&lt;pre&gt;&lt;code&gt;private static final String base = "label";
 private static int nameCounter = 0;
 
 String constructComponentName() {
@@ -5428,10 +5379,11 @@ String constructComponentName() {
           (and hopefully better) static analysis technique.
           We are interested is getting feedback about the
           usefulness of this bug pattern.
-          To send feedback:
+          For sending feedback, check:
           &lt;/p&gt;
           &lt;ul&gt;
-            &lt;li&gt;file an issue: &lt;a href="https://github.com/spotbugs/spotbugs/issues"&gt;https://github.com/spotbugs/spotbugs/issues&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/spotbugs/blob/master/CONTRIBUTING.md"&gt;contributing guideline&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/discuss/issues?q="&gt;malinglist&lt;/a&gt;&lt;/li&gt;
           &lt;/ul&gt;
 
           &lt;p&gt;
@@ -5470,11 +5422,11 @@ String constructComponentName() {
           (and hopefully better) static analysis technique.
           We are interested is getting feedback about the
           usefulness of this bug pattern.
-          To send feedback, either:
+          For sending feedback, check:
           &lt;/p&gt;
           &lt;ul&gt;
-            &lt;li&gt;send email to findbugs@cs.umd.edu&lt;/li&gt;
-            &lt;li&gt;file a bug report: &lt;a href="http://findbugs.sourceforge.net/reportingBugs.html"&gt;http://findbugs.sourceforge.net/reportingBugs.html&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/spotbugs/blob/master/CONTRIBUTING.md"&gt;contributing guideline&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/discuss/issues?q="&gt;malinglist&lt;/a&gt;&lt;/li&gt;
           &lt;/ul&gt;
 
           &lt;p&gt;
@@ -5531,8 +5483,7 @@ String constructComponentName() {
   that memory, which means that the logger configuration is lost. For example,
 consider:
 &lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public static void initLogging() throws Exception {
+&lt;pre&gt;&lt;code&gt;public static void initLogging() throws Exception {
     Logger logger = Logger.getLogger("edu.umd.cs");
     logger.addHandler(new FileHandler()); // call to change logger configuration
     logger.setUseParentHandlers(false); // another call to change logger configuration
@@ -5542,8 +5493,7 @@ public static void initLogging() throws Exception {
 escape the method), so if you have a garbage collection cycle just
 after the call to initLogging, the logger configuration is lost
 (because Logger only keeps weak references).&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;
-public static void main(String[] args) throws Exception {
+&lt;pre&gt;&lt;code&gt;public static void main(String[] args) throws Exception {
     initLogging(); // adds a file handler to the logger
     System.gc(); // logger configuration lost
     Logger.getLogger("edu.umd.cs").info("Some message"); // this isn't logged to the file as expected

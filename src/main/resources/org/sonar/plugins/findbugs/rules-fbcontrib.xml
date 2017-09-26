@@ -1852,8 +1852,8 @@ return new String[0];&lt;br/&gt;
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING' priority='INFO'>
-    <name>Experimental - Method passes a simple String.format result to an SLF4J's format string</name>
+  <rule key='LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING' priority='MAJOR'>
+    <name>Correctness - Method passes a simple String.format result to an SLF4J's format string</name>
     <configKey>LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING</configKey>
     <description>&lt;p&gt;This method uses an SLF4J logger to log a string, which was produced through a call to String.format, where
 	       the format string passed was a constant string containing only simple format markers that could be directly handled
@@ -1866,7 +1866,20 @@ return new String[0];&lt;br/&gt;
 	          logger.error(This {} is an error", s);
 	       &lt;/pre&gt;
 	       &lt;/p&gt;</description>
-    <tag>experimental</tag>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='LO_TOSTRING_PARAMETER' priority='MAJOR'>
+    <name>Correctness - Method explicitly calls toString() on a logger parameter</name>
+    <configKey>LO_TOSTRING_PARAMETER</configKey>
+    <description>&lt;p&gt;This method uses parameterized logging to avoid the cost of string concatenation in the case that
+			the log level does not meet the needed level. However, one or more of the parameters passed to the logging 
+			method uses .toString() to present a String representation for the parameter. This is unneeded as the logger
+			will do this for you, and because it is explicitly done, will always be called even if the log statement is 
+			not actually written. Also, by dropping the '.toString()' you may avoid unnecessary NPEs.
+			Just pass the variable as a parameter instead.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
   </rule>
   <rule key='IICU_INCORRECT_INTERNAL_CLASS_USE' priority='MAJOR'>
     <name>Correctness - Class relies on internal API classes</name>
@@ -3246,6 +3259,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='OI_OPTIONAL_ISSUES_USES_ORELSEGET_WITH_NULL' priority='MAJOR'>
+    <name>Correctness - Method uses Optional.orElseGet(null)</name>
+    <configKey>OI_OPTIONAL_ISSUES_USES_ORELSEGET_WITH_NULL</configKey>
+    <description>&lt;p&gt;This method uses Optional.orElseGet(null). This method is supposed to to receive a lambda expression for what to execute
+    		when the Optional is not there. If you want to just return null, use Optional.orElse(null) instead.
+    		&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='UAC_UNNECESSARY_API_CONVERSION_DATE_TO_INSTANT' priority='MAJOR'>
     <name>Correctness - Method constructs a Date object, merely to convert it to an Instant object</name>
     <configKey>UAC_UNNECESSARY_API_CONVERSION_DATE_TO_INSTANT</configKey>
@@ -3271,7 +3293,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>RFI_SET_ACCESSIBLE</configKey>
     <description>&lt;p&gt;This method uses the reflective setAccessible method to alter the behavior of methods and fields in classes 
     		in ways that were not expected to be accessed by the author. Doing so circumvents the protections that the author
-    		provided through the class definition, and may expose your application unexpected side effects and problems. This
+    		provided through the class definition, and may expose your application to unexpected side effects and problems. This
     		functionality is deprecated in Java 9, and in Java 10 it is expected that this functionality won't work at all.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
