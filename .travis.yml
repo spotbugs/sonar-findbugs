@@ -11,3 +11,11 @@ matrix:
   fast_finish: true
 notifications:
   email: false
+
+addons:
+  sonarcloud:
+    organization: "default"
+    token:
+      secure: "IZaGLNje55EkAlOxBCDmrqsKdgXqMRiLm2D3UjVAJvn02CBb2xzZEc+rbIl8DpZO1j25uM7J7wMW8oURX4K2iYdoTPKyliqAIfpui712dJS13SZPWGvORVPx8XDkPe89OYf63JHxVtvqLuOTfPGXdQniY2ThvUj8HHwGhhEJl2U="
+    branches:
+      - master
