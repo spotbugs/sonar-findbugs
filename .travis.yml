@@ -3,7 +3,7 @@ sudo: false
 jdk:
 - oraclejdk8
 install: true
-script: ./travis.sh
+script: mvn verify -B -e -V sonar:sonar -Dsonar.host.url=https://sonarcloud.io/
 env:
   matrix:
   - TEST=ci
