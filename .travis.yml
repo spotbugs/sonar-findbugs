@@ -1,5 +1,6 @@
 language: java
-sudo: false
+dist: trusty #Require by SonarCloud
+
 jdk:
 - oraclejdk8
 install: true
