@@ -3,7 +3,7 @@ sudo: false
 jdk:
 - oraclejdk8
 install: true
-script: mvn verify -B -e -V sonar:sonar -Dsonar.host.url=https://sonarcloud.io/
+script: mvn verify -B -e -V sonar:sonar -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.login=$SONAR_TOKEN
 env:
   matrix:
   - TEST=ci
@@ -11,10 +11,3 @@ matrix:
   fast_finish: true
 notifications:
   email: false
-
-addons:
-  sonarcloud:
-    token:
-      secure: "IZaGLNje55EkAlOxBCDmrqsKdgXqMRiLm2D3UjVAJvn02CBb2xzZEc+rbIl8DpZO1j25uM7J7wMW8oURX4K2iYdoTPKyliqAIfpui712dJS13SZPWGvORVPx8XDkPe89OYf63JHxVtvqLuOTfPGXdQniY2ThvUj8HHwGhhEJl2U="
-    branches:
-      - master
