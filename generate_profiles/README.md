@@ -32,12 +32,12 @@ To update the description of a specific plugin, you must edit the script at two 
 
 ```groovy
 @Grapes([
-    @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.0-RC2'),
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.0'),
     @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='7.0.0'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.6.0')]
 )
 [...]
-FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.0-RC2')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.0')
 CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '7.0.0')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.6.0')
 
