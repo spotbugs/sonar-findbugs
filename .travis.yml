@@ -1,9 +1,10 @@
 language: java
-sudo: false
+dist: trusty #Require by SonarCloud
+
 jdk:
 - oraclejdk8
 install: true
-script: ./travis.sh
+script: mvn verify -B -e -V sonar:sonar -Dsonar.host.url=https://sonarcloud.io/ -Dsonar.login=$SONAR_TOKEN
 env:
   matrix:
   - TEST=ci
