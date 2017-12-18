@@ -11,6 +11,9 @@ notifications:
 addons:
   sonarcloud:
     organization: "spotbugs"
+    branches:
+      - master
+      - stabilize-build
     token:
       secure: "LzizJSH1+fj2w752WgdurWoQkaPSCB9uSioWr26hvcW1F0EGXhLqeeRPOI+2Nwg8YpSni59jyIGWBt6uFtwzLSD0mtyWjsXWx1Q6PlmV99HV2eTYjG74ir9qWvZTDzmVBiU0tOXEDEeTIqs4MDVNuWXzMARFQRLHbcq+U3tSCj8="
     github_token:
