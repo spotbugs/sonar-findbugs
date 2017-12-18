@@ -1,4 +1,8 @@
-# Sonar Findbugs [![Build Status](https://travis-ci.org/spotbugs/sonar-findbugs.svg?branch=master)](https://travis-ci.org/spotbugs/sonar-findbugs) ![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-818-brightgreen.svg?maxAge=2592000) [![Dependency Status](https://www.versioneye.com/user/projects/5a379f7c0fb24f61fa117ac4/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a379f7c0fb24f61fa117ac4)
+# SonarQube Findbugs Plugin
+[![Build Status](https://travis-ci.org/spotbugs/sonar-findbugs.svg?branch=master)](https://travis-ci.org/spotbugs/sonar-findbugs)
+![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-818-brightgreen.svg?maxAge=2592000)
+[![Dependency Status](https://www.versioneye.com/user/projects/5a379f7c0fb24f61fa117ac4/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5a379f7c0fb24f61fa117ac4)
+[![Coverage Status](https://sonarcloud.io/api/badges/measure?key=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)
 
 ## Description / Features
 
