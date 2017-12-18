@@ -5,6 +5,7 @@ jdk:
   - oraclejdk8
 install:
   - if [ -n "$encrypted_b6710039761a_key" ]; then openssl aes-256-cbc -K $encrypted_b6710039761a_key -iv $encrypted_b6710039761a_iv -in .travis/settings.xml.enc -out .travis/settings.xml -d; fi
+  # TODO install secring.gpg
 script:
   - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V
 notifications:
@@ -23,3 +24,9 @@ deploy:
     script: mvn deploy -P deploy -s .travis/settings.xml
     on:
       branch: master
+  # deploy STABLE artifact onto Sonatype Nexus
+  - provider: script
+    skip_cleanup: true
+    script: mvn deploy -P deploy -s .travis/settings.xml
+    on:
+      tags: true

@@ -23,6 +23,7 @@
       <id>deploy</id>
       <properties>
         <gpg.passphrase>...</gpg.passphrase>
+        <gpg.secretKeyring>.travis/secring.gpg</gpg.secretKeyring>
       </properties>
     </profile>
   </profiles>
