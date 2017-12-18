@@ -15,6 +15,6 @@ addons:
       - master
       - stabilize-build
     token:
-      secure: "LzizJSH1+fj2w752WgdurWoQkaPSCB9uSioWr26hvcW1F0EGXhLqeeRPOI+2Nwg8YpSni59jyIGWBt6uFtwzLSD0mtyWjsXWx1Q6PlmV99HV2eTYjG74ir9qWvZTDzmVBiU0tOXEDEeTIqs4MDVNuWXzMARFQRLHbcq+U3tSCj8="
+      secure: "TO179WgRUyyT2Yg92FpC1r746GaHDMZ7+rMiBqnXztoj5VWTn8U0+M9edyxQ+cKZtCznC4JoimdjBhne52vauWFuQsoczrxtnN7l4w+yemC799Mm5jEuPKoId1CQZkVc5g4hmmeV4Qg6H5K1or1gnl+MGGZ9tbUYOu2v+G2SyAA="
     github_token:
-      secure: "CTSQvp5VkT63mf93ngenRkxzUtaqGSktI5T1N9fUfcawxSE8BjrOPA90u5hBJUNVC+Jq8my4mMWs0MGb30SQgNJ5Cyc6zaqmyl6E/de5fGbOjvGkFmH8ZMtfApLfjx8X93OPzZkZW9LZYCsxsBROM9c/vT08/MVjFJkCGrCHXg0="
+      secure: "F37JqWPpdlOl4oHvTAap9uw+MEqmIz60HiVKYmSpQHDZRb13VJ/pVO11GVhoUfiswOERIEe6Ot/diH/ZK7qhaJQtPJVdSHLyN5t9KSdLtP9wYHWINVR79q8nM7I0rOZ94XDbBsHEsFgC/IWAYizVavQpMw5AGt31qjTzac19BVQ="
