@@ -2,22 +2,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.sonarsource.sonar-findbugs-plugin</groupId>
+  <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
   <version>3.7.0-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Findbugs Plugin</name>
   <description>SpotBugs is a program that uses static analysis to look for bugs in Java code. It can detect a variety of common coding mistakes, including thread synchronization problems, misuse of API methods.</description>
-  <url>https://github.com/SonarQubeCommunity/sonar-findbugs/</url>
+  <url>https://github.com/spotbugs/sonar-findbugs/</url>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/SonarQubeCommunity/sonar-findbugs/issues</url>
+    <url>https://github.com/spotbugs/sonar-findbugs/issues</url>
   </issueManagement>
   <inceptionYear>2012</inceptionYear>
   <organization>
-    <name>SonarSource</name>
-    <url>http://www.sonarsource.com</url>
+    <name>SpotBugs Team</name>
+    <url>https://github.com/spotbugs/</url>
   </organization>
   <licenses>
     <license>
@@ -40,9 +40,9 @@
     </developer>
   </developers>
   <scm>
-    <connection>scm:git:git@github.com:SonarQubeCommunity/sonar-findbugs.git</connection>
-    <developerConnection>scm:git:git@github.com:SonarQubeCommunity/sonar-findbugs.git</developerConnection>
-    <url>https://github.com/SonarQubeCommunity/sonar-findbugs</url>
+    <connection>scm:git:git@github.com:spotbugs/sonar-findbugs.git</connection>
+    <developerConnection>scm:git:git@github.com:spotbugs/sonar-findbugs.git</developerConnection>
+    <url>https://github.com/spotbugs/sonar-findbugs</url>
     <tag>HEAD</tag>
   </scm>
 
