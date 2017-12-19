@@ -7,7 +7,7 @@
   <version>3.7.0-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
-  <name>SonarQube Findbugs Plugin</name>
+  <name>SonarQube SpotBugs Plugin</name>
   <description>SpotBugs is a program that uses static analysis to look for bugs in Java code. It can detect a variety of common coding mistakes, including thread synchronization problems, misuse of API methods.</description>
   <url>https://github.com/spotbugs/sonar-findbugs/</url>
   <issueManagement>
