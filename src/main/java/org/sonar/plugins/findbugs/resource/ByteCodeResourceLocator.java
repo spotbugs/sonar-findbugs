@@ -84,9 +84,9 @@ public class ByteCodeResourceLocator implements BatchExtension {
 
     /**
      * JSP files are compile to class with pseudo packages and class name that vary based on the compiler used.
-     * Multiples patterns are test against the available sources files.<br/>
-     * (ie : <code>test.index_jsp</code> ->  <code>src/main/webapp/test/index.jsp</code>)
-     * <br/>
+     * Multiples patterns are test against the available sources files.<br>
+     * (ie : <code>test.index_jsp</code> -&gt; <code>src/main/webapp/test/index.jsp</code>)
+     * <br>
      * Their is a certain level of guessing since their could always be a class following the same pattern of colliding
      * precompiled jsp. (same pseudo package, same class format, etc.)
      *
@@ -154,7 +154,7 @@ public class ByteCodeResourceLocator implements BatchExtension {
      * The smap can be either embedded in the class file or alternatively place in separate file.
      *
      * @param className Class name
-     * @param originalLine Line of code of the auto-generated Java line (.jsp -> .java -> .class)
+     * @param originalLine Line of code of the auto-generated Java line (.jsp -&gt; .java -&gt; .class)
      * @param classFile (Optional)
      * @return JSP line number
      */
