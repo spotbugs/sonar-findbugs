@@ -22,12 +22,12 @@ deploy:
   # deploy SNAPSHOT artifact onto Sonatype Nexus
   - provider: script
     skip_cleanup: true
-    script: mvn deploy -P deploy -s .travis/settings.xml
+    script: mvn deploy -B -P deploy -s .travis/settings.xml
     on:
       branch: master
   # deploy STABLE artifact onto Sonatype Nexus
   - provider: script
     skip_cleanup: true
-    script: mvn deploy -P deploy -s .travis/settings.xml
+    script: mvn deploy -B -P deploy -s .travis/settings.xml
     on:
       tags: true
