@@ -13,6 +13,8 @@ When you release fixed version of SonarQube SpotBugs Plugin, please follow these
 When we push tag, the build result on Travis CI will be deployed to [Sonatype Nexus](https://oss.sonatype.org/).
 Check [Sonatype official page](http://central.sonatype.org/pages/apache-maven.html) for detail.
 
-## Release to SonarQube plugin update center
+## Release to SonarQube Marketplace
 
-TBU
+Follow the procedures listed in [SonarQube official guide](https://docs.sonarqube.org/display/DEV/Deploying+to+the+Marketplace#DeployingtotheMarketplace-Announcingnewreleases).
+
+Here is [the SonarCloud dashboard for this project](https://sonarcloud.io/dashboard?id=com.github.spotbugs:sonar-findbugs-plugin).
