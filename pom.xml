@@ -114,6 +114,13 @@
     </dependency>
 
     <dependency>
+      <!-- For some reasons was not deployed with FindBugs 2.0.3 and not transitive dependency anymore -->
+      <groupId>com.github.spotbugs</groupId>
+      <artifactId>spotbugs-annotations</artifactId>
+      <version>${spotbugs.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.mebigfatguy.fb-contrib</groupId>
       <artifactId>fb-contrib</artifactId>
       <version>${fbcontrib.version}</version>
@@ -237,7 +244,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.6.2</version>
+        <version>3.7.0</version>
         <configuration>
           <source>${jdk.min.version}</source>
           <target>${jdk.min.version}</target>
