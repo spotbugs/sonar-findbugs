@@ -164,7 +164,8 @@ public class FindbugsConfiguration {
                     //package-info.java will not generate any class files.
                     //See: https://github.com/SonarQubeCommunity/sonar-findbugs/issues/36
                     pred.not(pred.matchesPathPattern("**/package-info.java")),
-                    pred.not(pred.matchesPathPattern("**/module-info.java"))
+                    pred.not(pred.matchesPathPattern("**/module-info.java")),
+                    pred.not(pred.matchesPathPattern("**/*.jsp"))
             )
     );
   }
