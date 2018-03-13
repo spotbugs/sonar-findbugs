@@ -4,8 +4,6 @@ dist: trusty
 jdk:
   - oraclejdk8
 env:
-  # previous LTS
-  #- SONAR_VERSION=5.6.7 SONAR_JAVA_VERSION=4.0
   # latest LTS
   - SONAR_VERSION=6.7.1 SONAR_JAVA_VERSION=5.1.1.13214
   # latest
@@ -16,7 +14,7 @@ install:
   - if [ -f ".travis/secrets.tar" ]; then tar -xvf .travis/secrets.tar -C .travis; fi
 script:
   - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
-  - if [ $SONAR_VERSION = '5.6'* ]; then mvn sonar:sonar -B -e -V; fi
+  - if [ $SONAR_VERSION = '6.7'* ]; then mvn sonar:sonar -B -e -V; fi
 notifications:
   email: false
 addons:
@@ -33,11 +31,11 @@ deploy:
     script: mvn deploy -B -P deploy -Dgpg.skip -s .travis/settings.xml
     on:
       branch: master
-      condition: "$SONAR_VERSION = '5.6'*"
+      condition: "$SONAR_VERSION = '6.7'*"
   # deploy STABLE artifact onto Sonatype Nexus
   - provider: script
     skip_cleanup: true
     script: mvn deploy -B -P deploy -s .travis/settings.xml
     on:
       tags: true
-      condition: "$SONAR_VERSION = '5.6'*"
+      condition: "$SONAR_VERSION = '6.7'*"
