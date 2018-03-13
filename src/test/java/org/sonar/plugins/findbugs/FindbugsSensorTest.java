@@ -73,7 +73,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     javaResourceLocator = mockJavaResourceLocator();
 
     DefaultFileSystem dfs = new DefaultFileSystem(new File("."));
-    dfs.setWorkDir(Files.createTempDir());
+    dfs.setWorkDir(Files.createTempDir().toPath());
     fs = spy(dfs);
 
     InputFile dummyFile = mock(InputFile.class);

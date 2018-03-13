@@ -30,7 +30,7 @@ import org.sonar.api.rules.RuleQuery;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.*;
 import org.sonar.plugins.java.Java;
-import org.sonar.test.TestUtils;
+import org.sonar.plugins.findbugs.util.TestUtils;
 import org.xml.sax.SAXException;
 
 import java.io.File;

@@ -7,6 +7,7 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.internal.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -102,7 +103,7 @@ public class ByteCodeResourceLocatorTest {
 
   @Test
   public void findRegularSourceFile() throws Exception {
-    DefaultInputFile givenJavaFile = new DefaultInputFile("TestJavaClass", "app/src/main/java/com/helloworld/TestJavaClass.java");
+    DefaultInputFile givenJavaFile = TestInputFileBuilder.create("TestJavaClass", "app/src/main/java/com/helloworld/TestJavaClass.java").build();
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
@@ -111,7 +112,7 @@ public class ByteCodeResourceLocatorTest {
 
   @Test
   public void findSourceFileFromScalaClassName() throws Exception {
-    DefaultInputFile givenJavaFile = new DefaultInputFile("TestOperationalProfileIccidModel", "src/main/scala/TestOperationalProfileIccidModel.scala");
+    DefaultInputFile givenJavaFile = TestInputFileBuilder.create("TestOperationalProfileIccidModel", "src/main/scala/TestOperationalProfileIccidModel.scala").build();
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
