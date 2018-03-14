@@ -21,7 +21,7 @@ package org.sonar.plugins.findbugs.language;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 
 import java.util.List;
@@ -55,16 +55,16 @@ public class Jsp extends AbstractLanguage {
     public static final String DEFAULT_FILE_SUFFIXES = ".jsp";
 
     /**
-     * Settings of the plugin.
+     * Configuration of the plugin.
      */
-    private final Settings settings;
+    private final Configuration config;
 
     /**
      * Default constructor
      */
-    public Jsp(Settings settings) {
+    public Jsp(Configuration config) {
         super(KEY, NAME);
-        this.settings = settings;
+        this.config = config;
     }
 
     /**
@@ -74,7 +74,7 @@ public class Jsp extends AbstractLanguage {
      */
     @Override
     public String[] getFileSuffixes() {
-        String[] suffixes = filterEmptyStrings(settings.getStringArray(FILE_SUFFIXES_KEY));
+        String[] suffixes = filterEmptyStrings(config.getStringArray(FILE_SUFFIXES_KEY));
         if (suffixes.length == 0) {
             suffixes = StringUtils.split(DEFAULT_FILE_SUFFIXES, ",");
         }

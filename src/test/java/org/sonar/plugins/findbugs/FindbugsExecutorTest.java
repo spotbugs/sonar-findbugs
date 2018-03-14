@@ -25,18 +25,15 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.api.CoreProperties;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.config.Settings;
 import org.sonar.api.config.internal.MapSettings;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -107,7 +104,7 @@ public class FindbugsExecutorTest {
     DefaultFileSystem fs = new DefaultFileSystem(new File("."));
     MapSettings settings = new MapSettings();
     //settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
-    FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings, null, null, null);
+    FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings.asConfig(), null, null, null);
 
     new FindbugsExecutor(conf, fsEmpty).execute();
   }
