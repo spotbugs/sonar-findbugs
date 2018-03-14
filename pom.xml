@@ -55,6 +55,7 @@
     <fbcontrib.version>7.2.1.sb</fbcontrib.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
 
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
   </properties>
 
