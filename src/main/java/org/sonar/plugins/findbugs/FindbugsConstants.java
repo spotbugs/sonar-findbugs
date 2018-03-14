@@ -25,10 +25,16 @@ public final class FindbugsConstants {
 
   public static final String EFFORT_PROPERTY = "sonar.findbugs.effort";
   public static final String EFFORT_DEFAULT_VALUE = "Default";
+
   public static final String CONFIDENCE_LEVEL_PROPERTY = "sonar.findbugs.confidenceLevel";
   public static final String CONFIDENCE_LEVEL_DEFAULT_VALUE = "medium";
+
   public static final String TIMEOUT_PROPERTY = "sonar.findbugs.timeout";
   public static final long TIMEOUT_DEFAULT_VALUE = 600000L;
+
+  public static final String ALLOW_UNCOMPILED_CODE = "sonar.findbugs.allowuncompiledcode";
+  public static final boolean ALLOW_UNCOMPILED_CODE_VALUE = false;
+
 
   public static final String EXCLUDES_FILTERS_PROPERTY = "sonar.findbugs.excludesFilters";
 

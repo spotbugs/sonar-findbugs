@@ -39,8 +39,8 @@ import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.config.Settings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
@@ -50,10 +50,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @BatchSide
 public class FindbugsConfiguration {
@@ -61,15 +58,15 @@ public class FindbugsConfiguration {
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
 
   private final FileSystem fileSystem;
-  private final Settings settings;
+  private final Configuration config;
   private final RulesProfile profile;
   private final FindbugsProfileExporter exporter;
   private final JavaResourceLocator javaResourceLocator;
 
-  public FindbugsConfiguration(FileSystem fileSystem, Settings settings, RulesProfile profile, FindbugsProfileExporter exporter,
-    JavaResourceLocator javaResourceLocator) {
+  public FindbugsConfiguration(FileSystem fileSystem, Configuration config, RulesProfile profile, FindbugsProfileExporter exporter,
+                               JavaResourceLocator javaResourceLocator) {
     this.fileSystem = fileSystem;
-    this.settings = settings;
+    this.config = config;
     this.profile = profile;
     this.exporter = exporter;
     this.javaResourceLocator = javaResourceLocator;
@@ -113,8 +110,8 @@ public class FindbugsConfiguration {
       LOG.warn("Findbugs needs sources to be compiled."
               + " Please build project before executing sonar or check the location of compiled classes to"
               + " make it possible for Findbugs to analyse your (sub)project ({}).", fileSystem.baseDir().getPath());
-
-      if (hasSourceFiles()) { //This excludes test source files
+      
+      if (!isAllowUncompiledCode() && hasSourceFiles()) { //This excludes test source files
         throw new IllegalStateException(format("One (sub)project contains Java source files that are not compiled (%s).",
                 fileSystem.baseDir().getPath()));
       }
@@ -208,7 +205,7 @@ public class FindbugsConfiguration {
   List<File> getExcludesFilters() {
     List<File> result = Lists.newArrayList();
     PathResolver pathResolver = new PathResolver();
-    String[] filters = settings.getStringArray(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY);
+    String[] filters = config.getStringArray(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY);
     for (String excludesFilterPath : filters) {
       excludesFilterPath = StringUtils.trim(excludesFilterPath);
       if (StringUtils.isNotBlank(excludesFilterPath)) {
@@ -219,15 +216,23 @@ public class FindbugsConfiguration {
   }
 
   public String getEffort() {
-    return StringUtils.lowerCase(settings.getString(FindbugsConstants.EFFORT_PROPERTY));
+    return StringUtils.lowerCase(
+            config.get(FindbugsConstants.EFFORT_PROPERTY)
+            .orElse(FindbugsConstants.EFFORT_DEFAULT_VALUE));
   }
 
   public String getConfidenceLevel() {
-    return StringUtils.lowerCase(settings.getString(FindbugsConstants.CONFIDENCE_LEVEL_PROPERTY));
+    return StringUtils.lowerCase(
+            config.get(FindbugsConstants.CONFIDENCE_LEVEL_PROPERTY)
+            .orElse(FindbugsConstants.CONFIDENCE_LEVEL_DEFAULT_VALUE));
   }
 
   public long getTimeout() {
-    return settings.getLong(FindbugsConstants.TIMEOUT_PROPERTY);
+    return config.getLong(FindbugsConstants.TIMEOUT_PROPERTY).orElse(FindbugsConstants.TIMEOUT_DEFAULT_VALUE);
+  }
+
+  public boolean isAllowUncompiledCode() {
+    return config.getBoolean(FindbugsConstants.ALLOW_UNCOMPILED_CODE).orElse(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE);
   }
 
   private File jsr305Lib;
@@ -330,7 +335,17 @@ public class FindbugsConfiguration {
         .subCategory(subCategory)
         .name("Confidence Level")
         .description("Specifies the confidence threshold (previously called \"priority\") for reporting issues. If set to \"low\", confidence is not used to filter bugs. " +
-          "If set to \"medium\" (the default), low confidence issues are supressed. If set to \"high\", only high confidence bugs are reported. ")
+          "If set to \"medium\" (the default), low confidence issues are suppressed. If set to \"high\", only high confidence bugs are reported. ")
+        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .build(),
+      PropertyDefinition.builder(FindbugsConstants.ALLOW_UNCOMPILED_CODE)
+        .defaultValue(Boolean.toString(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE))
+        .type(PropertyType.BOOLEAN)
+        .category(CoreProperties.CATEGORY_JAVA)
+        .subCategory(subCategory)
+        .name("Allow Uncompiled Code")
+        .description("Remove the compiled code requirement for all projects. "+
+          "It can lead to a false sense of security if the build process skips certain projects.")
         .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
         .build()
       );

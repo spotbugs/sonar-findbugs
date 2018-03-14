@@ -27,7 +27,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.config.PropertyDefinitions;
-import org.sonar.api.config.Settings;
 import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.java.api.JavaResourceLocator;
@@ -45,7 +44,7 @@ public class FindbugsConfigurationTest {
   public TemporaryFolder temp = new TemporaryFolder();
 
   private DefaultFileSystem fs;
-  private Settings settings;
+  private MapSettings settings;
   private File baseDir;
   private FindbugsConfiguration conf;
   private JavaResourceLocator javaResourceLocator;
@@ -59,7 +58,7 @@ public class FindbugsConfigurationTest {
 
     settings = new MapSettings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
     javaResourceLocator = mock(JavaResourceLocator.class);
-    conf = new FindbugsConfiguration(fs, settings, RulesProfile.create(), new FindbugsProfileExporter(), javaResourceLocator);
+    conf = new FindbugsConfiguration(fs, settings.asConfig(), RulesProfile.create(), new FindbugsProfileExporter(), javaResourceLocator);
   }
 
   @Test
