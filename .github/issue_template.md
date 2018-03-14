@@ -1,4 +1,3 @@
-<!--  /!\ Incomplete issue will closed -->
 
 ## Issue Description
 
