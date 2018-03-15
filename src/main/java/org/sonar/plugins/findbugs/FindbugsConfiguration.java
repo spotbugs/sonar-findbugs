@@ -21,13 +21,11 @@ package org.sonar.plugins.findbugs;
 
 import static java.lang.String.format;
 
-import org.apache.commons.lang.ArrayUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.Project;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
@@ -347,6 +345,14 @@ public class FindbugsConfiguration {
         .description("Remove the compiled code requirement for all projects. "+
           "It can lead to a false sense of security if the build process skips certain projects.")
         .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .build(),
+      PropertyDefinition.builder(FindbugsConstants.REPORT_PATHS)
+        .category(CoreProperties.CATEGORY_JAVA)
+        .subCategory(subCategory)
+        .name("Report Paths")
+        .description("Relative path to SpotBugs report files intended to be reused. (<code>/target/findbugsXml.xml</code> and <code>/target/spotbugsXml.xml</code> are included by default)")
+        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .multiValues(true)
         .build()
       );
   }
