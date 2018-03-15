@@ -30,10 +30,12 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.config.internal.MapSettings;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -48,6 +50,8 @@ public class FindbugsExecutorTest {
   FileSystem fsEmpty;
   FilePredicates predicatesEmpty;
 
+  Configuration configEmpty;
+
   @Before
   public void setUp() {
     fsEmpty = mock(FileSystem.class);
@@ -55,6 +59,10 @@ public class FindbugsExecutorTest {
     when(fsEmpty.baseDir()).thenReturn(new File("./"));
     when(fsEmpty.predicates()).thenReturn(predicatesEmpty);
     when(fsEmpty.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
+
+    configEmpty = mock(Configuration.class);
+    when(configEmpty.getStringArray(any())).thenReturn(new String[0]);
+    when(configEmpty.get(any())).thenReturn(Optional.of(""));
   }
 
   @Test
@@ -64,7 +72,7 @@ public class FindbugsExecutorTest {
     File reportFile = temporaryFolder.newFile("findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
 
-    new FindbugsExecutor(conf, fsEmpty).execute();
+    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
 
     assertThat(reportFile.exists()).isTrue();
     String report = FileUtils.readFileToString(reportFile);
@@ -81,7 +89,7 @@ public class FindbugsExecutorTest {
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
     when(conf.getConfidenceLevel()).thenReturn("low");
 
-    new FindbugsExecutor(conf, fsEmpty).execute();
+    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
 
     assertThat(reportFile.exists()).isTrue();
     String report = FileUtils.readFileToString(reportFile);
@@ -96,7 +104,7 @@ public class FindbugsExecutorTest {
     FindbugsConfiguration conf = mockConf();
     when(conf.getTimeout()).thenReturn(1L);
 
-    new FindbugsExecutor(conf, fsEmpty).execute();
+    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
   }
 
   @Test(expected = IllegalStateException.class)
@@ -106,7 +114,7 @@ public class FindbugsExecutorTest {
     //settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
     FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings.asConfig(), null, null, null);
 
-    new FindbugsExecutor(conf, fsEmpty).execute();
+    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
   }
 
   private FindbugsConfiguration mockConf() throws Exception {

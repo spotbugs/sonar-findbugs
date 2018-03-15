@@ -35,6 +35,8 @@ public final class FindbugsConstants {
   public static final String ALLOW_UNCOMPILED_CODE = "sonar.findbugs.allowuncompiledcode";
   public static final boolean ALLOW_UNCOMPILED_CODE_VALUE = false;
 
+  public static final String REPORT_PATHS = "sonar.findbugs.reportpaths";
+
 
   public static final String EXCLUDES_FILTERS_PROPERTY = "sonar.findbugs.excludesFilters";
 

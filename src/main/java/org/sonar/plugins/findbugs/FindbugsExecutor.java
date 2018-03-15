@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.BatchSide;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Configuration;
 
 import java.io.File;
 import java.io.FileReader;
@@ -49,13 +50,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -68,9 +63,10 @@ public class FindbugsExecutor {
   private static final String FINDBUGS_CORE_PLUGIN_ID = "edu.umd.cs.findbugs.plugins.core";
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
-  public static final String EXISTING_FINDBUGS_REPORT_PATH = "/target/findbugsXml.xml";
+  public static final List<String> EXISTING_FINDBUGS_REPORT_PATHS = Arrays.asList("/target/findbugsXml.xml","/target/spotbugsXml.xml");
 
   private FileSystem fs;
+  private Configuration config;
 
   /**
    * Map of priority level names to their numeric values.
@@ -88,9 +84,10 @@ public class FindbugsExecutor {
 
   private final FindbugsConfiguration configuration;
 
-  public FindbugsExecutor(FindbugsConfiguration configuration, FileSystem fs) {
+  public FindbugsExecutor(FindbugsConfiguration configuration, FileSystem fs, Configuration config) {
     this.configuration = configuration;
     this.fs = fs;
+    this.config = config;
   }
 
   @VisibleForTesting
@@ -163,13 +160,25 @@ public class FindbugsExecutor {
 
       engine.finishSettings();
 
-      //Avoid rescanning the project if FindBugs was run already
-      File findbugsReport = new File(fs.baseDir(), EXISTING_FINDBUGS_REPORT_PATH);
-      if(findbugsReport.exists() && findbugsReport.length() > 0) {
-        LOG.info("FindBugs report is already generated {}. Reusing the report.",xmlReport.getAbsolutePath());
-        xmlBugReporter.getBugCollection().readXML(new FileReader(findbugsReport));
+      //Load findbugs report location
+      List<String> potentialReportPaths = new ArrayList<>();
+      potentialReportPaths.addAll(EXISTING_FINDBUGS_REPORT_PATHS);
+      String[] paths = config.getStringArray(FindbugsConstants.REPORT_PATHS);
+      if(paths != null) potentialReportPaths.addAll(Arrays.asList(paths));
+      boolean foundExistingReport = false;
+
+      //Look for existing reports relative to subproject directory
+      reportPaths : for(String potentialPath : potentialReportPaths) {
+        File findbugsReport = new File(fs.baseDir(), potentialPath);
+        if(findbugsReport.exists() && findbugsReport.length() > 0) {
+          LOG.info("FindBugs report is already generated {}. Reusing the report.",findbugsReport.getAbsolutePath());
+          xmlBugReporter.getBugCollection().readXML(new FileReader(findbugsReport));
+          foundExistingReport = true;
+          break reportPaths;
+        }
       }
-      else {
+
+      if(!foundExistingReport) { //Avoid rescanning the project if FindBugs was run already
         executorService.submit(new FindbugsTask(engine)).get(configuration.getTimeout(), TimeUnit.MILLISECONDS);
       }
       return toReportedBugs(xmlBugReporter.getBugCollection());
