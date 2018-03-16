@@ -14,7 +14,7 @@ install:
   - if [ -f ".travis/secrets.tar" ]; then tar -xvf .travis/secrets.tar -C .travis; fi
 script:
   - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
-  - if [ $SONAR_VERSION = '6.7'* ]; then mvn sonar:sonar -B -e -V; fi
+  - if [[ $SONAR_VERSION = '6.7'* ]]; then mvn sonar:sonar -B -e -V; fi
 notifications:
   email: false
 addons:
