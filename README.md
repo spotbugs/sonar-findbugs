@@ -10,8 +10,7 @@ This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/P
 
 ## Usage
 
-In the quality profile, activate some rules from the FindBugs, fb-contrib or FindSecBugs rule repositories and run an analysis on your project.
-
+In the quality profile, activate some rules from Spotbugs, fb-contrib or Find Security Bugs rule repositories and run an analysis on your project.
 
 ### Configuration
 This plugin can be configured with sonar web interface (see General/Java section) or with project properties.
