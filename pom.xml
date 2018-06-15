@@ -47,12 +47,12 @@
   </scm>
 
   <properties>
-    <spotbugs.version>3.1.3</spotbugs.version>
+    <spotbugs.version>3.1.5</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
 
     <sonar.version>6.7.1</sonar.version>
     <sonar-java.version>5.1.0.13090</sonar-java.version>
-    <fbcontrib.version>7.2.1.sb</fbcontrib.version>
+    <fbcontrib.version>7.4.2.sb</fbcontrib.version>
     <findsecbugs.version>1.7.1</findsecbugs.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
