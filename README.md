@@ -19,7 +19,7 @@ This plugin can be configured with sonar web interface (see General/Java section
 
 **Effort** (sonar.findbugs.effort): Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases memory consumption.
 
-**Excludes** (sonar.findbugs.excludesFilters): Paths to findbugs filter-files with exclusions. 
+**Excludes** (sonar.findbugs.excludesFilters): Paths to findbugs filter-files with exclusions.
 
 **Timeout** (sonar.findbugs.timeout): Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. The default is 600,000 milliseconds, which is ten minutes.
 
@@ -31,7 +31,7 @@ FindBugs requires the compiled classes to run.
 Make sure that you compile your source code with debug information on (to get the line numbers in the Java bytecode). Debug is usually on by default unless you're compiling with Ant, in which case, you will need to turn it on explicitly. If the debug information is not available, the issues raised by FindBugs will be displayed at the beginning of the file because the correct line numbers were not available.
 
 
-## Compatibility 
+## Compatibility
 
 Since version 3.0, the plugin embed FindBugs 3.0.0 which supports analysis of Java 8 bytecode but requires Java 1.7 to run (see Compatibility section). Please find below the compatibility matrix of the plugin.
 
@@ -45,4 +45,4 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 3.5                    | 3.1.0 RC1 (SpotBugs)             | 1.6.0                      | 7.0.0                     | 1.8|5.6.6|4.0
 3.6                    | 3.1.0 RC4 (SpotBugs)             | 1.6.0                      | 7.0.0                     | 1.8|5.6.7|4.15.0.12310
 3.7                    | 3.1.2 (SpotBugs)                 | 1.7.1                      | 7.2.1sb                   | 1.8|6.7.1|5.1.0.13090
-3.8-SNAPSHOT           | 3.1.5 (SpotBugs)                 | 1.7.1                      | 7.4.2sb                   | 1.8|6.7.1|5.1.0.13090
+3.8-SNAPSHOT           | 3.1.5 (SpotBugs)                 | 1.8.0                      | 7.4.2sb                   | 1.8|6.7.1|5.1.0.13090
