@@ -3,8 +3,23 @@
 When you release fixed version of SonarQube SpotBugs Plugin, please follow these procedures.
 
 * create topic branch from `master` branch
-* change version number in `pom.xml` to stable version (e.g. `1.2.3`), then commit changes
+
+```
+git checkout -b master-release
+```
+
+* change version number in `pom.xml` to stable version (e.g. `1.2.3`), then commit changes 
+
+```
+mvn versions:set -DnewVersion=1.2.3
+```
+
 * change version number in `pom.xml` to next development SNAPSHOT version (e.g. `1.2.4-SNAPSHOT`), then commit changes
+
+```
+mvn versions:set -DnewVersion=1.2.4-SNAPSHOT
+```
+
 * push your topic branch and propose a pull request
 * after merging your pull request, tag the commit which has stable version in `pom.xml`, and push this tag
 
