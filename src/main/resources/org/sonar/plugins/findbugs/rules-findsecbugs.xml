@@ -2200,15 +2200,15 @@ to do this correctly.
     <tag>security</tag>
   </rule>
   <rule key='DES_USAGE' priority='MAJOR'>
-    <name>Security - DES/DESede is insecure</name>
+    <name>Security - DES is insecure</name>
     <configKey>DES_USAGE</configKey>
     <description>&lt;p&gt;
-DES and DESede (3DES) are not considered strong ciphers for modern applications. Currently, NIST recommends the 
-usage of AES block ciphers instead of DES/3DES.
+DES is considered strong ciphers for modern applications. Currently, NIST recommends the
+usage of AES block ciphers instead of DES.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Example weak code:&lt;/b&gt;
-&lt;pre&gt;Cipher c = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+&lt;pre&gt;Cipher c = Cipher.getInstance("DES/ECB/PKCS5Padding");
 c.init(Cipher.ENCRYPT_MODE, k, iv);
 byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;/p&gt;
