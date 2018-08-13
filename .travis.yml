@@ -13,8 +13,13 @@ install:
   - if [ -n "$encrypted_b6710039761a_key" ]; then openssl aes-256-cbc -K $encrypted_b6710039761a_key -iv $encrypted_b6710039761a_iv -in .travis/secrets.tar.enc -out .travis/secrets.tar -d; fi
   - if [ -f ".travis/secrets.tar" ]; then tar -xvf .travis/secrets.tar -C .travis; fi
 script:
-  - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
-  - if [[ $SONAR_VERSION = '6.7'* ]]; then mvn sonar:sonar -B -e -V; fi
+  - mvn verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
+jobs:
+  include:
+    - stage: analysis
+      if: ( type = pull_request and head_repo =~ ^spotbugs/ ) or ( type != pull_request and repo =~ ^spotbugs/ )
+      script:
+        - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
 notifications:
   email: false
 addons:
