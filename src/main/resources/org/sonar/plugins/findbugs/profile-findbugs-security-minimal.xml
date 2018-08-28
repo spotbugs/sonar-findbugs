@@ -39,6 +39,9 @@
     <Bug pattern='XXE_XMLSTREAMREADER' />
   </Match>
   <Match>
+    <Bug pattern='XXE_XPATH' />
+  </Match>
+  <Match>
     <Bug pattern='XXE_SAXPARSER' />
   </Match>
   <Match>
@@ -241,6 +244,12 @@
   </Match>
   <Match>
     <Bug pattern='HTTP_PARAMETER_POLLUTION' />
+  </Match>
+  <Match>
+    <Bug pattern='INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE' />
+  </Match>
+  <Match>
+    <Bug pattern='SMTP_HEADER_INJECTION' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
