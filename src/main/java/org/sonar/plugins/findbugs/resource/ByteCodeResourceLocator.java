@@ -22,7 +22,7 @@ package org.sonar.plugins.findbugs.resource;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.BatchExtension;
+import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.java.api.JavaResourceLocator;
@@ -40,7 +40,8 @@ import java.util.List;
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
  */
-public class ByteCodeResourceLocator implements BatchExtension {
+@ExtensionPoint
+public class ByteCodeResourceLocator {
 
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
