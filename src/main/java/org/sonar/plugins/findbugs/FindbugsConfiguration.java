@@ -33,7 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
-import org.sonar.api.batch.BatchSide;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
@@ -50,7 +50,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.*;
 
-@BatchSide
+@ScannerSide
 public class FindbugsConfiguration {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
