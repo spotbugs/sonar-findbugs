@@ -84,6 +84,9 @@
     <Bug pattern='XXE_XMLSTREAMREADER' />
   </Match>
   <Match>
+    <Bug pattern='XXE_XPATH' />
+  </Match>
+  <Match>
     <Bug pattern='XXE_SAXPARSER' />
   </Match>
   <Match>
@@ -91,6 +94,12 @@
   </Match>
   <Match>
     <Bug pattern='XXE_DOCUMENT' />
+  </Match>
+  <Match>
+    <Bug pattern='XXE_DTD_TRANSFORM_FACTORY' />
+  </Match>
+  <Match>
+    <Bug pattern='XXE_XSLT_TRANSFORM_FACTORY' />
   </Match>
   <Match>
     <Bug pattern='XPATH_INJECTION' />
@@ -180,6 +189,9 @@
     <Bug pattern='DES_USAGE' />
   </Match>
   <Match>
+    <Bug pattern='TDES_USAGE' />
+  </Match>
+  <Match>
     <Bug pattern='RSA_NO_PADDING' />
   </Match>
   <Match>
@@ -187,6 +199,9 @@
   </Match>
   <Match>
     <Bug pattern='HARD_CODE_KEY' />
+  </Match>
+  <Match>
+    <Bug pattern='UNSAFE_HASH_EQUALS' />
   </Match>
   <Match>
     <Bug pattern='STRUTS_FORM_VALIDATION' />
@@ -270,6 +285,9 @@
     <Bug pattern='MALICIOUS_XSLT' />
   </Match>
   <Match>
+    <Bug pattern='URLCONNECTION_SSRF_FD' />
+  </Match>
+  <Match>
     <Bug pattern='TEMPLATE_INJECTION_VELOCITY' />
   </Match>
   <Match>
@@ -306,10 +324,19 @@
     <Bug pattern='SPRING_FILE_DISCLOSURE' />
   </Match>
   <Match>
+    <Bug pattern='REQUESTDISPATCHER_FILE_DISCLOSURE' />
+  </Match>
+  <Match>
     <Bug pattern='FORMAT_STRING_MANIPULATION' />
   </Match>
   <Match>
     <Bug pattern='HTTP_PARAMETER_POLLUTION' />
+  </Match>
+  <Match>
+    <Bug pattern='INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE' />
+  </Match>
+  <Match>
+    <Bug pattern='SMTP_HEADER_INJECTION' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />

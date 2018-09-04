@@ -27,7 +27,7 @@ public final class FindSecurityBugsRulesDefinition implements RulesDefinition {
 
   public static final String REPOSITORY_KEY = "findsecbugs";
   public static final String REPOSITORY_NAME = "Find Security Bugs";
-  public static final int RULE_COUNT = 104;
+  public static final int RULE_COUNT = 113;
 
   @Override
   public void define(Context context) {

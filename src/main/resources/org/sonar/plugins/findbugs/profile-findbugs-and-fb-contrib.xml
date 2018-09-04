@@ -1626,7 +1626,10 @@
     <Bug pattern='SPP_INVALID_CALENDAR_COMPARE' />
   </Match>
   <Match>
-    <Bug pattern='SPP_USE_CONTAINSKEY' />
+    <Bug pattern='SPP_USE_ZERO_WITH_COMPARATOR' />
+  </Match>
+  <Match>
+    <Bug pattern='MUI_USE_CONTAINSKEY' />
   </Match>
   <Match>
     <Bug pattern='SPP_USE_ISEMPTY' />
@@ -1677,13 +1680,10 @@
     <Bug pattern='SPP_STATIC_FORMAT_STRING' />
   </Match>
   <Match>
-    <Bug pattern='SPP_NULL_CHECK_ON_OPTIONAL' />
-  </Match>
-  <Match>
     <Bug pattern='SPP_WRONG_COMMONS_TO_STRING_OBJECT' />
   </Match>
   <Match>
-    <Bug pattern='SPP_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR' />
+    <Bug pattern='MUI_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR' />
   </Match>
   <Match>
     <Bug pattern='BAS_BLOATED_ASSIGNMENT_SCOPE' />
@@ -1837,6 +1837,9 @@
   </Match>
   <Match>
     <Bug pattern='LO_TOSTRING_PARAMETER' />
+  </Match>
+  <Match>
+    <Bug pattern='LO_NON_PRIVATE_STATIC_LOGGER' />
   </Match>
   <Match>
     <Bug pattern='IICU_INCORRECT_INTERNAL_CLASS_USE' />
@@ -2007,6 +2010,9 @@
     <Bug pattern='PSC_PRESIZE_COLLECTIONS' />
   </Match>
   <Match>
+    <Bug pattern='PSC_SUBOPTIMAL_COLLECTION_SIZING' />
+  </Match>
+  <Match>
     <Bug pattern='UMTP_UNBOUND_METHOD_TEMPLATE_PARAMETER' />
   </Match>
   <Match>
@@ -2169,6 +2175,9 @@
     <Bug pattern='WI_DUPLICATE_WIRED_TYPES' />
   </Match>
   <Match>
+    <Bug pattern='WI_MANUALLY_ALLOCATING_AN_AUTOWIRED_BEAN' />
+  </Match>
+  <Match>
     <Bug pattern='CCI_CONCURRENT_COLLECTION_ISSUES_USE_PUT_IS_RACY' />
   </Match>
   <Match>
@@ -2203,5 +2212,53 @@
   </Match>
   <Match>
     <Bug pattern='RFI_SET_ACCESSIBLE' />
+  </Match>
+  <Match>
+    <Bug pattern='AI_ANNOTATION_ISSUES_NEEDS_NULLABLE' />
+  </Match>
+  <Match>
+    <Bug pattern='MUI_CALLING_SIZE_ON_SUBCONTAINER' />
+  </Match>
+  <Match>
+    <Bug pattern='MUI_CONTAINSKEY_BEFORE_GET' />
+  </Match>
+  <Match>
+    <Bug pattern='MUI_GET_BEFORE_REMOVE' />
+  </Match>
+  <Match>
+    <Bug pattern='LUI_USE_SINGLETON_LIST' />
+  </Match>
+  <Match>
+    <Bug pattern='LUI_USE_GET0' />
+  </Match>
+  <Match>
+    <Bug pattern='LUI_USE_COLLECTION_ADD' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_USE_METHOD_REFERENCE' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_USE_ANY_MATCH' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_USE_FIND_FIRST' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_COMBINE_FILTERS' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_USE_FUNCTION_IDENTITY' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_AVOID_SIZE_ON_COLLECTED_STREAM' />
+  </Match>
+  <Match>
+    <Bug pattern='SUI_CONTAINS_BEFORE_ADD' />
+  </Match>
+  <Match>
+    <Bug pattern='SUI_CONTAINS_BEFORE_REMOVE' />
   </Match>
 </FindBugsFilter>

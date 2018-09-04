@@ -44,6 +44,7 @@ class FsbClassifier {
                             "ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE",
                             "FORMAT_STRING_MANIPULATION",
                             "DESERIALIZATION_GADGET", //Prone to false positive.. therefore only in audit profile
+                            "INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE",
   ]
 
   //All the cryptography related bugs. Usually with issues related to confidentiality or integrity of data in transit.
@@ -68,7 +69,9 @@ class FsbClassifier {
           "SSL_CONTEXT",
           "UNENCRYPTED_SERVER_SOCKET",
           "DEFAULT_HTTP_CLIENT", //TLS 1.2 vs SSL
-          "INSECURE_SMTP_SSL"
+          "INSECURE_SMTP_SSL",
+          "UNSAFE_HASH_EQUALS",
+          "TDES_USAGE",
   ]
 
   static majorBugsAuditOnly = [ //Mostly due to their high false-positive rate
@@ -103,6 +106,9 @@ class FsbClassifier {
           "STRUTS_FILE_DISCLOSURE",
           "SPRING_FILE_DISCLOSURE",
           "HTTP_PARAMETER_POLLUTION",
+          "SMTP_HEADER_INJECTION",
+          "REQUESTDISPATCHER_FILE_DISCLOSURE",
+          "URLCONNECTION_SSRF_FD",
   ]
 
   static criticalBugs = [ //RCE or powerful function
@@ -111,6 +117,9 @@ class FsbClassifier {
           "XXE_XMLREADER",
           "XXE_DOCUMENT",
           "XXE_XMLSTREAMREADER",
+          "XXE_XPATH",
+          "XXE_XSLT_TRANSFORM_FACTORY",
+          "XXE_DTD_TRANSFORM_FACTORY",
           "SQL_INJECTION_HIBERNATE",
           "SQL_INJECTION_JDO",
           "SQL_INJECTION_JPA",
