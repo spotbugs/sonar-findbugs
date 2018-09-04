@@ -948,6 +948,100 @@ The following snippets show two available solutions. You can set one property or
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='XXE_XPATH' priority='CRITICAL'>
+    <name>Security - XML parsing vulnerable to XXE (XPathExpression)</name>
+    <configKey>XXE_XPATH</configKey>
+    <description>&lt;!--XXE_GENERIC_START--&gt;
+&lt;h3&gt;Attack&lt;/h3&gt;
+&lt;p&gt;XML External Entity (XXE) attacks can occur when an XML parser supports XML entities while processing XML received
+from an untrusted source.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Risk 1: Expose local file content (XXE: &lt;u&gt;X&lt;/u&gt;ML e&lt;u&gt;X&lt;/u&gt;ternal &lt;u&gt;E&lt;/u&gt;ntity)&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;ISO-8859-1&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE foo [
+   &amp;lt;!ENTITY xxe SYSTEM &amp;quot;file:///etc/passwd&amp;quot; &amp;gt; ]&amp;gt;
+&amp;lt;foo&amp;gt;&amp;amp;xxe;&amp;lt;/foo&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;b&gt;Risk 2: Denial of service (XEE: &lt;u&gt;X&lt;/u&gt;ml &lt;u&gt;E&lt;/u&gt;ntity &lt;u&gt;E&lt;/u&gt;xpansion)&lt;/b&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE lolz [
+ &amp;lt;!ENTITY lol &amp;quot;lol&amp;quot;&amp;gt;
+ &amp;lt;!ELEMENT lolz (#PCDATA)&amp;gt;
+ &amp;lt;!ENTITY lol1 &amp;quot;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol2 &amp;quot;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol3 &amp;quot;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;quot;&amp;gt;
+[...]
+ &amp;lt;!ENTITY lol9 &amp;quot;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;quot;&amp;gt;
+]&amp;gt;
+&amp;lt;lolz&amp;gt;&amp;amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;h3&gt;Solution&lt;/h3&gt;
+&lt;p&gt;
+In order to avoid exposing dangerous feature of the XML parser, you can do the following change to the code.
+&lt;/p&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;DocumentBuilder builder = df.newDocumentBuilder();
+
+XPathFactory xPathFactory = XPathFactory.newInstance();
+XPath xpath = xPathFactory.newXPath();
+XPathExpression xPathExpr = xpath.compile("/somepath/text()");
+
+xPathExpr.evaluate(new InputSource(inputStream));&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one feature or both.
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+This setting will protect you against Denial of Service attack and remote file access.
+&lt;pre&gt;
+DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+df.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+DocumentBuilder builder = df.newDocumentBuilder();
+
+[...]
+
+xPathExpr.evaluate( builder.parse(inputStream) );&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+By disabling DTD, almost all XXE attacks will be prevented.
+&lt;pre&gt;
+DocumentBuilderFactory df = DocumentBuilderFactory.newInstance();
+spf.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+DocumentBuilder builder = df.newDocumentBuilder();
+
+[...]
+
+xPathExpr.evaluate( builder.parse(inputStream) );&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_START--&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/611.html"&gt;CWE-611: Improper Restriction of XML External Entity Reference ('XXE')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=61702260"&gt;CERT: IDS10-J. Prevent XML external entity attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing"&gt;OWASP.org: XML External Entity (XXE) Processing&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+&lt;a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet#XPathExpression"&gt;XML External Entity (XXE) Prevention Cheat Sheet&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='XXE_SAXPARSER' priority='CRITICAL'>
     <name>Security - XML parsing vulnerable to XXE (SAXParser)</name>
     <configKey>XXE_SAXPARSER</configKey>
@@ -1205,6 +1299,171 @@ Document doc = db.parse(input);&lt;/pre&gt;
 &lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
 &lt;!--XXE_GENERIC_END--&gt;
 &lt;a href="http://xerces.apache.org/xerces2-j/features.html"&gt;Xerces2 complete features list&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='XXE_DTD_TRANSFORM_FACTORY' priority='CRITICAL'>
+    <name>Security - XML parsing vulnerable to XXE (TransformerFactory)</name>
+    <configKey>XXE_DTD_TRANSFORM_FACTORY</configKey>
+    <description>&lt;!--XXE_GENERIC_START--&gt;
+&lt;h3&gt;Attack&lt;/h3&gt;
+&lt;p&gt;XML External Entity (XXE) attacks can occur when an XML parser supports XML entities while processing XML received
+from an untrusted source.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Risk 1: Expose local file content (XXE: &lt;u&gt;X&lt;/u&gt;ML e&lt;u&gt;X&lt;/u&gt;ternal &lt;u&gt;E&lt;/u&gt;ntity)&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;ISO-8859-1&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE foo [
+   &amp;lt;!ENTITY xxe SYSTEM &amp;quot;file:///etc/passwd&amp;quot; &amp;gt; ]&amp;gt;
+&amp;lt;foo&amp;gt;&amp;amp;xxe;&amp;lt;/foo&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+&lt;b&gt;Risk 2: Denial of service (XEE: &lt;u&gt;X&lt;/u&gt;ml &lt;u&gt;E&lt;/u&gt;ntity &lt;u&gt;E&lt;/u&gt;xpansion)&lt;/b&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE lolz [
+ &amp;lt;!ENTITY lol &amp;quot;lol&amp;quot;&amp;gt;
+ &amp;lt;!ELEMENT lolz (#PCDATA)&amp;gt;
+ &amp;lt;!ENTITY lol1 &amp;quot;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;amp;lol;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol2 &amp;quot;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;amp;lol1;&amp;quot;&amp;gt;
+ &amp;lt;!ENTITY lol3 &amp;quot;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;amp;lol2;&amp;quot;&amp;gt;
+[...]
+ &amp;lt;!ENTITY lol9 &amp;quot;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;amp;lol8;&amp;quot;&amp;gt;
+]&amp;gt;
+&amp;lt;lolz&amp;gt;&amp;amp;lol9;&amp;lt;/lolz&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;h3&gt;Solution&lt;/h3&gt;
+&lt;p&gt;
+In order to avoid exposing dangerous feature of the XML parser, you can do the following change to the code.
+&lt;/p&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+Transformer transformer = TransformerFactory.newInstance().newTransformer();
+transformer.transform(input, result);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one feature or both.
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+This setting will protect you against remote file access but not denial of service.
+&lt;pre&gt;
+TransformerFactory factory = TransformerFactory.newInstance();
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "all");
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "all");
+
+Transformer transformer = factory.newTransformer();
+transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+transformer.transform(input, result);&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+This setting will protect you against remote file access but not denial of service.
+&lt;pre&gt;
+TransformerFactory factory = TransformerFactory.newInstance();
+factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+Transformer transformer = factory.newTransformer();
+transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+transformer.transform(input, result);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_START--&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/611.html"&gt;CWE-611: Improper Restriction of XML External Entity Reference ('XXE')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=61702260"&gt;CERT: IDS10-J. Prevent XML external entity attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing"&gt;OWASP.org: XML External Entity (XXE) Processing&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='XXE_XSLT_TRANSFORM_FACTORY' priority='CRITICAL'>
+    <name>Security - XSLT parsing vulnerable to XXE (TransformerFactory)</name>
+    <configKey>XXE_XSLT_TRANSFORM_FACTORY</configKey>
+    <description>&lt;!--XXE_GENERIC_START--&gt;
+&lt;h3&gt;Attack&lt;/h3&gt;
+&lt;p&gt;XSLT External Entity (XXE) attacks can occur when an XSLT parser supports external entities while processing XSLT received
+from an untrusted source.&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Risk: Expose local file content (XXE: &lt;u&gt;X&lt;/u&gt;ML e&lt;u&gt;X&lt;/u&gt;ternal &lt;u&gt;E&lt;/u&gt;ntity)&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+&amp;lt;xsl:stylesheet version=&amp;quot;1.0&amp;quot; xmlns:xsl=&amp;quot;http://www.w3.org/1999/XSL/Transform&amp;quot;&amp;gt;
+   &amp;lt;xsl:template match=&amp;quot;/&amp;quot;&amp;gt;
+       &amp;lt;xsl:value-of select=&amp;quot;document(&amp;apos;/etc/passwd&amp;apos;)&amp;quot;&amp;gt;
+   &amp;lt;/xsl:value-of&amp;gt;&amp;lt;/xsl:template&amp;gt;
+&amp;lt;/xsl:stylesheet&amp;gt;&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;h3&gt;Solution&lt;/h3&gt;
+&lt;p&gt;
+In order to avoid exposing dangerous feature of the XML parser, you can do the following change to the code.
+&lt;/p&gt;
+&lt;!--XXE_GENERIC_END--&gt;
+
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+Transformer transformer = TransformerFactory.newInstance().newTransformer();
+transformer.transform(input, result);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+The following snippets show two available solutions. You can set one feature or both.
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+This setting will protect you against remote file access but not denial of service.
+&lt;pre&gt;
+TransformerFactory factory = TransformerFactory.newInstance();
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "all");
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "all");
+
+Transformer transformer = factory.newTransformer();
+transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+transformer.transform(input, result);&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+This setting will protect you against remote file access but not denial of service.
+&lt;pre&gt;
+TransformerFactory factory = TransformerFactory.newInstance();
+factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+Transformer transformer = factory.newTransformer();
+transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+
+transformer.transform(input, result);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_START--&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/611.html"&gt;CWE-611: Improper Restriction of XML External Entity Reference ('XXE')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=61702260"&gt;CERT: IDS10-J. Prevent XML external entity attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing"&gt;OWASP.org: XML External Entity (XXE) Processing&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying Xml eXternal Entity vulnerability (XXE)&lt;/a&gt;&lt;br/&gt;
+&lt;!--XXE_GENERIC_END--&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
@@ -2237,6 +2496,36 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='TDES_USAGE' priority='MAJOR'>
+    <name>Security - DESede is insecure</name>
+    <configKey>TDES_USAGE</configKey>
+    <description>&lt;p&gt;
+Triple DES (also known as 3DES or DESede) is considered strong ciphers for modern applications. Currently, NIST recommends the
+usage of AES block ciphers instead of 3DES.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Example weak code:&lt;/b&gt;
+&lt;pre&gt;Cipher c = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+c.init(Cipher.ENCRYPT_MODE, k, iv);
+byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Example solution:&lt;/b&gt;
+    &lt;pre&gt;Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+c.init(Cipher.ENCRYPT_MODE, k, iv);
+byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://www.nist.gov/itl/fips/060205_des.cfm"&gt;NIST Withdraws Outdated Data Encryption Standard&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='RSA_NO_PADDING' priority='MAJOR'>
     <name>Security - RSA with no padding is insecure</name>
     <configKey>RSA_NO_PADDING</configKey>
@@ -2311,6 +2600,43 @@ return aesCipher.doFinal(secretData);&lt;/pre&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/321.html"&gt;CWE-321: Use of Hard-coded Cryptographic Key&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='UNSAFE_HASH_EQUALS' priority='MAJOR'>
+    <name>Security - Unsafe hash equals</name>
+    <configKey>UNSAFE_HASH_EQUALS</configKey>
+    <description>&lt;p&gt;
+An attacker might be able to detect the value of the secret hash due to the exposure of comparison timing. When the
+functions &lt;code&gt;Arrays.equals()&lt;/code&gt; or &lt;code&gt;String.equals()&lt;/code&gt; are called, they will exited earlier if less
+bytes are matched.
+&lt;/p&gt;
+&lt;p&gt;
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+
+&lt;pre&gt;
+String actualHash = ...
+
+if(userInput.equals(actualHash)) {
+    ...
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+
+&lt;pre&gt;
+String actualHash = ...
+
+if(MessageDigest.isEqual(userInput.getBytes(),actualHash.getBytes())) {
+    ...
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/203.html"&gt;CWE-203: Information Exposure Through DiscrepancyKey&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a6</tag>
+    <tag>cryptography</tag>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -3518,6 +3844,44 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
     <tag>wasc</tag>
     <tag>security</tag>
   </rule>
+  <rule key='URLCONNECTION_SSRF_FD' priority='MAJOR'>
+    <name>Security - URLConnection Server-Side Request Forgery (SSRF) and File Disclosure</name>
+    <configKey>URLCONNECTION_SSRF_FD</configKey>
+    <description>&lt;p&gt;
+    Server-Side Request Forgery occur when a web server executes a request to a user supplied destination
+    parameter that is not validated. Such vulnerabilities could allow an attacker to access internal services
+    or to launch attacks from your web server.
+&lt;/p&gt;
+&lt;p&gt;
+    URLConnection can be used with file:// protocol or other protocols to access local filesystem and potentially other services.
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;
+new URL(String url).openConnection()
+new URL(String url).openStream()
+new URL(String url).getContent()
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br/&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Don't accept URL destinations from users&lt;/li&gt;
+        &lt;li&gt;Accept a destination key, and use it to look up the target (legal) destination&lt;/li&gt;
+        &lt;li&gt;White list URLs (if possible)&lt;/li&gt;
+        &lt;li&gt;Validate that the beginning of the URL is part of a white list&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/918.html"&gt;CWE-918: Server-Side Request Forgery (SSRF)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.bishopfox.com/blog/2015/04/vulnerable-by-design-understanding-server-side-request-forgery/"&gt;Understanding Server-Side Request Forgery&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/73.html"&gt;CWE-73: External Control of File Name or Path&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.pwntester.com/blog/2013/11/28/abusing-jar-downloads/"&gt;Abusing jar:// downloads&lt;/a&gt;&lt;br /&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='TEMPLATE_INJECTION_VELOCITY' priority='CRITICAL'>
     <name>Security - Potential template injection with Velocity</name>
     <configKey>TEMPLATE_INJECTION_VELOCITY</configKey>
@@ -3891,6 +4255,32 @@ Avoid constructing server-side redirects using user controlled input.
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='REQUESTDISPATCHER_FILE_DISCLOSURE' priority='MAJOR'>
+    <name>Security - RequestDispatcher File Disclosure</name>
+    <configKey>REQUESTDISPATCHER_FILE_DISCLOSURE</configKey>
+    <description>&lt;p&gt;
+Constructing a server-side redirect path with user input could allow an attacker to download application binaries (including application classes or jar files) or view arbitrary files within protected directories.&lt;br/&gt;
+An attacker may be able to forge a request parameter to match sensitive file locations. For example, requesting "http://example.com/?jspFile=../applicationContext.xml%3F" would display the application's applicationContext.xml file. The attacker would be able to locate and download the applicationContext.xml referenced in the other configuration files, and even class files or jar files, obtaining sensitive information and launching other types of attacks.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;...
+String jspFile = request.getParameter("jspFile");
+request.getRequestDispatcher("/WEB-INF/jsps/" + jspFile + ".jsp").include(request, response);
+...&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+Avoid constructing server-side redirects using user controlled input.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/552.html"&gt;CWE-552: Files or Directories Accessible to External Parties&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='FORMAT_STRING_MANIPULATION' priority='INFO'>
     <name>Security - Format String Manipulation</name>
     <configKey>FORMAT_STRING_MANIPULATION</configKey>
@@ -3939,6 +4329,68 @@ Sanitize user input before using it in HTTP parameters.
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://capec.mitre.org/data/definitions/460.html"&gt;CAPEC-460: HTTP Parameter Pollution (HPP)&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE' priority='INFO'>
+    <name>Security - Information Exposure Through An Error Message</name>
+    <configKey>INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE</configKey>
+    <description>&lt;p&gt;
+The sensitive information may be valuable information on its own (such as a password), or it may be useful for launching other, more deadly attacks. If an attack fails, an attacker may use error information provided by the server to launch another more focused attack. For example, an attempt to exploit a path traversal weakness (CWE-22) might yield the full pathname of the installed application. In turn, this could be used to select the proper number of ".." sequences to navigate to the targeted file. An attack using SQL injection (CWE-89) might not initially succeed, but an error message could reveal the malformed query, which would expose query logic and possibly even passwords or other sensitive information used within the query.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;try {
+  out = httpResponse.getOutputStream()
+} catch (Exception e) {
+  e.printStackTrace(out);
+}&lt;/pre&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/209.html"&gt;CWE-209: Information Exposure Through an Error Message&lt;/a&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SMTP_HEADER_INJECTION' priority='MAJOR'>
+    <name>Security - SMTP Header Injection</name>
+    <configKey>SMTP_HEADER_INJECTION</configKey>
+    <description>&lt;p&gt;
+Simple Mail Transfer Protocol (SMTP) is a the text based protocol used for email delivery.
+Like with HTTP, headers are separate by new line separator.
+If user input is place in a header line, the application should remove
+or replace new line characters (CR / LF).
+You should use a safe wrapper such as &lt;a href="https://commons.apache.org/proper/commons-email/userguide.html"&gt;Apache Common Email&lt;/a&gt;
+and &lt;a href="http://www.simplejavamail.org"&gt;Simple Java Mail&lt;/a&gt; which filter special characters that can lead to header injection.
+
+&lt;/p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;
+&lt;pre&gt;
+Message message = new MimeMessage(session);
+message.setFrom(new InternetAddress("noreply@your-organisation.com"));
+message.setRecipients(Message.RecipientType.TO, new InternetAddress[] {new InternetAddress("target@gmail.com")});
+message.setSubject(usernameDisplay + " has sent you notification"); //Injectable API
+message.setText("Visit your ACME Corp profile for more info.");
+Transport.send(message);
+&lt;/pre&gt;
+&lt;/p&gt;
+    &lt;b&gt;Solution&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;Use &lt;a href="https://commons.apache.org/proper/commons-email/userguide.html"&gt;Apache Common Email&lt;/a&gt; or &lt;a href="http://www.simplejavamail.org"&gt;Simple Java Mail&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Testing_for_IMAP/SMTP_Injection_(OTG-INPVAL-011)"&gt;OWASP SMTP Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/93.html"&gt;CWE-93: Improper Neutralization of CRLF Sequences ('CRLF Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://commons.apache.org/proper/commons-email/userguide.html"&gt;Commons Email: User Guide&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://www.simplejavamail.org"&gt;Simple Java Mail Website&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://security.stackexchange.com/a/54100/24973"&gt;StackExchange InfoSec: What threats come from CRLF in email generation?&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
 </rules>

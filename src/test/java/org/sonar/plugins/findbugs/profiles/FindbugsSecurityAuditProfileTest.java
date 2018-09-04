@@ -43,6 +43,6 @@ public class FindbugsSecurityAuditProfileTest {
     assertThat(validation.getErrors()).isEmpty();
     assertThat(validation.getWarnings()).isEmpty();
     assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(8);
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(104);
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(FindSecurityBugsRulesDefinition.RULE_COUNT);
   }
 }
