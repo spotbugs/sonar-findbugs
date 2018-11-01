@@ -57,10 +57,10 @@ public class FindbugsPlugin implements Plugin {
             JspSyntaxSensor.class,
 
             FindbugsSensor.class,
-            FindbugsConfiguration.class,
-            FindbugsExecutor.class,
             FindbugsProfileExporter.class,
             FindbugsProfileImporter.class,
+            FindbugsConfiguration.class,
+            FindbugsExecutor.class,
 
             FindbugsProfile.class,
             FindbugsContribProfile.class,
