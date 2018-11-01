@@ -17,12 +17,12 @@
  */
 package org.sonar.plugins.findbugs.language.lex;
 
-import org.sonar.channel.Channel;
-import org.sonar.channel.ChannelDispatcher;
-import org.sonar.channel.CodeReader;
 import org.sonar.plugins.findbugs.language.node.Node;
 import org.sonar.plugins.findbugs.language.node.NodeType;
 import org.sonar.plugins.findbugs.language.node.TagNode;
+import org.sonar.sslr.channel.Channel;
+import org.sonar.sslr.channel.ChannelDispatcher;
+import org.sonar.sslr.channel.CodeReader;
 
 import java.io.Reader;
 import java.util.ArrayList;
@@ -87,7 +87,8 @@ public final class PageLexer {
     List<Node> nodeList = new ArrayList<>();
 
     // ChannelDispatcher manages the tokenizers
-    ChannelDispatcher<List<Node>> channelDispatcher = ChannelDispatcher.builder().addChannels((Channel[]) tokenizers.toArray(new Channel[tokenizers.size()])).build();
+    ChannelDispatcher<List<Node>> channelDispatcher = ChannelDispatcher.builder()
+        .addChannels((Channel[]) tokenizers.toArray(new Channel[tokenizers.size()])).build();
     channelDispatcher.consume(codeReader, nodeList);
 
     createNodeHierarchy(nodeList);

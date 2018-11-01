@@ -50,8 +50,8 @@
     <spotbugs.version>3.1.8</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
 
-    <sonar.version>6.7.1</sonar.version>
-    <sonar-java.version>5.1.0.13090</sonar-java.version>
+    <sonar.version>7.4</sonar.version>
+    <sonar-java.version>5.8.0.15699</sonar-java.version>
     <fbcontrib.version>7.4.3.sb</fbcontrib.version>
     <findsecbugs.version>1.8.0</findsecbugs.version>
 
@@ -86,7 +86,7 @@
     <dependency>
       <groupId>org.sonarsource.sslr-squid-bridge</groupId>
       <artifactId>sslr-squid-bridge</artifactId>
-      <version>2.6.1</version>
+      <version>2.7.0.377</version>
       <exclusions>
         <exclusion>
           <groupId>org.codehaus.sonar</groupId>
@@ -105,7 +105,7 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>10.0.1</version>
+      <version>26.0-jre</version>
     </dependency>
 
     <dependency>
@@ -211,7 +211,7 @@
     <dependency>
       <groupId>org.sonarsource.sslr</groupId>
       <artifactId>sslr-core</artifactId>
-      <version>1.22</version>
+      <version>1.23</version>
     </dependency>
 
   </dependencies>

@@ -17,12 +17,12 @@
  */
 package org.sonar.plugins.findbugs.language.lex;
 
-import org.sonar.channel.CodeReader;
-import org.sonar.channel.EndMatcher;
 import org.sonar.plugins.findbugs.language.node.Node;
 import org.sonar.plugins.findbugs.language.node.NodeType;
 import org.sonar.plugins.findbugs.language.node.TagNode;
 import org.sonar.plugins.findbugs.language.node.TextNode;
+import org.sonar.sslr.channel.CodeReader;
+import org.sonar.sslr.channel.EndMatcher;
 
 import java.util.List;
 
@@ -83,9 +83,9 @@ class TextTokenizer extends AbstractTokenizer<List<Node>> {
 
     StringBuilder stringBuilder = new StringBuilder();
     if (inScript(nodeList)) {
-      codeReader.popTo(new EndScriptMatcher(codeReader), stringBuilder);
+      codeReader.peekTo(new EndScriptMatcher(codeReader), stringBuilder);
     } else {
-      codeReader.popTo(endTokenMatcher, stringBuilder);
+      codeReader.peekTo(endTokenMatcher, stringBuilder);
     }
     node.setCode(stringBuilder.toString());
     setEndPosition(codeReader, node);

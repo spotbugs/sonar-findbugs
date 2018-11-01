@@ -18,10 +18,10 @@
 package org.sonar.plugins.findbugs.language.lex;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.sonar.channel.CodeReader;
-import org.sonar.channel.EndMatcher;
 import org.sonar.plugins.findbugs.language.node.CommentNode;
 import org.sonar.plugins.findbugs.language.node.Node;
+import org.sonar.sslr.channel.CodeReader;
+import org.sonar.sslr.channel.EndMatcher;
 
 import java.util.List;
 

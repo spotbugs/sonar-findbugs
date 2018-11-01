@@ -18,10 +18,10 @@
 package org.sonar.plugins.findbugs.language.lex;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.sonar.channel.Channel;
-import org.sonar.channel.CodeReader;
-import org.sonar.channel.EndMatcher;
 import org.sonar.plugins.findbugs.language.node.Node;
+import org.sonar.sslr.channel.Channel;
+import org.sonar.sslr.channel.CodeReader;
+import org.sonar.sslr.channel.EndMatcher;
 
 import java.util.List;
 
@@ -79,24 +79,28 @@ abstract class AbstractTokenizer<T extends List<Node>> extends Channel<T> {
 
   @Override
   public boolean consume(CodeReader codeReader, T nodeList) {
-    if (equalsIgnoreCase(codeReader.peek(startChars.length), startChars)) {
-      Node node = createNode();
-      setStartPosition(codeReader, node);
-
-      StringBuilder stringBuilder = new StringBuilder();
-      codeReader.popTo(getEndMatcher(codeReader), stringBuilder);
-      for (int i = 0; i < endChars.length; i++) {
-        codeReader.pop(stringBuilder);
-      }
-      node.setCode(stringBuilder.toString());
-      setEndPosition(codeReader, node);
-
-      addNode(nodeList, node);
-
-      return true;
-    } else {
+    if (!equalsIgnoreCase(codeReader.peek(startChars.length), startChars)) {
       return false;
     }
+    Node node = createNode();
+    setStartPosition(codeReader, node);
+
+    StringBuilder stringBuilder = new StringBuilder();
+    EndMatcher endMatcher = getEndMatcher(codeReader);
+    codeReader.peekTo(endMatcher, stringBuilder);
+
+    for (int i = 0; i < stringBuilder.length(); i++) {
+      codeReader.pop();
+    }
+    for (int i = 0; i < endChars.length; i++) {
+      codeReader.pop(stringBuilder);
+    }
+    node.setCode(stringBuilder.toString());
+    setEndPosition(codeReader, node);
+
+    addNode(nodeList, node);
+
+    return true;
   }
 
   abstract Node createNode();
