@@ -20,6 +20,8 @@
 package org.sonar.plugins.findbugs;
 
 import com.thoughtworks.xstream.XStream;
+
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
@@ -33,6 +35,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.stream.Collectors;
 
+@ScannerSide
 public class FindbugsProfileExporter extends ProfileExporter {
 
   public FindbugsProfileExporter() {

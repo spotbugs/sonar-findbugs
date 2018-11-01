@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.XStream;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.profiles.ProfileImporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rule.Severity;
@@ -43,6 +44,7 @@ import org.sonar.plugins.java.Java;
 import java.io.Reader;
 import java.util.Map;
 
+@ScannerSide
 public class FindbugsProfileImporter extends ProfileImporter {
 
   private final RuleFinder ruleFinder;
