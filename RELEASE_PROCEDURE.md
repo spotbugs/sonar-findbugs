@@ -8,7 +8,9 @@ When you release fixed version of SonarQube SpotBugs Plugin, please follow these
 git checkout -b master-release
 ```
 
-* change version number in `pom.xml` to stable version (e.g. `1.2.3`), then commit changes 
+* Make sure profile XMLs are updated. See [`generate_progiles/README.md`](generate_progiles/README.md) for detail.
+
+* change version number in `pom.xml` to stable version (e.g. `1.2.3`), then commit changes
 
 ```
 mvn versions:set -DnewVersion=1.2.3
