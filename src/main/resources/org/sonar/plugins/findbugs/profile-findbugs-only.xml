@@ -1113,37 +1113,7 @@
     <Bug pattern='DMI_NONSERIALIZABLE_OBJECT_WRITTEN' />
   </Match>
   <Match>
-    <Bug pattern='VA_FORMAT_STRING_NO_PREVIOUS_ARGUMENT' />
-  </Match>
-  <Match>
     <Bug pattern='VA_FORMAT_STRING_USES_NEWLINE' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_BAD_CONVERSION' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_BAD_CONVERSION_TO_BOOLEAN' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_BAD_CONVERSION_FROM_ARRAY' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_ARG_MISMATCH' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_EXPECTED_MESSAGE_FORMAT_SUPPLIED' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_EXTRA_ARGUMENTS_PASSED' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_ILLEGAL' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_MISSING_ARGUMENT' />
-  </Match>
-  <Match>
-    <Bug pattern='VA_FORMAT_STRING_BAD_ARGUMENT' />
   </Match>
   <Match>
     <Bug pattern='VA_PRIMITIVE_ARRAY_PASSED_TO_OBJECT_VARARG' />

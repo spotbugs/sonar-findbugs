@@ -3416,7 +3416,7 @@ use &lt;code&gt;0xff &amp;amp; b&lt;/code&gt;.
     <configKey>INT_BAD_COMPARISON_WITH_INT_VALUE</configKey>
     <description>&lt;p&gt; This code compares an int value with a long constant that is outside
 the range of values that can be represented as an int value.
-This comparison is vacuous and possibly to be incorrect.
+This comparison is vacuous and possibly incorrect.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -4405,21 +4405,6 @@ If the object is, indeed, non-serializable, an error will result.
 &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
-  <rule key='VA_FORMAT_STRING_NO_PREVIOUS_ARGUMENT' priority='MAJOR'>
-    <name>Correctness - No previous argument for format string</name>
-    <configKey>VA_FORMAT_STRING_NO_PREVIOUS_ARGUMENT</configKey>
-    <description>&lt;p&gt;
-The format string specifies a relative index to request that the argument for the previous format specifier
-be reused. However, there is no previous argument.
-For example,
-&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;formatter.format("%&amp;lt;s %s", "a", "b")&lt;/code&gt;
-&lt;/p&gt;
-&lt;p&gt;would throw a MissingFormatArgumentException when executed.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
   <rule key='VA_FORMAT_STRING_USES_NEWLINE' priority='MAJOR'>
     <name>Bad practice - Format string should use %n rather than \n</name>
     <configKey>VA_FORMAT_STRING_USES_NEWLINE</configKey>
@@ -4428,117 +4413,6 @@ This format string includes a newline character (\n). In format strings, it is g
  preferable to use %n, which will produce the platform-specific line separator.
 &lt;/p&gt;</description>
     <tag>bad-practice</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_BAD_CONVERSION' priority='MAJOR'>
-    <name>Correctness - The type of a supplied argument doesn't match format specifier</name>
-    <configKey>VA_FORMAT_STRING_BAD_CONVERSION</configKey>
-    <description>&lt;p&gt;
-One of the arguments is incompatible with the corresponding format string specifier.
-As a result, this will generate a runtime exception when executed.
-For example, &lt;code&gt;String.format("%d", "1")&lt;/code&gt; will generate an exception, since
-the String "1" is incompatible with the format specifier %d.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_BAD_CONVERSION_TO_BOOLEAN' priority='INFO'>
-    <name>Style - Non-Boolean argument formatted using %b format specifier</name>
-    <configKey>VA_FORMAT_STRING_BAD_CONVERSION_TO_BOOLEAN</configKey>
-    <description>&lt;p&gt;
-An argument not of type Boolean is being formatted with a %b format specifier. This won't throw an
-exception; instead, it will print true for any non-null value, and false for null.
-This feature of format strings is strange, and may not be what you intended.
-&lt;/p&gt;</description>
-    <tag>style</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_BAD_CONVERSION_FROM_ARRAY' priority='MAJOR'>
-    <name>Correctness - Array formatted in useless way using format string</name>
-    <configKey>VA_FORMAT_STRING_BAD_CONVERSION_FROM_ARRAY</configKey>
-    <description>&lt;p&gt;
-One of the arguments being formatted with a format string is an array. This will be formatted
-using a fairly useless format, such as [I@304282, which doesn't actually show the contents
-of the array.
-Consider wrapping the array using &lt;code&gt;Arrays.asList(...)&lt;/code&gt; before handling it off to a formatted.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_ARG_MISMATCH' priority='MAJOR'>
-    <name>Correctness - Number of format-string arguments does not correspond to number of placeholders</name>
-    <configKey>VA_FORMAT_STRING_ARG_MISMATCH</configKey>
-    <description>&lt;p&gt;
-A format-string method with a variable number of arguments is called,
-but the number of arguments passed does not match with the number of
-% placeholders in the format string.  This is probably not what the
-author intended.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_EXPECTED_MESSAGE_FORMAT_SUPPLIED' priority='MAJOR'>
-    <name>Correctness - MessageFormat supplied where printf style format expected</name>
-    <configKey>VA_FORMAT_STRING_EXPECTED_MESSAGE_FORMAT_SUPPLIED</configKey>
-    <description>&lt;p&gt;
-A method is called that expects a Java printf format string and a list of arguments.
-However, the format string doesn't contain any format specifiers (e.g., %s) but
-does contain message format elements (e.g., {0}).  It is likely
-that the code is supplying a MessageFormat string when a printf-style format string
-is required. At runtime, all of the arguments will be ignored
-and the format string will be returned exactly as provided without any formatting.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_EXTRA_ARGUMENTS_PASSED' priority='MAJOR'>
-    <name>Correctness - More arguments are passed than are actually used in the format string</name>
-    <configKey>VA_FORMAT_STRING_EXTRA_ARGUMENTS_PASSED</configKey>
-    <description>&lt;p&gt;
-A format-string method with a variable number of arguments is called,
-but more arguments are passed than are actually used by the format string.
-This won't cause a runtime exception, but the code may be silently omitting
-information that was intended to be included in the formatted string.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_ILLEGAL' priority='MAJOR'>
-    <name>Correctness - Illegal format string</name>
-    <configKey>VA_FORMAT_STRING_ILLEGAL</configKey>
-    <description>&lt;p&gt;
-The format string is syntactically invalid,
-and a runtime exception will occur when
-this statement is executed.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_MISSING_ARGUMENT' priority='MAJOR'>
-    <name>Correctness - Format string references missing argument</name>
-    <configKey>VA_FORMAT_STRING_MISSING_ARGUMENT</configKey>
-    <description>&lt;p&gt;
-Not enough arguments are passed to satisfy a placeholder in the format string.
-A runtime exception will occur when
-this statement is executed.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
-  <rule key='VA_FORMAT_STRING_BAD_ARGUMENT' priority='MAJOR'>
-    <name>Correctness - Format string placeholder incompatible with passed argument</name>
-    <configKey>VA_FORMAT_STRING_BAD_ARGUMENT</configKey>
-    <description>&lt;p&gt;
-The format string placeholder is incompatible with the corresponding
-argument. For example,
-&lt;code&gt;
-  System.out.println("%d\n", "hello");
-&lt;/code&gt;
-&lt;p&gt;The %d placeholder requires a numeric argument, but a string value is
-passed instead.
-A runtime exception will occur when
-this statement is executed.
-&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
   </rule>
   <rule key='VA_PRIMITIVE_ARRAY_PASSED_TO_OBJECT_VARARG' priority='MAJOR'>
     <name>Correctness - Primitive array passed to function expecting a variable number of object arguments</name>
