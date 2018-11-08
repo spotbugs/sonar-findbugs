@@ -246,9 +246,6 @@
     <Bug pattern='HTTP_PARAMETER_POLLUTION' />
   </Match>
   <Match>
-    <Bug pattern='INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE' />
-  </Match>
-  <Match>
     <Bug pattern='SMTP_HEADER_INJECTION' />
   </Match>
   <Match>
