@@ -1,0 +1,10 @@
+FROM maven:3.6.0-jdk-8
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  bash \
+  git \
+  nodejs \
+  && rm -rf /var/lib/apt/lists/*
+
+COPY src/smoke-test/smoke-test.sh /tmp/smoke-test.sh
+ENTRYPOINT /tmp/smoke-test.sh

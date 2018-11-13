@@ -1,8 +1,10 @@
 language: java
-sudo: false
+sudo: required
 dist: trusty
 jdk:
   - oraclejdk8
+services:
+  - docker
 env:
   # latest LTS
   - SONAR_VERSION=6.7.5 SONAR_JAVA_VERSION=5.2.0.13398
@@ -21,6 +23,11 @@ script:
   - mvn verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
 jobs:
   include:
+    - stage: smoke-test
+      script:
+        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-lts'
+    - script:
+        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest'
     - stage: analysis
       if: ( type = pull_request and head_repo =~ ^spotbugs/ ) or ( type != pull_request and repo =~ ^spotbugs/ )
       script:
