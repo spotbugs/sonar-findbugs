@@ -213,7 +213,11 @@
       <artifactId>sslr-core</artifactId>
       <version>1.22</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-channel</artifactId>
+      <version>4.2</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -303,6 +307,38 @@
                   </files>
                 </requireFilesSize>
               </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>commons-io:commons-io</include>
+                  <include>org.codehaus.sonar:sonar-channel</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.apache.commons.io</pattern>
+                  <shadedPattern>shaded.io</shadedPattern>
+                </relocation>
+                  <relocation>
+                    <pattern>org.sonar.channel</pattern>
+                    <shadedPattern>shaded.channel</shadedPattern>
+                  </relocation>
+              </relocations>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
         </executions>
