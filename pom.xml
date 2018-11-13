@@ -213,7 +213,11 @@
       <artifactId>sslr-core</artifactId>
       <version>1.22</version>
     </dependency>
-
+    <dependency>
+      <groupId>org.codehaus.sonar</groupId>
+      <artifactId>sonar-channel</artifactId>
+      <version>4.2</version>
+    </dependency>
   </dependencies>
 
   <build>
