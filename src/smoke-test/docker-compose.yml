@@ -21,21 +21,21 @@ services:
         aliases:
           - sonarqube
   test-lts:
-    image: 'maven:3.6.0-jdk-8-alpine'
+    build:
+      context: .
+      dockerfile: src/smoke-test/sonarqube-client
     volumes:
-      - './src/smoke-test/smoke-test.sh:/tmp/smoke-test.sh:ro'
       - '~/.m2:/root/.m2'
-    entrypoint: /tmp/smoke-test.sh
     depends_on:
       - sonarqube-lts
     networks:
       lts:
   test-latest:
-    image: 'maven:3.6.0-jdk-8-alpine'
+    build:
+      context: .
+      dockerfile: src/smoke-test/sonarqube-client
     volumes:
-      - './src/smoke-test/smoke-test.sh:/tmp/smoke-test.sh:ro'
       - '~/.m2:/root/.m2'
-    entrypoint: /tmp/smoke-test.sh
     depends_on:
       - sonarqube-latest
     networks:

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copied from https://github.com/SonarSource/docker-sonarqube/tree/master/7.1-alpine under LGPL
+# Copied from https://github.com/SonarSource/docker-sonarqube/tree/master/7.1 under LGPL
 
 set -e
 

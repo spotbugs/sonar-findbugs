@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -eu
-apk add --no-cache bash git
 
 # 1st param... The git URL to clone
 # 2nd param... The tag name to check out
