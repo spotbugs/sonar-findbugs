@@ -1,0 +1,46 @@
+version: '3'
+services:
+  sonarqube-lts:
+    build:
+      context: .
+      dockerfile: src/smoke-test/sonarqube-lts
+    expose:
+      - 9000
+    networks:
+      lts:
+        aliases:
+          - sonarqube
+  sonarqube-latest:
+    build:
+      context: .
+      dockerfile: src/smoke-test/sonarqube-latest
+    expose:
+      - 9000
+    networks:
+      latest:
+        aliases:
+          - sonarqube
+  test-lts:
+    build:
+      context: .
+      dockerfile: src/smoke-test/sonarqube-client
+    volumes:
+      - '~/.m2:/root/.m2'
+    depends_on:
+      - sonarqube-lts
+    networks:
+      lts:
+  test-latest:
+    build:
+      context: .
+      dockerfile: src/smoke-test/sonarqube-client
+    volumes:
+      - '~/.m2:/root/.m2'
+    depends_on:
+      - sonarqube-latest
+    networks:
+      latest:
+
+networks:
+  lts:
+  latest:
