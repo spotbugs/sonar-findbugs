@@ -24,8 +24,6 @@ services:
     build:
       context: .
       dockerfile: src/smoke-test/sonarqube-client
-    volumes:
-      - '~/.m2:/root/.m2'
     depends_on:
       - sonarqube-lts
     networks:
@@ -34,8 +32,6 @@ services:
     build:
       context: .
       dockerfile: src/smoke-test/sonarqube-client
-    volumes:
-      - '~/.m2:/root/.m2'
     depends_on:
       - sonarqube-latest
     networks:
