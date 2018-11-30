@@ -7,7 +7,7 @@ services:
   - docker
 env:
   # latest LTS
-  - SONAR_VERSION=6.7.5 SONAR_JAVA_VERSION=5.2.0.13398
+  - SONAR_VERSION=6.7.6 SONAR_JAVA_VERSION=5.2.0.13398
   # latest releases
   - SONAR_VERSION=7.4 SONAR_JAVA_VERSION=5.8.0.15699
 install:
