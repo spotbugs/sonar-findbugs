@@ -1,0 +1,350 @@
+<rules><!-- This file is auto-generated. -->
+    <rule key='SCALA_PATH_TRAVERSAL_IN' priority='CRITICAL'>
+        <name>Potential Path Traversal (file read)</name>
+        <configKey>SCALA_PATH_TRAVERSAL_IN</configKey>
+        <description>
+            &lt;p&gt;A file is opened to read its content. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter.
+                    If an unfiltered parameter is passed to this file API, files from an arbitrary filesystem location could be read.&lt;/p&gt;
+                &lt;p&gt;This rule identifies &lt;b&gt;potential&lt;/b&gt; path traversal vulnerabilities. In many cases, the constructed file path cannot be controlled
+                    by the user. If that is the case, the reported instance is a false positive.&lt;/p&gt;
+                &lt;br&gt;
+
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;def getWordList(value:String) = Action {
+                if (!Files.exists(Paths.get("public/lists/" + value))) {
+                NotFound("File not found")
+                } else {
+                val result = Source.fromFile("public/lists/" + value).getLines().mkString // Weak point
+                Ok(result)
+                }
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;br&gt;
+
+                &lt;p&gt;
+                    &lt;b&gt;Solution:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;import org.apache.commons.io.FilenameUtils;
+
+                def getWordList(value:String) = Action {
+                val filename = "public/lists/" + FilenameUtils.getName(value)
+
+                if (!Files.exists(Paths.get(filename))) {
+                NotFound("File not found")
+                } else {
+                val result = Source.fromFile(filename).getLines().mkString // Fix
+                Ok(result)
+                }
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;br&gt;
+                &lt;p&gt;
+                    &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                    &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="http://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="http://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
+                &lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_COMMAND_INJECTION' priority='CRITICAL'>
+        <name>Potential Command Injection (Scala)</name>
+        <configKey>SCALA_COMMAND_INJECTION</configKey>
+        <description>
+            &lt;p&gt;The highlighted API is used to execute a system command. If unfiltered input is passed to this API, it can lead to arbitrary command execution.&lt;/p&gt;
+            &lt;br&gt;
+            &lt;p&gt;
+                &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br&gt;
+            &lt;/p&gt;&lt;pre&gt;def executeCommand(value:String) = Action {
+            val result = value.!
+            Ok("Result:\n"+result)
+            }&lt;/pre&gt;
+            &lt;p&gt;&lt;/p&gt;
+            &lt;p&gt;
+                &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Command_Injection"&gt;OWASP: Command Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="http://cwe.mitre.org/data/definitions/78.html"&gt;CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')&lt;/a&gt;
+            &lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_SQL_INJECTION_SLICK' priority='CRITICAL'>
+        <name>Potential Scala Slick Injection</name>
+        <configKey>SCALA_SQL_INJECTION_SLICK</configKey>
+        <description>
+                &lt;p&gt;
+                    The input values included in SQL queries need to be passed in safely.
+                    Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+                &lt;/p&gt;
+
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;db.run {
+                sql"select * from people where name = '#$value'".as[Person]
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Solution:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;db.run {
+                sql"select * from people where name = $value".as[Person]
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;br&gt;
+
+                &lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br&gt;
+                &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br&gt;
+                &lt;p&gt;&lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_SQL_INJECTION_ANORM' priority='CRITICAL'>
+        <name>Potential Scala Anorm Injection</name>
+        <configKey>SCALA_SQL_INJECTION_ANORM</configKey>
+        <description>
+                &lt;p&gt;
+                    The input values included in SQL queries need to be passed in safely.
+                    Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+                &lt;/p&gt;
+
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;val peopleParser = Macro.parser[Person]("id", "name", "age")
+
+                DB.withConnection { implicit c =&gt;
+                val people: List[Person] = SQL("select * from people where name = '" + value + "'").as(peopleParser.*)
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Solution:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;val peopleParser = Macro.parser[Person]("id", "name", "age")
+
+                DB.withConnection { implicit c =&gt;
+                val people: List[Person] = SQL"select * from people where name = $value".as(peopleParser.*)
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;br&gt;
+
+                &lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br&gt;
+                &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br&gt;
+                &lt;p&gt;&lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_SENSITIVE_DATA_EXPOSURE' priority='CRITICAL'>
+        <name>Potential information leakage in Scala Play</name>
+        <configKey>SCALA_SENSITIVE_DATA_EXPOSURE</configKey>
+        <description>
+                &lt;p&gt;
+                    Applications can unintentionally leak information about their configuration, internal workings, or violate privacy through a
+                    variety of application problems. &lt;sup&gt;[1]&lt;/sup&gt; Pages that provide different responses based on the validity of the data can
+                    lead to Information Leakage; specifically when data deemed confidential is being revealed as a result of the web application's
+                    design. &lt;sup&gt;[2]&lt;/sup&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    Examples of sensitive data includes (but is not limited to): API keys, passwords, product versions or environment configurations.
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;def doGet(value:String) = Action {
+                val configElement = configuration.underlying.getString(value)
+
+                Ok("Hello "+ configElement +" !")
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    Application configuration elements should not be sent in the response content and users should not be allowed to control which
+                    configuration elements will be used by the code.
+                &lt;/p&gt;
+                &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure"&gt;OWASP: Top 10 2013-A6-Sensitive Data Exposure&lt;/a&gt;&lt;br&gt;
+                [1] &lt;a href="https://www.owasp.org/index.php/Top_10_2007-Information_Leakage_and_Improper_Error_Handling"&gt;OWASP: Top 10 2007-Information Leakage and Improper Error Handling&lt;/a&gt;&lt;br&gt;
+                [2] &lt;a href="http://projects.webappsec.org/w/page/13246936/Information%20Leakage"&gt;WASC-13: Information Leakage&lt;/a&gt;&lt;br&gt;
+                &lt;a href="https://cwe.mitre.org/data/definitions/200.html"&gt;CWE-200: Information Exposure&lt;/a&gt;&lt;br&gt;
+                &lt;p&gt;&lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_PLAY_SSRF' priority='CRITICAL'>
+        <name>Scala Play Server-Side Request Forgery (SSRF)</name>
+        <configKey>SCALA_PLAY_SSRF</configKey>
+        <description>
+                &lt;p&gt;
+                    Server-Side Request Forgery occur when a web server executes a request to a user supplied destination
+                    parameter that is not validated. Such vulnerabilities could allow an attacker to access internal services
+                    or to launch attacks from your web server.
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+                &lt;/p&gt;&lt;pre&gt;def doGet(value:String) = Action {
+                WS.url(value).get().map { response =&gt;
+                Ok(response.body)
+                }
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;ul&gt;
+                &lt;li&gt;Don't accept request destinations from users&lt;/li&gt;
+                &lt;li&gt;Accept a destination key, and use it to look up the target (legal) destination&lt;/li&gt;
+                &lt;li&gt;White list URLs (if possible)&lt;/li&gt;
+                &lt;li&gt;Validate that the beginning of the URL is part of a white list&lt;/li&gt;
+            &lt;/ul&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;br&gt;
+                &lt;p&gt;
+                    &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                    &lt;a href="https://cwe.mitre.org/data/definitions/918.html"&gt;CWE-918: Server-Side Request Forgery (SSRF)&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.bishopfox.com/blog/2015/04/vulnerable-by-design-understanding-server-side-request-forgery/"&gt;Understanding Server-Side Request Forgery&lt;/a&gt;&lt;br&gt;
+                &lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_XSS_TWIRL' priority='CRITICAL'>
+        <name>Potential XSS in Scala Twirl template engine</name>
+        <configKey>SCALA_XSS_TWIRL</configKey>
+        <description>
+                &lt;p&gt;
+                    A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+                &lt;/p&gt;&lt;pre&gt;@(value: Html)
+
+                @value&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Solution:&lt;/b&gt;
+                &lt;/p&gt;&lt;pre&gt;@(value: String)
+
+                @value&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
+                    HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
+                    which explains these defenses in significant detail.
+                &lt;/p&gt;
+                &lt;br&gt;
+                &lt;p&gt;
+                    &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                    &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br&gt;
+                &lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='SCALA_XSS_MVC_API' priority='CRITICAL'>
+        <name>Potential XSS in Scala MVC API engine</name>
+        <configKey>SCALA_XSS_MVC_API</configKey>
+        <description>
+                &lt;p&gt;
+                    A potential XSS was found. It could be used to execute unwanted JavaScript in a client's browser. (See references)
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+                &lt;/p&gt;&lt;pre&gt;def doGet(value:String) = Action {
+                Ok("Hello " + value + " !").as("text/html")
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Solution:&lt;/b&gt;
+                &lt;/p&gt;&lt;pre&gt;def doGet(value:String) = Action {
+                Ok("Hello " + Encode.forHtml(value) + " !")
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
+                    HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
+                    which explains these defenses in significant detail.
+                &lt;/p&gt;
+                &lt;br&gt;
+                &lt;p&gt;
+                    &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                    &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br&gt;
+                &lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+    <rule key='PREDICTABLE_RANDOM_SCALA' priority='CRITICAL'>
+        <name>Predictable pseudorandom number generator (Scala)</name>
+        <configKey>PREDICTABLE_RANDOM_SCALA</configKey>
+        <description>
+                &lt;p&gt;The use of a predictable random value can lead to vulnerabilities when used in certain security critical contexts. For example, when the value is used as:&lt;/p&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;a CSRF token: a predictable token can lead to a CSRF attack as an attacker will know the value of the token&lt;/li&gt;
+                    &lt;li&gt;a password reset token (sent by email): a predictable password token can lead to an account takeover, since an attacker will guess the URL of the change password form&lt;/li&gt;
+                    &lt;li&gt;any other secret value&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;p&gt;
+                    A quick fix could be to replace the use of &lt;b&gt;java.util.Random&lt;/b&gt; with something stronger, such as &lt;b&gt;java.security.SecureRandom&lt;/b&gt;.
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br&gt;
+                &lt;/p&gt;&lt;pre&gt;import scala.util.Random
+
+                def generateSecretToken() {
+                val result = Seq.fill(16)(Random.nextInt)
+                return result.map("%02x" format _).mkString
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;p&gt;
+                    &lt;b&gt;Solution:&lt;/b&gt;
+                &lt;/p&gt;&lt;pre&gt;import java.security.SecureRandom
+
+                def generateSecretToken() {
+                val rand = new SecureRandom()
+                val value = Array.ofDim[Byte](16)
+                rand.nextBytes(value)
+                return value.map("%02x" format _).mkString
+                }&lt;/pre&gt;
+                &lt;p&gt;&lt;/p&gt;
+                &lt;!--&lt;p&gt;
+                &lt;b&gt;Solution:&lt;/b&gt;
+                &lt;pre&gt;import java.security.SecureRandom
+                import scala.util.Random._
+                
+                def generateSecretToken() {
+                    val secRandom = javaRandomToRandom(new SecureRandom())
+                    val result = Seq.fill(16)(secRandom.nextInt)
+                    return result.map("%02x" format _).mkString
+                }&lt;/pre&gt;
+                &lt;/p&gt;--&gt;
+                &lt;br&gt;
+                &lt;p&gt;
+                    &lt;b&gt;References&lt;/b&gt;&lt;br&gt;
+                    &lt;a href="http://jazzy.id.au/default/2010/09/20/cracking_random_number_generators_part_1.html"&gt;Cracking Random Number Generators - Part 1 (http://jazzy.id.au)&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="https://www.securecoding.cert.org/confluence/display/java/MSC02-J.+Generate+strong+random+numbers"&gt;CERT: MSC02-J. Generate strong random numbers&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="http://cwe.mitre.org/data/definitions/330.html"&gt;CWE-330: Use of Insufficiently Random Values&lt;/a&gt;&lt;br&gt;
+                    &lt;a href="http://blog.h3xstream.com/2014/12/predicting-struts-csrf-token-cve-2014.html"&gt;Predicting Struts CSRF Token (Example of real-life vulnerability and exploitation)&lt;/a&gt;
+                &lt;/p&gt;
+        </description>
+        <tag>scala</tag>
+        <tag>security</tag>
+    </rule>
+</rules>

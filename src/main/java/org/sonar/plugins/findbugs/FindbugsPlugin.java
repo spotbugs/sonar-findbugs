@@ -72,6 +72,7 @@ public class FindbugsPlugin implements Plugin {
             FbContribRulesDefinition.class,
             FindSecurityBugsRulesDefinition.class,
             FindSecurityBugsJspRulesDefinition.class,
+            FindSecurityBugsScalaRulesDefinition.class,
             ByteCodeResourceLocator.class));
   }
 }

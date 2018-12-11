@@ -28,10 +28,7 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Context;
-import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.*;
 
 import java.util.List;
 
@@ -49,7 +46,7 @@ public class FakeRuleFinder {
   private FakeRuleFinder() {
   }
 
-  private static RuleFinder create(boolean findbugs, boolean fbContrib, boolean findSecBug, boolean findSecBugJsp) {
+  private static RuleFinder create(boolean findbugs, boolean fbContrib, boolean findSecBug, boolean findSecBugJsp, boolean findSecBugScala) {
     RuleFinder ruleFinder = mock(RuleFinder.class);
     RulesDefinition.Context context = new RulesDefinition.Context();
 
@@ -77,23 +74,29 @@ public class FakeRuleFinder {
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
     }
 
+    if (findSecBugScala) {
+      RulesDefinition rulesDefinition = new FindSecurityBugsScalaRulesDefinition();
+      rulesDefinition.define(context);
+      configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY);
+    }
+
     return ruleFinder;
   }
 
   public static RuleFinder createWithAllRules() {
-    return create(true, true, true, true);
+    return create(true, true, true, true, true);
   }
 
   public static RuleFinder createWithOnlyFindbugsRules() {
-    return create(true, false, false,false);
+    return create(true, false, false,false, true);
   }
 
   public static RuleFinder createWithOnlyFbContribRules() {
-    return create(false, true, false,false);
+    return create(false, true, false,false,false);
   }
 
   public static RuleFinder createWithOnlyFindSecBugsRules() {
-    return create(false, false, true,false);
+    return create(false, false, true,false, true);
   }
 
   private static void configRuleFinderForRepo(RuleFinder ruleFinder, final Context context, final String repositoryKey) {

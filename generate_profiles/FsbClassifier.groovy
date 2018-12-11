@@ -130,6 +130,15 @@ class FsbClassifier {
           "LDAP_INJECTION",
           "XPATH_INJECTION",
           "XML_DECODER",
+          "SCALA_SENSITIVE_DATA_EXPOSURE",
+          "SCALA_PLAY_SSRF",
+          "SCALA_XSS_TWIRL",
+          "SCALA_XSS_MVC_API",
+          "SCALA_PATH_TRAVERSAL_IN",
+          "SCALA_COMMAND_INJECTION",
+          "SCALA_SQL_INJECTION_SLICK",
+          "SCALA_SQL_INJECTION_ANORM",
+          "PREDICTABLE_RANDOM_SCALA",
           "SCRIPT_ENGINE_INJECTION",
           "SPEL_INJECTION",
           "SQL_INJECTION_SPRING_JDBC",
@@ -152,22 +161,33 @@ class FsbClassifier {
   static //RCE from JSP specific functions (taglibs)
   criticalJspBugs = ["JSP_INCLUDE","JSP_SPRING_EVAL","JSP_XSLT"]
 
-  static exclusions = ['CUSTOM_INJECTION',
-                       'SCALA_SENSITIVE_DATA_EXPOSURE',
-                       'SCALA_PLAY_SSRF',
-                       'SCALA_XSS_TWIRL',
-                       'SCALA_XSS_MVC_API',
-                       'SCALA_PATH_TRAVERSAL_IN',
-                       'SCALA_COMMAND_INJECTION',
+  static
+  criticalScalaBugs = ["SCALA_SENSITIVE_DATA_EXPOSURE",
+                       "SCALA_PLAY_SSRF",
+                       "SCALA_XSS_TWIRL",
+                       "SCALA_XSS_MVC_API",
+                       "SCALA_PATH_TRAVERSAL_IN",
+                       "SCALA_COMMAND_INJECTION",
                        "SCALA_SQL_INJECTION_SLICK",
                        "SCALA_SQL_INJECTION_ANORM",
                        "PREDICTABLE_RANDOM_SCALA"]
+
+  static exclusions = ['CUSTOM_INJECTION']
+//                       'SCALA_SENSITIVE_DATA_EXPOSURE',
+//                       'SCALA_PLAY_SSRF',
+//                       'SCALA_XSS_TWIRL',
+//                       'SCALA_XSS_MVC_API',
+////                       'SCALA_PATH_TRAVERSAL_IN',
+//                       'SCALA_COMMAND_INJECTION',
+//                       "SCALA_SQL_INJECTION_SLICK",
+//                       "SCALA_SQL_INJECTION_ANORM",
+//                       "PREDICTABLE_RANDOM_SCALA"]
 
   static deprecatedRules = []
 
   static String getPriorityFromType(String type,String category) {
     //FSB Specific
-    if (type in criticalBugs || type in criticalJspBugs) return "CRITICAL";
+    if (type in criticalBugs || type in criticalJspBugs || type in criticalScalaBugs) return "CRITICAL";
     if (type in majorBugs || type in cryptoBugs || type in majorJspBugs) return "MAJOR";
     if (type in informationnalPatterns) return "INFO"
 

@@ -34,10 +34,7 @@ import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.findbugs.language.Jsp;
-import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
-import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.*;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.java.Java;
 
@@ -85,6 +82,9 @@ public class FindbugsProfileImporter extends ProfileImporter {
           rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
           if (rule == null) {
             rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
+          }
+          if (rule == null) {
+            rule = ruleFinder.findByKey(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
           }
         }
       }
@@ -143,7 +143,8 @@ public class FindbugsProfileImporter extends ProfileImporter {
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY)),
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FbContribRulesDefinition.REPOSITORY_KEY)),
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)),
-      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)));
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)),
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY)));
   }
 
 }

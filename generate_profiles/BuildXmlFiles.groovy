@@ -195,12 +195,14 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 }
 
 def securityJspRules = majorJspBugs + criticalJspBugs
+def securityScalaRules = criticalScalaBugs
 
 //FindBugs
-writeRules("findbugs", [FB], [], securityJspRules)
+writeRules("findbugs", [FB], [], [securityJspRules, securityScalaRules])
 //Find Security Bugs
-writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, securityJspRules)
+writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, [securityJspRules, securityScalaRules])
 writeRules("jsp", [FSB,FB], securityJspRules)
+writeRules("scala", [FSB,FB], securityScalaRules)
 //FB-contrib
 writeRules("fbcontrib", [CONTRIB], [])
 
@@ -258,6 +260,7 @@ totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(F
 totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns, securityJspRules)
 writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions + findBugsPatterns, securityJspRules)
 totalCount += writeProfile("findbugs-security-jsp", securityJspRules)
+totalCount += writeProfile("findbugs-security-scala", securityScalaRules)
 
 
 //unclassifiedBugs = getAllPatternsFromPlugin(FSB) - (informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns + exclusions + criticalJspBugs + majorJspBugs)
