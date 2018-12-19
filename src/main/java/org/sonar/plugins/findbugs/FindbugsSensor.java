@@ -110,10 +110,12 @@ public class FindbugsSensor implements Sensor {
     return hasActiveRules("findsecbugs");
   }
 
+  private boolean hasActiveFindSecScalaBugsRules() { return hasActiveRules("findsecbugs-scala"); }
+
   @Override
   public void execute(SensorContext context) {
 
-    if (!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules()) {
+    if (!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules() && !hasActiveFindSecScalaBugsRules()) {
       return;
     }
 

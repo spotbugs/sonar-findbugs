@@ -24,6 +24,8 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.JspSyntaxSensor;
+import org.sonar.plugins.findbugs.language.scala.Scala;
+import org.sonar.plugins.findbugs.language.scala.ScalaSensor;
 import org.sonar.plugins.findbugs.profiles.*;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rules.*;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 public class FindbugsPlugin implements Plugin {
 
     public static final String SUPPORTED_JVM_LANGUAGES[] = {
-            Java.KEY, Jsp.KEY, "scala", "clojure"
+            Java.KEY, Jsp.KEY, Scala.KEY, "clojure"
     };
 
     public static final String SUPPORTED_JVM_LANGUAGES_EXTENSIONS[] = {
@@ -56,6 +58,9 @@ public class FindbugsPlugin implements Plugin {
             Jsp.class,
             JspSyntaxSensor.class,
 
+            Scala.class,
+            ScalaSensor.class,
+
             FindbugsSensor.class,
             FindbugsProfileExporter.class,
             FindbugsProfileImporter.class,
@@ -67,6 +72,7 @@ public class FindbugsPlugin implements Plugin {
             FindbugsSecurityAuditProfile.class,
             FindbugsSecurityMinimalProfile.class,
             FindbugsSecurityJspProfile.class,
+            FindbugsSecurityScalaProfile.class,
 
             FindbugsRulesDefinition.class,
             FbContribRulesDefinition.class,

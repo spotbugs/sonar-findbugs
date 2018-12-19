@@ -34,6 +34,7 @@ import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.rules.*;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.java.Java;
@@ -49,7 +50,7 @@ public class FindbugsProfileImporter extends ProfileImporter {
 
   public FindbugsProfileImporter(RuleFinder ruleFinder) {
     super(FindbugsRulesDefinition.REPOSITORY_KEY, FindbugsConstants.PLUGIN_NAME);
-    setSupportedLanguages(Java.KEY, Jsp.KEY);
+    setSupportedLanguages(Java.KEY, Jsp.KEY, Scala.KEY);
     this.ruleFinder = ruleFinder;
   }
 

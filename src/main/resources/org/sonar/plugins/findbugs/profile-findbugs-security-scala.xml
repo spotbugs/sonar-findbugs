@@ -1,0 +1,29 @@
+<FindBugsFilter><!-- This file is auto-generated. -->
+  <Match>
+    <Bug pattern='SCALA_PATH_TRAVERSAL_IN' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_COMMAND_INJECTION' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_SQL_INJECTION_SLICK' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_SQL_INJECTION_ANORM' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_SENSITIVE_DATA_EXPOSURE' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_PLAY_SSRF' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_XSS_TWIRL' />
+  </Match>
+  <Match>
+    <Bug pattern='SCALA_XSS_MVC_API' />
+  </Match>
+  <Match>
+    <Bug pattern='PREDICTABLE_RANDOM_SCALA' />
+  </Match>
+</FindBugsFilter>
