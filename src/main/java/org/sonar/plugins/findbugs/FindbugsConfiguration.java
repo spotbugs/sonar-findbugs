@@ -121,25 +121,12 @@ public class FindbugsConfiguration {
               fileSystem.baseDir().getPath());
     }
 
-
-    boolean hasScalaFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("scala"));
-    boolean hasPrecompiledScala = false;
     for (File classToAnalyze : classFilesToAnalyze) {
       String absolutePath = classToAnalyze.getCanonicalPath();
-      if(hasScalaFiles && !hasPrecompiledScala
-              && (absolutePath.endsWith("_jsp.class") || //Jasper
-              absolutePath.contains("/jsp_servlet/")) //WebLogic
-      ) {
-        hasPrecompiledScala = true;
-      }
+
       if(!"module-info.class".equals(classToAnalyze.getName())) {
         findbugsProject.addFile(absolutePath);
       }
-    }
-
-    if (hasScalaFiles && !hasPrecompiledScala) {
-      LOG.warn("Scala files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. ",
-              fileSystem.baseDir().getPath());
     }
 
     copyLibs();
