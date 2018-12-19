@@ -47,7 +47,7 @@
   </scm>
 
   <properties>
-    <spotbugs.version>3.1.9</spotbugs.version>
+    <spotbugs.version>3.1.10</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
 
     <sonar.version>6.7.1</sonar.version>

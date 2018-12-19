@@ -1,6 +1,6 @@
 # SonarQube Spotbugs Plugin
 [![Build Status](https://travis-ci.org/spotbugs/sonar-findbugs.svg?branch=master)](https://travis-ci.org/spotbugs/sonar-findbugs)
-![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-871-brightgreen.svg?maxAge=2592000)
+![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-872-brightgreen.svg?maxAge=2592000)
 [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs%3Asonar-findbugs-plugin&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)
 
 ## Description / Features
@@ -47,4 +47,4 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 3.7                    | 3.1.2 (SpotBugs)                 | 1.7.1                      | 7.2.1sb                   | 1.8|6.7.1|5.1.0.13090
 3.8                    | 3.1.6 (SpotBugs)                 | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1|5.1.0.13090
 3.9                    | 3.1.8 (SpotBugs)                 | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1|5.2.0.13398
-3.10-SNAPSHOT          | 3.1.9 (SpotBugs)                 | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1|5.2.0.13398
+3.10-SNAPSHOT          | 3.1.10 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1|5.2.0.13398
