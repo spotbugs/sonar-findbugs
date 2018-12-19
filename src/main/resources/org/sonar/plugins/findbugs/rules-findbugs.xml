@@ -3795,6 +3795,16 @@ directly. This avoids the need to create a second array
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='IRA_INEFFICIENT_REPLACEALL' priority='MAJOR'>
+    <name>Performance - Method uses replaceAll(String regex, String replacement) without any special regex characters</name>
+    <configKey>IRA_INEFFICIENT_REPLACEALL</configKey>
+    <description>&lt;p&gt; This method uses replaceAll(String regex, String replacement) without any special regex characters. 
+It is more efficient to use
+&lt;code&gt;myString.replace(CharSequence target, CharSequence replacement)&lt;/code&gt;
+if there is no need to use regular expressions.&lt;/p&gt;</description>
+    <tag>performance</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD' priority='MAJOR'>
     <name>Correctness - JUnit assertion in run method will not be noticed by JUnit</name>
     <configKey>IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD</configKey>
