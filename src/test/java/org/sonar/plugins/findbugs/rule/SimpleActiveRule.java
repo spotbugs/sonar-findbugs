@@ -69,4 +69,11 @@ public class SimpleActiveRule implements ActiveRule {
   public String templateRuleKey() {
     return templateRuleKey;
   }
+
+  /**
+   * Key of the quality profile the rule belongs to. To compile with SonarQube 7.4 and older, we do not annotate this method with {@code @Override} for now.
+   */
+  public String qpKey() {
+    return "quality-profile-key";
+  }
 }
