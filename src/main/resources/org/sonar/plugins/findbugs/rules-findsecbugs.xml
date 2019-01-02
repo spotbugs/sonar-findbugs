@@ -81,8 +81,8 @@ The HTTP header Content-Type can be controlled by the client. As such, its value
   <rule key='SERVLET_SERVER_NAME' priority='INFO'>
     <name>Security - Untrusted Hostname header</name>
     <configKey>SERVLET_SERVER_NAME</configKey>
-    <description>&lt;p&gt;The hostname header can be controlled by the client. As such, its value should not be used in any security critical decisions. 
-Both &lt;code&gt;ServletRequest.getServerName()&lt;/code&gt; and &lt;code&gt;HttpServletRequest.getHeader("Host")&lt;/code&gt; have the same 
+    <description>&lt;p&gt;The hostname header can be controlled by the client. As such, its value should not be used in any security critical decisions.
+Both &lt;code&gt;ServletRequest.getServerName()&lt;/code&gt; and &lt;code&gt;HttpServletRequest.getHeader("Host")&lt;/code&gt; have the same
 behavior which is to extract the &lt;code&gt;Host&lt;/code&gt; header.&lt;/p&gt;
 &lt;pre&gt;
 GET /testpage HTTP/1.1
@@ -109,7 +109,7 @@ The method &lt;a href="http://docs.oracle.com/javaee/6/api/javax/servlet/http/Ht
 typically returns the value of the cookie &lt;code&gt;JSESSIONID&lt;/code&gt;. This value is normally only accessed by the session management logic and not normal developer code.
 &lt;/p&gt;
 &lt;p&gt;
-The value passed to the client is generally an alphanumeric value (e.g., &lt;code&gt;JSESSIONID=jp6q31lq2myn&lt;/code&gt;). However, the value can be altered by the client. 
+The value passed to the client is generally an alphanumeric value (e.g., &lt;code&gt;JSESSIONID=jp6q31lq2myn&lt;/code&gt;). However, the value can be altered by the client.
 The following HTTP request illustrates the potential modification.
 &lt;pre&gt;
 GET /somePage HTTP/1.1
@@ -118,8 +118,8 @@ User-Agent: Mozilla/5.0
 Cookie: JSESSIONID=Any value of the user&amp;#39;s choice!!??'''&amp;quot;&amp;gt;
 &lt;/pre&gt;
 &lt;/p&gt;
-&lt;p&gt;As such, the JSESSIONID should only be used to see if its value matches an existing session ID. If it does not, the user should be 
-considered an unauthenticated user. In addition, the session ID value should never be logged. If it is, then the log file could contain 
+&lt;p&gt;As such, the JSESSIONID should only be used to see if its value matches an existing session ID. If it does not, the user should be
+considered an unauthenticated user. In addition, the session ID value should never be logged. If it is, then the log file could contain
 valid active session IDs, allowing an insider to hijack any sessions whose IDs have been logged and are still active.
 &lt;/p&gt;
 &lt;br/&gt;
@@ -138,9 +138,9 @@ valid active session IDs, allowing an insider to hijack any sessions whose IDs h
     <description>&lt;p&gt;The query string is the concatenation of the GET parameter names and values. Parameters other than those intended can
 be passed in.&lt;/p&gt;
 &lt;p&gt;For the URL request &lt;code&gt;/app/servlet.htm?a=1&amp;b=2&lt;/code&gt;, the query string extract will be &lt;code&gt;a=1&amp;b=2&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Just as is true for individual parameter values retrieved via methods like &lt;code&gt;HttpServletRequest.getParameter()&lt;/code&gt;, 
+&lt;p&gt;Just as is true for individual parameter values retrieved via methods like &lt;code&gt;HttpServletRequest.getParameter()&lt;/code&gt;,
 the value obtained from &lt;code&gt;HttpServletRequest.getQueryString()&lt;/code&gt; should be considered unsafe.
-You may need to validate or sanitize anything pulled from the query string before passing it to sensitive APIs. 
+You may need to validate or sanitize anything pulled from the query string before passing it to sensitive APIs.
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -153,8 +153,8 @@ You may need to validate or sanitize anything pulled from the query string befor
   <rule key='SERVLET_HEADER' priority='INFO'>
     <name>Security - HTTP headers untrusted</name>
     <configKey>SERVLET_HEADER</configKey>
-    <description>&lt;p&gt;Request headers can easily be altered by the requesting user. In general, no assumption should be made that 
-the request came from a regular browser without modification by an attacker. As such, it is recommended that you 
+    <description>&lt;p&gt;Request headers can easily be altered by the requesting user. In general, no assumption should be made that
+the request came from a regular browser without modification by an attacker. As such, it is recommended that you
 not trust this value in any security decisions you make with respect to a request.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -219,7 +219,7 @@ and referenced by the user's session cookie. See HttpSession (HttpServletRequest
   <rule key='PATH_TRAVERSAL_IN' priority='MAJOR'>
     <name>Security - Potential Path Traversal (file read)</name>
     <configKey>PATH_TRAVERSAL_IN</configKey>
-    <description>&lt;p&gt;A file is opened to read its content. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter. 
+    <description>&lt;p&gt;A file is opened to read its content. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter.
 If an unfiltered parameter is passed to this file API, files from an arbitrary filesystem location could be read.&lt;/p&gt;
 &lt;p&gt;This rule identifies &lt;b&gt;potential&lt;/b&gt; path traversal vulnerabilities. In many cases, the constructed file path cannot be controlled
 by the user. If that is the case, the reported instance is a false positive.&lt;/p&gt;
@@ -275,7 +275,7 @@ public Response getImage(@javax.ws.rs.PathParam("image") String image) {
   <rule key='PATH_TRAVERSAL_OUT' priority='MAJOR'>
     <name>Security - Potential Path Traversal (file write)</name>
     <configKey>PATH_TRAVERSAL_OUT</configKey>
-    <description>&lt;p&gt;A file is opened to write to its contents. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter. 
+    <description>&lt;p&gt;A file is opened to write to its contents. The filename comes from an &lt;b&gt;input&lt;/b&gt; parameter.
 If an unfiltered parameter is passed to this file API, files at an arbitrary filesystem location could be modified.&lt;/p&gt;
 &lt;p&gt;This rule identifies &lt;b&gt;potential&lt;/b&gt; path traversal vulnerabilities. In many cases, the constructed file path cannot be controlled
 by the user. If that is the case, the reported instance is a false positive.&lt;/p&gt;
@@ -308,6 +308,7 @@ r.exec("/bin/sh -c some_tool" + input);&lt;/pre&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Command_Injection"&gt;OWASP: Command Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/78.html"&gt;CWE-78: Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
@@ -321,11 +322,11 @@ r.exec("/bin/sh -c some_tool" + input);&lt;/pre&gt;
     <description>&lt;p&gt;Some FilenameUtils' methods don't filter NULL bytes (&lt;code&gt;0x00&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;If a null byte is injected into a filename, if this filename is passed to the underlying OS, the file retrieved will be the
 name of the file that is specified prior to the NULL byte, since at the OS level, all strings are terminated by a null byte even
-though Java itself doesn't care about null bytes or treat them special. This OS behavior can be used to bypass filename validation 
+though Java itself doesn't care about null bytes or treat them special. This OS behavior can be used to bypass filename validation
 that looks at the end of the filename (e.g., endswith ".log") to make sure its a safe file to access.&lt;/p&gt;
 &lt;p&gt;To fix this, two things are recommended:
 &lt;ul&gt;
-&lt;li&gt;Upgrade to Java 7 update 40 or later, or Java 8+ since  
+&lt;li&gt;Upgrade to Java 7 update 40 or later, or Java 8+ since
 &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8014846"&gt;NULL byte injection in filenames is fixed in those versions&lt;/a&gt;.&lt;/li&gt;
 &lt;li&gt;Strongly validate any filenames provided by untrusted users to make sure they are valid (i.e., don't contain null, don't include path characters, etc.)&lt;/li&gt;
 &lt;/ul&gt;
@@ -504,8 +505,8 @@ sc.init(kmf.getKeyManagers(), tmf.getTrustManagers(),null);
   <rule key='TAPESTRY_ENDPOINT' priority='INFO'>
     <name>Security - Found Tapestry page</name>
     <configKey>TAPESTRY_ENDPOINT</configKey>
-    <description>&lt;p&gt;A Tapestry endpoint was discovered at application startup. Tapestry apps are structured with a backing Java class and a corresponding 
-Tapestry Markup Language page (a .tml file) for each page. When a request is received, the GET/POST parameters are mapped to specific 
+    <description>&lt;p&gt;A Tapestry endpoint was discovered at application startup. Tapestry apps are structured with a backing Java class and a corresponding
+Tapestry Markup Language page (a .tml file) for each page. When a request is received, the GET/POST parameters are mapped to specific
 inputs in the backing Java class. The mapping is either done with fieldName:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;
     [...]
@@ -524,7 +525,7 @@ inputs in the backing Java class. The mapping is either done with fieldName:&lt;
     [...]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The page is mapped to the view &lt;code&gt;[/resources/package/PageName].tml.&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Each Tapestry page in this application should be researched to make sure all inputs that are automatically 
+&lt;p&gt;Each Tapestry page in this application should be researched to make sure all inputs that are automatically
 mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -538,9 +539,9 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
   <rule key='WICKET_ENDPOINT' priority='INFO'>
     <name>Security - Found Wicket WebPage</name>
     <configKey>WICKET_ENDPOINT</configKey>
-    <description>&lt;p&gt;This class represents a Wicket WebPage. Input is automatically read from a PageParameters instance passed to the constructor. 
+    <description>&lt;p&gt;This class represents a Wicket WebPage. Input is automatically read from a PageParameters instance passed to the constructor.
 The current page is mapped to the view [/package/WebPageName].html.&lt;/p&gt;
-&lt;p&gt;Each Wicket page in this application should be researched to make sure all inputs that are automatically 
+&lt;p&gt;Each Wicket page in this application should be researched to make sure all inputs that are automatically
 mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -814,8 +815,8 @@ sha256Digest.update(password.getBytes());&lt;/pre&gt;
 &lt;li&gt;&lt;code&gt;"../../../config/overide_file"&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;"shell.jsp\u0000expected.gif"&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Therefore, such values should not be passed directly to the filesystem API. If acceptable, the application should generate its 
-own file names and use those. Otherwise, the provided filename should be properly validated to ensure it's properly structured, 
+&lt;p&gt;Therefore, such values should not be passed directly to the filesystem API. If acceptable, the application should generate its
+own file names and use those. Otherwise, the provided filename should be properly validated to ensure it's properly structured,
 contains no unauthorized path characters (e.g., / \), and refers to an authorized file.&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -836,17 +837,17 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
     <name>Security - Regex DOS (ReDOS)</name>
     <configKey>REDOS</configKey>
     <description>&lt;p&gt;
-    Regular expressions (regexs) are frequently subject to Denial of Service (DOS) attacks (called ReDOS). This is due to the fact that regex engines 
+    Regular expressions (regexs) are frequently subject to Denial of Service (DOS) attacks (called ReDOS). This is due to the fact that regex engines
     may take a large amount of time when analyzing certain strings, depending on how the regex is defined.
 &lt;p&gt;
-    For example, for the regex: &lt;b&gt;^(a+)+$&lt;/b&gt;, the input "&lt;code&gt;aaaaaaaaaaaaaaaaX&lt;/code&gt;" will cause the regex engine to analyze 65536 
+    For example, for the regex: &lt;b&gt;^(a+)+$&lt;/b&gt;, the input "&lt;code&gt;aaaaaaaaaaaaaaaaX&lt;/code&gt;" will cause the regex engine to analyze 65536
 different paths.&lt;sup&gt;[1] Example taken from OWASP references&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;
-Therefore, it is possible that a single request may cause a large amount of computation on the server side. 
-The problem with this regex, and others like it, is that there are two different ways the same input character can be accepted by the 
-Regex due to the + (or a *) inside the parenthesis, and the + (or a *) outside the parenthesis. The way this is written, either + could 
-consume the character 'a'. To fix this, the regex should be rewritten to eliminate the ambiguity. For example, this could simply be 
-rewritten as: &lt;b&gt;^a+$&lt;/b&gt;, which is presumably what the author meant anyway (any number of a's). Assuming that's what the original 
+Therefore, it is possible that a single request may cause a large amount of computation on the server side.
+The problem with this regex, and others like it, is that there are two different ways the same input character can be accepted by the
+Regex due to the + (or a *) inside the parenthesis, and the + (or a *) outside the parenthesis. The way this is written, either + could
+consume the character 'a'. To fix this, the regex should be rewritten to eliminate the ambiguity. For example, this could simply be
+rewritten as: &lt;b&gt;^a+$&lt;/b&gt;, which is presumably what the author meant anyway (any number of a's). Assuming that's what the original
 regex meant, this new regex can be evaluated quickly, and is not subject to ReDOS.
 &lt;/p&gt;
 &lt;br/&gt;
@@ -1480,6 +1481,7 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-39: XPath Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/643.html"&gt;CWE-643: Improper Neutralization of Data within XPath Expressions ('XPath Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.securecoding.cert.org/confluence/pages/viewpage.action?pageId=61407250"&gt;CERT: IDS09-J. Prevent XPath Injection (archive)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://media.blackhat.com/bh-eu-12/Siddharth/bh-eu-12-Siddharth-Xpath-WP.pdf"&gt;Black Hat Europe 2012: Hacking XPath 2.0&lt;/a&gt;&lt;br/&gt;
@@ -1495,7 +1497,7 @@ could be exposed. This could allow an attacker to access unauthorized data or ma
     <name>Security - Found Struts 1 endpoint</name>
     <configKey>STRUTS1_ENDPOINT</configKey>
     <description>&lt;p&gt;This class is a Struts 1 Action.&lt;/p&gt;
-&lt;p&gt;Once a request is routed to this controller, a Form object will automatically be instantiated that contains the HTTP parameters. 
+&lt;p&gt;Once a request is routed to this controller, a Form object will automatically be instantiated that contains the HTTP parameters.
 The use of these parameters should be reviewed to make sure they are used safely.&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
@@ -1504,7 +1506,7 @@ The use of these parameters should be reviewed to make sure they are used safely
     <configKey>STRUTS2_ENDPOINT</configKey>
     <description>&lt;p&gt;In Struts 2, the endpoints are Plain Old Java Objects (POJOs) which means no Interface/Class needs to be implemented/extended.&lt;/p&gt;
 &lt;p&gt;When a request is routed to its controller (like the selected class), the supplied HTTP parameters are automatically mapped to setters for
-the class. Therefore, all setters of this class should be considered as untrusted input even if the form doesn't include those values. 
+the class. Therefore, all setters of this class should be considered as untrusted input even if the form doesn't include those values.
 An attacker can simply provide additional values in the request, and they will be set in the object anyway, as long as that object has
 such a setter. The use of these parameters should be reviewed to make sure they are used safely.&lt;/p&gt;</description>
     <tag>security</tag>
@@ -1652,6 +1654,7 @@ createQuery("select * from User where id = '"+Encoder.encodeForSQL(inputId)+"'")
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1708,6 +1711,7 @@ BasePeer.executeQuery("select * from Customer where id = '"+Encoder.encodeForSQL
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1760,6 +1764,7 @@ q.execute();&lt;/pre&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1802,6 +1807,7 @@ q.execute(input);&lt;/pre&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1847,6 +1853,7 @@ UserEntity res = q.getSingleResult();&lt;/pre&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1884,6 +1891,7 @@ int count = jdbc.queryForObject("select count(*) from Users where name = ?", Int
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1923,6 +1931,7 @@ updateSales.setString(2, coffeeName);&lt;/pre&gt;
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1963,6 +1972,7 @@ Cursor cursor = this.getReadableDatabase().rawQuery(query,new String[] {userInpu
 &lt;a href="http://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -1990,6 +2000,7 @@ Therefore, the primary defense against LDAP injection is strong input validation
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246947/LDAP%20Injection"&gt;WASC-29: LDAP Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 2017-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/90.html"&gt;CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://www.veracode.com/security/ldap-injection"&gt;LDAP Injection Guide: Learn How to Detect LDAP Injections and Improve LDAP Security&lt;/a&gt;
 &lt;/p&gt;</description>
@@ -2299,7 +2310,7 @@ The project &lt;a href="https://github.com/javabeanz/owasp-security-logging"&gt;
     <configKey>EXTERNAL_CONFIG_CONTROL</configKey>
     <description>&lt;p&gt;
     Allowing external control of system settings can disrupt service or cause an application
-    to behave in unexpected, and potentially malicious ways. 
+    to behave in unexpected, and potentially malicious ways.
     An attacker could cause an error by providing a nonexistent catalog name
     or connect to an unauthorized portion of the database.
 &lt;/p&gt;
@@ -2319,7 +2330,7 @@ The project &lt;a href="https://github.com/javabeanz/owasp-security-logging"&gt;
   <rule key='BAD_HEXA_CONVERSION' priority='MAJOR'>
     <name>Security - Bad hexadecimal concatenation</name>
     <configKey>BAD_HEXA_CONVERSION</configKey>
-    <description>&lt;p&gt;When converting a byte array containing a hash signature to a human readable string, a conversion mistake can be made if 
+    <description>&lt;p&gt;When converting a byte array containing a hash signature to a human readable string, a conversion mistake can be made if
 the array is read byte by byte. The following sample illustrates the use of Integer.toHexString() which will trim any leading zeroes
 from each byte of the computed hash value.
 &lt;pre&gt;
@@ -2334,7 +2345,7 @@ for(byte b :resultBytes) {
 return stringBuilder.toString();&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-This mistake weakens the hash value computed since it introduces more collisions. 
+This mistake weakens the hash value computed since it introduces more collisions.
 For example, the hash values "0x0679" and "0x6709" would both output as "679" for the above function.
 &lt;/p&gt;
 
@@ -2372,7 +2383,7 @@ In this situation, the use of toHexString() should be replaced with String.forma
     <name>Security - NullCipher is insecure</name>
     <configKey>NULL_CIPHER</configKey>
     <description>&lt;p&gt;
-The NullCipher is rarely used intentionally in production applications. It implements the Cipher interface by returning ciphertext 
+The NullCipher is rarely used intentionally in production applications. It implements the Cipher interface by returning ciphertext
 identical to the supplied plaintext. In a few contexts, such as testing, a NullCipher may be appropriate.
 &lt;/p&gt;
 &lt;p&gt;
@@ -2421,6 +2432,7 @@ to do this correctly.
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2010-A9"&gt;OWASP: Top 10 2010-A9-Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure"&gt;OWASP: Top 10 2013-A6-Sensitive Data Exposure&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure"&gt;OWASP: Top 10 2017-A3-Sensitive Data Exposure&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"&gt;OWASP: Transport Layer Protection Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/319.html"&gt;CWE-319: Cleartext Transmission of Sensitive Information&lt;/a&gt;
@@ -2456,6 +2468,7 @@ to do this correctly.
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2010-A9"&gt;OWASP: Top 10 2010-A9-Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A6-Sensitive_Data_Exposure"&gt;OWASP: Top 10 2013-A6-Sensitive Data Exposure&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure"&gt;OWASP: Top 10 2017-A3-Sensitive Data Exposure&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet"&gt;OWASP: Transport Layer Protection Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/319.html"&gt;CWE-319: Cleartext Transmission of Sensitive Information&lt;/a&gt;
@@ -2593,7 +2606,7 @@ certainly shared in open source. To be managed safely, passwords and secret keys
 SecretKeySpec spec = new SecretKeySpec(key, "AES");
 Cipher aes = Cipher.getInstance("AES");
 aes.init(Cipher.ENCRYPT_MODE, spec);
-return aesCipher.doFinal(secretData);&lt;/pre&gt; 
+return aesCipher.doFinal(secretData);&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -2705,6 +2718,7 @@ the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2017-A7: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a7</tag>
@@ -2947,11 +2961,11 @@ A potential XSS was found. It could be used to execute unwanted JavaScript in a 
 }&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider: 
+The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
 HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
 which explains these defenses in significant detail.
 &lt;/p&gt;
-&lt;p&gt;Note that this XSS in Servlet rule looks for similar issues, but looks for them in a different way than the existing 
+&lt;p&gt;Note that this XSS in Servlet rule looks for similar issues, but looks for them in a different way than the existing
 'XSS: Servlet reflected cross site scripting vulnerability' and 'XSS: Servlet reflected cross site scripting vulnerability in error page' rules in FindBugs.
 &lt;/p&gt;
 &lt;br/&gt;
@@ -2960,6 +2974,7 @@ which explains these defenses in significant detail.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2017-A7: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -3059,9 +3074,9 @@ public void encrypt(String message) throws Exception {
   <rule key='ECB_MODE' priority='MAJOR'>
     <name>Security - ECB mode is insecure</name>
     <configKey>ECB_MODE</configKey>
-    <description>&lt;p&gt;An authentication cipher mode which provides better confidentiality of the encrypted data should be used instead of Electronic Codebook (ECB) mode, 
-which does not provide good confidentiality. Specifically, ECB mode produces the same output for the same input each time. So, 
-for example, if a user is sending a password, the encrypted value is the same each time. This allows an attacker to intercept 
+    <description>&lt;p&gt;An authentication cipher mode which provides better confidentiality of the encrypted data should be used instead of Electronic Codebook (ECB) mode,
+which does not provide good confidentiality. Specifically, ECB mode produces the same output for the same input each time. So,
+for example, if a user is sending a password, the encrypted value is the same each time. This allows an attacker to intercept
 and replay the data.&lt;/p&gt;
 &lt;p&gt;
 To fix this, something like Galois/Counter Mode (GCM) should be used instead.
@@ -3128,11 +3143,11 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     <name>Security - Cipher with no integrity</name>
     <configKey>CIPHER_INTEGRITY</configKey>
     <description>&lt;p&gt;
-    The ciphertext produced is susceptible to alteration by an adversary. This mean that the cipher provides no way to detect that the 
+    The ciphertext produced is susceptible to alteration by an adversary. This mean that the cipher provides no way to detect that the
     data has been tampered with. If the ciphertext can be controlled by an attacker, it could be altered without detection.
 &lt;/p&gt;
 &lt;p&gt;
-    The solution is to used a cipher that includes a Hash based Message Authentication Code (HMAC) to sign the data. Combining a HMAC function to the 
+    The solution is to used a cipher that includes a Hash based Message Authentication Code (HMAC) to sign the data. Combining a HMAC function to the
     existing cipher is prone to error &lt;sup&gt;&lt;a href="http://www.thoughtcrime.org/blog/the-cryptographic-doom-principle/"&gt;[1]&lt;/a&gt;&lt;/sup&gt;. Specifically,
     it is always recommended that you be able to verify the HMAC first, and only if the data is unmodified, do you then perform any cryptographic
     functions on the data.
@@ -3484,6 +3499,7 @@ function updateDescription(newDescription) {
     &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2017-A7: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
     &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a7</tag>
@@ -4043,7 +4059,7 @@ ctx.search(query, filter,
     <name>Security - Persistent Cookie Usage</name>
     <configKey>COOKIE_PERSISTENT</configKey>
     <description>&lt;p&gt;
-Storing sensitive data in a persistent cookie for an extended period of time can lead to a breach of confidentiality or account compromise. 
+Storing sensitive data in a persistent cookie for an extended period of time can lead to a breach of confidentiality or account compromise.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Explanation:&lt;/b&gt;&lt;br/&gt;
@@ -4088,8 +4104,8 @@ URL rewriting has significant security risks. Since session ID appears in the UR
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
-&lt;pre&gt;out.println("Click &amp;lt;a href=" + 
-                res.encodeURL(HttpUtils.getRequestURL(req).toString()) + 
+&lt;pre&gt;out.println("Click &amp;lt;a href=" +
+                res.encodeURL(HttpUtils.getRequestURL(req).toString()) +
                 "&amp;gt;here&amp;lt;/a&amp;gt;");&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -4213,9 +4229,9 @@ An attacker may be able to forge a request parameter to match sensitive file loc
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
-&lt;pre&gt;... 
-String returnURL = request.getParameter("returnURL"); 
-Return new ActionForward(returnURL); 
+&lt;pre&gt;...
+String returnURL = request.getParameter("returnURL");
+Return new ActionForward(returnURL);
 ...&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -4239,9 +4255,9 @@ An attacker may be able to forge a request parameter to match sensitive file loc
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
-&lt;pre&gt;... 
+&lt;pre&gt;...
 String returnURL = request.getParameter("returnURL");
-return new ModelAndView(returnURL); 
+return new ModelAndView(returnURL);
 ...&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;

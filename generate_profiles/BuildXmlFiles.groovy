@@ -123,42 +123,22 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
                     description(pattern.Details.text().trim())
 
                     //OWASP TOP 10 2017
-                    if (pattern.Details.text().toLowerCase().contains('injection') || pattern.Details.text().contains('A1-Injection')) {
+                    if (pattern.Details.text().toLowerCase().contains('injection') || pattern.Details.text().contains('2017_A1-Injection')) {
                         tag("owasp-a1")
                         tag("injection")
                     }
-                    if (pattern.Details.text().contains('A2-Broken_Authentication_and_Session_Management')) {
-                        tag("owasp-a2")
-                    }
-                    if (pattern.attribute("type").contains("XSS") || pattern.Details.text().contains('A3-Cross-Site_Scripting')) {
+                    if (pattern.attribute("type").contains("XSS") || pattern.Details.text().contains('2017_A7-Cross-Site_Scripting')) {
                         tag("owasp-a7")
                     }
-                    if (pattern.Details.text().contains('A4-Insecure_Direct_Object_References') || pattern.Details.text().contains('Path_Traversal')) {
+                    if (pattern.Details.text().contains('Path_Traversal')) {
                         tag("owasp-a5")
-                    }
-                    if (pattern.Details.text().contains('A5-Security_Misconfiguration')) {
-                        tag("owasp-a6")
                     }
                     if (pattern.attribute('type').equals('HARD_CODE_PASSWORD') ||
                             pattern.attribute("type") in cryptoBugs ||
-                            pattern.Details.text().contains('A6-Sensitive_Data_Exposure')) {
+                            pattern.Details.text().contains('2017_A3-Sensitive_Data_Exposure')) {
                         tag("owasp-a3")
                         tag("cryptography")
                     }
-                    if (pattern.Details.text().contains('A7-Missing_Function_Level_Access_Control')) {
-                        tag("owasp-a4")
-                    }
-//                    no exist in owasp 2017
-//                    if (pattern.Details.text().toLowerCase().contains('A8-Cross-Site_Request_Forgery')) {
-//                        tag("owasp-a8")
-//                    }
-                    if (pattern.Details.text().toLowerCase().contains('A9-Using_Components_with_Known_Vulnerabilities')) {
-                        tag("owasp-a9")
-                    }
-//                    no exist in owasp 2017
-//                    if (pattern.Details.text().toLowerCase().contains('A10-Unvalidated_Redirects_and_Forwards')) {
-//                        tag("owasp-a10")
-//                    }
 
                     //Misc tags
 

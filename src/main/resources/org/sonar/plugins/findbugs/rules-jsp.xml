@@ -82,6 +82,7 @@ attacker gets the ability to execute any code.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2017-A7: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/c/out.html"&gt;JSTL Javadoc: Out tag&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
@@ -115,7 +116,7 @@ String taintedInput = (String) request.getAttribute("input");
     &lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider: 
+The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
 HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
 which explains these defenses in significant detail.
 &lt;/p&gt;
@@ -125,6 +126,7 @@ which explains these defenses in significant detail.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A7-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2017-A7: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
