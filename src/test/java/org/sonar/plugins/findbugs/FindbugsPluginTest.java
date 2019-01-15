@@ -22,7 +22,6 @@ package org.sonar.plugins.findbugs;
 import org.junit.Test;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarRuntime;
-import org.sonar.api.utils.Version;
 
 import static junit.framework.TestCase.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -38,7 +37,7 @@ public class FindbugsPluginTest {
     FindbugsPlugin plugin = new FindbugsPlugin();
     plugin.define(ctx);
 
-    assertEquals("extension count", 23, ctx.getExtensions().size());
+    assertEquals("extension count", 22, ctx.getExtensions().size());
   }
 
 }
