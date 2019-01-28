@@ -21,18 +21,18 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.Project;
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
+import org.sonar.api.batch.rule.internal.DefaultActiveRules;
 import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.internal.MapSettings;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.plugins.java.api.JavaResourceLocator;
-
-import java.io.File;
-import java.io.IOException;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -58,7 +58,7 @@ public class FindbugsConfigurationTest {
 
     settings = new MapSettings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
     javaResourceLocator = mock(JavaResourceLocator.class);
-    conf = new FindbugsConfiguration(fs, settings.asConfig(), RulesProfile.create(), new FindbugsProfileExporter(), javaResourceLocator);
+    conf = new FindbugsConfiguration(fs, settings.asConfig(), new DefaultActiveRules(Collections.emptyList()), javaResourceLocator);
   }
 
   @Test

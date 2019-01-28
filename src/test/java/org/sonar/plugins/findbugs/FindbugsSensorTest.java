@@ -19,18 +19,17 @@
  */
 package org.sonar.plugins.findbugs;
 
+import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
 import edu.umd.cs.findbugs.MethodAnnotation;
 import edu.umd.cs.findbugs.SourceLineAnnotation;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
@@ -50,11 +49,14 @@ import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import com.google.common.collect.Lists;
-
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class FindbugsSensorTest extends FindbugsTests {
 
@@ -94,7 +96,6 @@ public class FindbugsSensorTest extends FindbugsTests {
     //Common components are defined in the setup. This way they don't have to be defined in every test.
     pico.addComponent(fs);
     pico.addComponent(byteCodeResourceLocator);
-    pico.addComponent(FakeActiveRules.createWithAllRules());
     pico.addComponent(FindbugsSensor.class);
     pico.addComponent(sensorContext);
 
@@ -131,7 +132,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules());
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
     sensor.execute(sensorContext);
 
@@ -150,7 +151,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules());
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
     analyser.execute(sensorContext);
 
@@ -168,7 +169,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules(false, true, false, false));
+    pico.addComponent(FakeActiveRules.createWithOnlyFbContribRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
     analyser.execute(sensorContext);
@@ -186,7 +187,7 @@ public class FindbugsSensorTest extends FindbugsTests {
 
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules(false, false, true, false));
+    pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
     analyser.execute(sensorContext);
@@ -204,7 +205,7 @@ public class FindbugsSensorTest extends FindbugsTests {
 
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules(true, false, false, false));
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
     analyser.execute(sensorContext);
@@ -218,7 +219,7 @@ public class FindbugsSensorTest extends FindbugsTests {
 
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
-    pico.addComponent(createRulesProfileWithActiveRules(false, false, false, false));
+    pico.addComponent(FakeActiveRules.createWithNoRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
     analyser.execute(sensorContext);
@@ -242,9 +243,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_not_execute_if_no_compiled_class_available() throws Exception {
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.<File>emptyList());
-
-    pico.addComponent(createRulesProfileWithActiveRules());
-
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
     sensor.execute(sensorContext);
 
@@ -261,7 +260,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute()).thenReturn(collection);
 
-    pico.addComponent(createRulesProfileWithActiveRules());
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
     sensor.execute(sensorContext);
 
