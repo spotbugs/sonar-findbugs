@@ -18,10 +18,6 @@ import java.util.List;
  */
 public class FakeActiveRules {
 
-  public static ActiveRules createWithAllRules() {
-    return new ActiveRulesMock(FakeRuleFinder.createWithAllRules());
-  }
-
   public static ActiveRules createWithOnlyFindbugsRules() {
     return new ActiveRulesMock(FakeRuleFinder.createWithOnlyFindbugsRules());
   }
@@ -32,6 +28,10 @@ public class FakeActiveRules {
 
   public static ActiveRules createWithOnlyFindSecBugsRules() {
     return new ActiveRulesMock(FakeRuleFinder.createWithOnlyFindSecBugsRules());
+  }
+
+  public static ActiveRules createWithNoRules() {
+    return new ActiveRulesMock(FakeRuleFinder.createWithNoRules());
   }
 
   public static class ActiveRulesMock implements ActiveRules {
@@ -50,7 +50,7 @@ public class FakeActiveRules {
 
     @Override
     public Collection<ActiveRule> findAll() {
-      return null;
+      return transformRules(ruleFinder.findAll(RuleQuery.create()));
     }
 
     @Override
