@@ -9,7 +9,7 @@ env:
   # latest LTS
   - SONAR_VERSION=6.7.6 SONAR_JAVA_VERSION=5.2.0.13398
   # latest releases
-  - SONAR_VERSION=7.5 SONAR_JAVA_VERSION=5.9.2.16552
+  - SONAR_VERSION=7.6 SONAR_JAVA_VERSION=5.10.1.16922
 install:
   # decrypt settings.xml, pubring.gpg and secring.gpg
   - if [ -n "$encrypted_b6710039761a_key" ]; then openssl aes-256-cbc -K $encrypted_b6710039761a_key -iv $encrypted_b6710039761a_iv -in .travis/secrets.tar.enc -out .travis/secrets.tar -d; fi
