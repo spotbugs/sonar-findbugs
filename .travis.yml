@@ -6,8 +6,6 @@ jdk:
 services:
   - docker
 env:
-  # latest LTS
-  - SONAR_VERSION=6.7.6 SONAR_JAVA_VERSION=5.2.0.13398
   # latest releases
   - SONAR_VERSION=7.6 SONAR_JAVA_VERSION=5.10.1.16922
 install:
@@ -18,9 +16,6 @@ script:
   - mvn verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
 jobs:
   include:
-    - stage: smoke-test
-      script:
-        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-lts'
     - script:
         - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest'
     - stage: analysis

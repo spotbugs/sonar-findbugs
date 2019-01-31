@@ -50,8 +50,8 @@
     <spotbugs.version>3.1.11</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
 
-    <sonar.version>6.7.1</sonar.version>
-    <sonar-java.version>5.2.0.13398</sonar-java.version>
+    <sonar.version>7.6</sonar.version>
+    <sonar-java.version>5.10.1.16922</sonar-java.version>
     <fbcontrib.version>7.4.3.sb</fbcontrib.version>
     <findsecbugs.version>1.8.0</findsecbugs.version>
 
