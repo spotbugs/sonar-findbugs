@@ -42,7 +42,7 @@ deploy:
     skip_cleanup: true
     script: mvn deploy -B -P deploy -Dgpg.skip -s .travis/settings.xml
     on:
-      branch: master
+      branch: release-for-lts
       condition: "$SONAR_VERSION = '6.7'*"
   # deploy STABLE artifact onto Sonatype Nexus
   - provider: script
