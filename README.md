@@ -35,7 +35,7 @@ Make sure that you compile your source code with debug information on (to get th
 
 Since version 3.0, the plugin embed FindBugs 3.0.0 which supports analysis of Java 8 bytecode but requires Java 1.7 to run (see Compatibility section). Please find below the compatibility matrix of the plugin.
 
-Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs version|Embedded FB-Contrib version|Minimal Java version|Minimum SonarQube version|Minimum sonar-java version|
+Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs version|Embedded FB-Contrib version|Minimal Java version|Supported SonarQube version|Minimum sonar-java version|
 -----------------------|----------------------------------|----------------------------|---------------------------|--------------------|-----------------|------------------
 2.4                    | 2.0.3                            | N/A                        | 5.2.1                     | 1.6|4.2|2.4
 3.0                    | 3.0.0                            | N/A                        | 6.0.0                     | 1.7|4.2|2.4
@@ -47,5 +47,6 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 3.7                    | 3.1.2 (SpotBugs)                 | 1.7.1                      | 7.2.1sb                   | 1.8|6.7.1|5.1.0.13090
 3.8                    | 3.1.6 (SpotBugs)                 | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1|5.1.0.13090
 3.9                    | 3.1.8 (SpotBugs)                 | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1|5.2.0.13398
-3.10                   | 3.1.11 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6|5.10.1.16922
-3.11-SNAPSHOT          | 3.1.11 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6|5.10.1.16922
+3.9.2                  | 3.1.8 (SpotBugs)                 | 1.8.0                      | 7.4.3sb                   | 1.8|6.7.1~7.5|5.2.0.13398
+3.10                   | 3.1.11 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6~|5.10.1.16922
+3.11-SNAPSHOT          | 3.1.11 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6~|5.10.1.16922
