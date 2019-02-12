@@ -70,7 +70,7 @@ public class DebugExtensionExtractor {
         protected String debug;
 
         public AbstractClassVisitor() {
-            super(Opcodes.ASM5);
+            super(Opcodes.ASM7);
         }
 
         @Override
