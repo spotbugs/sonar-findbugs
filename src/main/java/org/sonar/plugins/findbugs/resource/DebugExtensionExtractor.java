@@ -19,9 +19,10 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
+import edu.umd.cs.findbugs.classfile.engine.asm.FindBugsASM;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Opcodes;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -70,7 +71,7 @@ public class DebugExtensionExtractor {
         protected String debug;
 
         public AbstractClassVisitor() {
-            super(Opcodes.ASM7);
+            super(FindBugsASM.ASM_VERSION);
         }
 
         @Override
