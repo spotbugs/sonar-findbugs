@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>3.9.3</version>
+  <version>3.9.4-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
