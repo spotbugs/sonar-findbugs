@@ -233,6 +233,10 @@ public class FindbugsConfiguration {
     return config.getBoolean(FindbugsConstants.ALLOW_UNCOMPILED_CODE).orElse(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE);
   }
 
+  public boolean isFindbugsEnabled() {
+    return config.getBoolean(FindbugsConstants.FINDBUGS_ENABLED_PROPERTY).orElse(FindbugsConstants.FINDBUGS_ENABLED_DEFAULT_VALUE);
+  }
+
   private File jsr305Lib;
   private File annotationsLib;
   private File fbContrib;
@@ -300,6 +304,15 @@ public class FindbugsConfiguration {
   public static List<PropertyDefinition> getPropertyDefinitions() {
     String subCategory = "FindBugs";
     return ImmutableList.of(
+      PropertyDefinition.builder(FindbugsConstants.FINDBUGS_ENABLED_PROPERTY)
+        .defaultValue(Boolean.toString(FindbugsConstants.FINDBUGS_ENABLED_DEFAULT_VALUE))
+        .type(PropertyType.BOOLEAN)
+        .category(CoreProperties.CATEGORY_JAVA)
+        .subCategory(subCategory)
+        .name("Enable FindBugs rules")
+        .description("Toggle whether external FindBugs analyzer should execute on this project.")
+        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .build(),
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
         .category(CoreProperties.CATEGORY_JAVA)

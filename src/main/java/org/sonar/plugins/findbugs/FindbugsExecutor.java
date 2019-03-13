@@ -100,6 +100,11 @@ public class FindbugsExecutor {
   }
 
   public Collection<ReportedBug> execute(boolean useFbContrib, boolean useFindSecBugs) {
+    if(!configuration.isFindbugsEnabled()) {
+      LOG.info("Findbugs analysis is explicitly disabled for this project, skipping execution.");
+      return new ArrayList<>();
+    }
+
     // We keep a handle on the current security manager because FB plays with it and we need to restore it before shutting down the executor
     // service
     SecurityManager currentSecurityManager = System.getSecurityManager();
