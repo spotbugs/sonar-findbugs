@@ -23,6 +23,8 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
+
+import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +34,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -100,18 +104,30 @@ public class FindbugsConfiguration {
 
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
     boolean hasPrecompiledJsp = false;
-    for (File classToAnalyze : classFilesToAnalyze) {
-      String absolutePath = classToAnalyze.getCanonicalPath();
-      if(hasJspFiles && !hasPrecompiledJsp
-              && (absolutePath.endsWith("_jsp.class") || //Jasper
-                  absolutePath.contains("/jsp_servlet/")) //WebLogic
-              ) {
-        hasPrecompiledJsp = true;
-      }
-      if(!"module-info.class".equals(classToAnalyze.getName())) {
-        findbugsProject.addFile(absolutePath);
-      }
-    }
+    
+    ClassScreener classScreener = getOnlyAnalyzeFilter();
+    
+    if(classScreener!=null) {
+    	  for (File classToAnalyze : classFilesToAnalyze) {    	     
+    	      if(classScreener.matches(classToAnalyze.getCanonicalPath())) {
+    	    	  findbugsProject.addFile(classToAnalyze.getCanonicalPath());
+    	      }    	    
+    	  }
+    } else {
+    	for (File classToAnalyze : classFilesToAnalyze) {
+    	      String absolutePath = classToAnalyze.getCanonicalPath();    	     
+    	      if(hasJspFiles && !hasPrecompiledJsp
+    	              && (absolutePath.endsWith("_jsp.class") || //Jasper
+    	                  absolutePath.contains("/jsp_servlet/")) //WebLogic
+    	              ) {
+    	        hasPrecompiledJsp = true;
+    	      }
+    	      if(!"module-info.class".equals(classToAnalyze.getName())) {
+    	        findbugsProject.addFile(absolutePath);
+    	      }
+    	    }
+    }    
+    
 
     if (classFilesToAnalyze.isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
@@ -140,6 +156,33 @@ public class FindbugsConfiguration {
     return findbugsProject;
   }
 
+  /**
+   * Creates a class screener to filter the files for analysis by findbugs.
+   * The filter is based on  sonar.findbugs.onlyAnalyze {@link FindbugsConstants} property
+   * 
+   * @return ClassScreener object if property is present and not empty, null otherwise.
+   */
+  @VisibleForTesting
+  ClassScreener getOnlyAnalyzeFilter() {
+	  ClassScreener classScreener = new ClassScreener();
+	  Optional<String> onlyAnalyzeProp = config.get(FindbugsConstants.ONLY_ANALYZE_PROPERTY);
+	  if(!onlyAnalyzeProp.isPresent() || StringUtils.isEmpty(onlyAnalyzeProp.get())) {
+		  return null;
+	  }
+	  String onlyAnayzeOptions = onlyAnalyzeProp.get();
+	  StringTokenizer tok = new StringTokenizer(onlyAnayzeOptions, ",");
+	  while (tok.hasMoreTokens()) {
+		  String item = tok.nextToken();
+		  if (item.endsWith(".-")) {
+			  classScreener.addAllowedPrefix(item.substring(0, item.length() - 1));
+		  } else if (item.endsWith(".*")) {
+			  classScreener.addAllowedPackage(item.substring(0, item.length() - 1));
+		  } else {
+			  classScreener.addAllowedClass(item);
+		  }
+	  }
+	  return classScreener;
+  }
   private void exportProfile(ActiveRules activeRules, Writer writer) {
     try {
       FindBugsFilter filter = buildFindbugsFilter(
@@ -381,7 +424,14 @@ public class FindbugsConfiguration {
         .description("Relative path to SpotBugs report files intended to be reused. (<code>/target/findbugsXml.xml</code> and <code>/target/spotbugsXml.xml</code> are included by default)")
         .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
         .multiValues(true)
-        .build()
+        .build(),
+        PropertyDefinition.builder(FindbugsConstants.ONLY_ANALYZE_PROPERTY)
+        .category(CoreProperties.CATEGORY_JAVA)
+        .subCategory(subCategory)
+        .name("Only Analyze")
+        .description("To analyze only the given files (in FQCN, comma separted) / package patterns")
+        .type(PropertyType.STRING)
+        .build()      
       );
   }
 

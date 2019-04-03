@@ -20,6 +20,8 @@
 package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.ImmutableList;
+
+import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +37,9 @@ import org.sonar.api.config.internal.MapSettings;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -156,6 +161,43 @@ public class FindbugsConfigurationTest {
   public void should_get_findSecBugs() throws IOException {
     conf.copyLibs();
     assertThat(conf.getFindSecBugsJar()).isFile();
+  }
+  
+  @Test
+  public void should_get_only_analyze_filter() {
+	 // No onlyAnalyze option present 
+	 assertNull(conf.getOnlyAnalyzeFilter());
+	 // Empty Property
+	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
+	 assertNull(conf.getOnlyAnalyzeFilter());
+	 
+	 // Screener made correctly for class files
+	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.Test");
+	 ClassScreener expected = conf.getOnlyAnalyzeFilter();
+	 assertNotNull(expected);	
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+	 		+ "ple/Test.class"));
+	 
+	 // Screener made correctly for package
+	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.*");
+	 expected = conf.getOnlyAnalyzeFilter();
+	 assertNotNull(expected);
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+	 		+ "ple/Test.class"));
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+		 		+ "ple/Test2.class"));
+	 
+	 // Screener made correctly for deep match
+	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.-");
+	 expected = conf.getOnlyAnalyzeFilter();
+	 assertNotNull(expected);	
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+		 		+ "ple/Test1.class"));
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+		 		+ "ple/innerPackage/Test2.class"));
+	 // To prevent other test to fail
+	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
+	 
   }
 
 }
