@@ -19,24 +19,25 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.ScannerSide;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.java.api.JavaResourceLocator;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.java.api.JavaResourceLocator;
 
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
@@ -56,8 +57,10 @@ public class ByteCodeResourceLocator {
      * @return
      */
     public String findSourceFileKeyByClassName(String className, JavaResourceLocator javaResourceLocator) {
-        String classFile = javaResourceLocator.findSourceFileKeyByClassName(className);
-        if(classFile != null) return classFile;
+        URI classFile = javaResourceLocator.findResourceByClassName(className).uri();
+        if (classFile != null && "file".equals(classFile.getScheme())) {
+            return new File(classFile).getAbsolutePath();
+        }
 
         String fileName = className.replaceAll("\\.","/")+".class";
 
