@@ -57,9 +57,12 @@ public class ByteCodeResourceLocator {
      * @return
      */
     public String findSourceFileKeyByClassName(String className, JavaResourceLocator javaResourceLocator) {
-        URI classFile = javaResourceLocator.findResourceByClassName(className).uri();
-        if (classFile != null && "file".equals(classFile.getScheme())) {
-            return new File(classFile).getAbsolutePath();
+        InputFile input = javaResourceLocator.findResourceByClassName(className);
+        if (input != null) {
+            URI classFile = input.uri();
+            if (classFile != null && "file".equals(classFile.getScheme())) {
+                return new File(classFile).getAbsolutePath();
+            }
         }
 
         String fileName = className.replaceAll("\\.","/")+".class";
