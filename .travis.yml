@@ -29,18 +29,8 @@ jobs:
       script:
         - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
     - stage: deploy
-      deploy:
-        # deploy SNAPSHOT artifact onto Sonatype Nexus
-        - provider: script
-          skip_cleanup: true
-          script: mvn deploy -B -P deploy -s .travis/settings.xml
-          on:
-            branch: master
-        # deploy STABLE artifact onto Sonatype Nexus
-        - provider: script
-          skip_cleanup: true
-          script: mvn deploy -B -P deploy -s .travis/settings.xml
-          on:
-            tags: true
+      if: ( branch = master ) OR ( tag IS present )
+      script:
+        - mvn deploy -B -P deploy -s .travis/settings.xml
 notifications:
   email: false
