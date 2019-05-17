@@ -29,7 +29,7 @@ jobs:
       script:
         - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
     - stage: deploy
-      if: ( branch = master ) OR ( tag IS present )
+      if: ( type != pull_request ) AND ( ( branch = master ) OR ( tag IS present ) )
       script:
         - mvn deploy -B -P deploy -s .travis/settings.xml
 notifications:
