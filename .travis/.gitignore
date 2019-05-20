@@ -1,6 +1,1 @@
-pubring.gpg
-secring.gpg
-settings.xml
-
-# create this file by `tar cvf secrets.tar pubring.gpg secring.gpg settings.xml`
-secrets.tar
+codesigning.asc
