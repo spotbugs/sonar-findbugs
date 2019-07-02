@@ -5,8 +5,10 @@ jdk:
 services:
   - docker
 env:
-  # latest releases
+  # minimal support version
   - SONAR_VERSION=7.6 SONAR_JAVA_VERSION=5.10.1.16922
+  # latest LTS version
+  - SONAR_VERSION=7.9 SONAR_JAVA_VERSION=5.13.1.18282
   # to reproduce https://github.com/spotbugs/sonar-findbugs/issues/263
   - SONAR_VERSION=7.6 SONAR_JAVA_VERSION=5.12.1.17771
 addons:
