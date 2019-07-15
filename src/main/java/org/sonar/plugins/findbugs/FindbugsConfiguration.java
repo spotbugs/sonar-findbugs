@@ -42,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
+import org.sonar.api.Startable;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -62,7 +63,7 @@ import org.sonar.plugins.java.api.JavaResourceLocator;
 import static java.lang.String.format;
 
 @ScannerSide
-public class FindbugsConfiguration {
+public class FindbugsConfiguration implements Startable {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
 
@@ -281,10 +282,16 @@ public class FindbugsConfiguration {
     }
   }
 
+  @Override
+  public void start() {
+    // do nothing
+  }
+
   /**
    * Invoked by PicoContainer to remove temporary files.
    */
   @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
+  @Override
   public void stop() {
     if (jsr305Lib != null) {
       jsr305Lib.delete();
