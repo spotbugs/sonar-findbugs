@@ -21,7 +21,7 @@ function run_smoke_test() {
   echo SonarQube has been launched.
 
   count=0
-  until mvn compile org.eclipse.jetty:jetty-jspc-maven-plugin:jspc org.sonarsource.scanner.maven:sonar-maven-plugin:3.5.0.1254:sonar -B -Dmaven.test.skip -Dsonar.profile="FindBugs + FB-Contrib" -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=admin -Dsonar.password=admin; do
+  until mvn compile org.eclipse.jetty:jetty-jspc-maven-plugin:9.4.19.v20190610:jspc org.sonarsource.scanner.maven:sonar-maven-plugin:3.5.0.1254:sonar -B -Dmaven.test.skip -Dsonar.profile="FindBugs + FB-Contrib" -Dsonar.host.url=http://sonarqube:9000 -Dsonar.login=admin -Dsonar.password=admin; do
     count=$[ $count + 1 ]
     if [ $count -ge 5 ]; then
       echo Sonar fails to scan 5 times!
