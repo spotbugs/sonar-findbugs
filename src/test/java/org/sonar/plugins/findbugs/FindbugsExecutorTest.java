@@ -112,7 +112,7 @@ public class FindbugsExecutorTest {
     DefaultFileSystem fs = new DefaultFileSystem(new File("."));
     MapSettings settings = new MapSettings();
     //settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
-    FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings.asConfig(), null, null, null);
+    FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings.asConfig(), null, null);
 
     new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
   }

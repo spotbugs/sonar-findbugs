@@ -1,53 +1,38 @@
 language: java
-sudo: required
-dist: trusty
+dist: xenial
 jdk:
-  - oraclejdk8
+  - openjdk8
 services:
   - docker
 env:
-  # latest LTS
-  - SONAR_VERSION=6.7.5 SONAR_JAVA_VERSION=5.2.0.13398
-  # latest releases
-  - SONAR_VERSION=7.4 SONAR_JAVA_VERSION=5.8.0.15699
-install:
-  # decrypt settings.xml, pubring.gpg and secring.gpg
-  - if [ -n "$encrypted_b6710039761a_key" ]; then openssl aes-256-cbc -K $encrypted_b6710039761a_key -iv $encrypted_b6710039761a_iv -in .travis/secrets.tar.enc -out .travis/secrets.tar -d; fi
-  - if [ -f ".travis/secrets.tar" ]; then tar -xvf .travis/secrets.tar -C .travis; fi
-script:
-  - mvn verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
-jobs:
-  include:
-    - stage: smoke-test
-      script:
-        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-lts'
-    - script:
-        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest'
-    - stage: analysis
-      if: ( type = pull_request and head_repo =~ ^spotbugs/ ) or ( type != pull_request and repo =~ ^spotbugs/ )
-      script:
-        - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
-notifications:
-  email: false
+  # minimal support version
+  - SONAR_VERSION=7.6 SONAR_JAVA_VERSION=5.10.1.16922
+  # latest LTS version
+  - SONAR_VERSION=7.9 SONAR_JAVA_VERSION=5.13.1.18282
+  # to reproduce https://github.com/spotbugs/sonar-findbugs/issues/263
+  - SONAR_VERSION=7.6 SONAR_JAVA_VERSION=5.12.1.17771
 addons:
   sonarcloud:
     organization: "spotbugs"
     token:
       secure: "TO179WgRUyyT2Yg92FpC1r746GaHDMZ7+rMiBqnXztoj5VWTn8U0+M9edyxQ+cKZtCznC4JoimdjBhne52vauWFuQsoczrxtnN7l4w+yemC799Mm5jEuPKoId1CQZkVc5g4hmmeV4Qg6H5K1or1gnl+MGGZ9tbUYOu2v+G2SyAA="
-    github_token:
-      secure: "F37JqWPpdlOl4oHvTAap9uw+MEqmIz60HiVKYmSpQHDZRb13VJ/pVO11GVhoUfiswOERIEe6Ot/diH/ZK7qhaJQtPJVdSHLyN5t9KSdLtP9wYHWINVR79q8nM7I0rOZ94XDbBsHEsFgC/IWAYizVavQpMw5AGt31qjTzac19BVQ="
-deploy:
-  # deploy SNAPSHOT artifact onto Sonatype Nexus
-  - provider: script
-    skip_cleanup: true
-    script: mvn deploy -B -P deploy -Dgpg.skip -s .travis/settings.xml
-    on:
-      branch: master
-      condition: "$SONAR_VERSION = '6.7'*"
-  # deploy STABLE artifact onto Sonatype Nexus
-  - provider: script
-    skip_cleanup: true
-    script: mvn deploy -B -P deploy -s .travis/settings.xml
-    on:
-      tags: true
-      condition: "$SONAR_VERSION = '6.7'*"
+install:
+  - if [ -n "$encrypted_71c23004c23b_key" ]; then openssl aes-256-cbc -K $encrypted_71c23004c23b_key -iv $encrypted_71c23004c23b_iv -in .travis/codesigning.asc.enc -out .travis/codesigning.asc -d; fi
+  - if [ -f ".travis/codesigning.asc" ]; then gpg --import .travis/codesigning.asc; fi
+script:
+  - mvn verify -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
+jobs:
+  include:
+    - name: 'smoke test'
+      script:
+        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest'
+    - stage: analysis
+      if: ( type = pull_request and head_repo =~ ^spotbugs/ ) or ( type != pull_request and repo =~ ^spotbugs/ )
+      script:
+        - mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -Dsonar.version=$SONAR_VERSION -Dsonar-java.version=$SONAR_JAVA_VERSION
+    - stage: deploy
+      if: ( type != pull_request ) AND ( ( branch = master ) OR ( tag IS present ) )
+      script:
+        - mvn deploy -B -P deploy -s .travis/settings.xml
+notifications:
+  email: false

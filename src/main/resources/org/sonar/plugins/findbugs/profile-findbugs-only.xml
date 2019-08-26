@@ -981,6 +981,9 @@
     <Bug pattern='ITA_INEFFICIENT_TO_ARRAY' />
   </Match>
   <Match>
+    <Bug pattern='IRA_INEFFICIENT_REPLACEALL' />
+  </Match>
+  <Match>
     <Bug pattern='IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD' />
   </Match>
   <Match>

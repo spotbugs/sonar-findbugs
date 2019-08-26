@@ -19,18 +19,23 @@
  */
 package org.sonar.plugins.findbugs;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
 import org.sonar.api.Plugin;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.plugins.findbugs.language.Jsp;
-import org.sonar.plugins.findbugs.language.JspSyntaxSensor;
-import org.sonar.plugins.findbugs.profiles.*;
+import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
+import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityJspProfile;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityMinimalProfile;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
-import org.sonar.plugins.findbugs.rules.*;
+import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.Java;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class FindbugsPlugin implements Plugin {
 
@@ -53,9 +58,6 @@ public class FindbugsPlugin implements Plugin {
   public void define(Context context) {
     context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
     context.addExtensions(Arrays.asList(
-            Jsp.class,
-            JspSyntaxSensor.class,
-
             FindbugsSensor.class,
             FindbugsProfileExporter.class,
             FindbugsProfileImporter.class,

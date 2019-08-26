@@ -19,12 +19,21 @@
  */
 package org.sonar.plugins.findbugs;
 
-import static java.lang.String.format;
-
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.thoughtworks.xstream.XStream;
 import edu.umd.cs.findbugs.Project;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -33,40 +42,41 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
+import org.sonar.api.Startable;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.xml.Bug;
+import org.sonar.plugins.findbugs.xml.FindBugsFilter;
+import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.util.*;
+import static java.lang.String.format;
 
 @ScannerSide
-public class FindbugsConfiguration {
+public class FindbugsConfiguration implements Startable {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
 
   private final FileSystem fileSystem;
   private final Configuration config;
-  private final RulesProfile profile;
-  private final FindbugsProfileExporter exporter;
+  private final ActiveRules activeRules;
   private final JavaResourceLocator javaResourceLocator;
 
-  public FindbugsConfiguration(FileSystem fileSystem, Configuration config, RulesProfile profile, FindbugsProfileExporter exporter,
+  public FindbugsConfiguration(FileSystem fileSystem, Configuration config, ActiveRules activeRules,
                                JavaResourceLocator javaResourceLocator) {
     this.fileSystem = fileSystem;
     this.config = config;
-    this.profile = profile;
-    this.exporter = exporter;
+    this.activeRules = activeRules;
     this.javaResourceLocator = javaResourceLocator;
   }
 
@@ -131,18 +141,37 @@ public class FindbugsConfiguration {
     return findbugsProject;
   }
 
-  /**
-   * Return the complete list of Java files from the project (excluding test files)
-   * @return The list of Java files
-   */
-  private Iterable<File> getSourceFiles() {
-    FilePredicates pred = fileSystem.predicates();
-    return fileSystem.files(pred.and(
-            pred.hasType(Type.MAIN),
-            pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
-            pred.not(pred.matchesPathPattern("**/package-info.java")),
-            pred.not(pred.matchesPathPattern("**/module-info.java"))
-    ));
+  private void exportProfile(ActiveRules activeRules, Writer writer) {
+    try {
+      FindBugsFilter filter = buildFindbugsFilter(
+        activeRules.findAll().stream().filter(activeRule ->
+        {
+          String repKey = activeRule.ruleKey().repository();
+          return repKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) ||
+            repKey.contains("findsecbugs") ||
+            repKey.contains("fb-contrib");
+        })
+          .collect(Collectors.toList())
+      );
+      XStream xstream = FindBugsFilter.createXStream();
+      writer.append(xstream.toXML(filter));
+    } catch (IOException e) {
+      throw new SonarException("Fail to generate the Findbugs profile configuration", e);
+    }
+  }
+
+  private static FindBugsFilter buildFindbugsFilter(Iterable<ActiveRule> activeRules) {
+    FindBugsFilter root = new FindBugsFilter();
+    for (ActiveRule activeRule : activeRules) {
+      String repoKey = activeRule.ruleKey().repository();
+
+      if (repoKey.contains("findsecbugs") || repoKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains("fb-contrib")) {
+        Match child = new Match();
+        child.setBug(new Bug(activeRule.internalKey()));
+        root.addMatch(child);
+      }
+    }
+    return root;
   }
 
   /**
@@ -168,7 +197,7 @@ public class FindbugsConfiguration {
   @VisibleForTesting
   File saveIncludeConfigXml() throws IOException {
     StringWriter conf = new StringWriter();
-    exporter.exportProfile(profile, conf);
+    exportProfile(activeRules, conf);
     File file = new File(fileSystem.workDir(), "findbugs-include.xml");
     FileUtils.write(file, conf.toString(), CharEncoding.UTF_8);
     return file;
@@ -253,10 +282,16 @@ public class FindbugsConfiguration {
     }
   }
 
+  @Override
+  public void start() {
+    // do nothing
+  }
+
   /**
    * Invoked by PicoContainer to remove temporary files.
    */
   @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
+  @Override
   public void stop() {
     if (jsr305Lib != null) {
       jsr305Lib.delete();

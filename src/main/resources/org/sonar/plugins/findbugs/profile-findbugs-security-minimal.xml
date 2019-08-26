@@ -159,6 +159,9 @@
     <Bug pattern='SPRING_UNVALIDATED_REDIRECT' />
   </Match>
   <Match>
+    <Bug pattern='SPRING_ENTITY_LEAK' />
+  </Match>
+  <Match>
     <Bug pattern='XSS_SERVLET' />
   </Match>
   <Match>
@@ -247,6 +250,12 @@
   </Match>
   <Match>
     <Bug pattern='SMTP_HEADER_INJECTION' />
+  </Match>
+  <Match>
+    <Bug pattern='RPC_ENABLED_EXTENSIONS' />
+  </Match>
+  <Match>
+    <Bug pattern='WICKET_XSS1' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
