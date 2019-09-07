@@ -1,0 +1,20 @@
+name-template: '$NEXT_PATCH_VERSION'
+tag-template: '$NEXT_PATCH_VERSION'
+categories:
+  - title: '🚀 Implemented enhancements'
+    labels:
+      - 'enhancement'
+  - title: '🐛 Fixed bugs'
+    labels:
+      - 'bug'
+  - title: '🔧 Maintenance'
+    labels:
+      - 'chore'
+      - 'task'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+template: |
+  [Full Changelog](https://github.com/spotbugs/sonar-findbugs/compare/$PREVIOUS_TAG...$NEXT_PATCH_VERSION)
+
+  ## Release Note
+
+  $CHANGES
