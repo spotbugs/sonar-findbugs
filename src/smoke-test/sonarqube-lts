@@ -1,4 +1,5 @@
-FROM sonarqube:7.9-community
+# 7.9-community
+FROM sonarqube@sha256:8f3615a9ce0fbada6b9ef4f613a9ea1d7a39fa892ee3189e8a227eaa82b19c05
 ENV SONAR_JAVA_VERSION=5.13.1.18282
 
 RUN wget -P $SONARQUBE_HOME/extensions/plugins/ --no-verbose https://repo.maven.apache.org/maven2/org/sonarsource/java/sonar-java-plugin/$SONAR_JAVA_VERSION/sonar-java-plugin-$SONAR_JAVA_VERSION.jar
