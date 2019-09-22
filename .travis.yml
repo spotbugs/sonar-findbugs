@@ -25,7 +25,7 @@ jobs:
   include:
     - name: 'smoke test'
       script:
-        - 'mvn package && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest'
+        - 'mvn package -B -V && docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest'
     - stage: analysis
       if: ( type = pull_request and head_repo =~ ^spotbugs/ ) or ( type != pull_request and repo =~ ^spotbugs/ )
       script:
