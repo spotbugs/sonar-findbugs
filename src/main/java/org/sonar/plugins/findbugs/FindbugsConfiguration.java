@@ -275,7 +275,7 @@ public class FindbugsConfiguration implements Startable {
       annotationsLib = copyLib("/annotations.jar");
     }
     if (fbContrib == null) {
-      fbContrib = copyLib("/fb-contrib.jar");
+      fbContrib = copyLib("/sb-contrib.jar");
     }
     if (findSecBugs == null) {
       findSecBugs = copyLib("/findsecbugs-plugin.jar");
