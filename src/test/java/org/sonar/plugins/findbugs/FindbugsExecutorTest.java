@@ -35,6 +35,7 @@ import org.sonar.api.config.internal.MapSettings;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Optional;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -62,6 +63,7 @@ public class FindbugsExecutorTest {
 
     configEmpty = mock(Configuration.class);
     when(configEmpty.getStringArray(any())).thenReturn(new String[0]);
+    when(configEmpty.getBoolean(FindbugsConstants.FINDBUGS_ENABLED_PROPERTY)).thenReturn(Optional.of(Boolean.TRUE));
     when(configEmpty.get(any())).thenReturn(Optional.of(""));
   }
 
@@ -99,6 +101,15 @@ public class FindbugsExecutorTest {
     assertThat(report).contains("priority=\"3\"");
   }
 
+  @Test
+  public void shouldSkipAnalysis() throws Exception {
+    FindbugsConfiguration conf = mockConf();
+    when(conf.isFindbugsEnabled()).thenReturn(false);
+
+    Collection<ReportedBug> issues = new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    assertThat(issues).isEmpty();
+  }
+
   @Test(expected = IllegalStateException.class)
   public void shouldTerminateAfterTimeout() throws Exception {
     FindbugsConfiguration conf = mockConf();
@@ -123,6 +134,7 @@ public class FindbugsExecutorTest {
     project.addFile(new File("test-resources/classes").getCanonicalPath());
     project.addSourceDir(new File("test-resources/src").getCanonicalPath());
     project.setCurrentWorkingDirectory(new File("test-resources"));
+    when(conf.isFindbugsEnabled()).thenReturn(true);
     when(conf.getFindbugsProject()).thenReturn(project);
     when(conf.saveIncludeConfigXml()).thenReturn(new File("test-resources/findbugs-include.xml"));
     when(conf.getExcludesFilters()).thenReturn(Lists.newArrayList(new File("test-resources/findbugs-exclude.xml"), new File("test-resources/fake-file.xml")));

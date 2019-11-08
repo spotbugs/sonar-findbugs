@@ -23,6 +23,9 @@ public final class FindbugsConstants {
 
   public static final String PLUGIN_NAME = "FindBugs";
 
+  public static final String FINDBUGS_ENABLED_PROPERTY = "sonar.findbugs.enabled";
+  public static final boolean FINDBUGS_ENABLED_DEFAULT_VALUE = true;
+
   public static final String EFFORT_PROPERTY = "sonar.findbugs.effort";
   public static final String EFFORT_DEFAULT_VALUE = "Default";
 
