@@ -150,7 +150,7 @@ If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/e
 vulnerabilities that SpotBugs doesn't report. If you are concerned about cross site scripting, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
-    <tag>owasp-a3</tag>
+    <tag>owasp-a7</tag>
     <tag>security</tag>
   </rule>
   <rule key='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' priority='MAJOR'>
@@ -165,7 +165,7 @@ If SpotBugs found &lt;em&gt;any&lt;/em&gt;, you &lt;em&gt;almost certainly&lt;/e
 vulnerabilities that SpotBugs doesn't report. If you are concerned about cross site scripting, you should seriously
 consider using a commercial static analysis or pen-testing tool.
 &lt;/p&gt;</description>
-    <tag>owasp-a3</tag>
+    <tag>owasp-a7</tag>
     <tag>security</tag>
   </rule>
   <rule key='SW_SWING_METHODS_INVOKED_IN_SWING_THREAD' priority='MAJOR'>
