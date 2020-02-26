@@ -1,4 +1,5 @@
 import groovy.xml.MarkupBuilder;
+import java.nio.file.Paths
 import FsbClassifier;
 import static FsbClassifier.*;
 @Grapes([
@@ -13,6 +14,9 @@ FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version:
 CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.4.7')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.10.1')
 
+def destDir() {
+    Paths.get("..", "src/main/resources/org/sonar/plugins/findbugs").toAbsolutePath().normalize().toFile()
+}
 
 ////////////// Generate rules files
 
@@ -97,7 +101,7 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 
 
     //Output file
-    File f = new File("out_sonar","rules-"+rulesSetName+".xml")
+    File f = new File(destDir(), "rules-"+rulesSetName+".xml")
     printf("Building ruleset %s (%s)%n", rulesSetName, f.getCanonicalPath())
 
     //XML construction of the rules file
@@ -207,8 +211,7 @@ writeRules("fbcontrib", [CONTRIB], [])
 ////////////// Generate the profile files
 
 def writeProfile(String profileName,List<String> includedBugs,List<String> excludedBugs = []) {
-
-    File f = new File("out_sonar","profile-"+profileName+".xml")
+    File f = new File(destDir(), "profile-"+profileName+".xml")
     printf("Building profile %s (%s)%n",profileName,f.getCanonicalPath())
 
     def countBugs=0;
