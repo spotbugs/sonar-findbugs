@@ -981,9 +981,6 @@
     <Bug pattern='ITA_INEFFICIENT_TO_ARRAY' />
   </Match>
   <Match>
-    <Bug pattern='IRA_INEFFICIENT_REPLACEALL' />
-  </Match>
-  <Match>
     <Bug pattern='IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD' />
   </Match>
   <Match>
@@ -1474,6 +1471,9 @@
   </Match>
   <Match>
     <Bug pattern='PMB_INSTANCE_BASED_THREAD_LOCAL' />
+  </Match>
+  <Match>
+    <Bug pattern='PMB_LOCAL_BASED_JAXB_CONTEXT' />
   </Match>
   <Match>
     <Bug pattern='LSYC_LOCAL_SYNCHRONIZED_COLLECTION' />
@@ -2094,6 +2094,12 @@
     <Bug pattern='IMC_IMMATURE_CLASS_LOWER_CLASS' />
   </Match>
   <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_BAD_SERIALVERSIONUID' />
+  </Match>
+  <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_VAR_NAME' />
+  </Match>
+  <Match>
     <Bug pattern='JXI_GET_ENDPOINT_CONSUMES_CONTENT' />
   </Match>
   <Match>
@@ -2137,6 +2143,9 @@
   </Match>
   <Match>
     <Bug pattern='IOI_USE_OF_FILE_STREAM_CONSTRUCTORS' />
+  </Match>
+  <Match>
+    <Bug pattern='IOI_UNENDED_ZLIB_OBJECT' />
   </Match>
   <Match>
     <Bug pattern='DMC_DUBIOUS_MAP_COLLECTION' />
@@ -2233,5 +2242,8 @@
   </Match>
   <Match>
     <Bug pattern='SUI_CONTAINS_BEFORE_REMOVE' />
+  </Match>
+  <Match>
+    <Bug pattern='SAT_SUSPICIOUS_ARGUMENT_TYPES' />
   </Match>
 </FindBugsFilter>
