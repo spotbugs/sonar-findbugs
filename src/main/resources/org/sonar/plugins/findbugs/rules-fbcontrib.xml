@@ -735,6 +735,17 @@ static {
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='PMB_LOCAL_BASED_JAXB_CONTEXT' priority='MAJOR'>
+    <name>Correctness - Local JAXBContext created on demand</name>
+    <configKey>PMB_LOCAL_BASED_JAXB_CONTEXT</configKey>
+    <description>&lt;p&gt;This method creates a JAXBContext and stores it in a local variable. This
+	       implies that this JAXBContext is created each time on demand, which will cause 
+	       memory bloat issues. It is better to either create this instance as a static field,
+	       or hold onto it with a ConcurrentHashMap, or such. See 
+	       https://javaee.github.io/jaxb-v2/doc/user-guide/ch03.html#other-miscellaneous-topics-performance-and-thread-safety &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='LSYC_LOCAL_SYNCHRONIZED_COLLECTION' priority='MAJOR'>
     <name>Correctness - Method creates local variable-based synchronized collection</name>
     <configKey>LSYC_LOCAL_SYNCHRONIZED_COLLECTION</configKey>
@@ -3004,6 +3015,22 @@ for (Person p : people) {
     		Classes should follow a pattern of uppercasing the first letter of each word, AsAnExample&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='IMC_IMMATURE_CLASS_BAD_SERIALVERSIONUID' priority='MAJOR'>
+    <name>Correctness - Class defines a computed serialVersionUID that doesn't equate to the calculated value</name>
+    <configKey>IMC_IMMATURE_CLASS_BAD_SERIALVERSIONUID</configKey>
+    <description>&lt;p&gt;This serializable class defines a serialVersionUID that appears to be a computed value, however the value does not
+    		match the computed value, and thus losses it's value as version indicator. Either create a custom value like 1, 2, 3, 4.. etc, or
+    		recompute the serialVersionUID using your IDE.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_VAR_NAME' priority='MAJOR'>
+    <name>Correctness - Class defines a field or local variable named 'var'</name>
+    <configKey>IMC_IMMATURE_CLASS_VAR_NAME</configKey>
+    <description>&lt;p&gt;A field or variable is named 'var' which will conflict with the built in Java 10 feature using 'var' as a keyword.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='JXI_GET_ENDPOINT_CONSUMES_CONTENT' priority='MAJOR'>
     <name>Correctness - JAX-RS Method implements a GET request but consumes input</name>
     <configKey>JXI_GET_ENDPOINT_CONSUMES_CONTENT</configKey>
@@ -3176,6 +3203,17 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		InputStream is = java.nio.file.Files.newInputStream(myfile.toPath());
     		OutputStream os = java.nio.file.Files.newOutputStream(myfile.toPath());
     		&lt;/code&gt;
+    		&lt;/p&gt;</description>
+    <tag>performance</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IOI_UNENDED_ZLIB_OBJECT' priority='MAJOR'>
+    <name>Performance - Method creates a ZLIB Inflater or Deflater and doesn't appear to end() it</name>
+    <configKey>IOI_UNENDED_ZLIB_OBJECT</configKey>
+    <description>&lt;p&gt;This method constructs a java.util.zip.Inflater or java.util.zip.Deflater and does not appear to call end() on
+    		it. This will cause a potentially large amount of memory to hang around inside the object until the object gets 
+    		garbage collected. To avoid this unnecessary bloat, put a call to end() in a finally block of the code where you
+    		are using this instance.
     		&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -3657,6 +3695,16 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
             &lt;/pre&gt;
             &lt;/code&gt;
             &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='SAT_SUSPICIOUS_ARGUMENT_TYPES' priority='MAJOR'>
+    <name>Correctness - This method invokes a method with parameters that seem incorrect for their intended use</name>
+    <configKey>SAT_SUSPICIOUS_ARGUMENT_TYPES</configKey>
+    <description>&lt;p&gt;This method calls a method passing arguments that seem incorrect for the intended purpose of the method. Make sure that the argument types are valid&lt;/p&gt;
+            &lt;ul&gt;
+            &lt;li&gt;&lt;p&gt;For Match.hasEntry it seems unlikely you want to pass a Matcher and non-Matcher at the same time&lt;/p&gt;&lt;/li&gt;
+            &lt;/ul&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>

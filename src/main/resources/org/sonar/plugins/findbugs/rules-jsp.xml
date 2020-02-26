@@ -19,7 +19,7 @@ attacker gets the ability to execute any code.
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-&lt;a href="http://resources.infosecinstitute.com/file-inclusion-attacks/"&gt;InfosecInstitute: File Inclusion Attacks&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://resources.infosecinstitute.com/file-inclusion-attacks/"&gt;InfosecInstitute: File Inclusion Attacks&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>wasc</tag>
@@ -50,8 +50,8 @@ attacker gets the ability to execute any code.
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
-    &lt;a href="http://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
-    &lt;a href="http://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
@@ -82,8 +82,8 @@ attacker gets the ability to execute any code.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/c/out.html"&gt;JSTL Javadoc: Out tag&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://docs.oracle.com/javaee/5/jstl/1.1/docs/tlddocs/c/out.html"&gt;JSTL Javadoc: Out tag&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
     <tag>wasc</tag>
@@ -115,7 +115,7 @@ String taintedInput = (String) request.getAttribute("input");
     &lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
-The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider: 
+The best defense against XSS is context sensitive output encoding like the example above. There are typically 4 contexts to consider:
 HTML, JavaScript, CSS (styles), and URLs. Please follow the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet,
 which explains these defenses in significant detail.
 &lt;/p&gt;
@@ -125,7 +125,7 @@ which explains these defenses in significant detail.
 &lt;a href="http://projects.webappsec.org/w/page/13246920/Cross%20Site%20Scripting"&gt;WASC-8: Cross Site Scripting&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet"&gt;OWASP: XSS Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2013-A3-Cross-Site_Scripting_%28XSS%29"&gt;OWASP: Top 10 2013-A3: Cross-Site Scripting (XSS)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="http://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/79.html"&gt;CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://code.google.com/p/owasp-java-encoder/"&gt;OWASP Java Encoder&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
@@ -135,7 +135,7 @@ which explains these defenses in significant detail.
     <tag>security</tag>
   </rule>
   <rule key='JSP_XSLT' priority='CRITICAL'>
-    <name>Security - A malicious XSLT could be provided</name>
+    <name>Security - A malicious XSLT could be provided to the JSP tag</name>
     <configKey>JSP_XSLT</configKey>
     <description>&lt;p&gt;
     "XSLT (Extensible Stylesheet Language Transformations) is a language for transforming XML documents into other XML documents".&lt;sup&gt;[1]&lt;/sup&gt;&lt;br/&gt;
@@ -157,10 +157,10 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 [1] &lt;a href="https://en.wikipedia.org/wiki/XSLT"&gt;Wikipedia: XSLT (Extensible Stylesheet Language Transformations)&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://prezi.com/y_fuybfudgnd/offensive-xslt/"&gt;Offensive XSLT&lt;/a&gt; by Nicolas Grégoire&lt;br/&gt;
-[2] &lt;a href="http://www.agarri.fr/kom/archives/2012/07/02/from_xslt_code_execution_to_meterpreter_shells/index.html"&gt;From XSLT code execution to Meterpreter shells&lt;/a&gt; by Nicolas Grégoire&lt;br/&gt;
-&lt;a href="http://xhe.myxwiki.org/xwiki/bin/view/Main/"&gt;XSLT Hacking Encyclopedia&lt;/a&gt; by Nicolas Grégoire&lt;br/&gt;
-&lt;a href="http://www.acunetix.com/blog/articles/the-hidden-dangers-of-xsltprocessor-remote-xsl-injection/"&gt;Acunetix.com : The hidden dangers of XSLTProcessor - Remote XSL injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://prezi.com/y_fuybfudgnd/offensive-xslt/"&gt;Offensive XSLT&lt;/a&gt; by Nicolas GrÃ©goire&lt;br/&gt;
+[2] &lt;a href="https://www.agarri.fr/blog/archives/2012/07/02/from_xslt_code_execution_to_meterpreter_shells/index.html"&gt;From XSLT code execution to Meterpreter shells&lt;/a&gt; by Nicolas GrÃ©goire&lt;br/&gt;
+&lt;a href="https://xhe.myxwiki.org/xwiki/bin/view/Main/"&gt;XSLT Hacking Encyclopedia&lt;/a&gt; by Nicolas GrÃ©goire&lt;br/&gt;
+&lt;a href="https://www.acunetix.com/blog/articles/the-hidden-dangers-of-xsltprocessor-remote-xsl-injection/"&gt;Acunetix.com : The hidden dangers of XSLTProcessor - Remote XSL injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.w3.org/TR/xslt"&gt;w3.org XSL Transformations (XSLT) Version 1.0&lt;/a&gt; : w3c specification&lt;br/&gt;
 [3] &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br/&gt;
 [4] &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;

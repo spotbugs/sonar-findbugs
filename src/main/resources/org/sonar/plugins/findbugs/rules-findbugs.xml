@@ -966,7 +966,7 @@ invoking super.equals(o).
     <name>Correctness - equals method overrides equals in superclass and may not be symmetric</name>
     <configKey>EQ_OVERRIDING_EQUALS_NOT_SYMMETRIC</configKey>
     <description>&lt;p&gt; This class defines an equals method that overrides an equals method in a superclass. Both equals methods
-methods use &lt;code&gt;instanceof&lt;/code&gt; in the determination of whether two objects are equal. This is fraught with peril,
+use &lt;code&gt;instanceof&lt;/code&gt; in the determination of whether two objects are equal. This is fraught with peril,
 since it is important that the equals method is symmetrical (in other words, &lt;code&gt;a.equals(b) == b.equals(a)&lt;/code&gt;).
 If B is a subtype of A, and A's equals method checks that the argument is an instanceof A, and B's equals method
 checks that the argument is an instanceof B, it is quite likely that the equivalence relation defined by these
@@ -986,7 +986,7 @@ It is better to check if &lt;code&gt;this.getClass() == o.getClass()&lt;/code&gt
     <tag>bad-practice</tag>
   </rule>
   <rule key='EQ_UNUSUAL' priority='INFO'>
-    <name>Style - Unusual equals method </name>
+    <name>Style - Unusual equals method</name>
     <configKey>EQ_UNUSUAL</configKey>
     <description>&lt;p&gt; This class doesn't do any of the patterns we recognize for checking that the type of the argument
 is compatible with the type of the &lt;code&gt;this&lt;/code&gt; object. There might not be anything wrong with
@@ -1557,7 +1557,7 @@ For example, in the following code, &lt;code&gt;foo&lt;/code&gt; will be null.&l
     <tag>bad-practice</tag>
   </rule>
   <rule key='DL_SYNCHRONIZATION_ON_SHARED_CONSTANT' priority='MAJOR'>
-    <name>Multi-threading - Synchronization on interned String </name>
+    <name>Multi-threading - Synchronization on interned String</name>
     <configKey>DL_SYNCHRONIZATION_ON_SHARED_CONSTANT</configKey>
     <description>&lt;p&gt; The code synchronizes on interned String.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;private static String LOCK = "LOCK";
@@ -2053,7 +2053,7 @@ be confusing to users of this class.&lt;/p&gt;</description>
     <tag>bad-practice</tag>
   </rule>
   <rule key='SE_READ_RESOLVE_IS_STATIC' priority='MAJOR'>
-    <name>Correctness - The readResolve method must not be declared as a static method.  </name>
+    <name>Correctness - The readResolve method must not be declared as a static method.</name>
     <configKey>SE_READ_RESOLVE_IS_STATIC</configKey>
     <description>&lt;p&gt; In order for the readResolve method to be recognized by the serialization
 mechanism, it must not be declared as a static method.
@@ -2070,7 +2070,7 @@ This might be intentional and OK, but should be reviewed to ensure it is what is
     <tag>style</tag>
   </rule>
   <rule key='SE_READ_RESOLVE_MUST_RETURN_OBJECT' priority='MAJOR'>
-    <name>Bad practice - The readResolve method must be declared with a return type of Object. </name>
+    <name>Bad practice - The readResolve method must be declared with a return type of Object.</name>
     <configKey>SE_READ_RESOLVE_MUST_RETURN_OBJECT</configKey>
     <description>&lt;p&gt; In order for the readResolve method to be recognized by the serialization
 mechanism, it must be declared to have a return type of Object.
@@ -2078,7 +2078,7 @@ mechanism, it must be declared to have a return type of Object.
     <tag>bad-practice</tag>
   </rule>
   <rule key='SE_TRANSIENT_FIELD_OF_NONSERIALIZABLE_CLASS' priority='INFO'>
-    <name>Style - Transient field of class that isn't Serializable. </name>
+    <name>Style - Transient field of class that isn't Serializable.</name>
     <configKey>SE_TRANSIENT_FIELD_OF_NONSERIALIZABLE_CLASS</configKey>
     <description>&lt;p&gt; The field is marked as transient, but the class isn't Serializable, so marking it as transient
 has absolutely no effect.
@@ -2088,7 +2088,7 @@ it may indicate a misunderstanding of how serialization works.
     <tag>style</tag>
   </rule>
   <rule key='SE_TRANSIENT_FIELD_NOT_RESTORED' priority='MAJOR'>
-    <name>Bad practice - Transient field that isn't set by deserialization. </name>
+    <name>Bad practice - Transient field that isn't set by deserialization.</name>
     <configKey>SE_TRANSIENT_FIELD_NOT_RESTORED</configKey>
     <description>&lt;p&gt; This class contains a field that is updated at multiple places in the class, thus it seems to be part of the state of the class. However, since the field is marked as transient and not set in readObject or readResolve, it will contain the default value in any
 deserialized instance of the class.
@@ -2330,7 +2330,7 @@ consider removing it from the class.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='QF_QUESTIONABLE_FOR_LOOP' priority='INFO'>
-    <name>Style - Complicated, subtle or wrong increment in for-loop </name>
+    <name>Style - Complicated, subtle or wrong increment in for-loop</name>
     <configKey>QF_QUESTIONABLE_FOR_LOOP</configKey>
     <description>&lt;p&gt;Are you sure this for loop is incrementing the correct variable?
    It appears that another variable is being initialized and checked
@@ -2484,7 +2484,7 @@ inner object.&amp;nbsp; This reference makes the instances
     <tag>bug</tag>
   </rule>
   <rule key='WA_NOT_IN_LOOP' priority='MAJOR'>
-    <name>Multi-threading - Wait not in loop </name>
+    <name>Multi-threading - Wait not in loop</name>
     <configKey>WA_NOT_IN_LOOP</configKey>
     <description>&lt;p&gt; This method contains a call to &lt;code&gt;java.lang.Object.wait()&lt;/code&gt;
   which is not in a loop.&amp;nbsp; If the monitor is used for multiple conditions,
@@ -2494,7 +2494,7 @@ inner object.&amp;nbsp; This reference makes the instances
     <tag>bug</tag>
   </rule>
   <rule key='WA_AWAIT_NOT_IN_LOOP' priority='MAJOR'>
-    <name>Multi-threading - Condition.await() not in loop </name>
+    <name>Multi-threading - Condition.await() not in loop</name>
     <configKey>WA_AWAIT_NOT_IN_LOOP</configKey>
     <description>&lt;p&gt; This method contains a call to &lt;code&gt;java.util.concurrent.await()&lt;/code&gt;
    (or variants)
@@ -2832,7 +2832,7 @@ for null.  This may lead to a &lt;code&gt;NullPointerException&lt;/code&gt; when
     <tag>bug</tag>
   </rule>
   <rule key='NP_NONNULL_PARAM_VIOLATION' priority='MAJOR'>
-    <name>Correctness - Method call passes null to a non-null parameter </name>
+    <name>Correctness - Method call passes null to a non-null parameter</name>
     <configKey>NP_NONNULL_PARAM_VIOLATION</configKey>
     <description>&lt;p&gt;
       This method passes a null value as the parameter of a method which
@@ -3248,7 +3248,7 @@ public void foo() {
     <tag>style</tag>
   </rule>
   <rule key='SA_LOCAL_DOUBLE_ASSIGNMENT' priority='INFO'>
-    <name>Style - Double assignment of local variable </name>
+    <name>Style - Double assignment of local variable</name>
     <configKey>SA_LOCAL_DOUBLE_ASSIGNMENT</configKey>
     <description>&lt;p&gt; This method contains a double assignment of a local variable; e.g.
 &lt;/p&gt;
@@ -3349,7 +3349,7 @@ generator is &lt;code&gt;Integer.MIN_VALUE&lt;/code&gt;, then the result will be
     <tag>bug</tag>
   </rule>
   <rule key='RV_ABSOLUTE_VALUE_OF_HASHCODE' priority='MAJOR'>
-    <name>Correctness - Bad attempt to compute absolute value of signed 32-bit hashcode </name>
+    <name>Correctness - Bad attempt to compute absolute value of signed 32-bit hashcode</name>
     <configKey>RV_ABSOLUTE_VALUE_OF_HASHCODE</configKey>
     <description>&lt;p&gt; This code generates a hashcode and then computes
 the absolute value of that hashcode.  If the hashcode
@@ -3609,7 +3609,7 @@ you are setting it to is fully populated/initialized.</description>
   <rule key='JLM_JSR166_LOCK_MONITORENTER' priority='MAJOR'>
     <name>Multi-threading - Synchronization performed on Lock</name>
     <configKey>JLM_JSR166_LOCK_MONITORENTER</configKey>
-    <description>&lt;p&gt; This method performs synchronization an object that implements
+    <description>&lt;p&gt; This method performs synchronization on an object that implements
 java.util.concurrent.locks.Lock. Such an object is locked/unlocked
 using
 &lt;code&gt;acquire()&lt;/code&gt;/&lt;code&gt;release()&lt;/code&gt; rather
@@ -3638,7 +3638,7 @@ your design, as other developers will find it exceptionally confusing.
   <rule key='JLM_JSR166_UTILCONCURRENT_MONITORENTER' priority='MAJOR'>
     <name>Multi-threading - Synchronization performed on util.concurrent instance</name>
     <configKey>JLM_JSR166_UTILCONCURRENT_MONITORENTER</configKey>
-    <description>&lt;p&gt; This method performs synchronization an object that is an instance of
+    <description>&lt;p&gt; This method performs synchronization on an object that is an instance of
 a class from the java.util.concurrent package (or its subclasses). Instances
 of these classes have their own concurrency control mechanisms that are orthogonal to
 the synchronization provided by the Java keyword &lt;code&gt;synchronized&lt;/code&gt;. For example,
@@ -3664,11 +3664,11 @@ removed.
   <rule key='UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS' priority='MAJOR'>
     <name>Correctness - Uncallable method defined in anonymous class</name>
     <configKey>UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS</configKey>
-    <description>&lt;p&gt; This anonymous class defined a method that is not directly invoked and does not override
+    <description>&lt;p&gt; This anonymous class defines a method that is not directly invoked and does not override
 a method in a superclass. Since methods in other classes cannot directly invoke methods
 declared in an anonymous class, it seems that this method is uncallable. The method
 might simply be dead code, but it is also possible that the method is intended to
-override a method declared in a superclass, and due to an typo or other error the method does not,
+override a method declared in a superclass, and due to a typo or other error the method does not,
 in fact, override the method it is intended to.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
@@ -3795,16 +3795,6 @@ directly. This avoids the need to create a second array
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='IRA_INEFFICIENT_REPLACEALL' priority='MAJOR'>
-    <name>Performance - Method uses replaceAll(String regex, String replacement) without any special regex characters</name>
-    <configKey>IRA_INEFFICIENT_REPLACEALL</configKey>
-    <description>&lt;p&gt; This method uses replaceAll(String regex, String replacement) without any special regex characters. 
-It is more efficient to use
-&lt;code&gt;myString.replace(CharSequence target, CharSequence replacement)&lt;/code&gt;
-if there is no need to use regular expressions.&lt;/p&gt;</description>
-    <tag>performance</tag>
-    <tag>bug</tag>
-  </rule>
   <rule key='IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD' priority='MAJOR'>
     <name>Correctness - JUnit assertion in run method will not be noticed by JUnit</name>
     <configKey>IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD</configKey>
@@ -3834,7 +3824,7 @@ super.tearDown(), but doesn't.&lt;/p&gt;</description>
     <tag>bug</tag>
   </rule>
   <rule key='IJU_SUITE_NOT_STATIC' priority='MAJOR'>
-    <name>Correctness - TestCase implements a non-static suite method </name>
+    <name>Correctness - TestCase implements a non-static suite method</name>
     <configKey>IJU_SUITE_NOT_STATIC</configKey>
     <description>&lt;p&gt; Class is a JUnit TestCase and implements the suite() method.
  The suite method should be declared as being static, but isn't.&lt;/p&gt;</description>
@@ -3842,7 +3832,7 @@ super.tearDown(), but doesn't.&lt;/p&gt;</description>
     <tag>bug</tag>
   </rule>
   <rule key='IJU_BAD_SUITE_METHOD' priority='MAJOR'>
-    <name>Correctness - TestCase declares a bad suite method </name>
+    <name>Correctness - TestCase declares a bad suite method</name>
     <configKey>IJU_BAD_SUITE_METHOD</configKey>
     <description>&lt;p&gt; Class is a JUnit TestCase and defines a suite() method.
 However, the suite method needs to be declared as either&lt;/p&gt;
@@ -3955,7 +3945,7 @@ only checks to see if they are the same array, and ignores the contents of the a
     <tag>bug</tag>
   </rule>
   <rule key='STI_INTERRUPTED_ON_CURRENTTHREAD' priority='MAJOR'>
-    <name>Correctness - Unneeded use of currentThread() call, to call interrupted() </name>
+    <name>Correctness - Unneeded use of currentThread() call, to call interrupted()</name>
     <configKey>STI_INTERRUPTED_ON_CURRENTTHREAD</configKey>
     <description>&lt;p&gt;
 This method invokes the Thread.currentThread() call, just to call the interrupted() method. As interrupted() is a
@@ -4445,7 +4435,7 @@ false if &lt;code&gt;o&lt;/code&gt; is not the same type as &lt;code&gt;this&lt;
     <tag>bad-practice</tag>
   </rule>
   <rule key='BC_BAD_CAST_TO_ABSTRACT_COLLECTION' priority='INFO'>
-    <name>Style - Questionable cast to abstract collection </name>
+    <name>Style - Questionable cast to abstract collection</name>
     <configKey>BC_BAD_CAST_TO_ABSTRACT_COLLECTION</configKey>
     <description>&lt;p&gt;
 This code casts a Collection to an abstract collection
@@ -4752,7 +4742,7 @@ publicized the bug pattern&lt;/a&gt;.
     <tag>style</tag>
   </rule>
   <rule key='IM_BAD_CHECK_FOR_ODD' priority='INFO'>
-    <name>Style - Check for oddness that won't work for negative numbers </name>
+    <name>Style - Check for oddness that won't work for negative numbers</name>
     <configKey>IM_BAD_CHECK_FOR_ODD</configKey>
     <description>&lt;p&gt;
 The code uses x % 2 == 1 to check to see if a value is odd, but this won't work
