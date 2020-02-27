@@ -41,10 +41,10 @@ public class FindbugsSecurityMinimalProfileTest {
 
 
     assertThat(validation.getErrors()).isEmpty();
-    assertThat(validation.getWarnings()).isEmpty();
+    assertThat(validation.getWarnings()).hasSize(5);
     // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
     assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(8);
     // 94 rules total - 8 fb = 86
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(86);
+    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).hasSize(85);
   }
 }
