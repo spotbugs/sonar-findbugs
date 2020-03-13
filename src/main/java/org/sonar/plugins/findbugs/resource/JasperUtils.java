@@ -43,7 +43,7 @@ public class JasperUtils {
   /**
    * Detect if the character is printable
    * @param c Character to test
-   * @return
+   * @return boolean true if its a printable char otherwise false
    */
   public static boolean isPrintableChar( char c ) {
     Character.UnicodeBlock block = Character.UnicodeBlock.of( c );

@@ -207,7 +207,7 @@ public class FindbugsConfiguration implements Startable {
    * Scan the given folder for classes. It will catch classes from Java, JSP and more.
    *
    * @param folder Folder to scan
-   * @return
+   * @return List<File> of class files
    * @throws IOException
    */
   public static List<File> scanForAdditionalClasses(File folder) throws IOException {
