@@ -197,9 +197,11 @@ public class FindbugsSensor implements Sensor {
       }
 
     }
-      finally {
-      classMappingWriter.flush();
-      classMappingWriter.close();
+    finally {
+      if(classMappingWriter != null) {
+        classMappingWriter.flush();
+        classMappingWriter.close();
+      }
     }
   }
 
