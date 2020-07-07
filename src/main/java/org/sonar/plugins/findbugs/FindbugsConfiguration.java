@@ -24,16 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 import edu.umd.cs.findbugs.Project;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import java.util.stream.Collectors;
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.CharEncoding;
@@ -60,6 +51,18 @@ import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
+import java.io.UncheckedIOException;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static java.lang.String.format;
 
 @ScannerSide
@@ -84,15 +87,39 @@ public class FindbugsConfiguration implements Startable {
     return new File(fileSystem.workDir(), "findbugs-result.xml");
   }
 
+  static final class WalkResult {
+    final boolean classFilesExists;
+    final boolean hasPrecompiledJsp;
+
+    WalkResult(boolean classFilesExists, boolean hasPrecompiledJsp) {
+      this.classFilesExists = classFilesExists;
+      this.hasPrecompiledJsp = hasPrecompiledJsp;
+    }
+
+    WalkResult or(@NonNull WalkResult another) {
+      if (this.classFilesExists && this.hasPrecompiledJsp) {
+        return this;
+      } else if (this.classFilesExists == another.classFilesExists && this.hasPrecompiledJsp == another.hasPrecompiledJsp) {
+        return this;
+      } else {
+        return new WalkResult(this.classFilesExists | another.classFilesExists, this.hasPrecompiledJsp | another.hasPrecompiledJsp);
+      }
+    }
+  }
+
   public Project getFindbugsProject() throws IOException {
     Project findbugsProject = new Project();
 
-    List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+    Stream<File> classFilesToAnalyze = javaResourceLocator.classFilesToAnalyze().stream();
 
     for (File file : javaResourceLocator.classpath()) {
       //Will capture additional classes including precompiled JSP
-      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
-        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
+      if (file.isDirectory()) { // will include "/target/classes" and other non-standard folders
+        classFilesToAnalyze = Stream.concat(classFilesToAnalyze,
+        Files.walk(file.toPath())
+                .map(Path::toFile)
+                .filter(File::isFile)
+                .filter(f -> f.getName().endsWith(".class")));
       }
 
       //Auxiliary dependencies
@@ -100,21 +127,26 @@ public class FindbugsConfiguration implements Startable {
     }
 
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
-    boolean hasPrecompiledJsp = false;
-    for (File classToAnalyze : classFilesToAnalyze) {
-      String absolutePath = classToAnalyze.getCanonicalPath();
-      if(hasJspFiles && !hasPrecompiledJsp
-              && (absolutePath.endsWith("_jsp.class") || //Jasper
-                  absolutePath.contains("/jsp_servlet/")) //WebLogic
-              ) {
-        hasPrecompiledJsp = true;
-      }
-      if(!"module-info.class".equals(classToAnalyze.getName())) {
-        findbugsProject.addFile(absolutePath);
-      }
+    final WalkResult result;
+    try (Stream<File> s = classFilesToAnalyze) {
+      result = s.map(classToAnalyze -> {
+        try {
+          String absolutePath = classToAnalyze.getCanonicalPath();
+          boolean hasPrecompiledJsp = hasJspFiles &&
+                  (absolutePath.endsWith("_jsp.class") || //Jasper
+                          absolutePath.contains("/jsp_servlet/")); //WebLogic
+
+          if (!"module-info.class".equals(classToAnalyze.getName())) {
+            findbugsProject.addFile(absolutePath);
+          }
+          return new WalkResult(true, hasPrecompiledJsp);
+        } catch (IOException e) {
+          throw new UncheckedIOException(e);
+        }
+      }).reduce(new WalkResult(false, false), WalkResult::or);
     }
 
-    if (classFilesToAnalyze.isEmpty()) {
+    if (!result.classFilesExists) {
       LOG.warn("Findbugs needs sources to be compiled."
               + " Please build project before executing sonar or check the location of compiled classes to"
               + " make it possible for Findbugs to analyse your (sub)project ({}).", fileSystem.baseDir().getPath());
@@ -125,7 +157,7 @@ public class FindbugsConfiguration implements Startable {
       }
     }
 
-    if (hasJspFiles && !hasPrecompiledJsp) {
+    if (hasJspFiles && !result.hasPrecompiledJsp) {
       LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
               "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
               fileSystem.baseDir().getPath());
@@ -201,31 +233,6 @@ public class FindbugsConfiguration implements Startable {
     File file = new File(fileSystem.workDir(), "findbugs-include.xml");
     FileUtils.write(file, conf.toString(), CharEncoding.UTF_8);
     return file;
-  }
-
-  /**
-   * Scan the given folder for classes. It will catch classes from Java, JSP and more.
-   *
-   * @param folder Folder to scan
-   * @return List<File> of class files
-   * @throws IOException
-   */
-  public static List<File> scanForAdditionalClasses(File folder) throws IOException {
-    List<File> allFiles = new ArrayList<File>();
-    Queue<File> dirs = new LinkedList<File>();
-    dirs.add(folder);
-    while (!dirs.isEmpty()) {
-      File dirPoll = dirs.poll();
-      if(dirPoll == null) break; //poll() result could be null if the queue is empty.
-      for (File f : dirPoll.listFiles()) {
-        if (f.isDirectory()) {
-          dirs.add(f);
-        } else if (f.isFile()&& f.getName().endsWith(".class")) {
-          allFiles.add(f);
-        }
-      }
-    }
-    return allFiles;
   }
 
   @VisibleForTesting
