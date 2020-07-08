@@ -2108,8 +2108,8 @@ deserialized instance of the class.
     <name>Bad practice - Class is Externalizable but doesn't define a void constructor</name>
     <configKey>SE_NO_SUITABLE_CONSTRUCTOR_FOR_EXTERNALIZATION</configKey>
     <description>&lt;p&gt; This class implements the &lt;code&gt;Externalizable&lt;/code&gt; interface, but does
-  not define a void constructor. When Externalizable objects are deserialized,
-   they first need to be constructed by invoking the void
+  not define a public void constructor. When Externalizable objects are deserialized,
+   they first need to be constructed by invoking the public void
    constructor. Since this class does not have one,
    serialization and deserialization will fail at runtime.&lt;/p&gt;</description>
     <tag>bad-practice</tag>
@@ -3106,7 +3106,7 @@ than are different than you would get using &lt;code&gt;.equals(...)&lt;/code&gt
   <rule key='EC_UNRELATED_TYPES_USING_POINTER_EQUALITY' priority='MAJOR'>
     <name>Correctness - Using pointer equality to compare different types</name>
     <configKey>EC_UNRELATED_TYPES_USING_POINTER_EQUALITY</configKey>
-    <description>&lt;p&gt; This method uses using pointer equality to compare two references that seem to be of
+    <description>&lt;p&gt; This method uses pointer equality to compare two references that seem to be of
 different types.  The result of this comparison will always be false at runtime.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
