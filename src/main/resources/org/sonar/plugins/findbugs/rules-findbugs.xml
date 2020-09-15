@@ -1,4 +1,26 @@
 <rules><!-- This file is auto-generated. -->
+  <rule key='JUA_DONT_ASSERT_INSTANCEOF_IN_TESTS' priority='MAJOR'>
+    <name>Bad practice -  Asserting value of instanceof in tests is not recommended. </name>
+    <configKey>JUA_DONT_ASSERT_INSTANCEOF_IN_TESTS</configKey>
+    <description>&lt;p&gt;Asserting type checks in tests is not recommended as a class cast exception message could better indicate
+            the cause of an instance of the wrong class being used than an instanceof assertion.&lt;/p&gt;
+
+            &lt;p&gt;When debugging tests that fail due to bad casts, it may be more useful to observe the output of the
+            resulting ClassCastException which could provide information about the actual encountered type.
+            Asserting the type before casting would instead result in a less informative &lt;code&gt;"false is not true"&lt;/code&gt;
+            message.&lt;/p&gt;
+
+            &lt;p&gt;If JUnit is used with hamcrest, the &lt;a href="https://junit.org/junit4/javadoc/latest/index.html?org/hamcrest/core/IsInstanceOf.html"&gt;&lt;code&gt;IsInstanceOf&lt;/code&gt;&lt;/a&gt;
+            class from hamcrest could be used instead.&lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
+  <rule key='OVERRIDING_METHODS_MUST_INVOKE_SUPER' priority='MAJOR'>
+    <name>Correctness - Super method is annotated with @OverridingMethodsMustInvokeSuper, but the overriding method isn't calling the super method.</name>
+    <configKey>OVERRIDING_METHODS_MUST_INVOKE_SUPER</configKey>
+    <description>&lt;p&gt;Super method is annotated with @OverridingMethodsMustInvokeSuper, but the overriding method isn't calling the super method.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='CNT_ROUGH_CONSTANT_VALUE' priority='MAJOR'>
     <name>Bad practice - Rough value of known constant found</name>
     <configKey>CNT_ROUGH_CONSTANT_VALUE</configKey>
@@ -2084,7 +2106,8 @@ mechanism, it must be declared to have a return type of Object.
 has absolutely no effect.
 This may be leftover marking from a previous version of the code in which the class was transient, or
 it may indicate a misunderstanding of how serialization works.
-&lt;/p&gt;</description>
+&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;This bug is reported only if special option &lt;tt&gt;reportTransientFieldOfNonSerializableClass&lt;/tt&gt; is set.&lt;/em&gt;&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='SE_TRANSIENT_FIELD_NOT_RESTORED' priority='MAJOR'>
@@ -2108,8 +2131,8 @@ deserialized instance of the class.
     <name>Bad practice - Class is Externalizable but doesn't define a void constructor</name>
     <configKey>SE_NO_SUITABLE_CONSTRUCTOR_FOR_EXTERNALIZATION</configKey>
     <description>&lt;p&gt; This class implements the &lt;code&gt;Externalizable&lt;/code&gt; interface, but does
-  not define a void constructor. When Externalizable objects are deserialized,
-   they first need to be constructed by invoking the void
+  not define a public void constructor. When Externalizable objects are deserialized,
+   they first need to be constructed by invoking the public void
    constructor. Since this class does not have one,
    serialization and deserialization will fail at runtime.&lt;/p&gt;</description>
     <tag>bad-practice</tag>
@@ -3106,7 +3129,7 @@ than are different than you would get using &lt;code&gt;.equals(...)&lt;/code&gt
   <rule key='EC_UNRELATED_TYPES_USING_POINTER_EQUALITY' priority='MAJOR'>
     <name>Correctness - Using pointer equality to compare different types</name>
     <configKey>EC_UNRELATED_TYPES_USING_POINTER_EQUALITY</configKey>
-    <description>&lt;p&gt; This method uses using pointer equality to compare two references that seem to be of
+    <description>&lt;p&gt; This method uses pointer equality to compare two references that seem to be of
 different types.  The result of this comparison will always be false at runtime.
 &lt;/p&gt;</description>
     <tag>correctness</tag>

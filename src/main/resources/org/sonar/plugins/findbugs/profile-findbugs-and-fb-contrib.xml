@@ -1,5 +1,11 @@
 <FindBugsFilter><!-- This file is auto-generated. -->
   <Match>
+    <Bug pattern='JUA_DONT_ASSERT_INSTANCEOF_IN_TESTS' />
+  </Match>
+  <Match>
+    <Bug pattern='OVERRIDING_METHODS_MUST_INVOKE_SUPER' />
+  </Match>
+  <Match>
     <Bug pattern='CNT_ROUGH_CONSTANT_VALUE' />
   </Match>
   <Match>
