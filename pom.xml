@@ -118,7 +118,7 @@
       <!-- For some reasons was not deployed with FindBugs 2.0.3 and not transitive dependency anymore -->
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>annotations</artifactId>
-      <version>3.0.1</version>
+      <version>3.0.1u2</version>
     </dependency>
 
     <dependency>
