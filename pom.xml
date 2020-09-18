@@ -331,7 +331,7 @@
         </executions>
         <configuration>
           <includes>
-            <include>com.hack23.*</include>
+            <include>org.sonar.plugins.*</include>
           </includes>
         </configuration>
       </plugin>
