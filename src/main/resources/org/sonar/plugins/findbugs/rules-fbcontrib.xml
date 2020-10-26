@@ -1199,7 +1199,7 @@ if ({{FLAWED_TEST_LOGIC}}) {
     <configKey>SPP_USE_ZERO_WITH_COMPARATOR</configKey>
     <description>This method calls the compareTo method on an object and then compares the resultant value to a value other than
 			zero. The compareTo method is really only specified to return 0, a positive number or a negative number, so you should 
-			compare as == 0, or &gt; 0 or &lt; 0, and not to a specific value like == 1.&lt;/p&gt;</description>
+			compare as == 0, or &gt; 0 or &lt; 0, and not to a specific value like == 1.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1403,7 +1403,7 @@ return "thisisaconstantstring";
     <configKey>MUI_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR</configKey>
     <description>This method checks to see if the return value from a keySet(), entrySet() or values() method call on a Map is null.
 			For any valid functioning Map these collections will always be non-null, and so the call is superfluous. Maybe you intended
-			to check whether those sets were empty instead.&lt;/p&gt;</description>
+			to check whether those sets were empty instead.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
