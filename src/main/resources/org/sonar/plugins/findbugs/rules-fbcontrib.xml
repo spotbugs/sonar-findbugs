@@ -1866,7 +1866,7 @@ return new String[0];&lt;br/&gt;
     <configKey>LO_EMBEDDED_SIMPLE_STRING_FORMAT_IN_FORMAT_STRING</configKey>
     <description>&lt;p&gt;This method uses an SLF4J or Log4J2 logger to log a string which was produced through a call to String.format, where
 	       the format string passed was a constant string containing only simple format markers that could be directly handled
-	       by SLF4J or Log4J. Rather than doing
+         by SLF4J or Log4J. Rather than doing&lt;/p&gt;
 	       &lt;pre&gt;
 	          logger.error(String.format("This %s is an error", s));
 	       &lt;pre&gt;
@@ -1874,7 +1874,7 @@ return new String[0];&lt;br/&gt;
 	       &lt;pre&gt;
 	          logger.error("This {} is an error", s);
 	       &lt;/pre&gt;
-	       &lt;/p&gt;</description>
+	       </description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -2851,13 +2851,13 @@ public String requestInfo(URI u) {
     <description>&lt;p&gt;This method is declared more permissively than the code is using. Having this method be more
 			permissive than is needed limits your ability to make observations about this method, like
     		parameter usage, refactorability, and derivability. It is possible that this detector will report
-    		erroneously if:
+    		erroneously if:&lt;/p&gt;
     		&lt;ul&gt;
     			&lt;li&gt;The method is called from code not being scanned, such as unit tests&lt;/li&gt;
 				&lt;li&gt;The method is an API method, expected to be used by unknown client code&lt;/li&gt;
     			&lt;li&gt;The method is called through reflection
     		&lt;/ul&gt;
-    		&lt;/p&gt;</description>
+    		</description>
     <tag>style</tag>
   </rule>
   <rule key='STT_TOSTRING_STORED_IN_FIELD' priority='INFO'>
