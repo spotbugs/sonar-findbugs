@@ -1199,7 +1199,7 @@ if ({{FLAWED_TEST_LOGIC}}) {
     <configKey>SPP_USE_ZERO_WITH_COMPARATOR</configKey>
     <description>This method calls the compareTo method on an object and then compares the resultant value to a value other than
 			zero. The compareTo method is really only specified to return 0, a positive number or a negative number, so you should 
-			compare as == 0, or &gt; 0 or &lt; 0, and not to a specific value like == 1.</description>
+			compare as == 0, or &gt; 0 or &lt; 0, and not to a specific value like == 1.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1403,7 +1403,7 @@ return "thisisaconstantstring";
     <configKey>MUI_NULL_CHECK_ON_MAP_SUBSET_ACCESSOR</configKey>
     <description>This method checks to see if the return value from a keySet(), entrySet() or values() method call on a Map is null.
 			For any valid functioning Map these collections will always be non-null, and so the call is superfluous. Maybe you intended
-			to check whether those sets were empty instead.</description>
+			to check whether those sets were empty instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1886,7 +1886,7 @@ return new String[0];&lt;br/&gt;
 			method uses .toString() to present a String representation for the parameter. This is unneeded as the logger
 			will do this for you, and because it is explicitly done, will always be called even if the log statement is
 			not actually written. Also, by dropping the '.toString()' you may avoid unnecessary NPEs.
-			Just pass the variable as a parameter instead.</description>
+			Just pass the variable as a parameter instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3266,7 +3266,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		&lt;code&gt;
     			ConcurrentHashMap.putIfAbsent(K, V)
     		&lt;/code&gt;
-    		instead.</description>
+    		instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3309,7 +3309,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <name>Correctness - Method of Singleton class writes to a field in an unsynchronized manner</name>
     <configKey>USFW_UNSYNCHRONIZED_SINGLETON_FIELD_WRITES</configKey>
     <description>&lt;p&gt;This method writes to a field of this class. Since this class is seen as a Singleton this can produce race
-    		conditions, or cause non-visible changes to other threads, because the field isn't accessed synchronously.</description>
+    		conditions, or cause non-visible changes to other threads, because the field isn't accessed synchronously.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3318,7 +3318,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>OI_OPTIONAL_ISSUES_USES_IMMEDIATE_EXECUTION</configKey>
     <description>&lt;p&gt;This method uses the Optional.orElse() method passing in some code that will execute immediately, whether
     		or not the else case of the Optional is needed. This may cause incorrect side effects to happen, or at the
-    		minimum, code to execute for no reason. It would be better to use Optional.orElseGet()</description>
+    		minimum, code to execute for no reason. It would be better to use Optional.orElseGet()&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3327,7 +3327,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>OI_OPTIONAL_ISSUES_USES_DELAYED_EXECUTION</configKey>
     <description>&lt;p&gt;This method uses the Optional.orElseGet() method passing in a simple variable or constant value.
     		As this value takes no time to execute and causes no side effects, the use of Optional.orElseGet is
-    		unnecessary and potentially confusing. You can use Optional.orElse() instead.</description>
+    		unnecessary and potentially confusing. You can use Optional.orElse() instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3337,7 +3337,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <description>&lt;p&gt;This method compares an Optional reference variable against null. As the whole point of the
     		Optional class is to avoid the null pointer exception, this use pattern is highly suspect.
     		The code should always make sure the Optional reference is valid, and should count on the APIs
-    		of this class to check for the held reference instead.</description>
+    		of this class to check for the held reference instead.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3385,7 +3385,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <description>&lt;p&gt;This method uses the reflective setAccessible method to alter the behavior of methods and fields in classes
     		in ways that were not expected to be accessed by the author. Doing so circumvents the protections that the author
     		provided through the class definition, and may expose your application to unexpected side effects and problems. This
-    		functionality is deprecated in Java 9, and in Java 10 it is expected that this functionality won't work at all.</description>
+    		functionality is deprecated in Java 9, and in Java 10 it is expected that this functionality won't work at all.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3406,7 +3406,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		&lt;/ul&gt;
     		&lt;p&gt;
     		You can supply a comma separated list of classes that are custom Nullable Annotations if you desire, by using the
-    		system property -Dfb-contrib.ai.annotations="com.acme.Foo,com.acme.Boo" when run.</description>
+    		system property -Dfb-contrib.ai.annotations="com.acme.Foo,com.acme.Boo" when run.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3511,7 +3511,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     	&lt;/p&gt;
     	&lt;p&gt;There is one difference between Array.asList and Collections.singletonList that you should be mindful of. The rarely used set(index, value) method is
     	allowed to be used with a List created by Array.asList, but not with Collections.singletonList. So if you do use the set(index, value) method
-    	continue using Arrays.asList.</description>
+    	continue using Arrays.asList.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
