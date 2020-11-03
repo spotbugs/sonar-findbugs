@@ -1894,18 +1894,20 @@ return new String[0];&lt;br/&gt;
     <name>Correctness - Class defines non private logger using a static class context</name>
     <configKey>LO_NON_PRIVATE_STATIC_LOGGER</configKey>
     <description>&lt;p&gt;This class defines a static logger as non private. It does so by passing the name of a
-				class such as
-				&lt;code&gt;&lt;pre&gt;public static final Logger LOG = LoggerFactory.getLogger(Foo.class);&lt;/pre&gt;&lt;/code&gt;
+				class such as&lt;/p&gt;
+        &lt;pre&gt;public static final Logger LOG = LoggerFactory.getLogger(Foo.class);&lt;/pre&gt;
+        &lt;p&gt;
 				Since this class is public it may be used in other classes, but doing so will provide the incorrect
 				class reference as the class is hard coded.
 				&lt;/p&gt;
 				&lt;p&gt;
 				It is recommend to define static loggers as private, and just redefine a new logger in any class
 				that you need to have logging done.
-				&lt;p&gt;
+				&lt;/p&gt;
 				&lt;p&gt;If you wish to have a base class define the logger, and have derived classes use that logger, you can
 				potentially use instance based logging, such as
-				&lt;code&gt;&lt;pre&gt;protected final Logger LOG = LoggerFactory.getLogger(getClass());&lt;/pre&gt;&lt;/code&gt;
+        &lt;pre&gt;protected final Logger LOG = LoggerFactory.getLogger(getClass());&lt;/pre&gt;
+        &lt;/p&gt;
 				However this has the downside of being an instance based logger, and creating a logger object in each instance
 				of the class where it is used.
 				&lt;/p&gt;</description>
@@ -3426,8 +3428,8 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <description>&lt;p&gt;This method checks for the presence of a key in a map using containsKey(), before attempting to fetch the value of the key
     	    using get(). This equates to doing two map lookups in a row. It is much simpler to just fetch the value with get, and checking
     	    for non null instead.&lt;/p&gt;
-    	    &lt;p&gt;As an example, instead of using
-    	    &lt;code&gt;
+    	    &lt;p&gt;As an example, instead of using&lt;/p&gt;
+    	
     	    &lt;pre&gt;
     	    	Map&lt;String, String&gt; myMap = getSomeMap();
     	    	if (myMap.containsKey("foo")) {
@@ -3435,9 +3437,9 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     	    		....
     	    	}
     	    &lt;/pre&gt;
-    	    &lt;/code&gt;
+          &lt;p&gt;
     	    convert this to
-    	    &lt;code&gt;
+    	    &lt;/p&gt;
     	    &lt;pre&gt;
      	    	Map&lt;String, String&gt; myMap = getSomeMap();
      	    	String value = myMap.get("foo");
@@ -3445,13 +3447,12 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     	    		....
     	    	}
     	    &lt;/pre&gt;
-    	    &lt;/code&gt;
-    	    &lt;/p&gt;
+    	    
     	    &lt;p&gt;The only caveat to this is that if you use a null value in a map to represent a third state for the key, then in this case
     	    using containsKey is 'correct'. This means an entry found in the map with a null value is taken differently than no entry
     	    at all. However, this is a very subtle programming paradigm, and likely to cause problems. If you wish to mark an entry as
     	    not being present, it is better to use a named 'sentinel' value to denote this, so instead of:
-    	    &lt;code&gt;
+    	    &lt;/p&gt;
     	    &lt;pre&gt;
     	    	Map&lt;String, String&gt; myMap = getSomeMap();
     	    	if (myMap.containsKey("foo")) {
@@ -3459,9 +3460,9 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     	    		....
     	    	}
     	    &lt;/pre&gt;
-    	    &lt;/code&gt;
+    	    
     	    convert this to
-    	    &lt;code&gt;
+    	    
     	    &lt;pre&gt;
      	    	Map&lt;String, String&gt; myMap = getSomeMap();
      	    	String value = myMap.get("foo");
@@ -3471,8 +3472,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     	    	where NOT_FOUND is some constant that denotes this special status. Of course you will need to find a special
     	    	sentinel value for each type you are using that isn't possible to have normally.
     	    &lt;/pre&gt;
-    	    &lt;/code&gt;
-    	    &lt;/p&gt;</description>
+    	    </description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3482,22 +3482,21 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <description>&lt;p&gt;This method fetches the value of an entry in a map using get(K k), and then follows it up with a remove(K k).
     		Since a remove() also returns the value, there is no point for doing the get, and just causes two map lookups
     		to occur when it can be done with just one.&lt;/p&gt;
-    	    &lt;p&gt;As an example, instead of using
-    	    &lt;code&gt;
+    	    &lt;p&gt;As an example, instead of using&lt;/p&gt;
     	    &lt;pre&gt;
     	    	Map&lt;String, String&gt; myMap = getSomeMap();
     	    	String v = myMap.get("foo")) {
     	    	myMap.remove("foo");
-    	    &lt;/pre&gt;
-    	    &lt;/code&gt;
-    	    convert this to
-    	    &lt;code&gt;
+          &lt;/pre&gt;
+          &lt;p&gt;
+          convert this to
+          &lt;/p&gt;
+    	    
     	    &lt;pre&gt;
      	    	Map&lt;String, String&gt; myMap = getSomeMap();
      	    	String v = myMap.remove("foo");
-    	    &lt;/pre&gt;
-    	    &lt;/code&gt;
-			&lt;/p&gt;</description>
+    	    &lt;/pre&gt;  
+		    </description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3520,15 +3519,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>LUI_USE_GET0</configKey>
     <description>&lt;p&gt;This method fetches the first item in a List using collection streaming. As a list is already ordered
     	there is no need to do that, just use the regular get(0) interface.&lt;br/&gt;
-    	Example:
-    	&lt;code&gt;&lt;pre&gt;
+    	Example:&lt;/p&gt;
+    	&lt;pre&gt;
     	String s = myList.stream().findFirst().get();
-    	&lt;/pre&gt;&lt;/code&gt;
+    	&lt;/pre&gt;
     	Can be more simply done using
-    	&lt;code&gt;&lt;pre&gt;
+    	&lt;pre&gt;
     	String s = myList.get(0);
-    	&lt;/pre&gt;&lt;/code&gt;
-    	&lt;/p&gt;</description>
+    	&lt;/pre&gt;
+    	</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3551,15 +3550,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         circuit the building of the collection.
         &lt;/p&gt;
         &lt;p&gt;
-        Instead of
-        &lt;code&gt;&lt;pre&gt;
+        Instead of&lt;/p&gt;
+        &lt;pre&gt;
         baubles.stream().map(Bauble::getName).collect(Collectors.toSet()).contains(name)
-        &lt;/pre&gt;&lt;/code&gt;
+        &lt;/pre&gt;
         do
-        &lt;code&gt;&lt;/pre&gt;
+        &lt;pre&gt;
         baubles.stream().anyMatch(b -&gt; name.equals(b.getName()))
-        &lt;/pre&gt;&lt;/code&gt;
-        &lt;/p&gt;</description>
+        &lt;/pre&gt;
+        </description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3651,24 +3650,24 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>SUI_CONTAINS_BEFORE_ADD</configKey>
     <description>&lt;p&gt;This method checks to see if an element is not in a set before adding it. This is unnecessary as you can just
             add the item, and if the item exists, it won't add it, otherwise it will.&lt;/p&gt;
-            &lt;p&gt;As an example, instead of using
-            &lt;code&gt;
+            &lt;p&gt;As an example, instead of using&lt;/p&gt;
+            
             &lt;pre&gt;
                 Set&lt;String&gt; mySet = getSomeSet();
                 if (!mySet.contains("foo")) {
                     mySet.add("foo");
                 }
             &lt;/pre&gt;
-            &lt;/code&gt;
+            
             convert this to
-            &lt;code&gt;
+            
             &lt;pre&gt;
                 Set&lt;String&gt; mySet = getSomeSet();
                 if (mySet.add("foo")) {
                 }
             &lt;/pre&gt;
-            &lt;/code&gt;
-            &lt;/p&gt;</description>
+            
+            </description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3678,23 +3677,21 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <description>&lt;p&gt;This method checks to see if an element is in a set before removing it. This is unnecessary as you can just
             remove the item, and if the item exists, it will return true.&lt;/p&gt;
             &lt;p&gt;As an example, instead of using
-            &lt;code&gt;
             &lt;pre&gt;
                 Set&lt;String&gt; mySet = getSomeSet();
                 if (mySet.contains("foo")) {
                     mySet.remove("foo");
                 }
             &lt;/pre&gt;
-            &lt;/code&gt;
+            &lt;p&gt;
             convert this to
-            &lt;code&gt;
+            &lt;/p&gt;
             &lt;pre&gt;
                 Set&lt;String&gt; mySet = getSomeSet();
                 if (mySet.remove("foo")) {
                 }
             &lt;/pre&gt;
-            &lt;/code&gt;
-            &lt;/p&gt;</description>
+            </description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
