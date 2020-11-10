@@ -3,13 +3,13 @@ import FsbClassifier;
 import static FsbClassifier.*;
 @Grapes([
 
-    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.1.2'),
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.1.4'),
     @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.4.7'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.10.1')]
 )
 
 
-FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.1.2')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.1.4')
 CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.4.7')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.10.1')
 
