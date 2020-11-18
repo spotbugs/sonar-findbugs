@@ -87,6 +87,9 @@
     <Bug pattern='SQL_INJECTION_JDBC' />
   </Match>
   <Match>
+    <Bug pattern='SQL_INJECTION_VERTX' />
+  </Match>
+  <Match>
     <Bug pattern='SQL_INJECTION_ANDROID' />
   </Match>
   <Match>
@@ -106,6 +109,9 @@
   </Match>
   <Match>
     <Bug pattern='OGNL_INJECTION' />
+  </Match>
+  <Match>
+    <Bug pattern='GROOVY_SHELL' />
   </Match>
   <Match>
     <Bug pattern='BAD_HEXA_CONVERSION' />
@@ -268,6 +274,9 @@
   </Match>
   <Match>
     <Bug pattern='OVERLY_PERMISSIVE_FILE_PERMISSION' />
+  </Match>
+  <Match>
+    <Bug pattern='IMPROPER_UNICODE' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
