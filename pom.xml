@@ -53,7 +53,7 @@
     <sonar.version>7.9</sonar.version>
     <sonar-java.version>5.13.1.18282</sonar-java.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
-    <findsecbugs.version>1.10.1</findsecbugs.version>
+    <findsecbugs.version>1.11.0</findsecbugs.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
