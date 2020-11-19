@@ -42,4 +42,4 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 4.0.0                  | 4.0.0 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
 4.0.1                  | 4.1.2 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
 4.0.2                  | 4.1.4 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
-4.0.3-SNAPSHOT         | 4.1.4 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
+4.0.3-SNAPSHOT         | 4.1.4 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
