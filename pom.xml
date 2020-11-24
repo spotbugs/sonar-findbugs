@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>4.0.2-SNAPSHOT</version>
+  <version>4.0.3-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
@@ -53,7 +53,7 @@
     <sonar.version>7.9</sonar.version>
     <sonar-java.version>5.13.1.18282</sonar-java.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
-    <findsecbugs.version>1.10.1</findsecbugs.version>
+    <findsecbugs.version>1.11.0</findsecbugs.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -132,7 +132,7 @@
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.4.13</version>
+      <version>1.4.14</version>
       <exclusions>
         <!-- we use stax -->
         <exclusion>

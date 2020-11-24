@@ -1853,11 +1853,24 @@ Bind variables in prepared statements can be used to easily mitigate the risk of
     &lt;pre&gt;JdbcTemplate jdbc = new JdbcTemplate();
 int count = jdbc.queryForObject("select count(*) from Users where name = '"+paramName+"'", Integer.class);
 &lt;/pre&gt;
+    &lt;pre&gt;@Value("properties")
+private String sql;
+
+public function count() {
+    JdcbOperation jdbc = new JdcbOperation();
+    int count = jdbc.query(sql);
+}&lt;/pre&gt;
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
     &lt;pre&gt;JdbcTemplate jdbc = new JdbcTemplate();
 int count = jdbc.queryForObject("select count(*) from Users where name = ?", Integer.class, paramName);&lt;/pre&gt;
+    &lt;pre&gt;private final static String sql = "select count(*) from Users";
+
+public function count() {
+    JdcbOperation jdbc = new JdcbOperation();
+    int count = jdbc.query(sql);
+}&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
 
@@ -1965,17 +1978,25 @@ Just like SQL, all inputs passed to an LDAP query need to be passed in safely. U
 Therefore, the primary defense against LDAP injection is strong input validation of any untrusted data before including it in an LDAP query.
 &lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+    &lt;strong&gt;Code at risk:&lt;/strong&gt;&lt;br/&gt;
     &lt;pre&gt;NamingEnumeration&amp;lt;SearchResult&amp;gt; answers = context.search("dc=People,dc=example,dc=com",
         "(uid=" + username + ")", ctrls);&lt;/pre&gt;
 &lt;/p&gt;
 &lt;br/&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;
-&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+Safe evaluation of Java code using "StringUtils" library.&lt;br/&gt;
+&lt;pre&gt;if(StringUtils.isAlphanumeric(username)) {
+    NamingEnumeration&amp;lt;SearchResult&amp;gt; answers = context.search("dc=People,dc=example,dc=com",
+        "(uid=" + username + ")", ctrls);
+}&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;&lt;p&gt;
+&lt;strong&gt;References&lt;/strong&gt;&lt;br/&gt;
+&lt;a href="https://cheatsheetseries.owasp.org/cheatsheets/LDAP_Injection_Prevention_Cheat_Sheet.html"&gt;LDAP Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A1-Injection"&gt;OWASP: Top 10 A1:2017-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246947/LDAP%20Injection"&gt;WASC-29: LDAP Injection&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/90.html"&gt;CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://www.veracode.com/security/ldap-injection"&gt;LDAP Injection Guide: Learn How to Detect LDAP Injections and Improve LDAP Security&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
@@ -1987,7 +2008,7 @@ Therefore, the primary defense against LDAP injection is strong input validation
     <name>Security - Potential code injection when using Script Engine</name>
     <configKey>SCRIPT_ENGINE_INJECTION</configKey>
     <description>&lt;p&gt;
-    Dynamic code is being evaluate. A careful analysis of the code construction should be made. Malicious code execution
+    Dynamic code is being evaluated. A careful analysis of the code construction should be made. Malicious code execution
     could lead to data leakage or operating system compromised.
 &lt;/p&gt;
 &lt;p&gt;
@@ -2168,7 +2189,7 @@ public void getUserProperty(String property) {
 &lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
-In general, method evaluating OGNL expression should not receive user input. It is intended to be used in static configurations and JSP.
+In general, method evaluating OGNL expression should not receive user input. It is intended to be used in static configurations.
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
@@ -3876,7 +3897,7 @@ new URL(String url).getContent()
     <configKey>TEMPLATE_INJECTION_VELOCITY</configKey>
     <description>&lt;p&gt;
 Velocity template engine is powerful. It is possible to add logic including condition statements, loops and external calls.
-It is not design to be sandbox to templating operations. A malicious user in control of a template can run malicious code
+It is not designed to be a sandbox to templating operations. A malicious user in control of a template can run malicious code
 on the server-side. Velocity templates should be seen as scripts.
 &lt;/p&gt;
 &lt;p&gt;
@@ -4310,15 +4331,24 @@ Concatenating unvalidated user input into a URL can allow an attacker to overrid
 In the following example the programmer has not considered the possibility that an attacker could provide a parameter &lt;code&gt;lang&lt;/code&gt; such as &lt;code&gt;en&amp;user_id=1&lt;/code&gt;, which would enable him to change the &lt;code&gt;user_id&lt;/code&gt; at will.
 &lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
-&lt;pre&gt;String lang = request.getParameter("lang");
-GetMethod get = new GetMethod("http://www.host.com");
-get.setQueryString("lang=" + lang + "&amp;user_id=" + user_id);
+&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;pre&gt;String input = request.getParameter("lang");
+GetMethod get = new GetMethod("http://www.host.com/viewDetails");
+get.setQueryString("lang=" + input + "&amp;user_id=" + userId);
 get.execute();&lt;/pre&gt;
 &lt;p&gt;
     &lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
-Sanitize user input before using it in HTTP parameters.
+You can either encode user input before placing it in HTTP parameters or use the
+&lt;a href="https://hc.apache.org/httpcomponents-client-4.3.x/httpclient/apidocs/org/apache/http/client/utils/URIBuilder.html"&gt;UriBuilder class&lt;/a&gt;
+from &lt;a href="https://hc.apache.org/httpcomponents-client-ga/"&gt;Apache HttpClient&lt;/a&gt;.
 &lt;/p&gt;
+&lt;pre&gt;
+URIBuilder uriBuilder = new URIBuilder("http://www.host.com/viewDetails");
+uriBuilder.addParameter("lang", input);
+uriBuilder.addParameter("user_id", userId);
+
+HttpGet httpget = new HttpGet(uriBuilder.build().toString()); //OK
+&lt;/pre&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
