@@ -47,7 +47,7 @@
   </scm>
 
   <properties>
-    <spotbugs.version>4.1.4</spotbugs.version>
+    <spotbugs.version>4.2.0</spotbugs.version>
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.0.0-M5</surefire.version>
     <sonar.version>7.9</sonar.version>
