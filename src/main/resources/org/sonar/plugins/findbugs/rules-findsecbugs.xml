@@ -323,7 +323,7 @@ r.exec("/bin/sh -c some_tool" + input);&lt;/pre&gt;
 name of the file that is specified prior to the NULL byte, since at the OS level, all strings are terminated by a null byte even
 though Java itself doesn't care about null bytes or treat them special. This OS behavior can be used to bypass filename validation
 that looks at the end of the filename (e.g., ends with &lt;code&gt;".log"&lt;/code&gt;) to make sure it's a safe file to access.&lt;/p&gt;
-&lt;p&gt;To fix this, two things are recommended:
+&lt;p&gt;To fix this, two things are recommended:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Upgrade to Java 7 update 40 or later, or Java 8+ since
 &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=8014846"&gt;NULL byte injection in filenames is fixed in those versions&lt;/a&gt;.&lt;/li&gt;
@@ -686,35 +686,34 @@ uses. &lt;b&gt;PBKDF2&lt;/b&gt; should be used to hash password for example.&lt;
     <name>Security - DefaultHttpClient with default constructor is not compatible with TLS 1.2</name>
     <configKey>DEFAULT_HTTP_CLIENT</configKey>
     <description>&lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;HttpClient client = new DefaultHttpClient();&lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
+
 &lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
 
 Upgrade your implementation to use one of the recommended constructs and configure &lt;code&gt;https.protocols&lt;/code&gt; JVM option to include TLSv1.2:&lt;/p&gt;
 
-&lt;p&gt;
 &lt;ul&gt;
-  &lt;li&gt;Use &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html"&gt;SystemDefaultHttpClient&lt;/a&gt; instead&lt;/li&gt;
-&lt;p&gt;
-    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;
+  &lt;li&gt;Use &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/SystemDefaultHttpClient.html"&gt;SystemDefaultHttpClient&lt;/a&gt; instead
+  &lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;
+    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;HttpClient client = new SystemDefaultHttpClient();&lt;/pre&gt;
-&lt;/p&gt;
+&lt;ul&gt;
   &lt;li&gt;Create an HttpClient based on SSLSocketFactory - get an SSLScoketFactory instance with &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/conn/ssl/SSLSocketFactory.html#getSystemSocketFactory()"&gt;&lt;code&gt;getSystemSocketFactory()&lt;/code&gt;&lt;/a&gt; and use this instance for HttpClient creation&lt;/li&gt;
   &lt;li&gt;Create an HttpClient based on SSLConnectionSocketFactory - get an instance with &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/conn/ssl/SSLConnectionSocketFactory.html#getSystemSocketFactory()"&gt;&lt;code&gt;getSystemSocketFactory()&lt;/code&gt;&lt;/a&gt; and use this instance for HttpClient creation&lt;/li&gt;
   &lt;li&gt;Use HttpClientBuilder - call &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/HttpClientBuilder.html#useSystemProperties()"&gt;&lt;code&gt;useSystemProperties()&lt;/code&gt;&lt;/a&gt; before calling &lt;code&gt;build()&lt;/code&gt;&lt;/li&gt;
-&lt;p&gt;
-    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;
+    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;HttpClient client = HttpClientBuilder.create().useSystemProperties().build();&lt;/pre&gt;
-&lt;/p&gt;
+&lt;ul&gt;
   &lt;li&gt;HttpClients - call &lt;a href="https://hc.apache.org/httpcomponents-client-ga/httpclient/apidocs/org/apache/http/impl/client/HttpClients.html#createSystem()"&gt;&lt;code&gt;createSystem()&lt;/code&gt;&lt;/a&gt; to create an instance&lt;/li&gt;
-&lt;p&gt;
-    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;
+    &lt;b&gt;Sample Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;HttpClient client = HttpClients.createSystem();&lt;/pre&gt;
-&lt;/p&gt;
-&lt;/ul&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 
 &lt;p&gt;
@@ -729,17 +728,14 @@ Upgrade your implementation to use one of the recommended constructs and configu
     <name>Security - Weak SSLContext</name>
     <configKey>SSL_CONTEXT</configKey>
     <description>&lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 
     &lt;pre&gt;SSLContext.getInstance("SSL");&lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
+
 &lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
 
 Upgrade your implementation to the following, and configure &lt;code&gt;https.protocols&lt;/code&gt; JVM option to include TLSv1.2:&lt;/p&gt;
 &lt;pre&gt;SSLContext.getInstance("TLS");&lt;/pre&gt;
-&lt;p&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -766,7 +762,7 @@ Upgrade your implementation to the following, and configure &lt;code&gt;https.pr
     - &lt;a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-131Ar2.pdf"&gt;NIST: Transitioning the Use of Cryptographic Algorithms and Key Lengths p.15&lt;/a&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;MyProprietaryMessageDigest extends MessageDigest {
     @Override
     protected byte[] engineDigest() {
@@ -775,14 +771,11 @@ Upgrade your implementation to the following, and configure &lt;code&gt;https.pr
         return [...];
     }
 }&lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;
 &lt;p&gt;Upgrade your implementation to use one of the approved algorithms. Use an algorithm that is sufficiently strong for your specific security needs.&lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Example Solution:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Example Solution:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;MessageDigest sha256Digest = MessageDigest.getInstance("SHA256");
 sha256Digest.update(password.getBytes());&lt;/pre&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -826,7 +819,7 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
     <configKey>REDOS</configKey>
     <description>&lt;p&gt;
     Regular expressions (Regex) are frequently subject to Denial of Service (DOS) attacks (called ReDOS). This is due to the fact that regex engines
-    may take a large amount of time when analyzing certain strings, depending on how the regex is defined.
+    may take a large amount of time when analyzing certain strings, depending on how the regex is defined.&lt;/p&gt;
 &lt;p&gt;
     For example, for the regex: &lt;code&gt;^(a+)+$&lt;/code&gt;, the input "&lt;code&gt;aaaaaaaaaaaaaaaaX&lt;/code&gt;" will cause the regex engine to analyze 65536
 different paths.&lt;sup&gt;[1] Example taken from OWASP references&lt;/sup&gt;&lt;/p&gt;
@@ -2571,14 +2564,13 @@ Passwords should not be kept in the source code. The source code can be widely s
 certainly shared in open source. To be managed safely, passwords and secret keys should be stored in separate configuration files or keystores.
 (Hard coded keys are reported separately by &lt;i&gt;Hard Coded Key&lt;/i&gt; pattern)
 &lt;/p&gt;
-&lt;p&gt;
-&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 
 &lt;pre&gt;private String SECRET_PASSWORD = "letMeIn!";
 
 Properties props = new Properties();
 props.put(Context.SECURITY_CREDENTIALS, "p@ssw0rd");&lt;/pre&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -2597,15 +2589,13 @@ Cryptographic keys should not be kept in the source code. The source code can be
 certainly shared in open source. To be managed safely, passwords and secret keys should be stored in separate configuration files or keystores.
 (Hard coded passwords are reported separately by the &lt;i&gt;Hard coded password&lt;/i&gt; pattern)
 &lt;/p&gt;
-&lt;p&gt;
-&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 
 &lt;pre&gt;byte[] key = {1, 2, 3, 4, 5, 6, 7, 8};
 SecretKeySpec spec = new SecretKeySpec(key, "AES");
 Cipher aes = Cipher.getInstance("AES");
 aes.init(Cipher.ENCRYPT_MODE, spec);
 return aesCipher.doFinal(secretData);&lt;/pre&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -2622,26 +2612,24 @@ An attacker might be able to detect the value of the secret hash due to the expo
 functions &lt;code&gt;Arrays.equals()&lt;/code&gt; or &lt;code&gt;String.equals()&lt;/code&gt; are called, they will exit earlier if fewer
 bytes are matched.
 &lt;/p&gt;
-&lt;p&gt;
 &lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
-
+&lt;/p&gt;
 &lt;pre&gt;
 String actualHash = ...
 
 if(userInput.equals(actualHash)) {
     ...
 }&lt;/pre&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
 
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;/p&gt;
 &lt;pre&gt;
 String actualHash = ...
 
 if(MessageDigest.isEqual(userInput.getBytes(),actualHash.getBytes())) {
     ...
 }&lt;/pre&gt;
-&lt;/p&gt;
-&lt;br/&gt;
+
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/203.html"&gt;CWE-203: Information Exposure Through DiscrepancyKey&lt;/a&gt;&lt;br/&gt;
@@ -2659,6 +2647,7 @@ Form inputs should have minimal input validation. Preventive validation helps pr
 &lt;/p&gt;
 &lt;p&gt;
 Validation can be introduced by implementing a &lt;code&gt;validate&lt;/code&gt; method.
+&lt;/p&gt;
 &lt;pre&gt;
 public class RegistrationForm extends ValidatorForm {
 
@@ -2672,7 +2661,6 @@ public class RegistrationForm extends ValidatorForm {
     }
 }
 &lt;/pre&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -3033,7 +3021,6 @@ The solution is to avoid using XMLDecoder to parse content from an untrusted sou
     Initialization vector must be regenerated for each message to be encrypted.
 &lt;/p&gt;
 &lt;p&gt;&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/p&gt;
-&lt;p&gt;
 &lt;pre&gt;
 private static byte[] IV = new byte[16] {(byte)0,(byte)1,(byte)2,[...]};
 
@@ -3043,7 +3030,6 @@ public void encrypt(String message) throws Exception {
 [...]
 &lt;/pre&gt;
 &lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;/p&gt;
-&lt;p&gt;
 &lt;pre&gt;
 public void encrypt(String message) throws Exception {
 
@@ -3053,7 +3039,6 @@ public void encrypt(String message) throws Exception {
     IvParameterSpec ivSpec = new IvParameterSpec(iv);
 [...]
 &lt;/pre&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -3664,7 +3649,7 @@ cookie.setHttpOnly(true); //HttpOnly flag
 &lt;/p&gt;
 
 &lt;p&gt;
-&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;
 public UserData deserializeObject(InputStream receivedFile) throws IOException, ClassNotFoundException {
 
@@ -3673,10 +3658,9 @@ public UserData deserializeObject(InputStream receivedFile) throws IOException, 
     }
 }
 &lt;/pre&gt;
-&lt;/p&gt;
 
 &lt;p&gt;
-&lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;p&gt;
 Avoid deserializing object provided by remote users.
 &lt;/p&gt;
@@ -3698,16 +3682,16 @@ Avoid deserializing object provided by remote users.
     <name>Security - Unsafe Jackson deserialization configuration</name>
     <configKey>JACKSON_UNSAFE_DESERIALIZATION</configKey>
     <description>&lt;p&gt;When the Jackson databind library is used incorrectly the deserialization of untrusted data can lead to remote code execution, if there is a class in classpath that allows the trigger of malicious operation.
-
+        &lt;/p&gt;
 &lt;p&gt;
-&lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;p&gt;
 Explicitly define what types and subtypes you want to be available when using polymorphism through JsonTypeInfo.Id.NAME.
 Also, never call &lt;code&gt;ObjectMapper.enableDefaultTyping&lt;/code&gt; (and then &lt;code&gt;readValue&lt;/code&gt; a type that holds a Object or Serializable or Comparable or a known deserialization type).
 &lt;/p&gt;
 
 &lt;p&gt;
-&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;
 public class Example {
     static class ABean {
@@ -3733,7 +3717,6 @@ public class Example {
 
 }
 &lt;/pre&gt;
-&lt;/p&gt;
 
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -3779,7 +3762,7 @@ Removing gadget is a hardening practice to reduce the risk of being exploited.
 &lt;/p&gt;
 
 &lt;p&gt;
-&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;
 public void doSomething(HttpServletRequest req, String activateProperty) {
     //..
@@ -3796,10 +3779,9 @@ public void loginEvent(HttpServletRequest req, String userSubmitted) {
     req.getSession().setAttribute("user",userSubmitted);
 }
 &lt;/pre&gt;
-&lt;/p&gt;
 
 &lt;p&gt;
-&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;p&gt;
 The solution would be to add validation prior setting a new session attribute. When possible, prefer data from
 safe location rather than using direct user input.
@@ -3822,7 +3804,7 @@ safe location rather than using direct user input.
     style sheet, he might be able to trigger remote code execution.&lt;sup&gt;[2]&lt;/sup&gt;
 &lt;/p&gt;
 &lt;p&gt;
-&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Code at risk:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;
 Source xslt = new StreamSource(new FileInputStream(inputUserFile)); //Dangerous source
 
@@ -3831,9 +3813,8 @@ Transformer transformer = TransformerFactory.newInstance().newTransformer(xslt);
 Source text = new StreamSource(new FileInputStream("/data_2_process.xml"));
 transformer.transform(text, new StreamResult(...));
 &lt;/pre&gt;
-&lt;/p&gt;
 &lt;p&gt;
-&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 
 &lt;p&gt;The solution is to enable the secure processing mode which will block potential reference to Java classes such as &lt;code&gt;java.lang.Runtime&lt;/code&gt;.&lt;/p&gt;
 
@@ -3876,8 +3857,10 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
 &lt;/p&gt;
 &lt;p&gt;
     URLConnection can be used with file:// protocol or other protocols to access local filesystem and potentially other services.
+&lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+    &lt;/p&gt;
 &lt;pre&gt;
 new URL(String url).openConnection()
 &lt;/pre&gt;
@@ -3889,16 +3872,15 @@ new URL(String url).openStream()
 &lt;pre&gt;
 new URL(String url).getContent()
 &lt;/pre&gt;
-&lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
     &lt;ul&gt;
         &lt;li&gt;Don't accept URL destinations from users&lt;/li&gt;
         &lt;li&gt;Accept a destination key, and use it to look up the target destination associate with the key&lt;/li&gt;
         &lt;li&gt;White list URLs (if possible)&lt;/li&gt;
         &lt;li&gt;Validate that the beginning of the URL is part of a white list&lt;/li&gt;
     &lt;/ul&gt;
-&lt;/p&gt;
+
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
@@ -4349,7 +4331,7 @@ Concatenating unvalidated user input into a URL can allow an attacker to overrid
 In the following example the programmer has not considered the possibility that an attacker could provide a parameter &lt;code&gt;lang&lt;/code&gt; such as &lt;code&gt;en&amp;user_id=1&lt;/code&gt;, which would enable him to change the &lt;code&gt;user_id&lt;/code&gt; at will.
 &lt;/p&gt;
 &lt;p&gt;
-    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;&lt;/p&gt;
 &lt;pre&gt;String input = request.getParameter("lang");
 GetMethod get = new GetMethod("http://www.host.com/viewDetails");
 get.setQueryString("lang=" + input + "&amp;user_id=" + userId);
@@ -4359,6 +4341,7 @@ get.execute();&lt;/pre&gt;
 You can either encode user input before placing it in HTTP parameters or use the
 &lt;a href="https://hc.apache.org/httpcomponents-client-4.3.x/httpclient/apidocs/org/apache/http/client/utils/URIBuilder.html"&gt;UriBuilder class&lt;/a&gt;
 from &lt;a href="https://hc.apache.org/httpcomponents-client-ga/"&gt;Apache HttpClient&lt;/a&gt;.
+&lt;/p&gt;
 &lt;pre&gt;
 URIBuilder uriBuilder = new URIBuilder("http://www.host.com/viewDetails");
 uriBuilder.addParameter("lang", input);
@@ -4366,7 +4349,6 @@ uriBuilder.addParameter("user_id", userId);
 
 HttpGet httpget = new HttpGet(uriBuilder.build().toString()); //OK
 &lt;/pre&gt;
-&lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
