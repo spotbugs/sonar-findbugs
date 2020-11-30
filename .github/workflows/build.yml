@@ -1,0 +1,66 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  release:
+    types:
+      - published
+
+strategy:
+  matrix:
+    include:
+      # minimal support version
+      - SONAR_VERSION: 7.6
+        SONAR_JAVA_VERSION: 5.10.1.16922
+      # latest LTS version
+      - SONAR_VERSION: 7.9
+        SONAR_JAVA_VERSION: 5.13.1.18282
+      # to reproduce https://github.com/spotbugs/sonar-findbugs/issues/263
+      - SONAR_VERSION: 7.6
+        SONAR_JAVA_VERSION: 5.12.1.17771
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@5a4ac90
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@d202f5d
+        with:
+          java-version: '11.0.x'
+      - name: Decide the phase to run
+        id: decide-phase
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.release }}" ]; then
+            echo "This build will run `mvn deploy` to publish the artifact"
+            echo "::set-output name=phase::deploy"
+          else
+            echo "This build will run `mvn verify` to verify the build result"
+            echo "::set-output name=phase::verify"
+          fi
+      - name: Build
+        run: |
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent ${{ steps.decide-phase.outputs.phase }} ${SONAR_LOGIN:+sonar:sonar} -B -e -V \
+            -Dsonar.version=${{ matrix.SONAR_VERSION }} \
+            -Dsonar-java.version=${{ matrix.SONAR_JAVA_VERSION }} \
+            -Dsonar.login=$SONAR_LOGIN
+          docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest
+        env:
+          GPG_KEY_NAME: ${{ secrets.GPG_KEY_NAME }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          GOAL: ${{ github.event.release }}
+      - name: Deploy
+        run: |
+          mvn clean deploy -B -e -P deploy -s .github/settings.xml -DskipTests
+        env:
+          GPG_KEY_NAME: ${{ secrets.GPG_KEY_NAME }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          OSSRH_JIRA_USERNAME: eller86
+          OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
