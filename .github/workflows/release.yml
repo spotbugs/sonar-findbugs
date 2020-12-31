@@ -1,0 +1,23 @@
+name: Update property for sonar-update-center
+
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  sonar-update-center:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: KengoTODA/sonar-update-center-action@main
+        with:
+          prop-file: findbugs.properties
+          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          minimal-supported-sq-version: 7.9
+          latest-supported-sq-version: LATEST
+          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
+          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
+          public-version: ${{ github.event.release.tag_name }}
+          sonar-cloud-url: https://sonarcloud.io/dashboard?branch=${{ github.event.release.tag_name }}&id=com.github.spotbugs%3Asonar-findbugs-plugin
+          github-token: ${{ secrets.PAT_TO_FORK }}
+          discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
