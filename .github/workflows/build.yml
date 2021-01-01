@@ -28,10 +28,10 @@ jobs:
       - uses: actions/checkout@5a4ac90
         with:
           fetch-depth: 0
-      - name: Set up JDK 11
+      - name: Set up JDK 8
         uses: actions/setup-java@d202f5d
         with:
-          java-version: '11.0.x'
+          java-version: 8
       - name: Decide the phase to run
         id: decide-phase
         shell: bash
