@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - '*'
   pull_request:
     branches:
       - master
@@ -52,15 +52,14 @@ jobs:
             -Dsonar.login=$SONAR_LOGIN
           docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest
         env:
-          GPG_KEY_NAME: ${{ secrets.GPG_KEY_NAME }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_KEY_NAME: ${{ secrets.SIGNING_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
           SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
-          GOAL: ${{ github.event.release }}
       - name: Deploy
         run: |
           mvn clean deploy -B -e -P deploy -s .github/settings.xml -DskipTests
         env:
-          GPG_KEY_NAME: ${{ secrets.GPG_KEY_NAME }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          GPG_KEY_NAME: ${{ secrets.SIGNING_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
           OSSRH_JIRA_USERNAME: eller86
           OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
