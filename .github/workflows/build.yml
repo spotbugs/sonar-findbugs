@@ -9,22 +9,21 @@ on:
     types:
       - published
 
-strategy:
-  matrix:
-    include:
-      # minimal support version
-      - SONAR_VERSION: 7.6
-        SONAR_JAVA_VERSION: 5.10.1.16922
-      # latest LTS version
-      - SONAR_VERSION: 7.9
-        SONAR_JAVA_VERSION: 5.13.1.18282
-      # to reproduce https://github.com/spotbugs/sonar-findbugs/issues/263
-      - SONAR_VERSION: 7.6
-        SONAR_JAVA_VERSION: 5.12.1.17771
-
 jobs:
   build:
     runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        include:
+          # minimal support version
+          - SONAR_VERSION: 7.6
+            SONAR_JAVA_VERSION: 5.10.1.16922
+          # latest LTS version
+          - SONAR_VERSION: 7.9
+            SONAR_JAVA_VERSION: 5.13.1.18282
+          # to reproduce https://github.com/spotbugs/sonar-findbugs/issues/263
+          - SONAR_VERSION: 7.6
+            SONAR_JAVA_VERSION: 5.12.1.17771
     steps:
       - uses: actions/checkout@5a4ac90
         with:
