@@ -18,7 +18,7 @@ jobs:
           # minimal support version
           - SONAR_VERSION: 7.6
             SONAR_JAVA_VERSION: 5.10.1.16922
-            SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+            USE_SONAR: true
           # latest LTS version
           - SONAR_VERSION: 7.9
             SONAR_JAVA_VERSION: 5.13.1.18282
@@ -46,7 +46,7 @@ jobs:
           fi
       - name: Build
         run: |
-          mvn org.jacoco:jacoco-maven-plugin:prepare-agent ${{ steps.decide-phase.outputs.phase }} ${SONAR_LOGIN:+sonar:sonar} -B -e -V \
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent ${{ steps.decide-phase.outputs.phase }} ${USE_SONAR:+sonar:sonar} -B -e -V \
             -Dsonar.version=${{ matrix.SONAR_VERSION }} \
             -Dsonar-java.version=${{ matrix.SONAR_JAVA_VERSION }} \
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
@@ -58,7 +58,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_NAME: ${{ secrets.SIGNING_KEY }}
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
-          SONAR_LOGIN: ${{ matrix.SONAR_LOGIN }}
+          SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          USE_SONAR: ${{ matrix.USE_SONAR }}
           CI: true
   deploy:
     runs-on: ubuntu-latest
