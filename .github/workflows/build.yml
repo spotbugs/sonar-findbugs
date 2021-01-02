@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - '*'
+      - master
   pull_request:
     branches:
       - master
@@ -33,20 +33,9 @@ jobs:
         uses: actions/setup-java@d202f5d
         with:
           java-version: 8
-      - name: Decide the phase to run
-        id: decide-phase
-        shell: bash
-        run: |
-          if [ -n "${{ github.event.release }}" ]; then
-            echo "This build will run `mvn deploy` to publish the artifact"
-            echo "::set-output name=phase::deploy"
-          else
-            echo "This build will run `mvn verify` to verify the build result"
-            echo "::set-output name=phase::verify"
-          fi
       - name: Build
         run: |
-          mvn org.jacoco:jacoco-maven-plugin:prepare-agent ${{ steps.decide-phase.outputs.phase }} ${USE_SONAR:+sonar:sonar} -B -e -V \
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify ${USE_SONAR:+sonar:sonar} -B -e -V \
             -Dsonar.version=${{ matrix.SONAR_VERSION }} \
             -Dsonar-java.version=${{ matrix.SONAR_JAVA_VERSION }} \
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
@@ -66,7 +55,7 @@ jobs:
     needs: build
     if: github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )
     steps:
-      - name: Deploy
+      - name: Deploy artifacts to Maven Central
         run: |
           mvn clean deploy -B -e -P deploy -s .github/settings.xml -DskipTests
         env:
@@ -75,3 +64,33 @@ jobs:
           OSSRH_JIRA_USERNAME: eller86
           OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
           CI: true
+      - name: Get release URL
+        if: github.event_name == 'release'
+        id: get_release
+        uses: bruceadams/get-release@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload .jar file to GitHub Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: ./target/sonar-findbugs-plugin.jar
+          asset_name: sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/zip
+      - name: Request SonarSource to release the plugin to marketplace
+        if: github.event_name == 'release'
+        uses: KengoTODA/sonar-update-center-action@main
+        with:
+          prop-file: findbugs.properties
+          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          minimal-supported-sq-version: 7.9
+          latest-supported-sq-version: LATEST
+          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
+          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
+          public-version: ${{ github.event.release.tag_name }}
+          sonar-cloud-url: https://sonarcloud.io/dashboard?branch=${{ github.event.release.tag_name }}&id=com.github.spotbugs%3Asonar-findbugs-plugin
+          github-token: ${{ secrets.PAT_TO_FORK }}
+          discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
