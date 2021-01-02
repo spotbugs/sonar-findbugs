@@ -90,11 +90,6 @@ public class FindbugsConfiguration implements Startable {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
-      //Will capture additional classes including precompiled JSP
-      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
-        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
-      }
-
       //Auxiliary dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
