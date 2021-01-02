@@ -18,6 +18,7 @@ jobs:
           # minimal support version
           - SONAR_VERSION: 7.6
             SONAR_JAVA_VERSION: 5.10.1.16922
+            SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
           # latest LTS version
           - SONAR_VERSION: 7.9
             SONAR_JAVA_VERSION: 5.13.1.18282
@@ -57,8 +58,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_NAME: ${{ secrets.SIGNING_KEY }}
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
-          SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          SONAR_LOGIN: ${{ matrix.SONAR_LOGIN }}
           CI: true
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'release' || ( github.event_name == 'push' && github.ref == refs/heads/master )
+    steps:
       - name: Deploy
         run: |
           mvn clean deploy -B -e -P deploy -s .github/settings.xml -DskipTests
@@ -67,3 +73,4 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
           OSSRH_JIRA_USERNAME: eller86
           OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
+          CI: true
