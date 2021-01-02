@@ -48,12 +48,16 @@ jobs:
           mvn org.jacoco:jacoco-maven-plugin:prepare-agent ${{ steps.decide-phase.outputs.phase }} ${SONAR_LOGIN:+sonar:sonar} -B -e -V \
             -Dsonar.version=${{ matrix.SONAR_VERSION }} \
             -Dsonar-java.version=${{ matrix.SONAR_JAVA_VERSION }} \
+            -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
+            -Dsonar.organization=spotbugs \
+            -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_LOGIN
           docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest
         env:
           GPG_KEY_NAME: ${{ secrets.SIGNING_KEY }}
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
           SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          CI: true
       - name: Deploy
         run: |
           mvn clean deploy -B -e -P deploy -s .github/settings.xml -DskipTests
