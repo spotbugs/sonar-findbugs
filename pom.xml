@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>4.0.3-SNAPSHOT</version>
+  <version>4.0.4-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
@@ -132,7 +132,7 @@
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.4.14</version>
+      <version>1.4.15</version>
       <exclusions>
         <!-- we use stax -->
         <exclusion>

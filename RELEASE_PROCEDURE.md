@@ -23,7 +23,7 @@ mvn versions:set -DnewVersion=1.2.4-SNAPSHOT
 ```
 
 * push your topic branch and propose a pull request
-* after merging your pull request, tag the commit which has stable version in `pom.xml`, and push this tag
+* after merging your pull request, create a GitHub Release with the commit which has stable version in `pom.xml`. The name of tag should have no prefix nor suffix, e.g. `4.0.0`
 
 ## Release to Maven Central
 
@@ -32,6 +32,4 @@ Check [Sonatype official page](http://central.sonatype.org/pages/apache-maven.ht
 
 ## Release to SonarQube Marketplace
 
-Follow the procedures listed in [SonarQube official guide](https://docs.sonarqube.org/display/DEV/Deploying+to+the+Marketplace#DeployingtotheMarketplace-Announcingnewreleases).
-
-Here is [the SonarCloud dashboard for this project](https://sonarcloud.io/dashboard?id=com.github.spotbugs:sonar-findbugs-plugin).
+[sonar-update-center-action](https://github.com/KengoTODA/sonar-update-center-action/) will handle necessary procedures. Please confirm that the PR is made in [SonarSource/sonar-update-center-properties](https://github.com/SonarSource/sonar-update-center-properties/), and a topic is posted to [the community forum](https://community.sonarsource.com/c/plugins).
