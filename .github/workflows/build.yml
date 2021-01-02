@@ -42,7 +42,6 @@ jobs:
             -Dsonar.organization=spotbugs \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_LOGIN
-          docker-compose -f src/smoke-test/docker-compose.yml --project-directory . run --rm test-latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GPG_KEY_NAME: ${{ secrets.SIGNING_KEY }}
