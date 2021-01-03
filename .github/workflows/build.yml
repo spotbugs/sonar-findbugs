@@ -92,5 +92,4 @@ jobs:
           public-version: ${{ github.event.release.tag_name }}
           sonar-cloud-url: https://sonarcloud.io/dashboard?branch=${{ github.event.release.tag_name }}&id=com.github.spotbugs%3Asonar-findbugs-plugin
           github-token: ${{ secrets.PAT_TO_FORK }}
-          discourse-username: KengoTODA
           discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
