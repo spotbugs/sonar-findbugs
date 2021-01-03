@@ -52,8 +52,8 @@ public class ByteCodeResourceLocator {
 
     /**
      * findSourceFileKeyByClassName() is broken in SonarQube 6.3.1.. This method is fixing it.
-     * @param className
-     * @param javaResourceLocator
+     * @param className The name of class to find the source file
+     * @param javaResourceLocator The {@link JavaResourceLocator} to find resource by classname
      * @return String filepath
      */
     public String findSourceFileKeyByClassName(String className, JavaResourceLocator javaResourceLocator) {
