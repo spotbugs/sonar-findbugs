@@ -49,7 +49,7 @@
   <properties>
     <!--
       When update these versions, update description in .github/workflows/build.yml too.
-      Also need to update profiles, see generate_profiles/README.md for detail.
+      Also need to update profiles, see ./generate_profiles/README.md for detail.
     -->
     <spotbugs.version>4.2.0</spotbugs.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
