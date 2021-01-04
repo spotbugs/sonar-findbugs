@@ -85,7 +85,7 @@ public class FindbugsSensor implements Sensor {
   }
 
   private boolean hasActiveRules(String repoSubstring) {
-    return activeRules.findAll().stream().anyMatch(activeRule -> activeRule.ruleKey().repository().contains(repoSubstring));
+    return activeRules.findAll().stream().anyMatch(activeRule -> activeRule.getRepositoryKey().contains(repoSubstring));
   }
 
   public List<String> getRepositories() {

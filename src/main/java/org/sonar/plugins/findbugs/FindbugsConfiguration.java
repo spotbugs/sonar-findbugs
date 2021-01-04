@@ -146,7 +146,7 @@ public class FindbugsConfiguration implements Startable {
       FindBugsFilter filter = buildFindbugsFilter(
         activeRules.findAll().stream().filter(activeRule ->
         {
-          String repKey = activeRule.ruleKey().repository();
+          String repKey = activeRule.getRepositoryKey();
           return repKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) ||
             repKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) ||
             repKey.contains(FbContribRulesDefinition.REPOSITORY_KEY);
@@ -163,7 +163,7 @@ public class FindbugsConfiguration implements Startable {
   private static FindBugsFilter buildFindbugsFilter(Iterable<ActiveRule> activeRules) {
     FindBugsFilter root = new FindBugsFilter();
     for (ActiveRule activeRule : activeRules) {
-      String repoKey = activeRule.ruleKey().repository();
+      String repoKey = activeRule.getRepositoryKey();
 
       if (repoKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FbContribRulesDefinition.REPOSITORY_KEY)) {
         Match child = new Match();
