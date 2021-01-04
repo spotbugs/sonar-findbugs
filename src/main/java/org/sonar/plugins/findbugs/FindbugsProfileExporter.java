@@ -45,9 +45,9 @@ public class FindbugsProfileExporter extends ProfileExporter {
     try {
       FindBugsFilter filter = buildFindbugsFilter(
               profile.getActiveRules().stream().filter(activeRule ->
-                      activeRule.getRepositoryKey().contains("findbugs") ||
-                              activeRule.getRepositoryKey().contains("findsecbugs") ||
-                              activeRule.getRepositoryKey().contains("fb-contrib"))
+                      activeRule.getRepositoryKey().contains(FindbugsRulesDefinition.REPOSITORY_KEY) ||
+                              activeRule.getRepositoryKey().contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) ||
+                              activeRule.getRepositoryKey().contains(FbContribRulesDefinition.REPOSITORY_KEY))
                       .collect(Collectors.toList())
       );
       XStream xstream = FindBugsFilter.createXStream();
@@ -62,7 +62,7 @@ public class FindbugsProfileExporter extends ProfileExporter {
     for (ActiveRule activeRule : activeRules) {
       String repoKey = activeRule.getRepositoryKey();
 
-      if (repoKey.contains("findsecbugs") || repoKey.contains("findbugs") || repoKey.contains("fb-contrib")) {
+      if (repoKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FbContribRulesDefinition.REPOSITORY_KEY)) {
         Match child = new Match();
         child.setBug(new Bug(activeRule.getConfigKey()));
         root.addMatch(child);
