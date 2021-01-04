@@ -93,15 +93,15 @@ public class FindbugsSensor implements Sensor {
   }
 
   private boolean hasActiveFindbugsRules() {
-    return hasActiveRules("findbugs");
+    return hasActiveRules(FindbugsRulesDefinition.REPOSITORY_KEY);
   }
 
   private boolean hasActiveFbContribRules() {
-    return hasActiveRules("fb-contrib");
+    return hasActiveRules(FbContribRulesDefinition.REPOSITORY_KEY);
   }
 
   private boolean hasActiveFindSecBugsRules() {
-    return hasActiveRules("findsecbugs");
+    return hasActiveRules(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
   }
 
   @Override
