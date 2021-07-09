@@ -40,10 +40,8 @@ import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.CoreProperties;
 import org.sonar.api.PropertyType;
 import org.sonar.api.Startable;
-import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
@@ -53,6 +51,7 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
@@ -60,6 +59,7 @@ import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.Bug;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
+import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import static java.lang.String.format;
@@ -338,7 +338,7 @@ public class FindbugsConfiguration implements Startable {
     return ImmutableList.of(
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Effort")
         .description("Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases " +
@@ -347,7 +347,7 @@ public class FindbugsConfiguration implements Startable {
         .build(),
       PropertyDefinition.builder(FindbugsConstants.TIMEOUT_PROPERTY)
         .defaultValue(Long.toString(FindbugsConstants.TIMEOUT_DEFAULT_VALUE))
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Timeout")
         .description("Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. " +
@@ -356,7 +356,7 @@ public class FindbugsConfiguration implements Startable {
         .type(PropertyType.INTEGER)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Excludes Filters")
         .description("Paths to findbugs filter-files with exclusions.")
@@ -365,7 +365,7 @@ public class FindbugsConfiguration implements Startable {
         .build(),
       PropertyDefinition.builder(FindbugsConstants.CONFIDENCE_LEVEL_PROPERTY)
         .defaultValue(FindbugsConstants.CONFIDENCE_LEVEL_DEFAULT_VALUE)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Confidence Level")
         .description("Specifies the confidence threshold (previously called \"priority\") for reporting issues. If set to \"low\", confidence is not used to filter bugs. " +
@@ -375,7 +375,7 @@ public class FindbugsConfiguration implements Startable {
       PropertyDefinition.builder(FindbugsConstants.ALLOW_UNCOMPILED_CODE)
         .defaultValue(Boolean.toString(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE))
         .type(PropertyType.BOOLEAN)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Allow Uncompiled Code")
         .description("Remove the compiled code requirement for all projects. "+
@@ -383,7 +383,7 @@ public class FindbugsConfiguration implements Startable {
         .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.REPORT_PATHS)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Report Paths")
         .description("Relative path to SpotBugs report files intended to be reused. (<code>/target/findbugsXml.xml</code> and <code>/target/spotbugsXml.xml</code> are included by default)")

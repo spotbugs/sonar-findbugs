@@ -19,18 +19,16 @@
  */
 package org.sonar.plugins.findbugs.profiles;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.java.Java;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-public class FindbugsProfile extends ProfileDefinition {
+public class FindbugsProfile implements BuiltInQualityProfilesDefinition {
 
-  private static final String FINDBUGS_PROFILE_NAME = "FindBugs";
+  public static final String FINDBUGS_PROFILE_NAME = "FindBugs";
   private final FindbugsProfileImporter importer;
 
   public FindbugsProfile(FindbugsProfileImporter importer) {
@@ -38,13 +36,13 @@ public class FindbugsProfile extends ProfileDefinition {
   }
 
   @Override
-  public RulesProfile createProfile(ValidationMessages messages) {
+  public void define(Context context) {
     Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
       "/org/sonar/plugins/findbugs/profile-findbugs-only.xml"));
-    RulesProfile profile = importer.importProfile(findbugsProfile, messages);
-    profile.setLanguage(Java.KEY);
-    profile.setName(FINDBUGS_PROFILE_NAME);
-    return profile;
+    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(FINDBUGS_PROFILE_NAME, Java.KEY);
+    importer.importProfile(findbugsProfile, profile);
+
+    profile.done();
   }
 
 }
