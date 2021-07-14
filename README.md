@@ -1,5 +1,5 @@
 # SonarQube Spotbugs Plugin
-[![Build Status](https://github.com/spotbugs/sonar-findbugs/workflows/build/badge.svg)](https://github.com/spotbugs/sonar-findbugs/actions)
+[![.github/workflows/build.yml](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml/badge.svg)](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml)
 ![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-883-brightgreen.svg?maxAge=2592000)
 [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs%3Asonar-findbugs-plugin&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)
 
