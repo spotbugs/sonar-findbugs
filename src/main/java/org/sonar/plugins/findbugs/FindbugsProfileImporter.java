@@ -21,12 +21,12 @@ package org.sonar.plugins.findbugs;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.ExtensionPoint;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.rules.RulePriority;
 import org.sonar.api.rules.RuleQuery;
-import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.server.ServerSide;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInActiveRule;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile;
