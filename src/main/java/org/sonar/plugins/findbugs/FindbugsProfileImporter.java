@@ -125,10 +125,10 @@ public class FindbugsProfileImporter {
   
   private void activateRule(NewBuiltInQualityProfile profile, Rule rule, @Nullable String severity) {
     NewBuiltInActiveRule r = profile.activateRule(rule.getRepositoryKey(), rule.getKey());
-    if (severity != null) {
-      r.overrideSeverity(severity);
-    } else {
+    if (severity == null) {
       r.overrideSeverity(getSeverityFromPriority(rule.getSeverity()));
+    } else {
+      r.overrideSeverity(severity);
     }
   }
 
@@ -139,9 +139,9 @@ public class FindbugsProfileImporter {
     case MINOR:
       return Severity.MINOR;
     case MAJOR:
-    return Severity.MAJOR;
+      return Severity.MAJOR;
     case CRITICAL:
-    return Severity.CRITICAL;
+      return Severity.CRITICAL;
     case BLOCKER:
       return Severity.BLOCKER;
     default:
