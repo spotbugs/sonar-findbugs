@@ -19,11 +19,14 @@
  */
 package org.sonar.plugins.findbugs.profiles;
 
+import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.plugins.findbugs.FindbugsProfileImporter;
-import org.sonar.plugins.findbugs.profiles.FindbugsSecurityJspProfile;
+import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -32,17 +35,21 @@ import static org.fest.assertions.Assertions.assertThat;
 
 public class FindbugsSecurityJspProfileTest {
 
+  @Rule
+  public LogTester logTester = new LogTester();
+
   @Test
   public void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityJspProfile secJspProfile = new FindbugsSecurityJspProfile(importer);
-    ValidationMessages validation = ValidationMessages.create();
-    RulesProfile profile = secJspProfile.createProfile(validation);
+    FindbugsSecurityJspProfile findbugsProfile = new FindbugsSecurityJspProfile(importer);
+    Context context = new Context();
+    findbugsProfile.define(context);
 
     //There are 6 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
-    assertThat(validation.getErrors()).isEmpty();
-    assertThat(validation.getWarnings()).isEmpty();
-    assertThat(profile.getActiveRulesByRepository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).hasSize(6);
-    assertThat(profile.getActiveRulesByRepository(FindbugsRulesDefinition.REPOSITORY_KEY)).hasSize(0);
+    BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsSecurityJspProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
+    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(6);
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(0);
   }
 }

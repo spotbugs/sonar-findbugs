@@ -23,15 +23,14 @@ import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.rule.internal.DefaultActiveRules;
-import org.sonar.api.config.PropertyDefinitions;
-import org.sonar.api.config.internal.MapSettings;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import static org.fest.assertions.Assertions.assertThat;
@@ -43,9 +42,11 @@ public class FindbugsConfigurationTest {
   @Rule
   public TemporaryFolder temp = new TemporaryFolder();
 
-  private DefaultFileSystem fs;
-  private MapSettings settings;
+  private FilePredicates filePredicates;
+  private FileSystem fs;
+  private SimpleConfiguration configuration;
   private File baseDir;
+  private ActiveRules activeRules;
   private FindbugsConfiguration conf;
   private JavaResourceLocator javaResourceLocator;
 
@@ -53,12 +54,18 @@ public class FindbugsConfigurationTest {
   public void setUp() throws Exception {
     baseDir = temp.newFolder("findbugs");
 
-    fs = new DefaultFileSystem(baseDir);
-    fs.setWorkDir(temp.newFolder().toPath());
+    filePredicates = mock(FilePredicates.class);
+    
+    fs = mock(FileSystem.class);
+    when(fs.baseDir()).thenReturn(baseDir);
+    when(fs.workDir()).thenReturn(temp.newFolder());
+    when(fs.predicates()).thenReturn(filePredicates);
+    
+    activeRules = mock(ActiveRules.class);
 
-    settings = new MapSettings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
+    configuration = new SimpleConfiguration();
     javaResourceLocator = mock(JavaResourceLocator.class);
-    conf = new FindbugsConfiguration(fs, settings.asConfig(), new DefaultActiveRules(Collections.emptyList()), javaResourceLocator);
+    conf = new FindbugsConfiguration(fs, configuration, activeRules, javaResourceLocator);
   }
 
   @Test
@@ -76,28 +83,28 @@ public class FindbugsConfigurationTest {
   @Test
   public void should_return_effort() {
     assertThat(conf.getEffort()).as("default effort").isEqualTo("default");
-    settings.setProperty(FindbugsConstants.EFFORT_PROPERTY, "Max");
+    configuration.setProperty(FindbugsConstants.EFFORT_PROPERTY, "Max");
     assertThat(conf.getEffort()).isEqualTo("max");
   }
 
   @Test
   public void should_return_timeout() {
     assertThat(conf.getTimeout()).as("default timeout").isEqualTo(600000);
-    settings.setProperty(FindbugsConstants.TIMEOUT_PROPERTY, 1);
+    configuration.setProperty(FindbugsConstants.TIMEOUT_PROPERTY, 1);
     assertThat(conf.getTimeout()).isEqualTo(1);
   }
 
   @Test
   public void should_return_excludes_filters() {
     assertThat(conf.getExcludesFilters()).isEmpty();
-    settings.setProperty(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY, " foo.xml , bar.xml,");
+    configuration.setProperty(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY, " foo.xml , bar.xml,");
     assertThat(conf.getExcludesFilters()).hasSize(2);
   }
 
   @Test
   public void should_return_confidence_level() {
     assertThat(conf.getConfidenceLevel()).as("default confidence level").isEqualTo("medium");
-    settings.setProperty(FindbugsConstants.EFFORT_PROPERTY, "HIGH");
+    configuration.setProperty(FindbugsConstants.EFFORT_PROPERTY, "HIGH");
     assertThat(conf.getEffort()).isEqualTo("high");
   }
 

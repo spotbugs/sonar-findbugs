@@ -29,9 +29,8 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.config.internal.MapSettings;
+import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -109,10 +108,11 @@ public class FindbugsExecutorTest {
 
   @Test(expected = IllegalStateException.class)
   public void shoulFailIfNoCompiledClasses() throws Exception {
-    DefaultFileSystem fs = new DefaultFileSystem(new File("."));
-    MapSettings settings = new MapSettings();
+    FileSystem fs = mock(FileSystem.class);
+    when(fs.baseDir()).thenReturn(new File("."));
+    SimpleConfiguration configuration = new SimpleConfiguration();
     //settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
-    FindbugsConfiguration conf = new FindbugsConfiguration(fs, settings.asConfig(), null, null);
+    FindbugsConfiguration conf = new FindbugsConfiguration(fs, configuration, null, null);
 
     new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
   }

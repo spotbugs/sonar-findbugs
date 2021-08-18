@@ -20,27 +20,28 @@
 package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
-import com.google.common.io.Files;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
 import edu.umd.cs.findbugs.MethodAnnotation;
 import edu.umd.cs.findbugs.SourceLineAnnotation;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import org.junit.rules.TemporaryFolder;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
@@ -53,14 +54,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class FindbugsSensorTest extends FindbugsTests {
+  @Rule
+  public TemporaryFolder temp = new TemporaryFolder();
 
-  DefaultFileSystem fs;
+  private FileSystem fs;
   private ByteCodeResourceLocator byteCodeResourceLocator;
   private MutablePicoContainer pico;
   private SensorContext sensorContext;
@@ -68,28 +70,29 @@ public class FindbugsSensorTest extends FindbugsTests {
   private JavaResourceLocator javaResourceLocator;
 
   @Before
-  public void setUp() {
+  public void setUp() throws IOException {
     sensorContext = mock(SensorContext.class);
     byteCodeResourceLocator = new ByteCodeResourceLocator();
     executor = mock(FindbugsExecutor.class);
     javaResourceLocator = mockJavaResourceLocator();
+    
+    File baseDir = temp.newFolder("findbugs");
 
-    DefaultFileSystem dfs = new DefaultFileSystem(new File("."));
-    dfs.setWorkDir(Files.createTempDir().toPath());
-    fs = spy(dfs);
+    FilePredicate relativePathFilePredicate = mock(FilePredicate.class);
+    when(relativePathFilePredicate.apply(any(InputFile.class))).thenReturn(true);
+    
+    FilePredicates filePredicates = mock(FilePredicates.class);
+    when(filePredicates.hasRelativePath(any(String.class))).thenReturn(relativePathFilePredicate);
+    
+    fs = mock(FileSystem.class);
+    when(fs.baseDir()).thenReturn(baseDir);
+    when(fs.workDir()).thenReturn(temp.newFolder());
+    when(fs.predicates()).thenReturn(filePredicates);
 
     InputFile dummyFile = mock(InputFile.class);
     when(dummyFile.relativePath()).thenReturn("src/main/java/com/helloworld/DummyFile.java");
     //Will make sure that the lookup on the filesystem will always find a file.
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(Arrays.asList(dummyFile));
-    File tempDir = Files.createTempDir();
-    when(fs.workDir()).then(new Answer<Object>() {
-      @Override
-      public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-        return tempDir;
-      }
-    });
-    //when(fs.workDir()).thenReturn(tempDir);
 
     pico = new DefaultPicoContainer();
 
