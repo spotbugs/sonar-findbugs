@@ -1,6 +1,8 @@
 import groovy.xml.MarkupBuilder;
 import FsbClassifier;
 import static FsbClassifier.*;
+import java.nio.charset.Charset;
+
 @Grapes([
 
     @Grab(group='com.github.spotbugs', module='spotbugs', version='4.2.0'),
@@ -101,7 +103,7 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
     printf("Building ruleset %s (%s)%n", rulesSetName, f.getCanonicalPath())
 
     //XML construction of the rules file
-    def xml = new MarkupBuilder(new PrintWriter(f))
+    def xml = new MarkupBuilder(new PrintWriter(Charset.forName("UTF-8"), f))
     xml.rules {
         mkp.comment "This file is auto-generated."
 
@@ -213,7 +215,7 @@ def writeProfile(String profileName,List<String> includedBugs,List<String> exclu
 
     def countBugs=0;
 
-    def xml = new MarkupBuilder(new PrintWriter(f))
+    def xml = new MarkupBuilder(new PrintWriter(Charset.forName("UTF-8"), f))
     xml.FindBugsFilter {
         mkp.comment "This file is auto-generated."
 
