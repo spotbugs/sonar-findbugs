@@ -18,7 +18,6 @@ jobs:
           # minimal support version
           - SONAR_VERSION: 7.6
             SONAR_JAVA_VERSION: 5.10.1.16922
-            USE_SONAR: true
           # latest LTS version
           - SONAR_VERSION: 7.9
             SONAR_JAVA_VERSION: 5.13.1.18282
@@ -39,7 +38,7 @@ jobs:
           distribution: adopt
       - name: Build
         run: |
-          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify ${USE_SONAR:+sonar:sonar} -B -e -V \
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify -B -e -V \
             -Dsonar.version=${{ matrix.SONAR_VERSION }} \
             -Dsonar-java.version=${{ matrix.SONAR_JAVA_VERSION }} \
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
@@ -49,7 +48,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
-          USE_SONAR: ${{ matrix.USE_SONAR }}
           CI: true
   deploy:
     runs-on: ubuntu-latest
