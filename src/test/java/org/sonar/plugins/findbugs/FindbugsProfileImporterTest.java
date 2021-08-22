@@ -127,7 +127,7 @@ public class FindbugsProfileImporterTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
     Collection<BuiltInActiveRule> results = profile.rules();
 
-    assertThat(results).hasSize(151);
+    assertThat(results).hasSize(152);
     assertThat(findActiveRule(profile, FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
   }
 
@@ -201,7 +201,7 @@ public class FindbugsProfileImporterTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
     Collection<BuiltInActiveRule> results = profile.rules();
 
-    assertThat(results).hasSize(151);
+    assertThat(results).hasSize(152);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(1);
   }
