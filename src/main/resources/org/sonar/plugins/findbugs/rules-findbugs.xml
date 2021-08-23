@@ -244,9 +244,9 @@ in Java 5.0).&lt;/p&gt;</description>
   <rule key='VO_VOLATILE_INCREMENT' priority='MAJOR'>
     <name>Multi-threading - An increment to a volatile field isn't atomic</name>
     <configKey>VO_VOLATILE_INCREMENT</configKey>
-    <description>&lt;p&gt;This code increments a volatile field. Increments of volatile fields aren't
-atomic. If more than one thread is incrementing the field at the same time,
-increments could be lost.
+    <description>&lt;p&gt;This code increments/decrements a volatile field. Increments/Decrements of volatile fields aren't
+atomic. If more than one thread is incrementing/decrementing the field at the same time,
+increments/decrements could be lost.
 &lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
@@ -1019,7 +1019,7 @@ this code, but it is worth reviewing.
   <rule key='EQ_COMPARING_CLASS_NAMES' priority='MAJOR'>
     <name>Correctness - equals method compares class names rather than class objects</name>
     <configKey>EQ_COMPARING_CLASS_NAMES</configKey>
-    <description>&lt;p&gt; This method checks to see if two objects are the same class by checking to see if the names
+    <description>&lt;p&gt; This class defines an equals method that checks to see if two objects are the same class by checking to see if the names
 of their classes are equal. You can have different classes with the same name if they are loaded by
 different class loaders. Just check to see if the class objects are the same.
 &lt;/p&gt;</description>
@@ -1386,6 +1386,53 @@ Thus, having a mutable instance field generally creates race conditions.</descri
    the mutable object would compromise security or other
    important properties, you will need to do something different.
   Storing a copy of the object is better approach in many situations.&lt;/p&gt;</description>
+    <tag>malicious-code</tag>
+  </rule>
+  <rule key='MS_EXPOSE_BUF' priority='INFO'>
+    <name>Malicious code - May expose internal representation by returning a buffer sharing non-public data</name>
+    <configKey>MS_EXPOSE_BUF</configKey>
+    <description>&lt;p&gt; A public static method either returns a buffer (java.nio.*Buffer) which wraps an array that is part of the
+  static state of the class by holding a reference only to this same array or it returns a shallow-copy of a buffer
+  that is part of the static stat of the class which shares its reference with the original buffer.
+   Any code that calls this method can freely modify the underlying array.
+   One fix is to return a read-only buffer or a new buffer with a copy of the array.&lt;/p&gt;</description>
+    <tag>malicious-code</tag>
+  </rule>
+  <rule key='EI_EXPOSE_BUF' priority='INFO'>
+    <name>Malicious code - May expose internal representation by returning a buffer sharing non-public data</name>
+    <configKey>EI_EXPOSE_BUF</configKey>
+    <description>&lt;p&gt; Returning a reference to a buffer (java.nio.*Buffer) which wraps an array stored in one of the object's fields
+  exposes the internal representation of the array elements because the buffer only stores a reference to the array
+  instead of copying its content. Similarly, returning a shallow-copy of such a buffer (using its duplicate() method)
+  stored in one of the object's fields also exposes the internal representation of the buffer.&amp;nbsp;
+   If instances are accessed by untrusted code, and unchecked changes to
+   the array would compromise security or other
+   important properties, you will need to do something different.
+  Returning a read-only buffer (using its asReadOnly() method) or copying the array to a new buffer (using its put()
+  method) is a better approach in many situations.&lt;/p&gt;</description>
+    <tag>malicious-code</tag>
+  </rule>
+  <rule key='EI_EXPOSE_BUF2' priority='INFO'>
+    <name>Malicious code - May expose internal representation by creating a buffer which incorporates reference to array</name>
+    <configKey>EI_EXPOSE_BUF2</configKey>
+    <description>&lt;p&gt; This code creates a buffer which stores a reference to an external array or the array of an external buffer into
+  the internal representation of the object.&amp;nbsp;
+   If instances
+   are accessed by untrusted code, and unchecked changes to
+   the array would compromise security or other
+   important properties, you will need to do something different.
+  Storing a copy of the array is a better approach in many situations.&lt;/p&gt;</description>
+    <tag>malicious-code</tag>
+  </rule>
+  <rule key='EI_EXPOSE_STATIC_BUF2' priority='INFO'>
+    <name>Malicious code - May expose internal static state by creating a buffer which stores an external array into a static field</name>
+    <configKey>EI_EXPOSE_STATIC_BUF2</configKey>
+    <description>&lt;p&gt; This code creates a buffer which stores a reference to an external array or the array of an external buffer into
+  a static field.
+   If unchecked changes to
+   the array would compromise security or other
+   important properties, you will need to do something different.
+  Storing a copy of the array is a better approach in many situations.&lt;/p&gt;</description>
     <tag>malicious-code</tag>
   </rule>
   <rule key='RU_INVOKE_RUN' priority='MAJOR'>
@@ -2355,7 +2402,7 @@ consider removing it from the class.&lt;/p&gt;</description>
   <rule key='QF_QUESTIONABLE_FOR_LOOP' priority='INFO'>
     <name>Style - Complicated, subtle or wrong increment in for-loop</name>
     <configKey>QF_QUESTIONABLE_FOR_LOOP</configKey>
-    <description>&lt;p&gt;Are you sure this for loop is incrementing the correct variable?
+    <description>&lt;p&gt;Are you sure this for loop is incrementing/decrementing the correct variable?
    It appears that another variable is being initialized and checked
    by the for loop.
 &lt;/p&gt;</description>
@@ -4040,7 +4087,7 @@ has effect. Please verify that this statement does the right thing.
   <rule key='DLS_DEAD_LOCAL_INCREMENT_IN_RETURN' priority='MAJOR'>
     <name>Correctness - Useless increment in return statement</name>
     <configKey>DLS_DEAD_LOCAL_INCREMENT_IN_RETURN</configKey>
-    <description>&lt;p&gt;This statement has a return such as &lt;code&gt;return x++;&lt;/code&gt;.
+    <description>&lt;p&gt;This statement has a return such as &lt;code&gt;return x++;&lt;/code&gt; / &lt;code&gt;return x--;&lt;/code&gt;.
 A postfix increment/decrement does not impact the value of the expression,
 so this increment/decrement has no effect.
 Please verify that this statement does the right thing.
@@ -4656,9 +4703,9 @@ regular expression as an escape character. Among other options, you can just use
     <name>Correctness - Overwritten increment</name>
     <configKey>DLS_OVERWRITTEN_INCREMENT</configKey>
     <description>&lt;p&gt;
-The code performs an increment operation (e.g., &lt;code&gt;i++&lt;/code&gt;) and then
-immediately overwrites it. For example, &lt;code&gt;i = i++&lt;/code&gt; immediately
-overwrites the incremented value with the original value.
+The code performs an increment/decrement operation (e.g., &lt;code&gt;i++&lt;/code&gt; / &lt;code&gt;i--&lt;/code&gt;) and then
+immediately overwrites it. For example, &lt;code&gt;i = i++&lt;/code&gt; / &lt;code&gt;i = i--&lt;/code&gt; immediately
+overwrites the incremented/decremented value with the original value.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -5444,5 +5491,19 @@ after the call to initLogging, the logger configuration is lost
     Doing so violates the contract that the method shouldn't return null.
         &lt;/p&gt;</description>
     <tag>style</tag>
+  </rule>
+  <rule key='EOS_BAD_END_OF_STREAM_CHECK' priority='MAJOR'>
+    <name>Correctness - Data read is converted before comparison to -1</name>
+    <configKey>EOS_BAD_END_OF_STREAM_CHECK</configKey>
+    <description>&lt;p&gt;
+      The method java.io.FileInputStream.read() returns an int. If this int is converted to a byte then -1 (which
+      indicates an EOF) and the byte 0xFF become indistinguishable, this comparing the (converted) result to -1
+      causes the read (probably in a loop) to end prematurely if the character 0xFF is met. Similarly, the method
+      java.io.FileReader.read() also returns an int. If it is converted to a char then -1 becomes 0xFFFF which is
+      Character.MAX_VALUE. Comparing the result to -1 is pointless, since characters are unsigned in Java. If the
+      checking for EOF is the condition of a loop then this loop is infinite.
+      &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
   </rule>
 </rules>

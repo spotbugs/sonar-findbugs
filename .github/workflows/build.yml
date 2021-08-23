@@ -98,7 +98,7 @@ jobs:
         uses: KengoTODA/sonar-update-center-action@main
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          description: Use SpotBugs 4.4.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
           minimal-supported-sq-version: 7.9
           latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
