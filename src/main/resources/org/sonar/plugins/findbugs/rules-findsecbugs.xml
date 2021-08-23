@@ -1936,6 +1936,49 @@ updateSales.setString(2, coffeeName);&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='SQL_INJECTION_VERTX' priority='CRITICAL'>
+    <name>Security - Potential SQL Injection with Vert.x Sql Client</name>
+    <configKey>SQL_INJECTION_VERTX</configKey>
+    <description>&lt;p&gt;
+The input values included in SQL queries need to be passed in safely.
+Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection.
+Vert.x Sql Client API provide a DSL to build query with Java code.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+    &lt;pre&gt;
+SqlClient.query( "select * from Customer where id=" + inputId ).execute(ar -&gt; ...);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution (using Prepared Statements):&lt;/b&gt;&lt;br/&gt;
+
+    &lt;pre&gt;
+client
+    .preparedQuery( "SELECT * FROM users WHERE id=$1" )
+    .execute(Tuple.of("julien"))
+    .onSuccess(rows -&gt; ...)
+    .onFailure(err -&gt; ...);
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References (Vert.x Sql Client)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://vertx.io/docs/#databases"&gt;Vertx Database Access Documentation&lt;/a&gt;&lt;br/&gt;
+&lt;b&gt;References (SQL injection)&lt;/b&gt;&lt;br/&gt;
+&lt;a href="http://projects.webappsec.org/w/page/13246963/SQL%20Injection"&gt;WASC-19: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://capec.mitre.org/data/definitions/66.html"&gt;CAPEC-66: SQL Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/89.html"&gt;CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10_2013-A1-Injection"&gt;OWASP: Top 10 2013-A1-Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet"&gt;OWASP: SQL Injection Prevention Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet"&gt;OWASP: Query Parameterization Cheat Sheet&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='SQL_INJECTION_ANDROID' priority='CRITICAL'>
     <name>Security - Potential Android SQL Injection</name>
     <configKey>SQL_INJECTION_ANDROID</configKey>
@@ -2208,6 +2251,36 @@ In general, method evaluating OGNL expression should not receive user input. It 
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='GROOVY_SHELL' priority='CRITICAL'>
+    <name>Security - Potential code injection when using GroovyShell</name>
+    <configKey>GROOVY_SHELL</configKey>
+    <description>&lt;p&gt;
+    A expression is built with a dynamic value. The source of the value(s) should be verified to avoid
+    that unfiltered values fall into this risky code evaluation.
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Code at risk:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+&lt;pre&gt;
+public void evaluateScript(String script) {
+  GroovyShell shell = new GroovyShell();
+  shell.evaluate(script);
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;
+In general, method evaluating Groovy expression should not receive user input from low privilege users.
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+    &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+    &lt;a href="https://blog.orange.tw/2019/02/abusing-meta-programming-for-unauthenticated-rce.html"&gt;Hacking Jenkins Part 2 - Abusing Meta Programming for Unauthenticated RCE!&lt;/a&gt; by Orange Tsai&lt;br/&gt;
+    &lt;a href="https://github.com/orangetw/awesome-jenkins-rce-2019"&gt;Jenkins RCE payloads&lt;/a&gt; by Orange Tsai&lt;br/&gt;
+    &lt;a href="https://github.com/adamyordan/cve-2019-1003000-jenkins-rce-poc"&gt;POC for CVE-2019-1003001&lt;/a&gt; by Adam Jordan&lt;br/&gt;
+    &lt;a href="https://github.com/welk1n/exploiting-groovy-in-Java/"&gt;Various payloads of exploiting Groovy code evaluation&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
   <rule key='HTTP_RESPONSE_SPLITTING' priority='INFO'>
@@ -2931,6 +3004,166 @@ public String redirect(@RequestParam("url") String url) {
 &lt;a href="https://cwe.mitre.org/data/definitions/601.html"&gt;CWE-601: URL Redirection to Untrusted Site ('Open Redirect')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ENTITY_LEAK' priority='MAJOR'>
+    <name>Security - Unexpected property leak</name>
+    <configKey>ENTITY_LEAK</configKey>
+    <description>&lt;p&gt;
+    Persistent objects should never be returned by APIs. They might lead to leaking business logic over the UI, unauthorized tampering of
+    persistent objects in database.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/br/&gt;
+&lt;pre&gt;
+@javax.persistence.Entity
+class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String username;
+
+    private String password;
+}
+
+[...]
+@Controller
+class UserController {
+
+    @GetMapping("/user/{id}")
+    public UserEntity getUser(@PathVariable("id") String id) {
+
+        return userService.findById(id).get(); //Return the user entity with ALL fields.
+    }
+
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution/Countermeasures:&lt;/b&gt;&lt;br/&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Data transfer objects should be used instead including only the parameters needed as input/response to/from the API.&lt;/li&gt;
+        &lt;li&gt;Sensitive parameters should be removed properly before transferring to UI.&lt;/li&gt;
+        &lt;li&gt;Data should be persisted in database only after proper sanitisation checks.&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Spring MVC Solution:&lt;/b&gt;&lt;br/&gt;
+    In Spring specifically, you can apply the following solution to allow or disallow specific fields.
+
+        &lt;pre&gt;
+@Controller
+class UserController {
+
+   @InitBinder
+   public void initBinder(WebDataBinder binder, WebRequest request)
+   {
+      binder.setAllowedFields(["username","firstname","lastname"]);
+   }
+
+}
+    &lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.owasp.org/index.php/Top_10-2017_A3-Sensitive_Data_Exposure"&gt;OWASP Top 10-2017 A3: Sensitive Data Exposure&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html#spring-mvc"&gt;OWASP Cheat Sheet: Mass Assignment&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/212.html"&gt;CWE-212: Improper Cross-boundary Removal of Sensitive Data&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/213.html"&gt;CWE-213: Intentional Information Exposure&lt;/a&gt;&lt;br/&gt;
+
+
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='ENTITY_MASS_ASSIGNMENT' priority='MAJOR'>
+    <name>Security - Mass assignment</name>
+    <configKey>ENTITY_MASS_ASSIGNMENT</configKey>
+    <description>&lt;p&gt;
+    Persistent objects should never be returned by APIs. They might lead to leaking business logic over the UI, unauthorized tampering of
+    persistent objects in database.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/br/&gt;
+&lt;pre&gt;
+@javax.persistence.Entity
+class UserEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String username;
+
+    private String password;
+
+    private Long role;
+}
+
+[...]
+@Controller
+class UserController {
+
+    @PutMapping("/user/")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void update(UserEntity user) {
+
+        userService.save(user); //ALL fields from the user can be altered
+    }
+
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;General Guidelines:&lt;/b&gt;&lt;br/&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Data transfer objects should be used instead including only the parameters needed as input/response to/from the API.&lt;/li&gt;
+        &lt;li&gt;Sensitive parameters should be removed properly before transferring to UI.&lt;/li&gt;
+        &lt;li&gt;Data should be persisted in database only after proper sanitisation checks.&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Spring MVC Solution:&lt;/b&gt;&lt;br/&gt;
+    In Spring specifically, you can apply the following solution to allow or disallow specific fields.&lt;br/&gt;
+&lt;br/&gt;
+With whitelist:&lt;br/&gt;
+        &lt;pre&gt;
+@Controller
+class UserController {
+
+   @InitBinder
+   public void initBinder(WebDataBinder binder, WebRequest request)
+   {
+      binder.setAllowedFields(["username","password"]);
+   }
+
+}
+    &lt;/pre&gt;
+&lt;br/&gt;
+With a blacklist:&lt;br/&gt;
+    &lt;pre&gt;
+@Controller
+class UserController {
+
+   @InitBinder
+   public void initBinder(WebDataBinder binder, WebRequest request)
+   {
+      binder.setDisallowedFields(["role"]);
+   }
+
+}
+    &lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html#spring-mvc"&gt;OWASP Cheat Sheet: Mass Assignment&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/915.html"&gt;CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
@@ -3970,6 +4203,37 @@ prefer logic-less template engines such as Handlebars or Moustache (See referenc
     <tag>injection</tag>
     <tag>security</tag>
   </rule>
+  <rule key='TEMPLATE_INJECTION_PEBBLE' priority='CRITICAL'>
+    <name>Security - Potential template injection with Pebble</name>
+    <configKey>TEMPLATE_INJECTION_PEBBLE</configKey>
+    <description>&lt;p&gt;
+Pebble template engine is powerful. It is possible to add logic including condition statements, loops and external calls.
+It is not design to be sandbox to templating operations. A malicious user in control of a template can run malicious code
+on the server-side. Pebble templates should be seen as scripts.
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Vulnerable Code:&lt;/b&gt;
+&lt;pre&gt;PebbleTemplate compiledTemplate = engine.getLiteralTemplate(inputFile);
+[...]
+compiledTemplate.evaluate(writer, context);&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+    &lt;b&gt;Solution:&lt;/b&gt;
+&lt;br/&gt;
+Avoid letting end users manipulate templates with Pebble. If you need to expose template editing to your users,
+prefer logic-less template engines such as Handlebars or Moustache (See references).
+&lt;/p&gt;
+&lt;br/&gt;
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/"&gt;Server Side Template Injection – on the example of Pebble&lt;/a&gt; by Michał Bentkowski&lt;br/&gt;
+&lt;a href="https://portswigger.net/research/server-side-template-injection"&gt;PortSwigger: Server-Side Template Injection&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://jknack.github.io/handlebars.java/"&gt;Handlebars.java&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='PERMISSIVE_CORS' priority='MAJOR'>
     <name>Security - Overly permissive CORS policy</name>
     <configKey>PERMISSIVE_CORS</configKey>
@@ -4480,6 +4744,165 @@ add(new Label("someLabel").setEscapeModelStrings(false));
 &lt;/p&gt;</description>
     <tag>owasp-a3</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='SAML_IGNORE_COMMENTS' priority='CRITICAL'>
+    <name>Security - Ignoring XML comments in SAML may lead to authentication bypass</name>
+    <configKey>SAML_IGNORE_COMMENTS</configKey>
+    <description>&lt;p&gt;
+Security Assertion Markup Language (SAML) is a single sign-on protocol that that used XML.
+The SAMLResponse message include statements that describe the authenticated user.
+If a user manage to place XML comments (&lt;code&gt;&amp;lt;!-- --&amp;gt;&lt;/code&gt;), it may caused issue in the way the parser extract literal value.
+&lt;/p&gt;
+
+&lt;p&gt;
+    For example, let's take the following XML section:
+    &lt;pre&gt;&amp;lt;saml:Subject&amp;gt;&amp;lt;saml:NameID&amp;gt;admin@domain.com&amp;lt;!----&amp;gt;.evil.com&amp;lt;/saml:NameID&amp;gt;&amp;lt;/saml:Subject&amp;gt;&lt;/pre&gt;
+
+    The user identity is &lt;code&gt;"admin@domain.com&amp;lt;!----&amp;gt;.evil.com"&lt;/code&gt; but it is in fact a text node &lt;code&gt;"admin@domain.com"&lt;/code&gt;, a comment &lt;code&gt;""&lt;/code&gt; and a text node &lt;code&gt;".evil.com"&lt;/code&gt;.
+    When extracting the NameID, the service provider implementation might take first text node or the last one.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+@Bean
+ParserPool parserPool1() {
+    BasicParserPool pool = new BasicParserPool();
+    pool.setIgnoreComments(false);
+    return pool;
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution:&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+@Bean
+ParserPool parserPool1() {
+    BasicParserPool pool = new BasicParserPool();
+    pool.setIgnoreComments(true);
+    return pool;
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://duo.com/blog/duo-finds-saml-vulnerabilities-affecting-multiple-implementations"&gt;Duo Finds SAML Vulnerabilities Affecting Multiple Implementations&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://spring.io/blog/2018/03/01/spring-security-saml-and-this-week-s-saml-vulnerability"&gt;Spring Security SAML and this week's SAML Vulnerability&lt;/a&gt;&lt;br/&gt;
+
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='OVERLY_PERMISSIVE_FILE_PERMISSION' priority='MAJOR'>
+    <name>Security - Overly permissive file permission</name>
+    <configKey>OVERLY_PERMISSIVE_FILE_PERMISSION</configKey>
+    <description>&lt;p&gt;
+It is generally a bad practices to set overly permissive file permission such as read+write+exec for all users.
+If the file affected is a configuration, a binary, a script or sensitive data, it can lead to privilege escalation or information leakage.
+&lt;/p&gt;
+&lt;p&gt;
+It is possible that another service, running on the same host as your application, gets compromised.
+Services typically run under a different user. A compromised service account could be use to read your configuration, add execution instruction to scripts or alter the data file.
+To limite the damage from other services or local users, you should limited to permission of your application files.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Vulnerable Code 1 (symbolic notation):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Files.setPosixFilePermissions(configPath, PosixFilePermissions.fromString("rw-rw-rw-"));
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution 1 (symbolic notation):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Files.setPosixFilePermissions(configPath, PosixFilePermissions.fromString("rw-rw----"));
+&lt;/pre&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;
+&lt;b&gt;Vulnerable Code 2 (Object-oriented implementation):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Set&amp;lt;PosixFilePermission&amp;gt; perms = new HashSet&amp;lt;&amp;gt;();
+perms.add(PosixFilePermission.OWNER_READ);
+perms.add(PosixFilePermission.OWNER_WRITE);
+perms.add(PosixFilePermission.OWNER_EXECUTE);
+
+perms.add(PosixFilePermission.GROUP_READ);
+perms.add(PosixFilePermission.GROUP_WRITE);
+perms.add(PosixFilePermission.GROUP_EXECUTE);
+
+perms.add(PosixFilePermission.OTHERS_READ);
+perms.add(PosixFilePermission.OTHERS_WRITE);
+perms.add(PosixFilePermission.OTHERS_EXECUTE);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Solution 2 (Object-oriented implementation):&lt;/b&gt;&lt;br/&gt;
+&lt;pre&gt;
+Set&amp;lt;PosixFilePermission&amp;gt; perms = new HashSet&amp;lt;&amp;gt;();
+perms.add(PosixFilePermission.OWNER_READ);
+perms.add(PosixFilePermission.OWNER_WRITE);
+perms.add(PosixFilePermission.OWNER_EXECUTE);
+
+perms.add(PosixFilePermission.GROUP_READ);
+perms.add(PosixFilePermission.GROUP_WRITE);
+perms.add(PosixFilePermission.GROUP_EXECUTE);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/732.html"&gt;CWE-732: Incorrect Permission Assignment for Critical Resource&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://payatu.com/guide-linux-privilege-escalation/"&gt;A guide to Linux Privilege Escalation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://en.wikipedia.org/wiki/File_system_permissions"&gt;File system permissions&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='IMPROPER_UNICODE' priority='CRITICAL'>
+    <name>Security - Improper handling of Unicode transformations</name>
+    <configKey>IMPROPER_UNICODE</configKey>
+    <description>&lt;p&gt;
+Unexpected behavior in unicode transformations can sometimes lead to bugs, some of them affecting software security.
+A code that applies the uppercase transformation to two strings could mistakenly interpret both strings as being equal.
+&lt;/p&gt;
+
+&lt;p&gt;
+In the code bellow, the string &lt;code&gt;"ADM\u0131N"&lt;/code&gt; would cause the condition to be true.
+When the uppercase transformation is applied, the character `\u0131` will becomme '\u0049' (I).
+It can be an issue if the developer only one user to be &lt;code&gt;"ADMIN"&lt;/code&gt;.&lt;br/&gt;
+&lt;pre&gt;
+if(username.toUpperCase().equals("ADMIN")) {
+  //...
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+Similar characters transformations can occurs with normalization functions.
+In the code bellow, the string &lt;code&gt;"BAC\u212AUP"&lt;/code&gt; would cause the condition to be true.
+When the normalization transformation is applied, the character `\u212A` will becomme '\u0048' (K).&lt;br/&gt;
+&lt;pre&gt;
+if(Normalizer.normalize(input, Normalizer.Form.NFC).equals("BACKUP")) {
+  //...
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://www.gosecure.net/blog/2020/08/04/unicode-for-security-professionals/"&gt;Unicode for Security Professionals&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://websec.github.io/unicode-security-guide/character-transformations/"&gt;Unicode Security Guide: Character Transformations&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/176.html"&gt;CWE-176: Improper Handling of Unicode Encoding&lt;/a&gt;&lt;br/&gt;
+&lt;a href="http://unicode.org/reports/tr36/"&gt;Unicode: Unicode Security Considerations&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>

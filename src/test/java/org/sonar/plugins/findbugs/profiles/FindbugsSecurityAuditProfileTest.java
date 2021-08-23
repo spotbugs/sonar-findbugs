@@ -48,7 +48,8 @@ public class FindbugsSecurityAuditProfileTest {
     // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
     BuiltInQualityProfile profile = context.profile(Java.KEY, FindbugsSecurityAuditProfile.FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(8);
+    // FSB rules must be added to FsbClassifier.groovy otherwise new rules metadata are not added in rules-findsecbugs.xml
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(8);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).count())
     .isEqualTo(FindSecurityBugsRulesDefinition.RULE_COUNT);
