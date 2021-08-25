@@ -47,10 +47,11 @@ public class FindbugsSecurityMinimalProfileTest {
 
     BuiltInQualityProfile profile = context.profile(Java.KEY, FindbugsSecurityMinimalProfile.FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(8);
+    // FSB rules must be added to FsbClassifier.groovy otherwise new rules metadata are not added in rules-findsecbugs.xml
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(8);
     // 94 rules total - 8 fb = 86
-    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(85);
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(93);
   }
 }
