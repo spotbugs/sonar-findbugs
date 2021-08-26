@@ -1,6 +1,6 @@
 # SonarQube Spotbugs Plugin
 [![.github/workflows/build.yml](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml/badge.svg)](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml)
-![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-883-brightgreen.svg?maxAge=2592000)
+![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-893-brightgreen.svg?maxAge=2592000)
 [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs%3Asonar-findbugs-plugin&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)
 
 ## Description / Features
@@ -34,12 +34,15 @@ Make sure that you compile your source code with debug information on (to get th
 ## Compatibility
 
 Since version 3.0, the plugin embed FindBugs 3.0.0 which supports analysis of Java 8 bytecode but requires Java 1.7 to run (see Compatibility section). Please find below the compatibility matrix of the plugin.
+Versions 4.0.3 and below are not compatible with SonarQube 9.
 
 Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs version|Embedded FB-Contrib version|Minimal Java version|Supported SonarQube version|Minimum sonar-java version|
 -----------------------|----------------------------------|----------------------------|---------------------------|--------------------|-----------------|------------------
-3.10                   | 3.1.11 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6~|5.10.1.16922
-3.11.0                 | 3.1.12 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6~|5.10.1.16922
-4.0.0                  | 4.0.0 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
-4.0.1                  | 4.1.2 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
-4.0.2                  | 4.2.0 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
-4.0.3-SNAPSHOT         | 4.2.0 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
+3.10                   | 3.1.11 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6-8.9|5.10.1.16922
+3.11.0                 | 3.1.12 (SpotBugs)                | 1.8.0                      | 7.4.3sb                   | 1.8|7.6-8.9|5.10.1.16922
+4.0.0                  | 4.0.0 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6-8.9|5.10.1.16922
+4.0.1                  | 4.1.2 (SpotBugs)                 | 1.10.1                     | 7.4.7 (sb-contrib)        | 1.8|7.6-8.9|5.10.1.16922
+4.0.2                  | 4.2.0 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6-8.9|5.10.1.16922
+4.0.3                  | 4.2.0 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6-8.9|5.10.1.16922
+4.0.4                  | 4.4.0 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
+4.0.5-SNAPSHOT         | 4.4.0 (SpotBugs)                 | 1.11.0                     | 7.4.7 (sb-contrib)        | 1.8|7.6~|5.10.1.16922
