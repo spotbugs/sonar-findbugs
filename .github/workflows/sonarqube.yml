@@ -5,6 +5,9 @@ on:
   pull_request_target:
     branches:
       - master
+  release:
+    types:
+      - created
 
 # set necessary permissions for SQ's GitHub integration
 # https://docs.sonarqube.org/latest/analysis/github-integration/#header-2
