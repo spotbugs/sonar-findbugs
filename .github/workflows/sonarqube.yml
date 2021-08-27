@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -43,7 +43,7 @@ jobs:
             -Dsonar.organization=spotbugs \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_LOGIN \
-            ${PR_NUMBER:+ -Dsonar.pullrequest.key=$PR_NUMBER }
+            ${PR_NUMBER:+ -Dsonar.pullrequest.key=$PR_NUMBER -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }} }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
