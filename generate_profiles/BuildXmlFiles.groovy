@@ -110,6 +110,8 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
         def buildPattern = { pattern ->
 
             category = getFindBugsCategory(plugins, pattern.attribute("type"))
+            // Is the rule deprecated in the metadata of the underlying rules set?
+            deprecated = (pattern.attribute("deprecated") == "true")
 
             if(category == "NOISE" || pattern.attribute("type") in ["TESTING", "TESTING1", "TESTING2", "TESTING3", "UNKNOWN"]) return;
             if(category == "MT_CORRECTNESS") category = "MULTI-THREADING"
@@ -123,6 +125,10 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
                     name(category.toLowerCase().capitalize().replace("_"," ") + " - " +pattern.ShortDescription.text())
                     configKey(pattern.attribute("type"))
                     description(pattern.Details.text().trim())
+                    
+                    if (deprecated) {
+                        status("DEPRECATED")
+                    }
 
                     //OWASP TOP 10 2013
                     if (pattern.Details.text().toLowerCase().contains('injection') || pattern.Details.text().contains('A1-Injection')) {

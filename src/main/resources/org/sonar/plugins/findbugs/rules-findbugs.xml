@@ -1521,6 +1521,7 @@ This not necessarily a bug, but is worth examining
    &amp;nbsp; If there is also a warning about a two lock wait, the
    probably of a bug is quite high.
 &lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
@@ -3098,6 +3099,7 @@ to null. Two types of redundant comparison are reported:
 value known not to be null was checked against null.
 While the check is not necessary, it may simply be a case
 of defensive programming.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>experimental</tag>
   </rule>
   <rule key='UL_UNRELEASED_LOCK' priority='MAJOR'>
@@ -3643,6 +3645,7 @@ You can make the field volatile to correct the problem.
 For more information, see the
 &lt;a href="http://www.cs.umd.edu/~pugh/java/memoryModel/"&gt;Java Memory Model web site&lt;/a&gt;.
 &lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
@@ -3937,6 +3940,7 @@ get called when the event occurs.&lt;/p&gt;</description>
     <configKey>BRSA_BAD_RESULTSET_ACCESS</configKey>
     <description>&lt;p&gt; A call to getXXX or updateXXX methods of a result set was made where the
 field index is 0. As ResultSet fields start at index 1, this is always a mistake.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -4627,6 +4631,7 @@ This instanceof test will always return false, since the value being checked is 
 Although this is safe, make sure it isn't
 an indication of some misunderstanding or some other logic error.
 &lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
