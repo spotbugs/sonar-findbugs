@@ -19,7 +19,9 @@
  */
 package org.sonar.plugins.findbugs;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -30,13 +32,22 @@ import java.util.List;
 import static org.fest.assertions.Assertions.assertThat;
 
 public class FindbugsRulesDefinitionTest {
-  @Test
-  public void test() {
+  /**
+   * The SpotBugs rules repository
+   */
+  private RulesDefinition.Repository repository;
+  
+  @Before
+  public void setupRepository() {
     FindbugsRulesDefinition definition = new FindbugsRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);
-    RulesDefinition.Repository repository = context.repository(FindbugsRulesDefinition.REPOSITORY_KEY);
-
+    
+    repository = context.repository(FindbugsRulesDefinition.REPOSITORY_KEY);
+  }
+  
+  @Test
+  public void testRepositoryRulesCount() {
     assertThat(repository.name()).isEqualTo(FindbugsRulesDefinition.REPOSITORY_NAME);
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
@@ -49,5 +60,18 @@ public class FindbugsRulesDefinitionTest {
       assertThat(rule.name()).isNotNull();
       assertThat(rule.htmlDescription()).isNotNull();
     }
+  }
+  
+  /**
+   * Rule TLW_TWO_LOCK_NOTIFY was marked deprecated in Spotbugs so we're testing that the SonarQube rule status is updated accordingly
+   * 
+   * In case that rule is removed in a future release, this unit test will need to be updated to test against another deprecated rule
+   */
+  @Test
+  public void testDeprecatedRules() {
+    Rule rule = repository.rule("TLW_TWO_LOCK_NOTIFY");
+    
+    assertThat(rule).isNotNull();
+    assertThat(rule.status()).isEqualTo(RuleStatus.DEPRECATED);
   }
 }
