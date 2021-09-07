@@ -3,6 +3,7 @@ import java.nio.file.Paths
 import FsbClassifier;
 import static FsbClassifier.*;
 import java.nio.charset.Charset;
+import groovy.json.JsonSlurper;
 
 @Grapes([
 
@@ -92,6 +93,21 @@ String getFindBugsCategory(List<Plugin> plugins, String bugType) {
     return "EXPERIMENTAL"
 }
 
+Map getDeprecationStatus(List<Plugin> plugins, String bugType) {
+    for(plugin in plugins) {
+        File file = new File("deprecated_rules/" + plugin.artifactId + "/" + bugType + ".json");
+        if (file.exists()) {
+            jsonSlurper = new JsonSlurper()
+            status = jsonSlurper.parse(file);
+
+            if(status != null) {
+                return status;
+            }
+        }
+    }
+    return null;
+}
+
 /**
  *
  * @param rulesSetName Name of the rules set generate. The filename will be rules-RULESSETNAME.xml
@@ -128,10 +144,17 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 
                     name(category.toLowerCase().capitalize().replace("_"," ") + " - " +pattern.ShortDescription.text())
                     configKey(pattern.attribute("type"))
-                    description(pattern.Details.text().trim())
                     
-                    if (deprecated) {
+                    Map deprecationStatus = getDeprecationStatus(plugins, pattern.attribute("type"));
+                    
+                    if (deprecationStatus != null) {
+                        description(pattern.Details.text().trim() + "\n<h2>Deprecated</h2>\n<p>This rule is deprecated; use {rule:" + deprecationStatus.replacement + "} instead.</p>")
                         status("DEPRECATED")
+                    } else if (deprecated) {
+                        description(pattern.Details.text().trim() + "\n<h2>Deprecated</h2>\n<p>This rule is deprecated</p>")
+                        status("DEPRECATED")
+                    } else {
+                        description(pattern.Details.text().trim())
                     }
 
                     //OWASP TOP 10 2013

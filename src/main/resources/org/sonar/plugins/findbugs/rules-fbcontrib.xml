@@ -297,7 +297,10 @@ for (float f = 1.0f; f &amp;lt;= 10.0f; f += 0.1f) {
     <name>Correctness - Method has abnormal exit from finally block</name>
     <configKey>AFBR_ABNORMAL_FINALLY_BLOCK_RETURN</configKey>
     <description>&lt;p&gt;This method returns or throws exceptions from a finally block. This will
-			mask real program logic in the try block, and short-circuit normal method termination.&lt;/p&gt;</description>
+			mask real program logic in the try block, and short-circuit normal method termination.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:squid:S1143} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1089,7 +1092,10 @@ if (myString.indexOf('e') != -1) {
     <configKey>SPP_USE_BIGDECIMAL_STRING_CTOR</configKey>
     <description>&lt;p&gt;This method calls the BigDecimal constructor that takes a double, and passes a literal double constant value. Since
 			the use of BigDecimal is to get better precision than double, by passing a double, you only get the precision of double number
-			space. To take advantage of the BigDecimal space, pass the number as a string. &lt;/p&gt;</description>
+			space. To take advantage of the BigDecimal space, pass the number as a string. &lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:squid:S1858} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1140,7 +1146,10 @@ if (Boolean.TRUE.equals(b))
     <name>Performance - Method uses a ternary operator to cast a boolean to true or false</name>
     <configKey>SPP_USELESS_TERNARY</configKey>
     <description>&lt;p&gt;This method tests the value of a boolean and uses a ternary operator to return either true or false.
-			The ternary operator is completely unnecessary, just use the original boolean value.&lt;/p&gt;</description>
+			The ternary operator is completely unnecessary, just use the original boolean value.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:squid:S1125} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
@@ -1341,7 +1350,10 @@ String str = sb.toString();
   <rule key='SPP_TOSTRING_ON_STRING' priority='MAJOR'>
     <name>Correctness - Method calls toString() on a String</name>
     <configKey>SPP_TOSTRING_ON_STRING</configKey>
-    <description>&lt;p&gt;This method calls &lt;code&gt;toString&lt;/code&gt; on a String. Just use the object itself if you want a String.&lt;/p&gt;</description>
+    <description>&lt;p&gt;This method calls &lt;code&gt;toString&lt;/code&gt; on a String. Just use the object itself if you want a String.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:squid:S2111} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -2560,7 +2572,10 @@ if (name != null) {
   <rule key='AIOB_ARRAY_STORE_TO_NULL_REFERENCE' priority='MAJOR'>
     <name>Correctness - Method attempts to store an array element to an array that does not appear to be allocated</name>
     <configKey>AIOB_ARRAY_STORE_TO_NULL_REFERENCE</configKey>
-    <description>&lt;p&gt;This method attempts to store an array element into an array that appears not to have been allocated.&lt;/p&gt;</description>
+    <description>&lt;p&gt;This method attempts to store an array element into an array that appears not to have been allocated.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:squid:S2259} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3578,7 +3593,10 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         &lt;code&gt;&lt;/pre&gt;
         baubles.stream().map(Bauble::getName).collect(Collectors.toSet())
         &lt;/pre&gt;&lt;/code&gt;
-        &lt;/p&gt;</description>
+        &lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:squid:S1612} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
