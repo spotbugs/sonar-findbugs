@@ -299,7 +299,7 @@ for (float f = 1.0f; f &amp;lt;= 10.0f; f += 0.1f) {
     <description>&lt;p&gt;This method returns or throws exceptions from a finally block. This will
 			mask real program logic in the try block, and short-circuit normal method termination.&lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:squid:S1143} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S1143} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -1094,7 +1094,7 @@ if (myString.indexOf('e') != -1) {
 			the use of BigDecimal is to get better precision than double, by passing a double, you only get the precision of double number
 			space. To take advantage of the BigDecimal space, pass the number as a string. &lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:squid:S1858} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S1858} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -1148,7 +1148,7 @@ if (Boolean.TRUE.equals(b))
     <description>&lt;p&gt;This method tests the value of a boolean and uses a ternary operator to return either true or false.
 			The ternary operator is completely unnecessary, just use the original boolean value.&lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:squid:S1125} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S1125} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -1352,7 +1352,7 @@ String str = sb.toString();
     <configKey>SPP_TOSTRING_ON_STRING</configKey>
     <description>&lt;p&gt;This method calls &lt;code&gt;toString&lt;/code&gt; on a String. Just use the object itself if you want a String.&lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:squid:S2111} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S2111} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -2574,7 +2574,7 @@ if (name != null) {
     <configKey>AIOB_ARRAY_STORE_TO_NULL_REFERENCE</configKey>
     <description>&lt;p&gt;This method attempts to store an array element into an array that appears not to have been allocated.&lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:squid:S2259} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S2259} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3595,7 +3595,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         &lt;/pre&gt;&lt;/code&gt;
         &lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:squid:S1612} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S1612} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
