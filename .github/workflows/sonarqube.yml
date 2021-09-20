@@ -5,6 +5,9 @@ on:
   pull_request_target:
     branches:
       - master
+  release:
+    types:
+      - created
 
 # set necessary permissions for SQ's GitHub integration
 # https://docs.sonarqube.org/latest/analysis/github-integration/#header-2
@@ -25,6 +28,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
@@ -38,8 +42,11 @@ jobs:
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
             -Dsonar.organization=spotbugs \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=$SONAR_LOGIN
+            -Dsonar.login=$SONAR_LOGIN \
+            ${PR_NUMBER:+ -Dsonar.pullrequest.key=$PR_NUMBER -Dsonar.pullrequest.branch=$PR_BRANCH }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
           CI: true
