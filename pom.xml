@@ -51,7 +51,7 @@
       When update these versions, update description in .github/workflows/build.yml too.
       Also need to update profiles, see ./generate_profiles/README.md for detail.
     -->
-    <spotbugs.version>4.4.0</spotbugs.version>
+    <spotbugs.version>4.5.0</spotbugs.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
     <findsecbugs.version>1.11.0</findsecbugs.version>
 
