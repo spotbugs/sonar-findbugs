@@ -1086,6 +1086,9 @@
     <Bug pattern='REC_CATCH_EXCEPTION' />
   </Match>
   <Match>
+    <Bug pattern='DCN_NULLPOINTER_EXCEPTION' />
+  </Match>
+  <Match>
     <Bug pattern='FE_TEST_IF_EQUAL_TO_NOT_A_NUMBER' />
   </Match>
   <Match>
@@ -1345,5 +1348,17 @@
   </Match>
   <Match>
     <Bug pattern='EOS_BAD_END_OF_STREAM_CHECK' />
+  </Match>
+  <Match>
+    <Bug pattern='REFLC_REFLECTION_MAY_INCREASE_ACCESSIBILITY_OF_CLASS' />
+  </Match>
+  <Match>
+    <Bug pattern='REFLF_REFLECTION_MAY_INCREASE_ACCESSIBILITY_OF_FIELD' />
+  </Match>
+  <Match>
+    <Bug pattern='MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR' />
+  </Match>
+  <Match>
+    <Bug pattern='MC_OVERRIDABLE_METHOD_CALL_IN_CLONE' />
   </Match>
 </FindBugsFilter>
