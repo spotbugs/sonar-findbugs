@@ -1,0 +1,66 @@
+name: integartion-test
+on:
+  workflow_run:
+    workflows:
+      - build
+    types:
+      - completed
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Read .nvmrc
+        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        id: nvm
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+          cache: npm
+      - run: |
+          npm ci
+          npm run all
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TO_FORK }}
+      - uses: LouisBrunner/checks-action@v1.1.2
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: integration-test
+          sha: ${{ github.event.workflow_run.head_sha }}
+          conclusion: ${{ job.status }}
+          details_url : https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
+  integrated-test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'success'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: ./
+        id: integrated-test
+        with:
+          prop-file: findbugs.properties
+          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          minimal-supported-sq-version: 7.9
+          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/4.1.0
+          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.1.0/sonar-findbugs-plugin-4.1.0.jar
+          public-version: 4.1.0
+          github-token: ${{ secrets.PAT_TO_FORK }}
+          skip-creating-pull-request: true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: updated-properties-file
+          path: ${{ steps.integrated-test.outputs.prop-file }}
+      - uses: LouisBrunner/checks-action@v1.1.2
+        if: always()
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: integrated-test
+          sha: ${{ github.event.workflow_run.head_sha }}
+          conclusion: ${{ job.status }}
+          details_url : https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
