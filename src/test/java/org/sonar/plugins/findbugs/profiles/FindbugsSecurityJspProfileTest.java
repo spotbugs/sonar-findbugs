@@ -21,6 +21,7 @@ package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.api.utils.log.LogTester;
@@ -50,6 +51,27 @@ public class FindbugsSecurityJspProfileTest {
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(6);
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(0);
+  }
+
+  @Test
+  public void disabledRuleMustNotBeActivated() {
+    RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
+    
+    // Mark a rule as removed
+    org.sonar.api.rules.Rule rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, "XSS_JSP_PRINT");
+    rule.setStatus(org.sonar.api.rules.Rule.STATUS_REMOVED);
+    
+    FindbugsProfileImporter importer = new FindbugsProfileImporter(ruleFinder);
+    FindbugsSecurityJspProfile findbugsProfile = new FindbugsSecurityJspProfile(importer);
+    Context context = new Context();
+    findbugsProfile.define(context);
+
+    //There should be 5 rules left since we removed one
+    BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsSecurityJspProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
+    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(5);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(0);
   }
 }

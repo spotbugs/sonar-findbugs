@@ -124,11 +124,14 @@ public class FindbugsProfileImporter {
   }
   
   private void activateRule(NewBuiltInQualityProfile profile, Rule rule, @Nullable String severity) {
-    NewBuiltInActiveRule r = profile.activateRule(rule.getRepositoryKey(), rule.getKey());
-    if (severity == null) {
-      r.overrideSeverity(getSeverityFromPriority(rule.getSeverity()));
-    } else {
-      r.overrideSeverity(severity);
+    // Trying to activate a disabled rule in a profile causes the SQ server to crash at startup
+    if (rule.isEnabled()) {
+      NewBuiltInActiveRule r = profile.activateRule(rule.getRepositoryKey(), rule.getKey());
+      if (severity == null) {
+        r.overrideSeverity(getSeverityFromPriority(rule.getSeverity()));
+      } else {
+        r.overrideSeverity(severity);
+      }
     }
   }
 
