@@ -1,0 +1,67 @@
+on:
+  pull_request_target:
+    paths:
+      - '.github/actions/sonar-update-center/**'
+  push:
+    branches:
+      - master
+
+defaults:
+  run:
+    working-directory: .github/actions/sonar-update-center
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide the ref to check out
+        uses: haya14busa/action-cond@v1
+        id: condval
+        with:
+          cond: ${{ github.event_name == 'pull_request_target' }}
+          if_true: refs/pull/${{ github.event.pull_request.number }}/merge
+          if_false: ${{ github.ref }}
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.condval.outputs.value }}
+      - name: Read .nvmrc
+        run: echo ::set-output name=NVMRC::$(cat .nvmrc)
+        id: nvm
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '${{ steps.nvm.outputs.NVMRC }}'
+          cache: npm
+      - run: |
+          npm ci
+          npm run all
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_TO_FORK }}
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Decide the ref to check out
+        uses: haya14busa/action-cond@v1
+        id: condval
+        with:
+          cond: ${{ github.event_name == 'pull_request_target' }}
+          if_true: refs/pull/${{ github.event.pull_request.number }}/merge
+          if_false: ${{ github.ref }}
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ steps.condval.outputs.value }}
+      - uses: ./.github/actions/sonar-update-center
+        id: integration-test
+        with:
+          prop-file: findbugs.properties
+          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          minimal-supported-sq-version: 7.9
+          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/4.1.0
+          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.1.0/sonar-findbugs-plugin-4.1.0.jar
+          public-version: 4.1.0
+          github-token: ${{ secrets.PAT_TO_FORK }}
+          skip-creating-pull-request: true
+      - uses: actions/upload-artifact@v2
+        with:
+          name: updated-properties-file
+          path: ${{ steps.integration-test.outputs.prop-file }}

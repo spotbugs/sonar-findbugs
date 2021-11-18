@@ -1,0 +1,46 @@
+name: 'sonar update center action'
+description: 'The GitHub Action updating prop file to release SonarQube plugin'
+author: 'Kengo TODA'
+inputs:
+  prop-file:
+    description: 'The file path in the SonarSource/sonar-update-center-properties project'
+    required: true
+  description:
+    description: 'The description of newly released version'
+    required: true
+  minimal-supported-sq-version:
+    description: 'The minimal supported version of SonarQube (e.g. 7.9)'
+    required: true
+  latest-supported-sq-version:
+    description: 'The latest supported version of SonarQube (e.g. LATEST)'
+    default: 'LATEST'
+  changelog-url:
+    description: 'The URL of changelog page'
+    required: true
+  download-url:
+    description: 'The URL of plugin .jar file'
+    required: true
+  public-version:
+    description: 'The version to release to the sonar update center'
+    required: true
+  sonar-cloud-url:
+    description: 'The URL of sonar-cloud page for this release'
+    required: false
+  github-token:
+    description: 'The GitHub Personal Access Token with the public_repo permission'
+    required: true
+  discourse-api-key:
+    description: 'The Discourse User API key with write scope'
+    required: false
+  skip-creating-pull-request:
+    description: 'For debug; Skip creating a PR'
+    default: false
+  skip-announcing:
+    description: 'For debug; Skip announcing at the Community Forum'
+    default: false
+outputs:
+  prop-file:
+    description: 'The full path of the updated properties file in local filesystem'
+runs:
+  using: 'node12'
+  main: 'dist/index.js'

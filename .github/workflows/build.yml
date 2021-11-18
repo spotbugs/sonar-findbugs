@@ -83,7 +83,7 @@ jobs:
           asset_content_type: application/zip
       - name: Request SonarSource to release the plugin to marketplace
         if: github.event_name == 'release'
-        uses: KengoTODA/sonar-update-center-action@main
+        uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
           description: Use SpotBugs 4.4.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
