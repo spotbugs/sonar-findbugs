@@ -19,6 +19,8 @@ permissions:
 
 jobs:
   build:
+    # Forked repos do not have access to the Sonar account
+    if: github.repository == 'spotbugs/sonar-findbugs'
     runs-on: ubuntu-20.04
     env:
       # minimal support version
