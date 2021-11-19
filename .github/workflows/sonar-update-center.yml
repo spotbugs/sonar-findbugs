@@ -32,6 +32,7 @@ jobs:
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
           cache: npm
+          cache-dependency-path: .github/actions/sonar-update-center/package-lock.json
       - run: |
           npm ci
           npm run all
