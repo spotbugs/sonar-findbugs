@@ -83,11 +83,11 @@ jobs:
           asset_content_type: application/zip
       - name: Request SonarSource to release the plugin to marketplace
         if: github.event_name == 'release'
-        uses: KengoTODA/sonar-update-center-action@main
+        uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.4.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
-          minimal-supported-sq-version: 7.9
+          description: Use SpotBugs 4.5.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          minimal-supported-sq-version: 8.9
           latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
