@@ -529,7 +529,10 @@ public float average(int[] arr) {
     &lt;b&gt;return sum / arr.length;&lt;/b&gt; //Change
 }
 &lt;/code&gt;&lt;/pre&gt;
-			&lt;/p&gt;</description>
+			&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S1488} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>style</tag>
   </rule>
   <rule key='COM_COPIED_OVERRIDDEN_METHOD' priority='INFO'>
