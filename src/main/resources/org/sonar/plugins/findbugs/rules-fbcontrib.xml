@@ -1097,7 +1097,7 @@ if (myString.indexOf('e') != -1) {
 			the use of BigDecimal is to get better precision than double, by passing a double, you only get the precision of double number
 			space. To take advantage of the BigDecimal space, pass the number as a string. &lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:java:S1858} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S2111} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -1355,7 +1355,7 @@ String str = sb.toString();
     <configKey>SPP_TOSTRING_ON_STRING</configKey>
     <description>&lt;p&gt;This method calls &lt;code&gt;toString&lt;/code&gt; on a String. Just use the object itself if you want a String.&lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
-&lt;p&gt;This rule is deprecated; use {rule:java:S2111} instead.&lt;/p&gt;</description>
+&lt;p&gt;This rule is deprecated; use {rule:java:S1858} instead.&lt;/p&gt;</description>
     <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
