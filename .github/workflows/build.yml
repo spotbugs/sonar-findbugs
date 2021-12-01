@@ -36,6 +36,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+          cache: 'maven'
       - name: Build
         run: |
           mvn verify -B -e -V
@@ -53,6 +54,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+          cache: 'maven'
           server-id: ossrh
           server-username: OSSRH_JIRA_USERNAME
           server-password: OSSRH_JIRA_PASSWORD
