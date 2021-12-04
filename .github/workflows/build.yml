@@ -33,13 +33,15 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+          cache: 'maven'
       - name: Build
         run: |
           mvn verify -B -e -V
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )
+    # Forked repos do not have the secrets to deploy so this would fail
+    if: ( github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )) && github.repository == 'spotbugs/sonar-findbugs'
     steps:
       - uses: actions/checkout@v2
         with:
@@ -49,6 +51,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+          cache: 'maven'
           server-id: ossrh
           server-username: OSSRH_JIRA_USERNAME
           server-password: OSSRH_JIRA_PASSWORD
