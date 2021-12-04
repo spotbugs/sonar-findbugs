@@ -57,6 +57,7 @@
 
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.0.0-M5</surefire.version>
+    <failsafe.version>3.0.0-M5</failsafe.version>
     <sonar.version>7.9</sonar.version>
     <sonar-java.version>5.13.1.18282</sonar-java.version>
 
@@ -205,6 +206,17 @@
       <scope>test</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.sonarsource.orchestrator</groupId>
+      <artifactId>sonar-orchestrator</artifactId>
+      <version>3.35.1.2719</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.sonarsource.sonarqube</groupId>
+      <artifactId>sonar-ws</artifactId>
+      <version>9.1.0.47736</version>
+    </dependency>
 
     <!-- Utilities use by the lexer -->
     <dependency>
@@ -290,6 +302,11 @@
          <version>${surefire.version}</version>
         </plugin>
         <plugin>
+         <groupId>org.apache.maven.plugins</groupId>
+         <artifactId>maven-failsafe-plugin</artifactId>
+         <version>${failsafe.version}</version>
+        </plugin>
+        <plugin>
          <groupId>org.jacoco</groupId>
          <artifactId>jacoco-maven-plugin</artifactId>
          <version>0.8.6</version>
@@ -349,7 +366,26 @@
           <useModulePath>false</useModulePath>
         </configuration>
       </plugin>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <argLine>${failsafeArgLine}</argLine>
+          <disableModules>false</disableModules>
+          <useModulePath>false</useModulePath>
+          <systemPropertyVariables>
+            <sonar.version>${sonar.version}</sonar.version>
+          </systemPropertyVariables>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
 
 
       <plugin>
