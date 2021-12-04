@@ -72,7 +72,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Before
   public void setUp() throws IOException {
     sensorContext = mock(SensorContext.class);
-    byteCodeResourceLocator = new ByteCodeResourceLocator();
+    byteCodeResourceLocator = mock(ByteCodeResourceLocator.class);
     executor = mock(FindbugsExecutor.class);
     javaResourceLocator = mockJavaResourceLocator();
     
@@ -129,7 +129,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_execute_findbugs() throws Exception {
 
-    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6);
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
@@ -146,7 +146,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_not_add_issue_if_resource_not_found() throws Exception {
 
-    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 13);
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 13, false);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
 
@@ -166,7 +166,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_execute_findbugs_even_if_only_fbcontrib() throws Exception {
 
-    BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49);
+    BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(true, false)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
@@ -184,7 +184,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_execute_findbugs_even_if_only_findsecbug() throws Exception {
 
-    BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0);
+    BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, true)).thenReturn(collection);
 
@@ -202,7 +202,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   @Test
   public void should_execute_findbugs_but_not_find_violation() throws Exception {
 
-    BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107);
+    BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(false, false)).thenReturn(collection);
 
@@ -231,7 +231,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     verify(sensorContext, never()).newIssue();
   }
 
-  private BugInstance getBugInstance(String name, int line) {
+  private BugInstance getBugInstance(String name, int line, boolean mockFindSourceFile) {
     BugInstance bugInstance = new BugInstance(name, 2);
     String className = "org.sonar.commons.ZipUtils";
     String sourceFile = "org/sonar/commons/ZipUtils.java";
@@ -240,6 +240,16 @@ public class FindbugsSensorTest extends FindbugsTests {
     MethodAnnotation methodAnnotation = new MethodAnnotation(className, "_zip", "(Ljava/lang/String;Ljava/io/File;Ljava/util/zip/ZipOutputStream;)V", true);
     methodAnnotation.setSourceLines(new SourceLineAnnotation(className, sourceFile, line, 0, 0, 0));
     bugInstance.add(methodAnnotation);
+    
+    if (mockFindSourceFile) {
+      InputFile resource = mock(InputFile.class);
+      TextRange textRange = mock(TextRange.class);
+
+      ReportedBug reportedBug = new ReportedBug(bugInstance);
+      when(byteCodeResourceLocator.findSourceFile(reportedBug.getSourceFile(), fs)).thenReturn(resource);
+      when(resource.selectLine(line > 0 ? line : 1)).thenReturn(textRange);
+    }
+    
     return bugInstance;
   }
 
