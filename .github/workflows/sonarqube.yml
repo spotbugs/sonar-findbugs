@@ -23,9 +23,9 @@ jobs:
     if: github.repository == 'spotbugs/sonar-findbugs'
     runs-on: ubuntu-20.04
     env:
-      # minimal support version
-      SONAR_VERSION: 7.6
-      SONAR_JAVA_VERSION: 5.10.1.16922
+      # previous LTS version
+      SONAR_VERSION: 7.9
+      SONAR_JAVA_VERSION: 5.13.1.18282
     steps:
       - name: Decide the ref to check out
         uses: haya14busa/action-cond@v1
@@ -43,6 +43,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
+          cache: 'maven'
       - name: Build
         run: |
           mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V \
