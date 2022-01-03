@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.TreeSet;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -228,6 +230,46 @@ public class FindbugsSensorTest extends FindbugsTests {
     analyser.execute(sensorContext);
 
     verify(executor, never()).execute(false, false);
+    verify(sensorContext, never()).newIssue();
+  }
+
+  /**
+   * When the users want to disable SpotBugs on a project they usually disable the java rules but do not realize that
+   * their default JSP profile has some Find Sec Bugs JSP rules. SonarQube's ActiveRule will return these JSP rules
+   * because it selects a profile for every language installed on the server (typically the default profile)
+   */
+  @Test
+  public void should_not_execute_findbugs_if_only_jsp_rules_and_no_jsp_file() throws Exception {
+    TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
+    when(fs.languages()).thenReturn(languages);
+
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+
+    pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
+
+    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
+    analyser.execute(sensorContext);
+
+    verify(executor, never()).execute(false, false);
+    verify(sensorContext, never()).newIssue();
+  }
+  
+  /**
+   * Check that the Find Sec Bugs analysis still runs when there are some JSP rules and files
+   */
+  @Test
+  public void should_execute_findbugs_if_only_jsp_rules_and_some_jsp_files() throws Exception {
+    TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml", "jsp"));
+    when(fs.languages()).thenReturn(languages);
+    
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+
+    pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
+
+    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
+    analyser.execute(sensorContext);
+
+    verify(executor).execute(false, true);
     verify(sensorContext, never()).newIssue();
   }
 
