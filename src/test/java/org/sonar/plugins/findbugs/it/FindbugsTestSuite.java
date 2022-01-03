@@ -22,7 +22,6 @@ package org.sonar.plugins.findbugs.it;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.MavenLocation;
 
 import org.junit.ClassRule;
 import org.junit.runner.RunWith;
@@ -54,6 +53,7 @@ public class FindbugsTestSuite {
       .addPlugin(FileLocation.of("./target/sonar-findbugs-plugin.jar"))
       .keepBundledPlugins()
       .setSonarVersion("LATEST_RELEASE[" + sonarVersion + "]")
+      .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/empty-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/fbcontrib-backup.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
