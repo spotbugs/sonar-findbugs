@@ -246,6 +246,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
+    descriptor.createIssuesForRuleRepositories(REPOS);
     descriptor.onlyOnLanguages(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES);
     descriptor.name("FindBugs Sensor");
   }
