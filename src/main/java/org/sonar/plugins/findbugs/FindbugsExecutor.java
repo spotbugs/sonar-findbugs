@@ -168,7 +168,9 @@ public class FindbugsExecutor {
       //Look for existing reports relative to subproject directory
       reportPaths : for(String potentialPath : potentialReportPaths) {
         File findbugsReport = new File(fs.baseDir(), potentialPath);
-        if(findbugsReport.exists() && findbugsReport.length() > 0) {
+        
+        // File.length() is unspecified for directories
+        if(findbugsReport.exists() && !findbugsReport.isDirectory() && findbugsReport.length() > 0) {
           LOG.info("FindBugs report is already generated {}. Reusing the report.",findbugsReport.getAbsolutePath());
           xmlBugReporter.getBugCollection().readXML(new FileReader(findbugsReport));
           foundExistingReport = true;
