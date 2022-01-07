@@ -19,8 +19,8 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
@@ -29,7 +29,7 @@ import org.sonar.plugins.java.Java;
 
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FindbugsRulesDefinitionTest {
   /**
@@ -37,7 +37,7 @@ public class FindbugsRulesDefinitionTest {
    */
   private RulesDefinition.Repository repository;
   
-  @Before
+  @BeforeEach
   public void setupRepository() {
     FindbugsRulesDefinition definition = new FindbugsRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();

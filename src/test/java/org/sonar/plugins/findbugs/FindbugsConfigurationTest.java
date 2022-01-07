@@ -23,42 +23,43 @@ import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FindbugsConfigurationTest {
 
-  @Rule
-  public TemporaryFolder temp = new TemporaryFolder();
+  @TempDir
+  public File temp;
 
   private FilePredicates filePredicates;
   private FileSystem fs;
   private SimpleConfiguration configuration;
   private File baseDir;
+  private File workDir;
   private ActiveRules activeRules;
   private FindbugsConfiguration conf;
   private JavaResourceLocator javaResourceLocator;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
-    baseDir = temp.newFolder("findbugs");
+    baseDir = new File(temp, "findbugs");
+    workDir = new File(temp, "findbugs");
 
     filePredicates = mock(FilePredicates.class);
     
     fs = mock(FileSystem.class);
     when(fs.baseDir()).thenReturn(baseDir);
-    when(fs.workDir()).thenReturn(temp.newFolder());
+    when(fs.workDir()).thenReturn(workDir);
     when(fs.predicates()).thenReturn(filePredicates);
     
     activeRules = mock(ActiveRules.class);
@@ -110,7 +111,7 @@ public class FindbugsConfigurationTest {
 
   @Test
   public void should_set_class_files() throws IOException {
-    File file = temp.newFile("MyClass.class");
+    File file = new File(temp, "MyClass.class");
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
     Project findbugsProject = conf.getFindbugsProject();
 
@@ -120,7 +121,7 @@ public class FindbugsConfigurationTest {
 
   @Test
   public void should_set_class_path() throws IOException {
-    File classpath = temp.newFolder();
+    File classpath = new File(temp, "classpath");
     when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
     Project findbugsProject = conf.getFindbugsProject();
 

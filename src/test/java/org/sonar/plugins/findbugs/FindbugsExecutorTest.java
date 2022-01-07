@@ -21,10 +21,9 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -36,22 +35,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class FindbugsExecutorTest {
-
-  @Rule
-  public TemporaryFolder temporaryFolder = new TemporaryFolder();
+  
+  @TempDir
+  public File temporaryFolder;
 
   FileSystem fsEmpty;
   FilePredicates predicatesEmpty;
 
   Configuration configEmpty;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     fsEmpty = mock(FileSystem.class);
     predicatesEmpty = mock(FilePredicates.class);
@@ -68,7 +68,7 @@ public class FindbugsExecutorTest {
   public void canGenerateXMLReport() throws Exception {
     FindbugsConfiguration conf = mockConf();
 
-    File reportFile = temporaryFolder.newFile("findbugs-report.xml");
+    File reportFile = new File(temporaryFolder, "findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
 
     new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
@@ -84,7 +84,7 @@ public class FindbugsExecutorTest {
   @Test
   public void canGenerateXMLReportWithCustomConfidence() throws Exception {
     FindbugsConfiguration conf = mockConf();
-    File reportFile = temporaryFolder.newFile("customized-findbugs-report.xml");
+    File reportFile = new File(temporaryFolder, "customized-findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
     when(conf.getConfidenceLevel()).thenReturn("low");
 
@@ -98,23 +98,25 @@ public class FindbugsExecutorTest {
     assertThat(report).contains("priority=\"3\"");
   }
 
-  @Test(expected = IllegalStateException.class)
   public void shouldTerminateAfterTimeout() throws Exception {
     FindbugsConfiguration conf = mockConf();
     when(conf.getTimeout()).thenReturn(1L);
 
-    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    assertThrows(IllegalStateException.class, () -> {
+      new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    });
   }
 
-  @Test(expected = IllegalStateException.class)
   public void shoulFailIfNoCompiledClasses() throws Exception {
     FileSystem fs = mock(FileSystem.class);
     when(fs.baseDir()).thenReturn(new File("."));
     SimpleConfiguration configuration = new SimpleConfiguration();
     //settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
     FindbugsConfiguration conf = new FindbugsConfiguration(fs, configuration, null, null);
-
-    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    
+    assertThrows(IllegalStateException.class, () -> {
+      new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    });
   }
 
   private FindbugsConfiguration mockConf() throws Exception {

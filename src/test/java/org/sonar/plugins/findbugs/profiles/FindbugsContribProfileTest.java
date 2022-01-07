@@ -1,7 +1,7 @@
 package org.sonar.plugins.findbugs.profiles;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.api.utils.log.LogTester;
@@ -10,14 +10,15 @@ import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.Java;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FindbugsContribProfileTest { 
 
-  @Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public LogTester logTester = new JupiterLogTester();
   
   @Test
   public void shouldCreateProfile() {
