@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
@@ -27,7 +27,7 @@ import org.sonar.plugins.java.Java;
 
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FbContribRulesDefinitionTest {
 

@@ -19,13 +19,11 @@
  */
 package org.sonar.plugins.findbugs.it;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
 
@@ -43,22 +41,12 @@ public class FindbugsIT {
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
   private static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
-  @BeforeClass
-  public static void startOrchestrator() {
-    orchestrator.start();
-  }
-  
-  @AfterClass
-  public static void stopOrchestrator() {
-    orchestrator.stop();
-  }
-
-  @Before
+  @BeforeEach
   public void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Findbugs Integration Tests", "findbugs-it", "java");
   }
   
-  @After
+  @AfterEach
   public void deleteProject() {
     FindbugsTestSuite.deleteProject(PROJECT_KEY);
   }

@@ -19,7 +19,7 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
@@ -37,7 +37,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FindbugsProfileExporterTest extends FindbugsTests {
 

@@ -1,7 +1,7 @@
 package org.sonar.plugins.findbugs.resource;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 import com.google.common.collect.ImmutableList;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -28,7 +28,7 @@ public class ByteCodeResourceLocatorTest {
   FileSystem fsEmpty;
   FilePredicates predicatesEmpty;
 
-  @Before
+  @BeforeEach
   public void setUp() {
 
     //Not used for the moment

@@ -22,6 +22,7 @@ package org.sonar.plugins.findbugs;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
@@ -31,6 +32,7 @@ import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.Java;
@@ -41,14 +43,14 @@ import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FindbugsProfileImporterTest {   
 	
 	private static final String TEST_PROFILE = "TEST_PROFILE";
 
-	@org.junit.Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public LogTester logTester = new JupiterLogTester();
 
 	private	Context context = new Context();
   private final FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithOnlyFindbugsRules());

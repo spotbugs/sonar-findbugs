@@ -28,7 +28,7 @@ import java.util.List;
 import org.apache.commons.lang.CharUtils;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.XMLUnit;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.sonar.api.rules.Rule;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.util.TestUtils;
@@ -58,6 +58,6 @@ public abstract class FindbugsTests {
     Reader reader = new FileReader(expectedFile);
     Diff diff = XMLUnit.compareXML(reader, xml);
     String message = "Diff: " + diff.toString() + CharUtils.LF + "XML: " + xml;
-    Assert.assertTrue(message, diff.similar());
+    Assertions.assertTrue(diff.similar(), message);
   }
 }

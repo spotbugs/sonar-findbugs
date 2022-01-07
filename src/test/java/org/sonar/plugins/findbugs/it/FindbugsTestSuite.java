@@ -22,11 +22,7 @@ package org.sonar.plugins.findbugs.it;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.MavenLocation;
 
-import org.junit.ClassRule;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
 import org.sonarqube.ws.client.projects.CreateRequest;
@@ -37,17 +33,12 @@ import org.sonarqube.ws.client.qualityprofiles.QualityprofilesService;
 
 import java.io.File;
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-  FindbugsIT.class,
-  FBContribIT.class
-})
 public class FindbugsTestSuite {
 
-  @ClassRule
   public static final Orchestrator ORCHESTRATOR;
 
   static {
+    // build, start and stop the orchestrator here, making sure that it happens exactly once whether we run one or multiple tests
     String sonarVersion = System.getProperty("sonar.version", "8.9");
     
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
@@ -57,6 +48,10 @@ public class FindbugsTestSuite {
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/fbcontrib-backup.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
+    ORCHESTRATOR.start();
+
+    Thread stopOrchestratorThread = new Thread(() -> ORCHESTRATOR.stop(), sonarVersion);
+    Runtime.getRuntime().addShutdownHook(stopOrchestratorThread);
   }
   
   public static void setupProjectAndProfile(String projectKey, String projectName, String qualityProfile, String language) {

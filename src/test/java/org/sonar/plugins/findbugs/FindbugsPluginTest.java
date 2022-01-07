@@ -19,12 +19,13 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarRuntime;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+
+import org.junit.jupiter.api.Test;
 
 public class FindbugsPluginTest {
 
@@ -37,7 +38,7 @@ public class FindbugsPluginTest {
     FindbugsPlugin plugin = new FindbugsPlugin();
     plugin.define(ctx);
 
-    assertEquals("extension count", 21, ctx.getExtensions().size());
+    assertEquals(21, ctx.getExtensions().size(), "extension count");
   }
 
 }
