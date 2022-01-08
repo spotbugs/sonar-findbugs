@@ -50,7 +50,6 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.utils.SonarException;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
