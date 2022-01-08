@@ -19,8 +19,8 @@
  */
 package org.sonar.plugins.findbugs.profiles;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
@@ -31,13 +31,14 @@ import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.util.JupiterLogTester;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FindbugsSecurityJspProfileTest {
 
-  @Rule
-  public LogTester logTester = new LogTester();
+  @RegisterExtension
+  public LogTester logTester = new JupiterLogTester();
 
   @Test
   public void shouldCreateProfile() {

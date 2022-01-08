@@ -32,10 +32,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.TreeSet;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -52,8 +51,8 @@ import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -61,8 +60,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class FindbugsSensorTest extends FindbugsTests {
-  @Rule
-  public TemporaryFolder temp = new TemporaryFolder();
+  @TempDir
+  public File temp;
 
   private FileSystem fs;
   private ByteCodeResourceLocator byteCodeResourceLocator;
@@ -71,14 +70,14 @@ public class FindbugsSensorTest extends FindbugsTests {
   private FindbugsExecutor executor;
   private JavaResourceLocator javaResourceLocator;
 
-  @Before
+  @BeforeEach
   public void setUp() throws IOException {
     sensorContext = mock(SensorContext.class);
     byteCodeResourceLocator = mock(ByteCodeResourceLocator.class);
     executor = mock(FindbugsExecutor.class);
     javaResourceLocator = mockJavaResourceLocator();
     
-    File baseDir = temp.newFolder("findbugs");
+    File baseDir = new File(temp, "findbugs");
 
     FilePredicate relativePathFilePredicate = mock(FilePredicate.class);
     when(relativePathFilePredicate.apply(any(InputFile.class))).thenReturn(true);
@@ -88,7 +87,7 @@ public class FindbugsSensorTest extends FindbugsTests {
     
     fs = mock(FileSystem.class);
     when(fs.baseDir()).thenReturn(baseDir);
-    when(fs.workDir()).thenReturn(temp.newFolder());
+    when(fs.workDir()).thenReturn(new File(temp, "workdir"));
     when(fs.predicates()).thenReturn(filePredicates);
 
     InputFile dummyFile = mock(InputFile.class);

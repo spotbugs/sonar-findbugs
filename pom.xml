@@ -50,8 +50,9 @@
     <!--
       When update these versions, update description in .github/workflows/build.yml too.
       Also need to update profiles, see ./generate_profiles/README.md for detail.
+      Update the version table and the rulse count badge in README.md
     -->
-    <spotbugs.version>4.5.0</spotbugs.version>
+    <spotbugs.version>4.5.2</spotbugs.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
     <findsecbugs.version>1.11.0</findsecbugs.version>
 
@@ -176,21 +177,21 @@
 
     <!-- unit tests -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.8.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.5.13</version>
+      <version>4.2.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.easytesting</groupId>
-      <artifactId>fest-assert</artifactId>
-      <version>1.4</version>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.21.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
