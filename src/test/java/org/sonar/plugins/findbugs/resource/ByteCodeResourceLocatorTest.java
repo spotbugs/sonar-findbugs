@@ -18,7 +18,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ByteCodeResourceLocatorTest {
+class ByteCodeResourceLocatorTest {
 
   //File system that return mock input files
 //  FileSystem fs;
@@ -44,7 +44,7 @@ public class ByteCodeResourceLocatorTest {
 
 
   @Test
-  public void findJavaClassFile_normalClassName() {
+  void findJavaClassFile_normalClassName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     locator.findSourceFile("com/helloworld/ThisIsATest.java", fsEmpty);
@@ -53,7 +53,7 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findScalaClassFileNormalClassName() {
+  void findScalaClassFileNormalClassName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     locator.findSourceFile("com/helloworld/ThisIsATest.scala", fsEmpty);
@@ -71,7 +71,7 @@ public class ByteCodeResourceLocatorTest {
 //  }
 
   @Test
-  public void findTemplateFile_weblogicFileName() {
+  void findTemplateFile_weblogicFileName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
 
@@ -81,7 +81,7 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findTemplateFile_jasperFileName() {
+  void findTemplateFile_jasperFileName() {
 
     String prefixSource = "src/main/webapp/org/apache/jsp/";
 
@@ -101,7 +101,7 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findRegularSourceFile() throws Exception {
+  void findRegularSourceFile() throws Exception {
     InputFile givenJavaFile = mock(InputFile.class);
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
@@ -110,7 +110,7 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findSourceFileFromScalaClassName() throws Exception {
+  void findSourceFileFromScalaClassName() throws Exception {
     InputFile givenJavaFile = mock(InputFile.class);
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 

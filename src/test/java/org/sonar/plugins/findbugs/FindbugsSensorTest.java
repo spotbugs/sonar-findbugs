@@ -59,7 +59,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class FindbugsSensorTest extends FindbugsTests {
+class FindbugsSensorTest extends FindbugsTests {
   @TempDir
   public File temp;
 
@@ -128,7 +128,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_execute_findbugs() throws Exception {
+  void should_execute_findbugs() throws Exception {
 
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -145,7 +145,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_not_add_issue_if_resource_not_found() throws Exception {
+  void should_not_add_issue_if_resource_not_found() throws Exception {
 
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 13, false);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -165,7 +165,7 @@ public class FindbugsSensorTest extends FindbugsTests {
 
 
   @Test
-  public void should_execute_findbugs_even_if_only_fbcontrib() throws Exception {
+  void should_execute_findbugs_even_if_only_fbcontrib() throws Exception {
 
     BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -183,7 +183,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_execute_findbugs_even_if_only_findsecbug() throws Exception {
+  void should_execute_findbugs_even_if_only_findsecbug() throws Exception {
 
     BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -219,7 +219,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_not_execute_findbugs_if_no_active() throws Exception {
+  void should_not_execute_findbugs_if_no_active() throws Exception {
 
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
@@ -295,7 +295,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_not_execute_if_no_compiled_class_available() throws Exception {
+  void should_not_execute_if_no_compiled_class_available() throws Exception {
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.<File>emptyList());
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
@@ -305,7 +305,7 @@ public class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void shouldIgnoreNotActiveViolations() throws Exception {
+  void shouldIgnoreNotActiveViolations() throws Exception {
     BugInstance bugInstance = new BugInstance("UNKNOWN", 2);
     String className = "org.sonar.commons.ZipUtils";
     String sourceFile = "org/sonar/commons/ZipUtils.java";

@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FindbugsConfigurationTest {
+class FindbugsConfigurationTest {
 
   @TempDir
   public File temp;
@@ -70,47 +70,47 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
-  public void should_return_report_file() throws Exception {
+  void should_return_report_file() throws Exception {
     assertThat(conf.getTargetXMLReport().getCanonicalPath()).isEqualTo(new File(fs.workDir(), "findbugs-result.xml").getCanonicalPath());
   }
 
   @Test
-  public void should_save_include_config() throws Exception {
+  void should_save_include_config() throws Exception {
     conf.saveIncludeConfigXml();
     File findbugsIncludeFile = new File(fs.workDir(), "findbugs-include.xml");
-    assertThat(findbugsIncludeFile.exists()).isTrue();
+    assertThat(findbugsIncludeFile).exists();
   }
 
   @Test
-  public void should_return_effort() {
+  void should_return_effort() {
     assertThat(conf.getEffort()).as("default effort").isEqualTo("default");
     configuration.setProperty(FindbugsConstants.EFFORT_PROPERTY, "Max");
     assertThat(conf.getEffort()).isEqualTo("max");
   }
 
   @Test
-  public void should_return_timeout() {
+  void should_return_timeout() {
     assertThat(conf.getTimeout()).as("default timeout").isEqualTo(600000);
     configuration.setProperty(FindbugsConstants.TIMEOUT_PROPERTY, 1);
     assertThat(conf.getTimeout()).isEqualTo(1);
   }
 
   @Test
-  public void should_return_excludes_filters() {
+  void should_return_excludes_filters() {
     assertThat(conf.getExcludesFilters()).isEmpty();
     configuration.setProperty(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY, " foo.xml , bar.xml,");
     assertThat(conf.getExcludesFilters()).hasSize(2);
   }
 
   @Test
-  public void should_return_confidence_level() {
+  void should_return_confidence_level() {
     assertThat(conf.getConfidenceLevel()).as("default confidence level").isEqualTo("medium");
     configuration.setProperty(FindbugsConstants.EFFORT_PROPERTY, "HIGH");
     assertThat(conf.getEffort()).isEqualTo("high");
   }
 
   @Test
-  public void should_set_class_files() throws IOException {
+  void should_set_class_files() throws IOException {
     File file = new File(temp, "MyClass.class");
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
     Project findbugsProject = conf.getFindbugsProject();
@@ -120,7 +120,7 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
-  public void should_set_class_path() throws IOException {
+  void should_set_class_path() throws IOException {
     File classpath = new File(temp, "classpath");
     when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
     Project findbugsProject = conf.getFindbugsProject();
@@ -130,7 +130,7 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
-  public void should_copy_lib_in_working_dir() throws IOException {
+  void should_copy_lib_in_working_dir() throws IOException {
     String jsr305 = "findbugs/jsr305.jar";
     String annotations = "findbugs/annotations.jar";
 
@@ -155,13 +155,13 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
-  public void should_get_fbcontrib() throws IOException {
+  void should_get_fbcontrib() throws IOException {
     conf.copyLibs();
     assertThat(conf.getFbContribJar()).isFile();
   }
 
   @Test
-  public void should_get_findSecBugs() throws IOException {
+  void should_get_findSecBugs() throws IOException {
     conf.copyLibs();
     assertThat(conf.getFindSecBugsJar()).isFile();
   }

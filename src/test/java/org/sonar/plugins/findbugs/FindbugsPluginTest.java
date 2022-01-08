@@ -27,10 +27,10 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
 
-public class FindbugsPluginTest {
+class FindbugsPluginTest {
 
   @Test
-  public void testGetExtensions() {
+  void testGetExtensions() {
 
     //Plugin.Context ctx = new FindbugsPlugin.Context(Version.parse("1.33.7"));
     Plugin.Context ctx = new Plugin.Context(mock(SonarRuntime.class));

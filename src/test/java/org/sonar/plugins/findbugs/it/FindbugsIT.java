@@ -36,7 +36,7 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.build.SonarScanner;
 
-public class FindbugsIT {
+class FindbugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
   private static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
@@ -52,7 +52,7 @@ public class FindbugsIT {
   }
 
   @Test
-  public void analysis() {
+  void analysis() {
     MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.dynamicAnalysis", "false");
@@ -79,7 +79,7 @@ public class FindbugsIT {
    * SONAR-2325
    */
   @Test
-  public void confidence_level() {
+  void confidence_level() {
     MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -102,7 +102,7 @@ public class FindbugsIT {
    * SONARJAVA-380
    */
   @Test
-  public void should_always_use_english_locale() throws Exception {
+  void should_always_use_english_locale() throws Exception {
     MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -120,7 +120,7 @@ public class FindbugsIT {
    * SONARJAVA-385
    */
   @Test
-  public void inclusions_exclusions() throws Exception {
+  void inclusions_exclusions() throws Exception {
     File projectDir = FindbugsTestSuite.projectPom("findbugs").getParentFile();
     // Compile
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
@@ -150,7 +150,7 @@ public class FindbugsIT {
   }
 
   @Test
-  public void multiple_directories_with_classes() throws Exception {
+  void multiple_directories_with_classes() throws Exception {
     File projectDir = FindbugsTestSuite.projectPom("multiple-directories-with-classes").getParentFile();
     // Compile
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))

@@ -32,6 +32,7 @@ import org.sonar.api.config.Configuration;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -41,7 +42,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FindbugsExecutorTest {
+class FindbugsExecutorTest {
   
   @TempDir
   public File temporaryFolder;
@@ -65,7 +66,7 @@ public class FindbugsExecutorTest {
   }
 
   @Test
-  public void canGenerateXMLReport() throws Exception {
+  void canGenerateXMLReport() throws Exception {
     FindbugsConfiguration conf = mockConf();
 
     File reportFile = new File(temporaryFolder, "findbugs-report.xml");
@@ -73,8 +74,8 @@ public class FindbugsExecutorTest {
 
     new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
 
-    assertThat(reportFile.exists()).isTrue();
-    String report = FileUtils.readFileToString(reportFile);
+    assertThat(reportFile).exists();
+    String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
     assertThat(report).as("Report should contain bug instance").contains("<BugInstance");
     assertThat(report).as("Report should be generated with messages").contains("<Message>");
     assertThat(report).contains("priority=\"1\"");
@@ -82,7 +83,7 @@ public class FindbugsExecutorTest {
   }
 
   @Test
-  public void canGenerateXMLReportWithCustomConfidence() throws Exception {
+  void canGenerateXMLReportWithCustomConfidence() throws Exception {
     FindbugsConfiguration conf = mockConf();
     File reportFile = new File(temporaryFolder, "customized-findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
@@ -90,8 +91,8 @@ public class FindbugsExecutorTest {
 
     new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
 
-    assertThat(reportFile.exists()).isTrue();
-    String report = FileUtils.readFileToString(reportFile);
+    assertThat(reportFile).exists();
+    String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
     assertThat(report).as("Report should contain bug instance").contains("<BugInstance");
     assertThat(report).as("Report should be generated with messages").contains("<Message>");
     assertThat(report).contains("priority=\"1\"");
@@ -102,8 +103,9 @@ public class FindbugsExecutorTest {
     FindbugsConfiguration conf = mockConf();
     when(conf.getTimeout()).thenReturn(1L);
 
+    FindbugsExecutor executor = new FindbugsExecutor(conf, fsEmpty, configEmpty);
     assertThrows(IllegalStateException.class, () -> {
-      new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+      executor.execute();
     });
   }
 
@@ -114,8 +116,9 @@ public class FindbugsExecutorTest {
     //settings.setProperty(CoreProperties.CORE_VIOLATION_LOCALE_PROPERTY, Locale.getDefault().getDisplayName());
     FindbugsConfiguration conf = new FindbugsConfiguration(fs, configuration, null, null);
     
+    FindbugsExecutor executor = new FindbugsExecutor(conf, fsEmpty, configEmpty);
     assertThrows(IllegalStateException.class, () -> {
-      new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+      executor.execute();
     });
   }
 

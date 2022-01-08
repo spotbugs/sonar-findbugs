@@ -35,13 +35,13 @@ import org.sonar.plugins.findbugs.util.JupiterLogTester;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsSecurityJspProfileTest {
+class FindbugsSecurityJspProfileTest {
 
   @RegisterExtension
   public LogTester logTester = new JupiterLogTester();
 
   @Test
-  public void shouldCreateProfile() {
+  void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
     FindbugsSecurityJspProfile findbugsProfile = new FindbugsSecurityJspProfile(importer);
     Context context = new Context();
@@ -52,11 +52,11 @@ public class FindbugsSecurityJspProfileTest {
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(6);
-    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(0);
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isZero();
   }
 
   @Test
-  public void disabledRuleMustNotBeActivated() {
+  void disabledRuleMustNotBeActivated() {
     RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
     
     // Mark a rule as removed
@@ -73,6 +73,6 @@ public class FindbugsSecurityJspProfileTest {
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(5);
-    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(0);
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isZero();
   }
 }

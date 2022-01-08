@@ -32,7 +32,7 @@ import java.util.List;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 
-public class FBContribIT {
+class FBContribIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:fb-contrib";
   public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
@@ -48,7 +48,7 @@ public class FBContribIT {
   }
 
   @Test
-  public void test() throws Exception {
+  void test() throws Exception {
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("simple"))
       .setProperty("sonar.dynamicAnalysis", "false")
