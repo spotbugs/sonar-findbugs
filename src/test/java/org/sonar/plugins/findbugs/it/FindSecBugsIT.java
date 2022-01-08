@@ -16,7 +16,7 @@ import com.sonar.orchestrator.build.MavenBuild;
  * @author gtoison
  *
  */
-public class FindSecBugsIT {
+class FindSecBugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
   public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
@@ -32,7 +32,7 @@ public class FindSecBugsIT {
   }
 
   @Test
-  public void noAnalysisWhenProfileDoesNotHaveSpotBugsRules() throws Exception {
+  void noAnalysisWhenProfileDoesNotHaveSpotBugsRules() throws Exception {
     // Set an empty Java quality profile for the project
     AddProjectRequest addProjectRequest = new AddProjectRequest();
     addProjectRequest.setLanguage("java");
