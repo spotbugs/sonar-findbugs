@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
@@ -29,14 +28,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,7 +156,7 @@ public class FindbugsConfiguration implements Startable {
       XStream xstream = FindBugsFilter.createXStream();
       writer.append(xstream.toXML(filter));
     } catch (IOException e) {
-      throw new SonarException("Fail to generate the Findbugs profile configuration", e);
+      throw new IllegalArgumentException("Fail to generate the Findbugs profile configuration", e);
     }
   }
 
@@ -196,12 +194,11 @@ public class FindbugsConfiguration implements Startable {
     );
   }
 
-  @VisibleForTesting
   File saveIncludeConfigXml() throws IOException {
     StringWriter conf = new StringWriter();
     exportProfile(activeRules, conf);
     File file = new File(fileSystem.workDir(), "findbugs-include.xml");
-    FileUtils.write(file, conf.toString(), CharEncoding.UTF_8);
+    FileUtils.write(file, conf.toString(), StandardCharsets.UTF_8);
     return file;
   }
 
@@ -212,8 +209,8 @@ public class FindbugsConfiguration implements Startable {
    * @return {@code List<File>} of class files
    */
   public static List<File> scanForAdditionalClasses(File folder) {
-    List<File> allFiles = new ArrayList<File>();
-    Queue<File> dirs = new LinkedList<File>();
+    List<File> allFiles = new ArrayList<>();
+    Queue<File> dirs = new LinkedList<>();
     dirs.add(folder);
     while (!dirs.isEmpty()) {
       File dirPoll = dirs.poll();
@@ -229,7 +226,6 @@ public class FindbugsConfiguration implements Startable {
     return allFiles;
   }
 
-  @VisibleForTesting
   List<File> getExcludesFilters() {
     List<File> result = Lists.newArrayList();
     PathResolver pathResolver = new PathResolver();
@@ -310,9 +306,7 @@ public class FindbugsConfiguration implements Startable {
   }
 
   private File copyLib(String name) {
-    InputStream input = null;
-    try {
-      input = getClass().getResourceAsStream(name);
+    try (InputStream input = getClass().getResourceAsStream(name)) {
       File dir = new File(fileSystem.workDir(), "findbugs");
       FileUtils.forceMkdir(dir);
       File target = new File(dir, name);
@@ -320,8 +314,6 @@ public class FindbugsConfiguration implements Startable {
       return target;
     } catch (IOException e) {
       throw new IllegalStateException("Fail to extract Findbugs dependency", e);
-    } finally {
-      IOUtils.closeQuietly(input);
     }
   }
 
@@ -343,7 +335,7 @@ public class FindbugsConfiguration implements Startable {
         .name("Effort")
         .description("Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases " +
           "memory consumption.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.TIMEOUT_PROPERTY)
         .defaultValue(Long.toString(FindbugsConstants.TIMEOUT_DEFAULT_VALUE))
@@ -352,7 +344,7 @@ public class FindbugsConfiguration implements Startable {
         .name("Timeout")
         .description("Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. " +
           "The default is 600,000 milliseconds, which is ten minutes.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .type(PropertyType.INTEGER)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY)
@@ -360,7 +352,7 @@ public class FindbugsConfiguration implements Startable {
         .subCategory(subCategory)
         .name("Excludes Filters")
         .description("Paths to findbugs filter-files with exclusions.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.CONFIDENCE_LEVEL_PROPERTY)
@@ -370,7 +362,7 @@ public class FindbugsConfiguration implements Startable {
         .name("Confidence Level")
         .description("Specifies the confidence threshold (previously called \"priority\") for reporting issues. If set to \"low\", confidence is not used to filter bugs. " +
           "If set to \"medium\" (the default), low confidence issues are suppressed. If set to \"high\", only high confidence bugs are reported. ")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.ALLOW_UNCOMPILED_CODE)
         .defaultValue(Boolean.toString(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE))
@@ -380,14 +372,14 @@ public class FindbugsConfiguration implements Startable {
         .name("Allow Uncompiled Code")
         .description("Remove the compiled code requirement for all projects. "+
           "It can lead to a false sense of security if the build process skips certain projects.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.REPORT_PATHS)
         .category(Java.KEY)
         .subCategory(subCategory)
         .name("Report Paths")
         .description("Relative path to SpotBugs report files intended to be reused. (<code>/target/findbugsXml.xml</code> and <code>/target/spotbugsXml.xml</code> are included by default)")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
         .build()
       );

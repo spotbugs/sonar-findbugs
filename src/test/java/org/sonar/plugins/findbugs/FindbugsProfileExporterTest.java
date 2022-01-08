@@ -39,12 +39,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsProfileExporterTest extends FindbugsTests {
+class FindbugsProfileExporterTest extends FindbugsTests {
 
   private FindbugsProfileExporter exporter = new FindbugsProfileExporter();
 
   @Test
-  public void shouldAddHeaderToExportedXml() throws IOException, SAXException {
+  void shouldAddHeaderToExportedXml() throws IOException, SAXException {
     RulesProfile profile = RulesProfile.create();
 
     StringWriter xml = new StringWriter();
@@ -53,7 +53,7 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   }
 
   @Test
-  public void shouldExportConfiguration() throws IOException, SAXException {
+  void shouldExportConfiguration() throws IOException, SAXException {
     List<Rule> rules = buildRulesFixture();
     List<ActiveRule> activeRulesExpected = buildActiveRulesFixture(rules);
     RulesProfile profile = RulesProfile.create();
@@ -65,13 +65,13 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   }
 
   @Test
-  public void shouldBuildOnlyOneModuleWhenNoActiveRules() {
+  void shouldBuildOnlyOneModuleWhenNoActiveRules() {
     FindBugsFilter filter = FindbugsProfileExporter.buildFindbugsFilter(Collections.<ActiveRule>emptyList());
-    assertThat(filter.getMatchs()).hasSize(0);
+    assertThat(filter.getMatchs()).isEmpty();
   }
 
   @Test
-  public void shouldBuildTwoModulesEvenIfSameTwoRulesActivated() {
+  void shouldBuildTwoModulesEvenIfSameTwoRulesActivated() {
     ActiveRule activeRule1 = anActiveRule(DLS_DEAD_LOCAL_STORE);
     ActiveRule activeRule2 = anActiveRule(SS_SHOULD_BE_STATIC);
     FindBugsFilter filter = FindbugsProfileExporter.buildFindbugsFilter(Arrays.asList(activeRule1, activeRule2));
@@ -84,16 +84,16 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   }
 
   @Test
-  public void shouldBuildOnlyOneModuleWhenNoFindbugsActiveRules() {
+  void shouldBuildOnlyOneModuleWhenNoFindbugsActiveRules() {
     ActiveRule activeRule1 = anActiveRuleFromAnotherPlugin();
     ActiveRule activeRule2 = anActiveRuleFromAnotherPlugin();
 
     FindBugsFilter filter = FindbugsProfileExporter.buildFindbugsFilter(Arrays.asList(activeRule1, activeRule2));
-    assertThat(filter.getMatchs()).hasSize(0);
+    assertThat(filter.getMatchs()).isEmpty();
   }
 
   @Test
-  public void shouldBuildModuleWithProperties() {
+  void shouldBuildModuleWithProperties() {
     ActiveRule activeRule = anActiveRule(DLS_DEAD_LOCAL_STORE);
     FindBugsFilter filter = FindbugsProfileExporter.buildFindbugsFilter(Arrays.asList(activeRule));
 
@@ -102,7 +102,7 @@ public class FindbugsProfileExporterTest extends FindbugsTests {
   }
 
   @Test
-  public void shouldBuilXmlFromModuleTree() throws IOException, SAXException {
+  void shouldBuilXmlFromModuleTree() throws IOException, SAXException {
     FindBugsFilter findBugsFilter = new FindBugsFilter();
     findBugsFilter.addMatch(new Match(new Bug("DLS_DEAD_LOCAL_STORE")));
     findBugsFilter.addMatch(new Match(new Bug("URF_UNREAD_FIELD")));

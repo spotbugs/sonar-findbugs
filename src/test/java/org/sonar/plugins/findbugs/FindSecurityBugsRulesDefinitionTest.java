@@ -29,9 +29,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindSecurityBugsRulesDefinitionTest {
+class FindSecurityBugsRulesDefinitionTest {
+  
   @Test
-  public void testLoadRepositoryFromXml() {
+  void testLoadRepositoryFromXml() {
     FindSecurityBugsRulesDefinition definition = new FindSecurityBugsRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);

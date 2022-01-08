@@ -29,10 +29,10 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FbContribRulesDefinitionTest {
+class FbContribRulesDefinitionTest {
 
   @Test
-  public void test() {
+  void test() {
     FbContribRulesDefinition definition = new FbContribRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);

@@ -33,13 +33,13 @@ import org.sonar.plugins.java.Java;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsProfileTest {
+class FindbugsProfileTest {
 
   @RegisterExtension
   public LogTester logTester = new JupiterLogTester();
 
   @Test
-  public void shouldCreateProfile() {
+  void shouldCreateProfile() {
     FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
     FindbugsProfile findbugsProfile = new FindbugsProfile(importer);
     Context context = new Context();

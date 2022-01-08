@@ -23,10 +23,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class FindbugsVersionTest {
+class FindbugsVersionTest {
 
   @Test
-  public void getFindbugsVersion() {
+  void getFindbugsVersion() {
     assertThat(FindbugsVersion.getVersion().length()).isGreaterThan(1);
   }
 

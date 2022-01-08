@@ -40,6 +40,7 @@ import org.sonar.plugins.java.Java;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class FindbugsProfileImporterTest {
     
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
 
-    assertThat(profile.rules()).hasSize(0);
+    assertThat(profile.rules()).isEmpty();
   }
 
   @Test
@@ -153,7 +154,7 @@ public class FindbugsProfileImporterTest {
     InputStream input = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/test_module_tree.xml");
 
     XStream xStream = FindBugsFilter.createXStream();
-    FindBugsFilter filter = (FindBugsFilter) xStream.fromXML(IOUtils.toString(input));
+    FindBugsFilter filter = (FindBugsFilter) xStream.fromXML(IOUtils.toString(input, StandardCharsets.UTF_8));
 
     List<Match> matches = filter.getMatchs();
     assertThat(matches).hasSize(2);
@@ -172,7 +173,7 @@ public class FindbugsProfileImporterTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
     Collection<BuiltInActiveRule> results = profile.rules();
 
-    assertThat(results).hasSize(0);
+    assertThat(results).isEmpty();
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).hasSize(1);
   }
 

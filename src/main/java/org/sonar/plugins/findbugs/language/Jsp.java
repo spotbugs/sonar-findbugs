@@ -25,7 +25,9 @@ package org.sonar.plugins.findbugs.language;
  * As sonar-html, which defines JSP lang is installed by default on sonarqube 7.6, JSP language will be always available.
  */
 public class Jsp {
-
+    private Jsp() {
+    }
+    
     /**
      * JSP key
      */

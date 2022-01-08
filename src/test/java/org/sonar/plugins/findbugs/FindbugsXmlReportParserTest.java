@@ -31,7 +31,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsXmlReportParserTest {
+class FindbugsXmlReportParserTest {
 
   private List<FindbugsXmlReportParser.XmlBugInstance> violations;
 
@@ -43,7 +43,7 @@ public class FindbugsXmlReportParserTest {
   }
 
   @Test
-  public void createFindbugsXmlReportParserWithUnexistedReportFile() {
+  void createFindbugsXmlReportParserWithUnexistedReportFile() {
     File xmlReport = new File("doesntExist.xml");
     
     Throwable thrown = assertThrows(IllegalStateException.class, () -> {
@@ -54,7 +54,7 @@ public class FindbugsXmlReportParserTest {
   }
 
   @Test
-  public void testGetViolations() {
+  void testGetViolations() {
     assertThat(violations.size()).isEqualTo(2);
 
     FindbugsXmlReportParser.XmlBugInstance fbViolation = violations.get(0);
@@ -68,7 +68,7 @@ public class FindbugsXmlReportParserTest {
   }
 
   @Test
-  public void testGetSonarJavaFileKey() {
+  void testGetSonarJavaFileKey() {
     FindbugsXmlReportParser.XmlSourceLineAnnotation sourceLine = new FindbugsXmlReportParser.XmlSourceLineAnnotation();
     sourceLine.className = "org.sonar.batch.Sensor";
     assertThat(sourceLine.getSonarJavaFileKey()).isEqualTo("org.sonar.batch.Sensor");

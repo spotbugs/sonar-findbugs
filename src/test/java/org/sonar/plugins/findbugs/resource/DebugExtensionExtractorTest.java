@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class DebugExtensionExtractorTest {
+class DebugExtensionExtractorTest {
 
     @Test
-    public void loadDebugInfoFromWeblogicClass() throws IOException {
+    void loadDebugInfoFromWeblogicClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/jsp_classes/weblogic/__test.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
         //System.out.println(debugInfo);
@@ -40,7 +40,7 @@ public class DebugExtensionExtractorTest {
     }
 
     @Test
-    public void loadDebugInfoFromJettyClass() throws IOException {
+    void loadDebugInfoFromJettyClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/jsp_classes/jetty936/test_jsp.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
         //System.out.println(debugInfo);

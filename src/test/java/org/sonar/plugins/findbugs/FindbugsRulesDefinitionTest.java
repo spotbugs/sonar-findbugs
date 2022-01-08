@@ -31,7 +31,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsRulesDefinitionTest {
+class FindbugsRulesDefinitionTest {
   /**
    * The SpotBugs rules repository
    */
@@ -47,7 +47,7 @@ public class FindbugsRulesDefinitionTest {
   }
   
   @Test
-  public void testRepositoryRulesCount() {
+  void testRepositoryRulesCount() {
     assertThat(repository.name()).isEqualTo(FindbugsRulesDefinition.REPOSITORY_NAME);
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
