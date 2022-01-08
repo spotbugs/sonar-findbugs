@@ -51,23 +51,7 @@ public class DebugExtensionExtractor {
         }
     }
 
-    public String getDebugSourceFromClass(InputStream classIn) throws IOException {
-
-        AbstractClassVisitor visitor = new AbstractClassVisitor();
-        try {
-            ClassReader classReader= new ClassReader(classIn);
-            classReader.accept(visitor, 0);
-
-            return visitor.source;
-        }
-        catch (Exception e) {
-            throw new ClassMetadataLoadingException(e);
-        }
-    }
-
     private static class AbstractClassVisitor extends ClassVisitor {
-
-        protected String source;
         protected String debug;
 
         public AbstractClassVisitor() {
@@ -77,7 +61,7 @@ public class DebugExtensionExtractor {
         @Override
         public void visitSource(String source, String debug) {
             super.visitSource(source, debug);
-            this.source = source;
+            
             this.debug  = debug;
         }
     }
