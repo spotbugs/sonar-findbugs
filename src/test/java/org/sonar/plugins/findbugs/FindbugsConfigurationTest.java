@@ -30,6 +30,7 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
+import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,7 +63,7 @@ class FindbugsConfigurationTest {
     when(fs.workDir()).thenReturn(workDir);
     when(fs.predicates()).thenReturn(filePredicates);
     
-    activeRules = mock(ActiveRules.class);
+    activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
 
     configuration = new SimpleConfiguration();
     javaResourceLocator = mock(JavaResourceLocator.class);
