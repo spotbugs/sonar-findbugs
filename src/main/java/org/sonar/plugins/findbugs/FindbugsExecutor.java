@@ -113,10 +113,8 @@ public class FindbugsExecutor {
     OutputStream xmlOutput = null;
     Collection<Plugin> customPlugins = null;
     ExecutorService executorService = Executors.newSingleThreadExecutor();
-    try {
-      final FindBugs2 engine = new FindBugs2();
-
-      Project project = configuration.getFindbugsProject();
+    try (FindBugs2 engine = new FindBugs2(); Project project = new Project()) {
+      configuration.initializeFindbugsProject(project);
 
       if(project.getFileCount() == 0) {
         LOG.info("Findbugs analysis skipped for this project.");

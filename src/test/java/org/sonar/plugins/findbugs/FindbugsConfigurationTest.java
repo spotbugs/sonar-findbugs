@@ -114,20 +114,24 @@ class FindbugsConfigurationTest {
   void should_set_class_files() throws IOException {
     File file = new File(temp, "MyClass.class");
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
-    Project findbugsProject = conf.getFindbugsProject();
-
-    assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
-    conf.stop();
+    try (Project findbugsProject = new Project()) {
+      conf.initializeFindbugsProject(findbugsProject);
+      
+      assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
+      conf.stop();
+    }
   }
 
   @Test
   void should_set_class_path() throws IOException {
     File classpath = new File(temp, "classpath");
     when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
-    Project findbugsProject = conf.getFindbugsProject();
+    try (Project findbugsProject = new Project()) {
+      conf.initializeFindbugsProject(findbugsProject);
 
-    assertThat(findbugsProject.getAuxClasspathEntryList()).contains(classpath.getCanonicalPath());
-    conf.stop();
+      assertThat(findbugsProject.getAuxClasspathEntryList()).contains(classpath.getCanonicalPath());
+      conf.stop();
+    }
   }
 
   @Test

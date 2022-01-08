@@ -83,9 +83,7 @@ public class FindbugsConfiguration implements Startable {
     return new File(fileSystem.workDir(), "findbugs-result.xml");
   }
 
-  public Project getFindbugsProject() throws IOException {
-    Project findbugsProject = new Project();
-
+  public void initializeFindbugsProject(Project findbugsProject) throws IOException {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
@@ -137,7 +135,6 @@ public class FindbugsConfiguration implements Startable {
       findbugsProject.addAuxClasspathEntry(jsr305Lib.getCanonicalPath());
     }
     findbugsProject.setCurrentWorkingDirectory(fileSystem.workDir());
-    return findbugsProject;
   }
 
   private void exportProfile(ActiveRules activeRules, Writer writer) {

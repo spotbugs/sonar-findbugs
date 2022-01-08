@@ -20,6 +20,9 @@
 package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
+
+import edu.umd.cs.findbugs.Project;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,11 +37,13 @@ import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -124,11 +129,14 @@ class FindbugsExecutorTest {
 
   private FindbugsConfiguration mockConf() throws Exception {
     FindbugsConfiguration conf = mock(FindbugsConfiguration.class);
-    edu.umd.cs.findbugs.Project project = new edu.umd.cs.findbugs.Project();
-    project.addFile(new File("test-resources/classes").getCanonicalPath());
-    project.addSourceDir(new File("test-resources/src").getCanonicalPath());
-    project.setCurrentWorkingDirectory(new File("test-resources"));
-    when(conf.getFindbugsProject()).thenReturn(project);
+    doAnswer(invocation -> {
+      Project project = invocation.getArgument(0);
+      project.addFile(new File("test-resources/classes").getCanonicalPath());
+      project.addSourceDirs(Collections.singletonList(new File("test-resources/src").getCanonicalPath()));
+      project.setCurrentWorkingDirectory(new File("test-resources"));
+      
+      return null;
+    }).when(conf).initializeFindbugsProject(any());
     when(conf.saveIncludeConfigXml()).thenReturn(new File("test-resources/findbugs-include.xml"));
     when(conf.getExcludesFilters()).thenReturn(Lists.newArrayList(new File("test-resources/findbugs-exclude.xml"), new File("test-resources/fake-file.xml")));
     when(conf.getEffort()).thenReturn("default");
