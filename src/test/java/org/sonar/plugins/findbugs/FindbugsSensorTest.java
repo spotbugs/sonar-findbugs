@@ -44,6 +44,7 @@ import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
@@ -51,6 +52,7 @@ import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -201,7 +203,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  public void should_execute_findbugs_but_not_find_violation() throws Exception {
+  void should_execute_findbugs_but_not_find_violation() throws Exception {
 
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107, true);
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
@@ -238,7 +240,7 @@ class FindbugsSensorTest extends FindbugsTests {
    * because it selects a profile for every language installed on the server (typically the default profile)
    */
   @Test
-  public void should_not_execute_findbugs_if_only_jsp_rules_and_no_jsp_file() throws Exception {
+  void should_not_execute_findbugs_if_only_jsp_rules_and_no_jsp_file() throws Exception {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
     when(fs.languages()).thenReturn(languages);
 
@@ -257,7 +259,7 @@ class FindbugsSensorTest extends FindbugsTests {
    * Check that the Find Sec Bugs analysis still runs when there are some JSP rules and files
    */
   @Test
-  public void should_execute_findbugs_if_only_jsp_rules_and_some_jsp_files() throws Exception {
+  void should_execute_findbugs_if_only_jsp_rules_and_some_jsp_files() throws Exception {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml", "jsp"));
     when(fs.languages()).thenReturn(languages);
     
@@ -321,5 +323,14 @@ class FindbugsSensorTest extends FindbugsTests {
     verify(sensorContext, never()).newIssue();
   }
 
-
+  @Test
+  void describe() {
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
+    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
+    
+    sensor.describe(descriptor);
+    
+    assertEquals(Arrays.asList(FindbugsSensor.REPOS), descriptor.ruleRepositories());
+  }
 }

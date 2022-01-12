@@ -23,6 +23,8 @@ import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -171,4 +173,10 @@ class FindbugsConfigurationTest {
     assertThat(conf.getFindSecBugsJar()).isFile();
   }
 
+  @Test
+  void scanEmptyFolderForAdditionalClasses() {
+    List<File> classes = FindbugsConfiguration.scanForAdditionalClasses(temp);
+    
+    assertThat(classes).isEmpty();
+  }
 }
