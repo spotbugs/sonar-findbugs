@@ -39,7 +39,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.profiles.RulesProfile;
+import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.resource.ClassMetadataLoadingException;
 import org.sonar.plugins.findbugs.resource.SmapParser;
@@ -57,8 +57,7 @@ public class FindbugsSensor implements Sensor {
 
   private List<String> repositories = new ArrayList<String>();
 
-  private RulesProfile profile;
-  private ActiveRules ruleFinder;
+  private ActiveRules activeRules;
   private FindbugsExecutor executor;
   private final JavaResourceLocator javaResourceLocator;
   private final ByteCodeResourceLocator byteCodeResourceLocator;
@@ -67,10 +66,9 @@ public class FindbugsSensor implements Sensor {
   protected final File classMappingFile;
   protected PrintWriter classMappingWriter;
 
-  public FindbugsSensor(RulesProfile profile, ActiveRules ruleFinder, SensorContext sensorContext,
+  public FindbugsSensor(ActiveRules activeRules, SensorContext sensorContext,
                         FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs, ByteCodeResourceLocator byteCodeResourceLocator) {
-    this.profile = profile;
-    this.ruleFinder = ruleFinder;
+    this.activeRules = activeRules;
     this.sensorContext = sensorContext;
     this.executor = executor;
     this.javaResourceLocator = javaResourceLocator;
@@ -88,10 +86,8 @@ public class FindbugsSensor implements Sensor {
     Collections.addAll(repositories, repos);
   }
 
-  private boolean hasActiveRules(String repoSubstring) {
-    return profile.getActiveRules().stream().anyMatch(activeRule ->
-      activeRule.getRepositoryKey().contains(repoSubstring)
-    );
+  private boolean hasActiveRules(String repository) {
+    return !activeRules.findByRepository(repository).isEmpty();
   }
 
   public List<String> getRepositories() {
@@ -99,15 +95,18 @@ public class FindbugsSensor implements Sensor {
   }
 
   private boolean hasActiveFindbugsRules() {
-    return hasActiveRules("findbugs");
+    return hasActiveRules(FindbugsRulesDefinition.REPOSITORY_KEY);
   }
 
   private boolean hasActiveFbContribRules() {
-    return hasActiveRules("fb-contrib");
+    return hasActiveRules(FbContribRulesDefinition.REPOSITORY_KEY);
   }
 
   private boolean hasActiveFindSecBugsRules() {
-    return hasActiveRules("findsecbugs");
+    boolean hasActiveFindSecBugsRules = hasActiveRules(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
+    boolean hasActiveFindSecBugsJspRules = hasActiveRules(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
+    
+    return hasActiveFindSecBugsRules || (hasActiveFindSecBugsJspRules && fs.languages().contains(Jsp.KEY));
   }
 
   private boolean hasActiveFindSecScalaBugsRules() { return hasActiveRules("findsecbugs-scala"); }
@@ -128,7 +127,7 @@ public class FindbugsSensor implements Sensor {
         try {
           ActiveRule rule = null;
           for (String repoKey : getRepositories()) {
-            rule = ruleFinder.findByInternalKey(repoKey, bugInstance.getType());
+            rule = activeRules.findByInternalKey(repoKey, bugInstance.getType());
             if (rule != null) {
               break;
             }
@@ -205,9 +204,11 @@ public class FindbugsSensor implements Sensor {
       }
 
     }
-      finally {
-      classMappingWriter.flush();
-      classMappingWriter.close();
+    finally {
+      if(classMappingWriter != null) {
+        classMappingWriter.flush();
+        classMappingWriter.close();
+      }
     }
   }
 
@@ -248,6 +249,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
+    descriptor.createIssuesForRuleRepositories(REPOS);
     descriptor.onlyOnLanguages(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES);
     descriptor.name("FindBugs Sensor");
   }

@@ -19,16 +19,14 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
-public class FindbugsCategoryTest {
+class FindbugsCategoryTest {
   @Test
-  public void test_mapping_of_categories() {
+  void test_mapping_of_categories() {
     assertThat(FindbugsCategory.findbugsToSonar("EXPERIMENTAL")).isEqualTo("Experimental");
     assertThat(FindbugsCategory.findbugsToSonar("UNKNOWN_XXX")).isNull();
   }
-
-
 }

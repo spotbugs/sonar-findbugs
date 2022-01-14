@@ -20,6 +20,7 @@
 package org.sonar.plugins.findbugs.rule;
 
 import com.google.common.collect.Lists;
+import java.util.ArrayList;
 import org.mockito.ArgumentMatcher;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -49,36 +50,45 @@ public class FakeRuleFinder {
   private static RuleFinder create(boolean findbugs, boolean fbContrib, boolean findSecBug, boolean findSecBugJsp, boolean findSecBugScala) {
     RuleFinder ruleFinder = mock(RuleFinder.class);
     RulesDefinition.Context context = new RulesDefinition.Context();
-
+    List<Rule> allRules = new ArrayList<>();
     if (findbugs) {
       RulesDefinition rulesDefinition = new FindbugsRulesDefinition();
       rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindbugsRulesDefinition.REPOSITORY_KEY);
+      allRules.addAll(convert(context.repository(FindbugsRulesDefinition.REPOSITORY_KEY).rules()));
     }
 
     if (fbContrib) {
       RulesDefinition rulesDefinition = new FbContribRulesDefinition();
       rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FbContribRulesDefinition.REPOSITORY_KEY);
+      allRules.addAll(convert(context.repository(FbContribRulesDefinition.REPOSITORY_KEY).rules()));
     }
 
     if (findSecBug) {
       RulesDefinition rulesDefinition = new FindSecurityBugsRulesDefinition();
       rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
+      allRules.addAll(convert(context.repository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY).rules()));
+
     }
 
     if (findSecBugJsp) {
       RulesDefinition rulesDefinition = new FindSecurityBugsJspRulesDefinition();
       rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
+      allRules.addAll(convert(context.repository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY).rules()));
+
     }
 
     if (findSecBugScala) {
       RulesDefinition rulesDefinition = new FindSecurityBugsScalaRulesDefinition();
       rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY);
+      allRules.addAll(convert(context.repository(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY).rules()));
     }
+    
+    when(ruleFinder.findAll(argThat(ruleQuery -> ruleQuery.getRepositoryKey() == null && ruleQuery.getKey() == null))).thenReturn(allRules);
 
     return ruleFinder;
   }
@@ -97,6 +107,14 @@ public class FakeRuleFinder {
 
   public static RuleFinder createWithOnlyFindSecBugsRules() {
     return create(false, false, true,false, true);
+  }
+
+  public static RuleFinder createWithOnlyFindSecBugsJspRules() {
+    return create(false, false, false, true, false);
+  }
+
+  public static RuleFinder createWithNoRules() {
+    return create(false, false, false, false, false);
   }
 
   private static void configRuleFinderForRepo(RuleFinder ruleFinder, final Context context, final String repositoryKey) {

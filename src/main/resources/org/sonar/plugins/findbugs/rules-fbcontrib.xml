@@ -297,7 +297,10 @@ for (float f = 1.0f; f &amp;lt;= 10.0f; f += 0.1f) {
     <name>Correctness - Method has abnormal exit from finally block</name>
     <configKey>AFBR_ABNORMAL_FINALLY_BLOCK_RETURN</configKey>
     <description>&lt;p&gt;This method returns or throws exceptions from a finally block. This will
-			mask real program logic in the try block, and short-circuit normal method termination.&lt;/p&gt;</description>
+			mask real program logic in the try block, and short-circuit normal method termination.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S1143} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -526,7 +529,10 @@ public float average(int[] arr) {
     &lt;b&gt;return sum / arr.length;&lt;/b&gt; //Change
 }
 &lt;/code&gt;&lt;/pre&gt;
-			&lt;/p&gt;</description>
+			&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S1488} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>style</tag>
   </rule>
   <rule key='COM_COPIED_OVERRIDDEN_METHOD' priority='INFO'>
@@ -732,6 +738,17 @@ static {
 	       Since this ThreadLocal is instanced, you potentially will be creating many non-reclaimable
 	       variables, even after the owning instance has been reclaimed. It is almost a certainty that
 	       you want to use static based ThreadLocal variables.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='PMB_LOCAL_BASED_JAXB_CONTEXT' priority='MAJOR'>
+    <name>Correctness - Local JAXBContext created on demand</name>
+    <configKey>PMB_LOCAL_BASED_JAXB_CONTEXT</configKey>
+    <description>&lt;p&gt;This method creates a JAXBContext and stores it in a local variable. This
+	       implies that this JAXBContext is created each time on demand, which will cause 
+	       memory bloat issues. It is better to either create this instance as a static field,
+	       or hold onto it with a ConcurrentHashMap, or such. See 
+	       https://javaee.github.io/jaxb-v2/doc/user-guide/ch03.html#other-miscellaneous-topics-performance-and-thread-safety &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1078,7 +1095,10 @@ if (myString.indexOf('e') != -1) {
     <configKey>SPP_USE_BIGDECIMAL_STRING_CTOR</configKey>
     <description>&lt;p&gt;This method calls the BigDecimal constructor that takes a double, and passes a literal double constant value. Since
 			the use of BigDecimal is to get better precision than double, by passing a double, you only get the precision of double number
-			space. To take advantage of the BigDecimal space, pass the number as a string. &lt;/p&gt;</description>
+			space. To take advantage of the BigDecimal space, pass the number as a string. &lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S2111} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -1129,7 +1149,10 @@ if (Boolean.TRUE.equals(b))
     <name>Performance - Method uses a ternary operator to cast a boolean to true or false</name>
     <configKey>SPP_USELESS_TERNARY</configKey>
     <description>&lt;p&gt;This method tests the value of a boolean and uses a ternary operator to return either true or false.
-			The ternary operator is completely unnecessary, just use the original boolean value.&lt;/p&gt;</description>
+			The ternary operator is completely unnecessary, just use the original boolean value.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S1125} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
@@ -1330,7 +1353,10 @@ String str = sb.toString();
   <rule key='SPP_TOSTRING_ON_STRING' priority='MAJOR'>
     <name>Correctness - Method calls toString() on a String</name>
     <configKey>SPP_TOSTRING_ON_STRING</configKey>
-    <description>&lt;p&gt;This method calls &lt;code&gt;toString&lt;/code&gt; on a String. Just use the object itself if you want a String.&lt;/p&gt;</description>
+    <description>&lt;p&gt;This method calls &lt;code&gt;toString&lt;/code&gt; on a String. Just use the object itself if you want a String.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S1858} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -2549,7 +2575,10 @@ if (name != null) {
   <rule key='AIOB_ARRAY_STORE_TO_NULL_REFERENCE' priority='MAJOR'>
     <name>Correctness - Method attempts to store an array element to an array that does not appear to be allocated</name>
     <configKey>AIOB_ARRAY_STORE_TO_NULL_REFERENCE</configKey>
-    <description>&lt;p&gt;This method attempts to store an array element into an array that appears not to have been allocated.&lt;/p&gt;</description>
+    <description>&lt;p&gt;This method attempts to store an array element into an array that appears not to have been allocated.&lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S2259} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3004,6 +3033,22 @@ for (Person p : people) {
     		Classes should follow a pattern of uppercasing the first letter of each word, AsAnExample&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='IMC_IMMATURE_CLASS_BAD_SERIALVERSIONUID' priority='MAJOR'>
+    <name>Correctness - Class defines a computed serialVersionUID that doesn't equate to the calculated value</name>
+    <configKey>IMC_IMMATURE_CLASS_BAD_SERIALVERSIONUID</configKey>
+    <description>&lt;p&gt;This serializable class defines a serialVersionUID that appears to be a computed value, however the value does not
+    		match the computed value, and thus losses it's value as version indicator. Either create a custom value like 1, 2, 3, 4.. etc, or
+    		recompute the serialVersionUID using your IDE.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IMC_IMMATURE_CLASS_VAR_NAME' priority='MAJOR'>
+    <name>Correctness - Class defines a field or local variable named 'var'</name>
+    <configKey>IMC_IMMATURE_CLASS_VAR_NAME</configKey>
+    <description>&lt;p&gt;A field or variable is named 'var' which will conflict with the built in Java 10 feature using 'var' as a keyword.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='JXI_GET_ENDPOINT_CONSUMES_CONTENT' priority='MAJOR'>
     <name>Correctness - JAX-RS Method implements a GET request but consumes input</name>
     <configKey>JXI_GET_ENDPOINT_CONSUMES_CONTENT</configKey>
@@ -3176,6 +3221,17 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		InputStream is = java.nio.file.Files.newInputStream(myfile.toPath());
     		OutputStream os = java.nio.file.Files.newOutputStream(myfile.toPath());
     		&lt;/code&gt;
+    		&lt;/p&gt;</description>
+    <tag>performance</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='IOI_UNENDED_ZLIB_OBJECT' priority='MAJOR'>
+    <name>Performance - Method creates a ZLIB Inflater or Deflater and doesn't appear to end() it</name>
+    <configKey>IOI_UNENDED_ZLIB_OBJECT</configKey>
+    <description>&lt;p&gt;This method constructs a java.util.zip.Inflater or java.util.zip.Deflater and does not appear to call end() on
+    		it. This will cause a potentially large amount of memory to hang around inside the object until the object gets 
+    		garbage collected. To avoid this unnecessary bloat, put a call to end() in a finally block of the code where you
+    		are using this instance.
     		&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -3540,7 +3596,10 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         &lt;code&gt;&lt;/pre&gt;
         baubles.stream().map(Bauble::getName).collect(Collectors.toSet())
         &lt;/pre&gt;&lt;/code&gt;
-        &lt;/p&gt;</description>
+        &lt;/p&gt;
+&lt;h2&gt;Deprecated&lt;/h2&gt;
+&lt;p&gt;This rule is deprecated; use {rule:java:S1612} instead.&lt;/p&gt;</description>
+    <status>DEPRECATED</status>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3657,6 +3716,16 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
             &lt;/pre&gt;
             &lt;/code&gt;
             &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='SAT_SUSPICIOUS_ARGUMENT_TYPES' priority='MAJOR'>
+    <name>Correctness - This method invokes a method with parameters that seem incorrect for their intended use</name>
+    <configKey>SAT_SUSPICIOUS_ARGUMENT_TYPES</configKey>
+    <description>&lt;p&gt;This method calls a method passing arguments that seem incorrect for the intended purpose of the method. Make sure that the argument types are valid&lt;/p&gt;
+            &lt;ul&gt;
+            &lt;li&gt;&lt;p&gt;For Match.hasEntry it seems unlikely you want to pass a Matcher and non-Matcher at the same time&lt;/p&gt;&lt;/li&gt;
+            &lt;/ul&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>

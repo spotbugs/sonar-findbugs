@@ -19,24 +19,25 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.ScannerSide;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.java.api.JavaResourceLocator;
-
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.java.api.JavaResourceLocator;
 
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
@@ -51,13 +52,18 @@ public class ByteCodeResourceLocator {
 
     /**
      * findSourceFileKeyByClassName() is broken in SonarQube 6.3.1.. This method is fixing it.
-     * @param className
-     * @param javaResourceLocator
-     * @return
+     * @param className The name of class to find the source file
+     * @param javaResourceLocator The {@link JavaResourceLocator} to find resource by classname
+     * @return String filepath
      */
     public String findSourceFileKeyByClassName(String className, JavaResourceLocator javaResourceLocator) {
-        String classFile = javaResourceLocator.findSourceFileKeyByClassName(className);
-        if(classFile != null) return classFile;
+        InputFile input = javaResourceLocator.findResourceByClassName(className);
+        if (input != null) {
+            URI classFile = input.uri();
+            if (classFile != null && "file".equals(classFile.getScheme())) {
+                return new File(classFile).getAbsolutePath();
+            }
+        }
 
         String fileName = className.replaceAll("\\.","/")+".class";
 

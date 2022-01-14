@@ -19,54 +19,63 @@
  */
 package org.sonar.plugins.findbugs;
 
-import static java.lang.String.format;
-
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.thoughtworks.xstream.XStream;
 import edu.umd.cs.findbugs.Project;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.CharEncoding;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.api.CoreProperties;
-import org.sonar.api.PropertyType;
-import org.sonar.api.batch.ScannerSide;
-import org.sonar.api.batch.fs.FilePredicates;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile.Type;
-import org.sonar.api.config.Configuration;
-import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.resources.Qualifiers;
-import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.plugins.java.api.JavaResourceLocator;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.*;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.PropertyType;
+import org.sonar.api.Startable;
+import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.config.Configuration;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
+import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.xml.Bug;
+import org.sonar.plugins.findbugs.xml.FindBugsFilter;
+import org.sonar.plugins.findbugs.xml.Match;
+import org.sonar.plugins.java.Java;
+import org.sonar.plugins.java.api.JavaResourceLocator;
+
+import static java.lang.String.format;
 
 @ScannerSide
-public class FindbugsConfiguration {
+public class FindbugsConfiguration implements Startable {
 
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
 
   private final FileSystem fileSystem;
   private final Configuration config;
-  private final RulesProfile profile;
-  private final FindbugsProfileExporter exporter;
+  private final ActiveRules activeRules;
   private final JavaResourceLocator javaResourceLocator;
 
-  public FindbugsConfiguration(FileSystem fileSystem, Configuration config, RulesProfile profile, FindbugsProfileExporter exporter,
+  public FindbugsConfiguration(FileSystem fileSystem, Configuration config, ActiveRules activeRules,
                                JavaResourceLocator javaResourceLocator) {
     this.fileSystem = fileSystem;
     this.config = config;
-    this.profile = profile;
-    this.exporter = exporter;
+    this.activeRules = activeRules;
     this.javaResourceLocator = javaResourceLocator;
   }
 
@@ -74,9 +83,7 @@ public class FindbugsConfiguration {
     return new File(fileSystem.workDir(), "findbugs-result.xml");
   }
 
-  public Project getFindbugsProject() throws IOException {
-    Project findbugsProject = new Project();
-
+  public void initializeFindbugsProject(Project findbugsProject) throws IOException {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
@@ -136,21 +143,39 @@ public class FindbugsConfiguration {
       findbugsProject.addAuxClasspathEntry(jsr305Lib.getCanonicalPath());
     }
     findbugsProject.setCurrentWorkingDirectory(fileSystem.workDir());
-    return findbugsProject;
   }
 
-  /**
-   * Return the complete list of Java files from the project (excluding test files)
-   * @return The list of Java files
-   */
-  private Iterable<File> getSourceFiles() {
-    FilePredicates pred = fileSystem.predicates();
-    return fileSystem.files(pred.and(
-            pred.hasType(Type.MAIN),
-            pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
-            pred.not(pred.matchesPathPattern("**/package-info.java")),
-            pred.not(pred.matchesPathPattern("**/module-info.java"))
-    ));
+  private void exportProfile(ActiveRules activeRules, Writer writer) {
+    try {
+      FindBugsFilter filter = buildFindbugsFilter(
+        activeRules.findAll().stream().filter(activeRule ->
+        {
+          String repKey = activeRule.ruleKey().repository();
+          return repKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) ||
+            repKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) ||
+            repKey.contains(FbContribRulesDefinition.REPOSITORY_KEY);
+        })
+          .collect(Collectors.toList())
+      );
+      XStream xstream = FindBugsFilter.createXStream();
+      writer.append(xstream.toXML(filter));
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Fail to generate the Findbugs profile configuration", e);
+    }
+  }
+
+  private static FindBugsFilter buildFindbugsFilter(Iterable<ActiveRule> activeRules) {
+    FindBugsFilter root = new FindBugsFilter();
+    for (ActiveRule activeRule : activeRules) {
+      String repoKey = activeRule.ruleKey().repository();
+
+      if (repoKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FbContribRulesDefinition.REPOSITORY_KEY)) {
+        Match child = new Match();
+        child.setBug(new Bug(activeRule.internalKey()));
+        root.addMatch(child);
+      }
+    }
+    return root;
   }
 
   /**
@@ -174,12 +199,11 @@ public class FindbugsConfiguration {
     );
   }
 
-  @VisibleForTesting
   File saveIncludeConfigXml() throws IOException {
     StringWriter conf = new StringWriter();
-    exporter.exportProfile(profile, conf);
+    exportProfile(activeRules, conf);
     File file = new File(fileSystem.workDir(), "findbugs-include.xml");
-    FileUtils.write(file, conf.toString(), CharEncoding.UTF_8);
+    FileUtils.write(file, conf.toString(), StandardCharsets.UTF_8);
     return file;
   }
 
@@ -187,12 +211,11 @@ public class FindbugsConfiguration {
    * Scan the given folder for classes. It will catch classes from Java, JSP and more.
    *
    * @param folder Folder to scan
-   * @return
-   * @throws IOException
+   * @return {@code List<File>} of class files
    */
-  public static List<File> scanForAdditionalClasses(File folder) throws IOException {
-    List<File> allFiles = new ArrayList<File>();
-    Queue<File> dirs = new LinkedList<File>();
+  public static List<File> scanForAdditionalClasses(File folder) {
+    List<File> allFiles = new ArrayList<>();
+    Queue<File> dirs = new LinkedList<>();
     dirs.add(folder);
     while (!dirs.isEmpty()) {
       File dirPoll = dirs.poll();
@@ -208,7 +231,6 @@ public class FindbugsConfiguration {
     return allFiles;
   }
 
-  @VisibleForTesting
   List<File> getExcludesFilters() {
     List<File> result = Lists.newArrayList();
     PathResolver pathResolver = new PathResolver();
@@ -255,17 +277,23 @@ public class FindbugsConfiguration {
       annotationsLib = copyLib("/annotations.jar");
     }
     if (fbContrib == null) {
-      fbContrib = copyLib("/fb-contrib.jar");
+      fbContrib = copyLib("/sb-contrib.jar");
     }
     if (findSecBugs == null) {
       findSecBugs = copyLib("/findsecbugs-plugin.jar");
     }
   }
 
+  @Override
+  public void start() {
+    // do nothing
+  }
+
   /**
    * Invoked by PicoContainer to remove temporary files.
    */
   @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
+  @Override
   public void stop() {
     if (jsr305Lib != null) {
       jsr305Lib.delete();
@@ -283,9 +311,7 @@ public class FindbugsConfiguration {
   }
 
   private File copyLib(String name) {
-    InputStream input = null;
-    try {
-      input = getClass().getResourceAsStream(name);
+    try (InputStream input = getClass().getResourceAsStream(name)) {
       File dir = new File(fileSystem.workDir(), "findbugs");
       FileUtils.forceMkdir(dir);
       File target = new File(dir, name);
@@ -293,8 +319,6 @@ public class FindbugsConfiguration {
       return target;
     } catch (IOException e) {
       throw new IllegalStateException("Fail to extract Findbugs dependency", e);
-    } finally {
-      IOUtils.closeQuietly(input);
     }
   }
 
@@ -311,56 +335,56 @@ public class FindbugsConfiguration {
     return ImmutableList.of(
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Effort")
         .description("Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases " +
           "memory consumption.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.TIMEOUT_PROPERTY)
         .defaultValue(Long.toString(FindbugsConstants.TIMEOUT_DEFAULT_VALUE))
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Timeout")
         .description("Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. " +
           "The default is 600,000 milliseconds, which is ten minutes.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .type(PropertyType.INTEGER)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Excludes Filters")
         .description("Paths to findbugs filter-files with exclusions.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.CONFIDENCE_LEVEL_PROPERTY)
         .defaultValue(FindbugsConstants.CONFIDENCE_LEVEL_DEFAULT_VALUE)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Confidence Level")
         .description("Specifies the confidence threshold (previously called \"priority\") for reporting issues. If set to \"low\", confidence is not used to filter bugs. " +
           "If set to \"medium\" (the default), low confidence issues are suppressed. If set to \"high\", only high confidence bugs are reported. ")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.ALLOW_UNCOMPILED_CODE)
         .defaultValue(Boolean.toString(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE))
         .type(PropertyType.BOOLEAN)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Allow Uncompiled Code")
         .description("Remove the compiled code requirement for all projects. "+
           "It can lead to a false sense of security if the build process skips certain projects.")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .build(),
       PropertyDefinition.builder(FindbugsConstants.REPORT_PATHS)
-        .category(CoreProperties.CATEGORY_JAVA)
+        .category(Java.KEY)
         .subCategory(subCategory)
         .name("Report Paths")
         .description("Relative path to SpotBugs report files intended to be reused. (<code>/target/findbugsXml.xml</code> and <code>/target/spotbugsXml.xml</code> are included by default)")
-        .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+        .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
         .build()
       );

@@ -19,9 +19,10 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
+import edu.umd.cs.findbugs.classfile.engine.asm.FindBugsASM;
+
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.Opcodes;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -50,33 +51,17 @@ public class DebugExtensionExtractor {
         }
     }
 
-    public String getDebugSourceFromClass(InputStream classIn) throws IOException {
-
-        AbstractClassVisitor visitor = new AbstractClassVisitor();
-        try {
-            ClassReader classReader= new ClassReader(classIn);
-            classReader.accept(visitor, 0);
-
-            return visitor.source;
-        }
-        catch (Exception e) {
-            throw new ClassMetadataLoadingException(e);
-        }
-    }
-
     private static class AbstractClassVisitor extends ClassVisitor {
-
-        protected String source;
         protected String debug;
 
         public AbstractClassVisitor() {
-            super(Opcodes.ASM5);
+            super(FindBugsASM.ASM_VERSION);
         }
 
         @Override
         public void visitSource(String source, String debug) {
             super.visitSource(source, debug);
-            this.source = source;
+            
             this.debug  = debug;
         }
     }

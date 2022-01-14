@@ -19,8 +19,9 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.Lists;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -28,34 +29,49 @@ import org.sonar.plugins.java.Java;
 
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsRulesDefinitionTest {
-  @Test
-  public void test() {
+class FindbugsRulesDefinitionTest {
+  /**
+   * The SpotBugs rules repository
+   */
+  private RulesDefinition.Repository repository;
+  
+  @BeforeEach
+  public void setupRepository() {
     FindbugsRulesDefinition definition = new FindbugsRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);
-    RulesDefinition.Repository repository = context.repository(FindbugsRulesDefinition.REPOSITORY_KEY);
-
+    
+    repository = context.repository(FindbugsRulesDefinition.REPOSITORY_KEY);
+  }
+  
+  @Test
+  void testRepositoryRulesCount() {
     assertThat(repository.name()).isEqualTo(FindbugsRulesDefinition.REPOSITORY_NAME);
     assertThat(repository.language()).isEqualTo(Java.KEY);
 
     List<Rule> rules = repository.rules();
     assertThat(rules).hasSize(FindbugsRulesDefinition.RULE_COUNT + FindbugsRulesDefinition.DEACTIVED_RULE_COUNT);
 
-    List<String> rulesWithMissingSQALE = Lists.newLinkedList();
     for (Rule rule : rules) {
       assertThat(rule.key()).isNotNull();
       assertThat(rule.internalKey()).isEqualTo(rule.key());
       assertThat(rule.name()).isNotNull();
       assertThat(rule.htmlDescription()).isNotNull();
-      if (rule.debtSubCharacteristic() == null) {
-        rulesWithMissingSQALE.add(rule.key());
-      }
     }
-    // These rules are "rejected" Findbugs rules
-    //FIXME:
-    //assertThat(rulesWithMissingSQALE).containsOnly("CNT_ROUGH_CONSTANT_VALUE", "TQ_UNKNOWN_VALUE_USED_WHERE_ALWAYS_STRICTLY_REQUIRED");
+  }
+  
+  /**
+   * Rule TLW_TWO_LOCK_NOTIFY was marked deprecated in Spotbugs so we're testing that the SonarQube rule status is updated accordingly
+   * 
+   * In case that rule is removed in a future release, this unit test will need to be updated to test against another deprecated rule
+   */
+  @Test
+  public void testDeprecatedRules() {
+    Rule rule = repository.rule("TLW_TWO_LOCK_NOTIFY");
+    
+    assertThat(rule).isNotNull();
+    assertThat(rule.status()).isEqualTo(RuleStatus.DEPRECATED);
   }
 }

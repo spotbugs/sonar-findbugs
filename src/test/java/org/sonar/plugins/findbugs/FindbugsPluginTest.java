@@ -19,18 +19,18 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarRuntime;
-import org.sonar.api.utils.Version;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class FindbugsPluginTest {
+import org.junit.jupiter.api.Test;
+
+class FindbugsPluginTest {
 
   @Test
-  public void testGetExtensions() {
+  void testGetExtensions() {
 
     //Plugin.Context ctx = new FindbugsPlugin.Context(Version.parse("1.33.7"));
     Plugin.Context ctx = new Plugin.Context(mock(SonarRuntime.class));
@@ -38,7 +38,6 @@ public class FindbugsPluginTest {
     FindbugsPlugin plugin = new FindbugsPlugin();
     plugin.define(ctx);
 
-    assertEquals("extension count", 27, ctx.getExtensions().size());
+    assertEquals(24, ctx.getExtensions().size(), "extension count");
   }
-
 }

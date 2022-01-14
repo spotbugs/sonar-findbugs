@@ -19,17 +19,14 @@
  */
 package org.sonar.plugins.findbugs.profiles;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.findbugs.FindbugsProfileImporter;
-import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-public class FindbugsSecurityScalaProfile extends ProfileDefinition {
+public class FindbugsSecurityScalaProfile implements BuiltInQualityProfilesDefinition {
 
     private static final String FINDBUGS_SECURITY_SCALA_PROFILE_NAME = "FindBugs Security Scala";
     private final FindbugsProfileImporter importer;
@@ -39,13 +36,14 @@ public class FindbugsSecurityScalaProfile extends ProfileDefinition {
     }
 
     @Override
-    public RulesProfile createProfile(ValidationMessages messages) {
+    public void define(Context context) {
         Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
                 "/org/sonar/plugins/findbugs/profile-findbugs-security-scala.xml"));
-        RulesProfile profile = importer.importProfile(findbugsProfile, messages);
-        profile.setLanguage(Scala.KEY);
-        profile.setName(FINDBUGS_SECURITY_SCALA_PROFILE_NAME);
-        return profile;
+
+        NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(FINDBUGS_SECURITY_SCALA_PROFILE_NAME, Scala.KEY);
+        importer.importProfile(findbugsProfile, profile);
+
+        profile.done();
     }
 
 }

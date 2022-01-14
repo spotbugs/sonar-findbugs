@@ -109,6 +109,11 @@ class FsbClassifier {
           "SMTP_HEADER_INJECTION",
           "REQUESTDISPATCHER_FILE_DISCLOSURE",
           "URLCONNECTION_SSRF_FD",
+          "SPRING_ENTITY_LEAK",
+          "WICKET_XSS1",
+          "ENTITY_LEAK",
+          "ENTITY_MASS_ASSIGNMENT",
+          "OVERLY_PERMISSIVE_FILE_PERMISSION",
   ]
 
   static criticalBugs = [ //RCE or powerful function
@@ -152,7 +157,13 @@ class FsbClassifier {
           "TEMPLATE_INJECTION_FREEMARKER",
           "AWS_QUERY_INJECTION",
           "LDAP_ENTRY_POISONING",
-          "BEAN_PROPERTY_INJECTION"
+          "BEAN_PROPERTY_INJECTION",
+          "RPC_ENABLED_EXTENSIONS",
+          "GROOVY_SHELL",
+          "TEMPLATE_INJECTION_PEBBLE",
+          "SQL_INJECTION_VERTX",
+          "IMPROPER_UNICODE",
+          "SAML_IGNORE_COMMENTS",
   ]
 
   static majorJspBugs = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER",

@@ -20,22 +20,20 @@
 package org.sonar.plugins.findbugs;
 
 import com.thoughtworks.xstream.XStream;
-
-import org.sonar.api.batch.ScannerSide;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.stream.Collectors;
 import org.sonar.api.profiles.ProfileExporter;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.utils.SonarException;
+import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.Bug;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.stream.Collectors;
-
-@ScannerSide
 public class FindbugsProfileExporter extends ProfileExporter {
 
   public FindbugsProfileExporter() {
@@ -49,9 +47,9 @@ public class FindbugsProfileExporter extends ProfileExporter {
     try {
       FindBugsFilter filter = buildFindbugsFilter(
               profile.getActiveRules().stream().filter(activeRule ->
-                      activeRule.getRepositoryKey().contains("findbugs") ||
-                              activeRule.getRepositoryKey().contains("findsecbugs") ||
-                              activeRule.getRepositoryKey().contains("fb-contrib"))
+                      activeRule.getRepositoryKey().contains(FindbugsRulesDefinition.REPOSITORY_KEY) ||
+                              activeRule.getRepositoryKey().contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) ||
+                              activeRule.getRepositoryKey().contains(FbContribRulesDefinition.REPOSITORY_KEY))
                       .collect(Collectors.toList())
       );
       XStream xstream = FindBugsFilter.createXStream();
@@ -66,7 +64,7 @@ public class FindbugsProfileExporter extends ProfileExporter {
     for (ActiveRule activeRule : activeRules) {
       String repoKey = activeRule.getRepositoryKey();
 
-      if (repoKey.contains("findsecbugs") || repoKey.contains("findbugs") || repoKey.contains("fb-contrib")) {
+      if (repoKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FbContribRulesDefinition.REPOSITORY_KEY)) {
         Match child = new Match();
         child.setBug(new Bug(activeRule.getConfigKey()));
         root.addMatch(child);

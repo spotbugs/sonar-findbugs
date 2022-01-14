@@ -3,7 +3,7 @@
 This set of Groovy scripts generate all the XML files for the descriptions and the profiles.
 All the descriptions are already present in the `messages.xml`/`findbugs.xml` of each respective plugins.  This script convert the description to SonarQube file formats.
 
- 
+
 ## Running the script
 
 ```
@@ -21,7 +21,7 @@ Building profile findbugs-security-jsp (C:\Code\workspace-java\sonar-findbugs\ge
 Total bugs patterns 820
 ```
 
-The generated XML files can be place in `src/main/resources/org/sonar/plugins/findbugs`.
+The generated XML files will be place in `src/main/resources/org/sonar/plugins/findbugs` automatically.
 Prior committing the new rules, please review with a diff of the changes.
  - Make sure you are not removing rules by mistake.
  - Make sure you are not changing the indent of the entire files, new line to carriage return, etc.

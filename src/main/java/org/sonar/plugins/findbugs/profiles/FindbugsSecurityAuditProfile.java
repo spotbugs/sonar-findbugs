@@ -19,9 +19,7 @@
  */
 package org.sonar.plugins.findbugs.profiles;
 
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.java.Java;
 
@@ -31,9 +29,9 @@ import java.io.Reader;
 /**
  * Security rules including informational rules. This profile is intend for in depth security code review.
  */
-public class FindbugsSecurityAuditProfile extends ProfileDefinition {
+public class FindbugsSecurityAuditProfile implements BuiltInQualityProfilesDefinition {
 
-  private static final String FINDBUGS_SECURITY_AUDIT_PROFILE_NAME = "FindBugs Security Audit";
+  public static final String FINDBUGS_SECURITY_AUDIT_PROFILE_NAME = "FindBugs Security Audit";
   private final FindbugsProfileImporter importer;
 
   public FindbugsSecurityAuditProfile(FindbugsProfileImporter importer) {
@@ -41,13 +39,13 @@ public class FindbugsSecurityAuditProfile extends ProfileDefinition {
   }
 
   @Override
-  public RulesProfile createProfile(ValidationMessages messages) {
+  public void define(Context context) {
     Reader findbugsProfile = new InputStreamReader(this.getClass().getResourceAsStream(
       "/org/sonar/plugins/findbugs/profile-findbugs-security-audit.xml"));
-    RulesProfile profile = importer.importProfile(findbugsProfile, messages);
-    profile.setLanguage(Java.KEY);
-    profile.setName(FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
-    return profile;
+    NewBuiltInQualityProfile profile = context.createBuiltInQualityProfile(FINDBUGS_SECURITY_AUDIT_PROFILE_NAME, Java.KEY);
+    importer.importProfile(findbugsProfile, profile);
+
+    profile.done();
   }
 
 }

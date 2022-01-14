@@ -19,26 +19,20 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.apache.commons.lang.CharUtils;
-import org.custommonkey.xmlunit.Diff;
-import org.custommonkey.xmlunit.XMLUnit;
-import org.junit.Assert;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
-import org.sonar.api.rules.RuleQuery;
-import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
-import org.sonar.plugins.findbugs.rules.*;
-import org.sonar.plugins.java.Java;
-import org.sonar.plugins.findbugs.util.TestUtils;
-import org.xml.sax.SAXException;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.CharUtils;
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
+import org.junit.jupiter.api.Assertions;
+import org.sonar.api.rules.Rule;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.util.TestUtils;
+import org.xml.sax.SAXException;
 
 public abstract class FindbugsTests {
 
@@ -59,46 +53,11 @@ public abstract class FindbugsTests {
     return rules;
   }
 
-  protected RulesProfile createRulesProfileWithActiveRules(boolean findbugs, boolean fbContrib, boolean findsecbug,
-                                                           boolean findbugsJsp) {
-    RulesProfile profile = RulesProfile.create();
-    profile.setName("FindBugs");
-    profile.setLanguage(Java.KEY);
-    RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
-    if (findbugs) {
-      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY))) {
-        profile.activateRule(rule, null);
-      }
-    }
-    if (fbContrib) {
-      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FbContribRulesDefinition.REPOSITORY_KEY))) {
-        profile.activateRule(rule, null);
-      }
-    }
-    if (findsecbug) {
-      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY))) {
-        rule.setRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
-        profile.activateRule(rule, null);
-      }
-    }
-    if (findbugsJsp) {
-      for (Rule rule : ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY))) {
-        rule.setRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
-        profile.activateRule(rule, null);
-      }
-    }
-    return profile;
-  }
-
-  protected RulesProfile createRulesProfileWithActiveRules() {
-    return createRulesProfileWithActiveRules(true, false, false, false);
-  }
-
   private void assertSimilarXml(File expectedFile, String xml) throws SAXException, IOException {
     XMLUnit.setIgnoreWhitespace(true);
     Reader reader = new FileReader(expectedFile);
     Diff diff = XMLUnit.compareXML(reader, xml);
     String message = "Diff: " + diff.toString() + CharUtils.LF + "XML: " + xml;
-    Assert.assertTrue(message, diff.similar());
+    Assertions.assertTrue(diff.similar(), message);
   }
 }
