@@ -33,11 +33,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.PropertyType;
 import org.sonar.api.Startable;
 import org.sonar.api.batch.ScannerSide;
@@ -50,6 +49,8 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -64,7 +65,8 @@ import static java.lang.String.format;
 @ScannerSide
 public class FindbugsConfiguration implements Startable {
 
-  private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
+  private static final Logger LOG = Loggers.get(FindbugsConfiguration.class);
+  private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp(\\$[0-9]+)*\\.class");
 
   private final FileSystem fileSystem;
   private final Configuration config;
@@ -87,25 +89,18 @@ public class FindbugsConfiguration implements Startable {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
-      //Will capture additional classes including precompiled JSP
-      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
-        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
-      }
-
       //Auxiliary dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
 
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
-    boolean hasPrecompiledJsp = false;
+    
+    if (hasJspFiles) {
+      addPrecompiledJspClasses(classFilesToAnalyze);
+    }
+    
     for (File classToAnalyze : classFilesToAnalyze) {
       String absolutePath = classToAnalyze.getCanonicalPath();
-      if(hasJspFiles && !hasPrecompiledJsp
-              && (absolutePath.endsWith("_jsp.class") || //Jasper
-                  absolutePath.contains("/jsp_servlet/")) //WebLogic
-              ) {
-        hasPrecompiledJsp = true;
-      }
       if(!"module-info.class".equals(classToAnalyze.getName())) {
         findbugsProject.addFile(absolutePath);
       }
@@ -120,12 +115,6 @@ public class FindbugsConfiguration implements Startable {
         throw new IllegalStateException(format("One (sub)project contains Java source files that are not compiled (%s).",
                 fileSystem.baseDir().getPath()));
       }
-    }
-
-    if (hasJspFiles && !hasPrecompiledJsp) {
-      LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
-              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
-              fileSystem.baseDir().getPath());
     }
 
     copyLibs();
@@ -196,6 +185,65 @@ public class FindbugsConfiguration implements Startable {
     File file = new File(fileSystem.workDir(), "findbugs-include.xml");
     FileUtils.write(file, conf.toString(), StandardCharsets.UTF_8);
     return file;
+  }
+
+  /**
+   * Updates the class files list by adding precompiled JSP classes
+   * 
+   * @param classFilesToAnalyze The current list of class files to analyze, by default SonarQube does not include precompiled JSP classes
+   * 
+   * @throws IOException In case an exception was thrown when building a file canonical path
+   */
+  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze) throws IOException {
+    for (File file : javaResourceLocator.classpath()) {
+      //Will capture additional classes including precompiled JSP
+      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
+        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
+      }
+    }
+    
+    boolean hasPrecompiledJsp = hasPrecompiledJsp(classFilesToAnalyze);
+
+    if (!hasPrecompiledJsp) {
+      LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
+              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
+              fileSystem.baseDir().getPath());
+    }
+  }
+
+  public boolean hasPrecompiledJsp(List<File> classFilesToAnalyze) {
+    for (File classToAnalyze : classFilesToAnalyze) {
+      if(isPrecompiledJspClassFile(classToAnalyze)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  public static boolean isPrecompiledJspClassFile(File file) {
+    String fileName = file.getName();
+    
+    //Jasper
+    // Replacement for previous implementation absolutePath.endsWith("_jsp.class") to account for inner classes
+    if (JSP_FILE_NAME_PATTERN.matcher(fileName).matches()) {
+      return true; 
+    }
+    
+    if (fileName.endsWith(".class")) {
+      //WebLogic
+      File parent = file.getParentFile();
+      while (parent != null) {
+        // Replacement for previous implementation absolutePath.contains("/jsp_servlet/") to account for windows paths
+        if (parent.getName().equals("jsp_servlet")) {
+          return true;
+        }
+        
+        parent = parent.getParentFile();
+      }
+    }
+    
+    return false;
   }
 
   /**

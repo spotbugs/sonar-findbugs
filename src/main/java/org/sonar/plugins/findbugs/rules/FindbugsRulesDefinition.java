@@ -22,7 +22,6 @@ package org.sonar.plugins.findbugs.rules;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
 import org.sonar.plugins.java.Java;
-import org.sonar.squidbridge.rules.ExternalDescriptionLoader;
 import org.sonar.squidbridge.rules.SqaleXmlLoader;
 
 public final class FindbugsRulesDefinition implements RulesDefinition {
