@@ -247,7 +247,7 @@ public class FindbugsConfiguration implements Startable {
   }
 
   /**
-   * Scan the given folder for classes. It will catch classes from Java, JSP and more.
+   * Scan the given folder for classes. It will catch classes compiled JSP classes.
    *
    * @param folder Folder to scan
    * @return {@code List<File>} of class files
@@ -262,7 +262,7 @@ public class FindbugsConfiguration implements Startable {
       for (File f : dirPoll.listFiles()) {
         if (f.isDirectory()) {
           dirs.add(f);
-        } else if (f.isFile()&& f.getName().endsWith(".class")) {
+        } else if (isPrecompiledJspClassFile(f)) {
           allFiles.add(f);
         }
       }
