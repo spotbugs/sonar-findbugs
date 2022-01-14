@@ -83,6 +83,10 @@ public class FindbugsTestSuite {
     return projectKey + ":src/main/java/" + pkgDir + cls;
   }
 
+  public static String keyForFile(String projectKey, String fileName) {
+    return projectKey + ":" + fileName;
+  }
+
   public static File projectPom(String projectName) {
     return new File("src/test/resources/projects/" + projectName + "/pom.xml").getAbsoluteFile();
   }
