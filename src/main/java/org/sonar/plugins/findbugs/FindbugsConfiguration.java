@@ -66,7 +66,7 @@ import static java.lang.String.format;
 public class FindbugsConfiguration implements Startable {
 
   private static final Logger LOG = Loggers.get(FindbugsConfiguration.class);
-  private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp(\\$[0-9]+)*\\.class");
+  private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp[\\$0-9]*\\.class");
 
   private final FileSystem fileSystem;
   private final Configuration config;
