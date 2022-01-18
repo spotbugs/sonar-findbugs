@@ -81,11 +81,6 @@
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
         </exclusion>
-        <exclusion>
-          <!-- For some reasons appeared as a transitive dependency of FindBugs 2.0.3 -->
-          <groupId>net.jcip</groupId>
-          <artifactId>jcip-annotations</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
 
@@ -113,13 +108,6 @@
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
       <version>2.8.0</version>
-    </dependency>
-
-    <dependency>
-      <!-- For some reasons was not deployed with FindBugs 2.0.3 and not transitive dependency anymore -->
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>3.0.1u2</version>
     </dependency>
 
     <dependency>
@@ -195,12 +183,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>xmlunit</groupId>
       <artifactId>xmlunit</artifactId>
       <version>1.6</version>
@@ -218,18 +200,6 @@
       <artifactId>sonar-ws</artifactId>
       <version>9.1.0.47736</version>
       <scope>test</scope>
-    </dependency>
-
-    <!-- Utilities use by the lexer -->
-    <dependency>
-      <groupId>org.sonarsource.sslr</groupId>
-      <artifactId>sslr-core</artifactId>
-      <version>1.23</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-channel</artifactId>
-      <version>4.2</version>
     </dependency>
   </dependencies>
 
