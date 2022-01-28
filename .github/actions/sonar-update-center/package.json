@@ -27,7 +27,7 @@
     "@actions/core": "^1.6.0",
     "@actions/exec": "^1.1.0",
     "@actions/github": "^5.0.0",
-    "promisified-properties": "^2.0.20",
+    "promisified-properties": "^2.0.21",
     "semver": "^7.3.5"
   },
   "devDependencies": {
