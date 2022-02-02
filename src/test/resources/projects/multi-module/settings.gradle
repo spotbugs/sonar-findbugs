@@ -1,0 +1,3 @@
+include 'multi-module-app'
+include 'multi-module-core'
+include 'multi-module-fx'
