@@ -19,25 +19,23 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class FindbugsXmlReportParserTest {
-
-  @Rule
-  public ExpectedException thrown = ExpectedException.none();
+class FindbugsXmlReportParserTest {
 
   private List<FindbugsXmlReportParser.XmlBugInstance> violations;
 
-  @Before
+  @BeforeEach
   public void init() {
     File findbugsXmlReport = getFile("/org/sonar/plugins/findbugs/findbugsReport.xml");
     FindbugsXmlReportParser xmlParser = new FindbugsXmlReportParser(findbugsXmlReport);
@@ -45,15 +43,18 @@ public class FindbugsXmlReportParserTest {
   }
 
   @Test
-  public void createFindbugsXmlReportParserWithUnexistedReportFile() {
+  void createFindbugsXmlReportParserWithUnexistedReportFile() {
     File xmlReport = new File("doesntExist.xml");
-    thrown.expect(IllegalStateException.class);
-    thrown.expectMessage("The findbugs XML report can't be found at '" + xmlReport.getAbsolutePath() + "'");
-    new FindbugsXmlReportParser(xmlReport);
+    
+    Throwable thrown = assertThrows(IllegalStateException.class, () -> {
+      new FindbugsXmlReportParser(xmlReport);
+    });
+    
+    assertEquals("The findbugs XML report can't be found at '" + xmlReport.getAbsolutePath() + "'", thrown.getMessage());
   }
 
   @Test
-  public void testGetViolations() {
+  void testGetViolations() {
     assertThat(violations.size()).isEqualTo(2);
 
     FindbugsXmlReportParser.XmlBugInstance fbViolation = violations.get(0);
@@ -67,7 +68,7 @@ public class FindbugsXmlReportParserTest {
   }
 
   @Test
-  public void testGetSonarJavaFileKey() {
+  void testGetSonarJavaFileKey() {
     FindbugsXmlReportParser.XmlSourceLineAnnotation sourceLine = new FindbugsXmlReportParser.XmlSourceLineAnnotation();
     sourceLine.className = "org.sonar.batch.Sensor";
     assertThat(sourceLine.getSonarJavaFileKey()).isEqualTo("org.sonar.batch.Sensor");

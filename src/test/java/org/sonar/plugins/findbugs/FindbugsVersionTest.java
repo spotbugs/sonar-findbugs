@@ -19,14 +19,14 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.fest.assertions.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
 
-public class FindbugsVersionTest {
+class FindbugsVersionTest {
 
   @Test
-  public void getFindbugsVersion() {
+  void getFindbugsVersion() {
     assertThat(FindbugsVersion.getVersion().length()).isGreaterThan(1);
   }
 

@@ -131,7 +131,6 @@ public class FindBugsFilter {
 
   public static XStream createXStream() {
     XStream xstream = new XStream(new StaxDriver());
-    XStream.setupDefaultSecurity(xstream); //Setup the default hardening of types disallowed.
     xstream.setClassLoader(FindBugsFilter.class.getClassLoader());
 
     for (Class modelClass : ALL_XSTREAM_TYPES) {

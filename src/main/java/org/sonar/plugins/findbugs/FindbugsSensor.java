@@ -39,6 +39,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.resource.ClassMetadataLoadingException;
 import org.sonar.plugins.findbugs.resource.SmapParser;
@@ -84,8 +85,8 @@ public class FindbugsSensor implements Sensor {
     Collections.addAll(repositories, repos);
   }
 
-  private boolean hasActiveRules(String repoSubstring) {
-    return activeRules.findAll().stream().anyMatch(activeRule -> activeRule.ruleKey().repository().contains(repoSubstring));
+  private boolean hasActiveRules(String repository) {
+    return !activeRules.findByRepository(repository).isEmpty();
   }
 
   public List<String> getRepositories() {
@@ -93,15 +94,18 @@ public class FindbugsSensor implements Sensor {
   }
 
   private boolean hasActiveFindbugsRules() {
-    return hasActiveRules("findbugs");
+    return hasActiveRules(FindbugsRulesDefinition.REPOSITORY_KEY);
   }
 
   private boolean hasActiveFbContribRules() {
-    return hasActiveRules("fb-contrib");
+    return hasActiveRules(FbContribRulesDefinition.REPOSITORY_KEY);
   }
 
   private boolean hasActiveFindSecBugsRules() {
-    return hasActiveRules("findsecbugs");
+    boolean hasActiveFindSecBugsRules = hasActiveRules(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
+    boolean hasActiveFindSecBugsJspRules = hasActiveRules(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
+    
+    return hasActiveFindSecBugsRules || (hasActiveFindSecBugsJspRules && fs.languages().contains(Jsp.KEY));
   }
 
   @Override
@@ -197,9 +201,11 @@ public class FindbugsSensor implements Sensor {
       }
 
     }
-      finally {
-      classMappingWriter.flush();
-      classMappingWriter.close();
+    finally {
+      if(classMappingWriter != null) {
+        classMappingWriter.flush();
+        classMappingWriter.close();
+      }
     }
   }
 
@@ -240,6 +246,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
+    descriptor.createIssuesForRuleRepositories(REPOS);
     descriptor.onlyOnLanguages(FindbugsPlugin.SUPPORTED_JVM_LANGUAGES);
     descriptor.name("FindBugs Sensor");
   }

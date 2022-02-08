@@ -1,0 +1,97 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  release:
+    types:
+      - published
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # previous LTS version
+          - SONAR_VERSION: 7.9
+            SONAR_JAVA_VERSION: 5.13.1.18282
+          # current LTS version
+          - SONAR_VERSION: 8.9
+            SONAR_JAVA_VERSION: 6.15.1.26025
+          # Sonarqube version 9 removed some deprecated APIs
+          - SONAR_VERSION: 9.0.0.45539
+            SONAR_JAVA_VERSION: 7.1.0.26670
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: temurin
+          cache: 'maven'
+      - name: Build
+        run: |
+          mvn verify -B -e -V
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    # Forked repos do not have the secrets to deploy so this would fail
+    if: ( github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )) && github.repository == 'spotbugs/sonar-findbugs'
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: temurin
+          cache: 'maven'
+          server-id: ossrh
+          server-username: OSSRH_JIRA_USERNAME
+          server-password: OSSRH_JIRA_PASSWORD
+          gpg-private-key: ${{ secrets.SIGNING_KEY }}
+          gpg-passphrase: GPG_PASSPHRASE
+      - name: Deploy artifacts to Maven Central
+        run: |
+          mvn clean deploy -B -e -P deploy -DskipTests
+        env:
+          OSSRH_JIRA_USERNAME: eller86
+          OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
+          GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
+          CI: true
+      - name: Get release URL
+        if: github.event_name == 'release'
+        id: get_release
+        uses: bruceadams/get-release@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Upload .jar file to GitHub Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: ./target/sonar-findbugs-plugin.jar
+          asset_name: sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar
+          asset_content_type: application/zip
+      - name: Request SonarSource to release the plugin to marketplace
+        if: github.event_name == 'release'
+        uses: ./.github/actions/sonar-update-center
+        with:
+          prop-file: findbugs.properties
+          description: Use SpotBugs 4.5.3, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          minimal-supported-sq-version: 8.9
+          latest-supported-sq-version: LATEST
+          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
+          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
+          public-version: ${{ github.event.release.tag_name }}
+          sonar-cloud-url: https://sonarcloud.io/dashboard?branch=${{ github.event.release.tag_name }}&id=com.github.spotbugs%3Asonar-findbugs-plugin
+          github-token: ${{ secrets.PAT_TO_FORK }}
+          discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}

@@ -1,5 +1,11 @@
 <FindBugsFilter><!-- This file is auto-generated. -->
   <Match>
+    <Bug pattern='JUA_DONT_ASSERT_INSTANCEOF_IN_TESTS' />
+  </Match>
+  <Match>
+    <Bug pattern='OVERRIDING_METHODS_MUST_INVOKE_SUPER' />
+  </Match>
+  <Match>
     <Bug pattern='CNT_ROUGH_CONSTANT_VALUE' />
   </Match>
   <Match>
@@ -370,6 +376,18 @@
   </Match>
   <Match>
     <Bug pattern='EI_EXPOSE_STATIC_REP2' />
+  </Match>
+  <Match>
+    <Bug pattern='MS_EXPOSE_BUF' />
+  </Match>
+  <Match>
+    <Bug pattern='EI_EXPOSE_BUF' />
+  </Match>
+  <Match>
+    <Bug pattern='EI_EXPOSE_BUF2' />
+  </Match>
+  <Match>
+    <Bug pattern='EI_EXPOSE_STATIC_BUF2' />
   </Match>
   <Match>
     <Bug pattern='RU_INVOKE_RUN' />
@@ -981,9 +999,6 @@
     <Bug pattern='ITA_INEFFICIENT_TO_ARRAY' />
   </Match>
   <Match>
-    <Bug pattern='IRA_INEFFICIENT_REPLACEALL' />
-  </Match>
-  <Match>
     <Bug pattern='IJU_ASSERT_METHOD_INVOKED_FROM_RUN_METHOD' />
   </Match>
   <Match>
@@ -1069,6 +1084,9 @@
   </Match>
   <Match>
     <Bug pattern='REC_CATCH_EXCEPTION' />
+  </Match>
+  <Match>
+    <Bug pattern='DCN_NULLPOINTER_EXCEPTION' />
   </Match>
   <Match>
     <Bug pattern='FE_TEST_IF_EQUAL_TO_NOT_A_NUMBER' />
@@ -1329,6 +1347,21 @@
     <Bug pattern='NP_METHOD_RETURN_RELAXING_ANNOTATION' />
   </Match>
   <Match>
+    <Bug pattern='EOS_BAD_END_OF_STREAM_CHECK' />
+  </Match>
+  <Match>
+    <Bug pattern='REFLC_REFLECTION_MAY_INCREASE_ACCESSIBILITY_OF_CLASS' />
+  </Match>
+  <Match>
+    <Bug pattern='REFLF_REFLECTION_MAY_INCREASE_ACCESSIBILITY_OF_FIELD' />
+  </Match>
+  <Match>
+    <Bug pattern='MC_OVERRIDABLE_METHOD_CALL_IN_CONSTRUCTOR' />
+  </Match>
+  <Match>
+    <Bug pattern='MC_OVERRIDABLE_METHOD_CALL_IN_CLONE' />
+  </Match>
+  <Match>
     <Bug pattern='ISB_INEFFICIENT_STRING_BUFFERING' />
   </Match>
   <Match>
@@ -1474,6 +1507,9 @@
   </Match>
   <Match>
     <Bug pattern='PMB_INSTANCE_BASED_THREAD_LOCAL' />
+  </Match>
+  <Match>
+    <Bug pattern='PMB_LOCAL_BASED_JAXB_CONTEXT' />
   </Match>
   <Match>
     <Bug pattern='LSYC_LOCAL_SYNCHRONIZED_COLLECTION' />
@@ -2094,6 +2130,12 @@
     <Bug pattern='IMC_IMMATURE_CLASS_LOWER_CLASS' />
   </Match>
   <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_BAD_SERIALVERSIONUID' />
+  </Match>
+  <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_VAR_NAME' />
+  </Match>
+  <Match>
     <Bug pattern='JXI_GET_ENDPOINT_CONSUMES_CONTENT' />
   </Match>
   <Match>
@@ -2137,6 +2179,9 @@
   </Match>
   <Match>
     <Bug pattern='IOI_USE_OF_FILE_STREAM_CONSTRUCTORS' />
+  </Match>
+  <Match>
+    <Bug pattern='IOI_UNENDED_ZLIB_OBJECT' />
   </Match>
   <Match>
     <Bug pattern='DMC_DUBIOUS_MAP_COLLECTION' />
@@ -2233,5 +2278,8 @@
   </Match>
   <Match>
     <Bug pattern='SUI_CONTAINS_BEFORE_REMOVE' />
+  </Match>
+  <Match>
+    <Bug pattern='SAT_SUSPICIOUS_ARGUMENT_TYPES' />
   </Match>
 </FindBugsFilter>

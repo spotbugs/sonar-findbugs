@@ -1,0 +1,62 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request_target:
+    branches:
+      - master
+  release:
+    types:
+      - created
+
+# set necessary permissions for SQ's GitHub integration
+# https://docs.sonarqube.org/latest/analysis/github-integration/#header-2
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+  statuses: read
+
+jobs:
+  build:
+    # Forked repos do not have access to the Sonar account
+    if: github.repository == 'spotbugs/sonar-findbugs'
+    runs-on: ubuntu-20.04
+    env:
+      # previous LTS version
+      SONAR_VERSION: 7.9
+      SONAR_JAVA_VERSION: 5.13.1.18282
+    steps:
+      - name: Decide the ref to check out
+        uses: haya14busa/action-cond@v1
+        id: condval
+        with:
+          cond: ${{ github.event_name == 'pull_request_target' }}
+          if_true: refs/pull/${{ github.event.pull_request.number }}/merge
+          if_false: ${{ github.ref }}
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ steps.condval.outputs.value }}
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+          distribution: temurin
+          cache: 'maven'
+      - name: Build
+        run: |
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V \
+            -Dsonar.version=${{ env.SONAR_VERSION }} \
+            -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }} \
+            -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
+            -Dsonar.organization=spotbugs \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_LOGIN \
+            ${PR_NUMBER:+ -Dsonar.pullrequest.key=$PR_NUMBER -Dsonar.pullrequest.branch=$PR_BRANCH }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_LOGIN: ${{ secrets.SONAR_LOGIN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          CI: true

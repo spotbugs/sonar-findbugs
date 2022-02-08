@@ -41,6 +41,23 @@ public class FindSecurityBugsJspRulesDefinition implements RulesDefinition {
 
         RulesDefinitionXmlLoader ruleLoaderJsp = new RulesDefinitionXmlLoader();
         ruleLoaderJsp.load(repositoryJsp, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-jsp.xml"), "UTF-8");
+        
+        addDeprecatedRuleKeys(repositoryJsp);
+        
         repositoryJsp.done();
+    }
+
+    public void addDeprecatedRuleKeys(NewRepository repositoryJsp) {
+        String[] rulesMovedFromFindSecurityBugs = new String[] {
+            "XSS_JSP_PRINT",
+            "XSS_REQUEST_PARAMETER_TO_JSP_WRITER"
+        };
+      
+        for (String key : rulesMovedFromFindSecurityBugs) {
+            NewRule rule = repositoryJsp.rule(key);
+            if (rule != null) {
+                rule.addDeprecatedRuleKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, key);
+            }
+        }
     }
 }

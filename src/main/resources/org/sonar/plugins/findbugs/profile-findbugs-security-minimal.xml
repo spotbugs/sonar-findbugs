@@ -87,6 +87,9 @@
     <Bug pattern='SQL_INJECTION_JDBC' />
   </Match>
   <Match>
+    <Bug pattern='SQL_INJECTION_VERTX' />
+  </Match>
+  <Match>
     <Bug pattern='SQL_INJECTION_ANDROID' />
   </Match>
   <Match>
@@ -106,6 +109,9 @@
   </Match>
   <Match>
     <Bug pattern='OGNL_INJECTION' />
+  </Match>
+  <Match>
+    <Bug pattern='GROOVY_SHELL' />
   </Match>
   <Match>
     <Bug pattern='BAD_HEXA_CONVERSION' />
@@ -159,6 +165,12 @@
     <Bug pattern='SPRING_UNVALIDATED_REDIRECT' />
   </Match>
   <Match>
+    <Bug pattern='ENTITY_LEAK' />
+  </Match>
+  <Match>
+    <Bug pattern='ENTITY_MASS_ASSIGNMENT' />
+  </Match>
+  <Match>
     <Bug pattern='XSS_SERVLET' />
   </Match>
   <Match>
@@ -210,6 +222,9 @@
     <Bug pattern='TEMPLATE_INJECTION_FREEMARKER' />
   </Match>
   <Match>
+    <Bug pattern='TEMPLATE_INJECTION_PEBBLE' />
+  </Match>
+  <Match>
     <Bug pattern='PERMISSIVE_CORS' />
   </Match>
   <Match>
@@ -247,6 +262,21 @@
   </Match>
   <Match>
     <Bug pattern='SMTP_HEADER_INJECTION' />
+  </Match>
+  <Match>
+    <Bug pattern='RPC_ENABLED_EXTENSIONS' />
+  </Match>
+  <Match>
+    <Bug pattern='WICKET_XSS1' />
+  </Match>
+  <Match>
+    <Bug pattern='SAML_IGNORE_COMMENTS' />
+  </Match>
+  <Match>
+    <Bug pattern='OVERLY_PERMISSIVE_FILE_PERMISSION' />
+  </Match>
+  <Match>
+    <Bug pattern='IMPROPER_UNICODE' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />

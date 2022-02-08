@@ -30,6 +30,10 @@ public class FakeActiveRules {
     return new ActiveRulesMock(FakeRuleFinder.createWithOnlyFindSecBugsRules());
   }
 
+  public static ActiveRules createWithOnlyFindSecBugsJspRules() {
+    return new ActiveRulesMock(FakeRuleFinder.createWithOnlyFindSecBugsJspRules());
+  }
+
   public static ActiveRules createWithNoRules() {
     return new ActiveRulesMock(FakeRuleFinder.createWithNoRules());
   }

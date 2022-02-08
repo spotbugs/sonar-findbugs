@@ -104,6 +104,10 @@ public class FakeRuleFinder {
     return create(false, false, true,false);
   }
 
+  public static RuleFinder createWithOnlyFindSecBugsJspRules() {
+    return create(false, false, false, true);
+  }
+
   public static RuleFinder createWithNoRules() {
     return create(false, false, false, false);
   }

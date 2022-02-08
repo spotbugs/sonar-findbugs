@@ -1,25 +1,24 @@
 package org.sonar.plugins.findbugs.resource;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.internal.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
+import com.google.common.collect.ImmutableList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ByteCodeResourceLocatorTest {
+class ByteCodeResourceLocatorTest {
 
   //File system that return mock input files
 //  FileSystem fs;
@@ -29,7 +28,7 @@ public class ByteCodeResourceLocatorTest {
   FileSystem fsEmpty;
   FilePredicates predicatesEmpty;
 
-  @Before
+  @BeforeEach
   public void setUp() {
 
     //Not used for the moment
@@ -45,7 +44,7 @@ public class ByteCodeResourceLocatorTest {
 
 
   @Test
-  public void findJavaClassFile_normalClassName() {
+  void findJavaClassFile_normalClassName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     locator.findSourceFile("com/helloworld/ThisIsATest.java", fsEmpty);
@@ -54,7 +53,7 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findScalaClassFileNormalClassName() {
+  void findScalaClassFileNormalClassName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     locator.findSourceFile("com/helloworld/ThisIsATest.scala", fsEmpty);
@@ -72,7 +71,7 @@ public class ByteCodeResourceLocatorTest {
 //  }
 
   @Test
-  public void findTemplateFile_weblogicFileName() {
+  void findTemplateFile_weblogicFileName() {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
 
@@ -82,7 +81,7 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findTemplateFile_jasperFileName() {
+  void findTemplateFile_jasperFileName() {
 
     String prefixSource = "src/main/webapp/org/apache/jsp/";
 
@@ -102,8 +101,8 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findRegularSourceFile() throws Exception {
-    DefaultInputFile givenJavaFile = TestInputFileBuilder.create("TestJavaClass", "app/src/main/java/com/helloworld/TestJavaClass.java").build();
+  void findRegularSourceFile() throws Exception {
+    InputFile givenJavaFile = mock(InputFile.class);
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
@@ -111,8 +110,8 @@ public class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  public void findSourceFileFromScalaClassName() throws Exception {
-    DefaultInputFile givenJavaFile = TestInputFileBuilder.create("TestOperationalProfileIccidModel", "src/main/scala/TestOperationalProfileIccidModel.scala").build();
+  void findSourceFileFromScalaClassName() throws Exception {
+    InputFile givenJavaFile = mock(InputFile.class);
     when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();

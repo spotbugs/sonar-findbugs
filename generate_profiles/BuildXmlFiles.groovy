@@ -1,18 +1,25 @@
 import groovy.xml.MarkupBuilder;
+import java.nio.file.Paths
 import FsbClassifier;
 import static FsbClassifier.*;
+import java.nio.charset.Charset;
+import groovy.json.JsonSlurper;
+
 @Grapes([
 
-    @Grab(group='com.github.spotbugs', module='spotbugs', version='3.1.10'),
-    @Grab(group='com.mebigfatguy.fb-contrib', module='fb-contrib', version='7.4.3.sb'),
-    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.8.0')]
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.5.3'),
+    @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.4.7'),
+    @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.11.0')]
 )
 
 
-FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '3.1.10')
-CONTRIB = new Plugin(groupId: 'com.mebigfatguy.fb-contrib', artifactId: 'fb-contrib', version: '7.4.3.sb')
-FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.8.0')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.5.3')
+CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.4.7')
+FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.11.0')
 
+def destDir() {
+    Paths.get("..", "src/main/resources/org/sonar/plugins/findbugs").toAbsolutePath().normalize().toFile()
+}
 
 ////////////// Generate rules files
 
@@ -86,6 +93,21 @@ String getFindBugsCategory(List<Plugin> plugins, String bugType) {
     return "EXPERIMENTAL"
 }
 
+Map getDeprecationStatus(List<Plugin> plugins, String bugType) {
+    for(plugin in plugins) {
+        File file = new File("deprecated_rules/" + plugin.artifactId + "/" + bugType + ".json");
+        if (file.exists()) {
+            jsonSlurper = new JsonSlurper()
+            status = jsonSlurper.parse(file);
+
+            if(status != null) {
+                return status;
+            }
+        }
+    }
+    return null;
+}
+
 /**
  *
  * @param rulesSetName Name of the rules set generate. The filename will be rules-RULESSETNAME.xml
@@ -97,17 +119,19 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 
 
     //Output file
-    File f = new File("out_sonar","rules-"+rulesSetName+".xml")
+    File f = new File(destDir(), "rules-"+rulesSetName+".xml")
     printf("Building ruleset %s (%s)%n", rulesSetName, f.getCanonicalPath())
 
     //XML construction of the rules file
-    def xml = new MarkupBuilder(new PrintWriter(f))
+    def xml = new MarkupBuilder(new PrintWriter(Charset.forName("UTF-8"), f))
     xml.rules {
         mkp.comment "This file is auto-generated."
 
         def buildPattern = { pattern ->
 
             category = getFindBugsCategory(plugins, pattern.attribute("type"))
+            // Is the rule deprecated in the metadata of the underlying rules set?
+            deprecated = (pattern.attribute("deprecated") == "true")
 
             if(category == "NOISE" || pattern.attribute("type") in ["TESTING", "TESTING1", "TESTING2", "TESTING3", "UNKNOWN"]) return;
             if(category == "MT_CORRECTNESS") category = "MULTI-THREADING"
@@ -120,7 +144,18 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 
                     name(category.toLowerCase().capitalize().replace("_"," ") + " - " +pattern.ShortDescription.text())
                     configKey(pattern.attribute("type"))
-                    description(pattern.Details.text().trim())
+                    
+                    Map deprecationStatus = getDeprecationStatus(plugins, pattern.attribute("type"));
+                    
+                    if (deprecationStatus != null) {
+                        description(pattern.Details.text().trim() + "\n<h2>Deprecated</h2>\n<p>This rule is deprecated; use {rule:" + deprecationStatus.replacement + "} instead.</p>")
+                        status("DEPRECATED")
+                    } else if (deprecated) {
+                        description(pattern.Details.text().trim() + "\n<h2>Deprecated</h2>\n<p>This rule is deprecated</p>")
+                        status("DEPRECATED")
+                    } else {
+                        description(pattern.Details.text().trim())
+                    }
 
                     //OWASP TOP 10 2013
                     if (pattern.Details.text().toLowerCase().contains('injection') || pattern.Details.text().contains('A1-Injection')) {
@@ -207,13 +242,12 @@ writeRules("fbcontrib", [CONTRIB], [])
 ////////////// Generate the profile files
 
 def writeProfile(String profileName,List<String> includedBugs,List<String> excludedBugs = []) {
-
-    File f = new File("out_sonar","profile-"+profileName+".xml")
+    File f = new File(destDir(), "profile-"+profileName+".xml")
     printf("Building profile %s (%s)%n",profileName,f.getCanonicalPath())
 
     def countBugs=0;
 
-    def xml = new MarkupBuilder(new PrintWriter(f))
+    def xml = new MarkupBuilder(new PrintWriter(Charset.forName("UTF-8"), f))
     xml.FindBugsFilter {
         mkp.comment "This file is auto-generated."
 

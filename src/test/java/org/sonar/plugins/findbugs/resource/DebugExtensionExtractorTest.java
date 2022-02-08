@@ -19,17 +19,17 @@
  */
 package org.sonar.plugins.findbugs.resource;
 
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class DebugExtensionExtractorTest {
+import org.junit.jupiter.api.Test;
+
+class DebugExtensionExtractorTest {
 
     @Test
-    public void loadDebugInfoFromWeblogicClass() throws IOException {
+    void loadDebugInfoFromWeblogicClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/jsp_classes/weblogic/__test.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
         //System.out.println(debugInfo);
@@ -40,7 +40,7 @@ public class DebugExtensionExtractorTest {
     }
 
     @Test
-    public void loadDebugInfoFromJettyClass() throws IOException {
+    void loadDebugInfoFromJettyClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/jsp_classes/jetty936/test_jsp.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
         //System.out.println(debugInfo);

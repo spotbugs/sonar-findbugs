@@ -25,109 +25,124 @@ import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.rule.internal.DefaultActiveRules;
-import org.sonar.api.config.PropertyDefinitions;
-import org.sonar.api.config.internal.MapSettings;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
+import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class FindbugsConfigurationTest {
+class FindbugsConfigurationTest {
 
-  @Rule
-  public TemporaryFolder temp = new TemporaryFolder();
+  @TempDir
+  public File temp;
 
-  private DefaultFileSystem fs;
-  private MapSettings settings;
+  private FilePredicates filePredicates;
+  private FileSystem fs;
+  private SimpleConfiguration configuration;
   private File baseDir;
+  private File workDir;
+  private ActiveRules activeRules;
   private FindbugsConfiguration conf;
   private JavaResourceLocator javaResourceLocator;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
-    baseDir = temp.newFolder("findbugs");
+    baseDir = new File(temp, "findbugs");
+    workDir = new File(temp, "findbugs");
 
-    fs = new DefaultFileSystem(baseDir);
-    fs.setWorkDir(temp.newFolder().toPath());
+    filePredicates = mock(FilePredicates.class);
+    
+    fs = mock(FileSystem.class);
+    when(fs.baseDir()).thenReturn(baseDir);
+    when(fs.workDir()).thenReturn(workDir);
+    when(fs.predicates()).thenReturn(filePredicates);
+    
+    activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
 
-    settings = new MapSettings(new PropertyDefinitions().addComponents(FindbugsConfiguration.getPropertyDefinitions()));
+    configuration = new SimpleConfiguration();
     javaResourceLocator = mock(JavaResourceLocator.class);
-    conf = new FindbugsConfiguration(fs, settings.asConfig(), new DefaultActiveRules(Collections.emptyList()), javaResourceLocator);
+    conf = new FindbugsConfiguration(fs, configuration, activeRules, javaResourceLocator);
   }
 
   @Test
-  public void should_return_report_file() throws Exception {
+  void should_return_report_file() throws Exception {
     assertThat(conf.getTargetXMLReport().getCanonicalPath()).isEqualTo(new File(fs.workDir(), "findbugs-result.xml").getCanonicalPath());
   }
 
   @Test
-  public void should_save_include_config() throws Exception {
+  void should_save_include_config() throws Exception {
     conf.saveIncludeConfigXml();
     File findbugsIncludeFile = new File(fs.workDir(), "findbugs-include.xml");
-    assertThat(findbugsIncludeFile.exists()).isTrue();
+    assertThat(findbugsIncludeFile).exists();
   }
 
   @Test
-  public void should_return_effort() {
+  void should_return_effort() {
     assertThat(conf.getEffort()).as("default effort").isEqualTo("default");
-    settings.setProperty(FindbugsConstants.EFFORT_PROPERTY, "Max");
+    configuration.setProperty(FindbugsConstants.EFFORT_PROPERTY, "Max");
     assertThat(conf.getEffort()).isEqualTo("max");
   }
 
   @Test
-  public void should_return_timeout() {
+  void should_return_timeout() {
     assertThat(conf.getTimeout()).as("default timeout").isEqualTo(600000);
-    settings.setProperty(FindbugsConstants.TIMEOUT_PROPERTY, 1);
+    configuration.setProperty(FindbugsConstants.TIMEOUT_PROPERTY, 1);
     assertThat(conf.getTimeout()).isEqualTo(1);
   }
 
   @Test
-  public void should_return_excludes_filters() {
+  void should_return_excludes_filters() {
     assertThat(conf.getExcludesFilters()).isEmpty();
-    settings.setProperty(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY, " foo.xml , bar.xml,");
+    configuration.setProperty(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY, " foo.xml , bar.xml,");
     assertThat(conf.getExcludesFilters()).hasSize(2);
   }
 
   @Test
-  public void should_return_confidence_level() {
+  void should_return_confidence_level() {
     assertThat(conf.getConfidenceLevel()).as("default confidence level").isEqualTo("medium");
-    settings.setProperty(FindbugsConstants.EFFORT_PROPERTY, "HIGH");
+    configuration.setProperty(FindbugsConstants.EFFORT_PROPERTY, "HIGH");
     assertThat(conf.getEffort()).isEqualTo("high");
   }
 
   @Test
-  public void should_set_class_files() throws IOException {
-    File file = temp.newFile("MyClass.class");
+  void should_set_class_files() throws IOException {
+    File file = new File(temp, "MyClass.class");
     when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
-    Project findbugsProject = conf.getFindbugsProject();
-
-    assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
-    conf.stop();
+    try (Project findbugsProject = new Project()) {
+      conf.initializeFindbugsProject(findbugsProject);
+      
+      assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
+      conf.stop();
+    }
   }
 
   @Test
-  public void should_set_class_path() throws IOException {
-    File classpath = temp.newFolder();
+  void should_set_class_path() throws IOException {
+    File classpath = new File(temp, "classpath");
     when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
-    Project findbugsProject = conf.getFindbugsProject();
+    try (Project findbugsProject = new Project()) {
+      conf.initializeFindbugsProject(findbugsProject);
 
-    assertThat(findbugsProject.getAuxClasspathEntryList()).contains(classpath.getCanonicalPath());
-    conf.stop();
+      assertThat(findbugsProject.getAuxClasspathEntryList()).contains(classpath.getCanonicalPath());
+      conf.stop();
+    }
   }
 
   @Test
-  public void should_copy_lib_in_working_dir() throws IOException {
+  void should_copy_lib_in_working_dir() throws IOException {
     String jsr305 = "findbugs/jsr305.jar";
     String annotations = "findbugs/annotations.jar";
 
@@ -152,13 +167,13 @@ public class FindbugsConfigurationTest {
   }
 
   @Test
-  public void should_get_fbcontrib() throws IOException {
+  void should_get_fbcontrib() throws IOException {
     conf.copyLibs();
     assertThat(conf.getFbContribJar()).isFile();
   }
 
   @Test
-  public void should_get_findSecBugs() throws IOException {
+  void should_get_findSecBugs() throws IOException {
     conf.copyLibs();
     assertThat(conf.getFindSecBugsJar()).isFile();
   }
@@ -168,18 +183,18 @@ public class FindbugsConfigurationTest {
 	 // No onlyAnalyze option present 
 	 assertNull(conf.getOnlyAnalyzeFilter());
 	 // Empty Property
-	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
 	 assertNull(conf.getOnlyAnalyzeFilter());
 	 
 	 // Screener made correctly for class files
-	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.Test");
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.Test");
 	 ClassScreener expected = conf.getOnlyAnalyzeFilter();
 	 assertNotNull(expected);	
 	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
 	 		+ "ple/Test.class"));
 	 
 	 // Screener made correctly for package
-	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.*");
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.*");
 	 expected = conf.getOnlyAnalyzeFilter();
 	 assertNotNull(expected);
 	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
@@ -188,7 +203,7 @@ public class FindbugsConfigurationTest {
 		 		+ "ple/Test2.class"));
 	 
 	 // Screener made correctly for deep match
-	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.-");
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.-");
 	 expected = conf.getOnlyAnalyzeFilter();
 	 assertNotNull(expected);	
 	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
@@ -196,8 +211,14 @@ public class FindbugsConfigurationTest {
 	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
 		 		+ "ple/innerPackage/Test2.class"));
 	 // To prevent other test to fail
-	 settings.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
 	 
   }
 
+  @Test
+  void scanEmptyFolderForAdditionalClasses() {
+    List<File> classes = FindbugsConfiguration.scanForAdditionalClasses(temp);
+    
+    assertThat(classes).isEmpty();
+  }
 }
