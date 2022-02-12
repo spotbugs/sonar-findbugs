@@ -22,6 +22,7 @@ package org.sonar.plugins.findbugs.it;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
+import com.sonar.orchestrator.locator.Location;
 
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
@@ -89,6 +90,10 @@ public class FindbugsTestSuite {
 
   public static File projectPom(String projectName) {
     return new File("src/test/resources/projects/" + projectName + "/pom.xml").getAbsoluteFile();
+  }
+
+  public static Location projectDirectoryLocation(String projectName) {
+    return FileLocation.of(new File("src/test/resources/projects/" + projectName).getAbsoluteFile());
   }
 
   public static HttpConnector connector() {

@@ -23,16 +23,23 @@ import com.google.common.collect.ImmutableList;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
+import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LoggerLevel;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
+import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,6 +50,9 @@ class FindbugsConfigurationTest {
 
   @TempDir
   public File temp;
+  
+  @RegisterExtension
+  public LogTester logTester = new JupiterLogTester();
 
   private FilePredicates filePredicates;
   private FileSystem fs;
@@ -174,9 +184,82 @@ class FindbugsConfigurationTest {
   }
 
   @Test
-  void scanEmptyFolderForAdditionalClasses() {
+  void scanEmptyFolderForAdditionalClasses() throws IOException {
     List<File> classes = FindbugsConfiguration.scanForAdditionalClasses(temp);
     
     assertThat(classes).isEmpty();
+  }
+  
+  @Test
+  void should_warn_of_missing_precompiled_jsp() throws IOException {
+    setupJspProject(false);
+    
+    try (Project project = new Project()) {
+      conf.initializeFindbugsProject(project);
+    }
+    
+    // There should be two warnings:
+    //  - There are JSP but they are not precompiled
+    //  - Findbugs needs sources to be compiled
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(2);
+  }
+  
+  @Test
+  void should_analyze_precompiled_jsp() throws IOException {
+    setupJspProject(true);
+    
+    try (Project project = new Project()) {
+      conf.initializeFindbugsProject(project);
+      
+      assertThat(project.getFileCount()).isEqualTo(3);
+    }
+    
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+  }
+
+  private void setupJspProject(boolean withPrecompiledJsp) throws IOException {
+    FilePredicate jspPredicate = mock(FilePredicate.class);
+    when(filePredicates.hasLanguage("jsp")).thenReturn(jspPredicate);
+    when(fs.hasFiles(jspPredicate)).thenReturn(Boolean.TRUE);
+    
+    // classpath
+    // |_ some.jar
+    // |_ target
+    //   |_ jsp_servlet
+    //   |_ classes
+    //     |_ module-info.class
+    //     |_ package
+    //       |_ Test.class
+    //       |_ message.txt
+    File classpath = new File(temp, "classpath");
+    File jarFile = new File(classpath, "some.jar");
+    File targetFolder = new File(classpath, "target");
+    File classesFolder = new File(targetFolder, "classes");
+    File jspServletFolder = new File(targetFolder, "jsp_servlet");
+    File packageFolder = new File(classesFolder, "package");
+    File classFile = new File(packageFolder, "Test.class");
+    File txtFile = new File(packageFolder, "message.txt");
+    File moduleInfoFile = new File(classesFolder, "module-info.class");
+    
+    Files.createDirectories(jspServletFolder.toPath());
+    Files.createDirectories(packageFolder.toPath());
+    Files.createFile(jarFile.toPath());
+    Files.createFile(classFile.toPath());
+    Files.createFile(txtFile.toPath());
+    Files.createFile(moduleInfoFile.toPath());
+    
+    if (withPrecompiledJsp) {
+      File jspClassFile = new File(packageFolder, "page1_jsp.class");
+      File jspInnerClassFile = new File(packageFolder, "page1_jsp$1.class");
+      File weblogicJspClassFile = new File(jspServletFolder, "weblogic.class");
+      
+      Files.createFile(jspClassFile.toPath());
+      Files.createFile(jspInnerClassFile.toPath());
+      Files.createFile(weblogicJspClassFile.toPath());
+    }
+    
+    List<File> classpathFiles = Arrays.asList(jarFile, classesFolder, jspServletFolder, moduleInfoFile);
+    
+    when(javaResourceLocator.classpath()).thenReturn(classpathFiles);
   }
 }

@@ -68,7 +68,7 @@ class FindbugsRulesDefinitionTest {
    * In case that rule is removed in a future release, this unit test will need to be updated to test against another deprecated rule
    */
   @Test
-  public void testDeprecatedRules() {
+  void testDeprecatedRules() {
     Rule rule = repository.rule("TLW_TWO_LOCK_NOTIFY");
     
     assertThat(rule).isNotNull();

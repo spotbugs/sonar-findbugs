@@ -1,0 +1,33 @@
+plugins {
+    id "java-library"
+    id "org.sonarqube" version "3.3"
+}
+
+allprojects {
+    ext.baseVersion = "0.1"
+    ext.snapshotVersion = true
+
+    group = "org.sonarqube"
+    version = "$baseVersion" + (snapshotVersion ? "-SNAPSHOT" : "")
+}
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Multimodule Gradle Project"
+        property "sonar.projectKey", "org.sonarqube:gradle-multimodule"
+    }
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'org.sonarqube'
+    sonarqube {
+        properties {
+            //property "sonar.java.libraries", 
+   	    }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
