@@ -20,6 +20,8 @@
 package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.ImmutableList;
+
+import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +44,9 @@ import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -181,6 +186,43 @@ class FindbugsConfigurationTest {
   void should_get_findSecBugs() throws IOException {
     conf.copyLibs();
     assertThat(conf.getFindSecBugsJar()).isFile();
+  }
+  
+  @Test
+  public void should_get_only_analyze_filter() {
+	 // No onlyAnalyze option present 
+	 assertNull(conf.getOnlyAnalyzeFilter());
+	 // Empty Property
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
+	 assertNull(conf.getOnlyAnalyzeFilter());
+	 
+	 // Screener made correctly for class files
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.Test");
+	 ClassScreener expected = conf.getOnlyAnalyzeFilter();
+	 assertNotNull(expected);	
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+	 		+ "ple/Test.class"));
+	 
+	 // Screener made correctly for package
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.*");
+	 expected = conf.getOnlyAnalyzeFilter();
+	 assertNotNull(expected);
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+	 		+ "ple/Test.class"));
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+		 		+ "ple/Test2.class"));
+	 
+	 // Screener made correctly for deep match
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "com.example.-");
+	 expected = conf.getOnlyAnalyzeFilter();
+	 assertNotNull(expected);	
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+		 		+ "ple/Test1.class"));
+	 assertTrue(expected.matches("any/random/src/main/java/com/exam"
+		 		+ "ple/innerPackage/Test2.class"));
+	 // To prevent other test to fail
+	 configuration.setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "");
+	 
   }
 
   @Test
