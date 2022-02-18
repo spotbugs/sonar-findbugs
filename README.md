@@ -15,14 +15,15 @@ In the quality profile, activate some rules from Spotbugs, fb-contrib or Find Se
 ### Configuration
 This plugin can be configured with sonar web interface (see General/Java section) or with project properties.
 
-**Confidence level** (sonar.findbugs.confidenceLevel): Specifies the confidence threshold (previously called "priority") for reporting issues. If set to "low", confidence is not used to filter bugs. If set to "medium" (the default), low confidence issues are supressed. If set to "high", only high confidence bugs are reported.
+**Confidence level** (`sonar.findbugs.confidenceLevel`): Specifies the confidence threshold (previously called "priority") for reporting issues. If set to "low", confidence is not used to filter bugs. If set to "medium" (the default), low confidence issues are supressed. If set to "high", only high confidence bugs are reported.
 
-**Effort** (sonar.findbugs.effort): Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases memory consumption.
+**Effort** (`sonar.findbugs.effort`): Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases memory consumption.
 
-**Excludes** (sonar.findbugs.excludesFilters): Paths to findbugs filter-files with exclusions.
+**Excludes** (`sonar.findbugs.excludesFilters`): Paths to findbugs filter-files with exclusions.
 
-**Timeout** (sonar.findbugs.timeout): Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. The default is 600,000 milliseconds, which is ten minutes.
+**Timeout** (`sonar.findbugs.timeout`): Specifies the amount of time, in milliseconds, that FindBugs may run before it is assumed to be hung and is terminated. The default is 600,000 milliseconds, which is ten minutes.
 
+**Only analyze** (`sonar.findbugs.onlyAnalyze`): Restrict analysis to a comma-separated list of classes and packages. For large projects, this may greatly reduce the amount of time needed to run the analysis. (However, some detectors may produce inaccurate results if they aren’t run on the entire application.) Classes should be specified using their full classnames (including package), and packages should be specified in the same way they would in a Java import statement to import all classes in the package (i.e., add .* to the full name of the package). Replace .* with .- to also analyze all subpackages.
 
 ### Compiled code
 
