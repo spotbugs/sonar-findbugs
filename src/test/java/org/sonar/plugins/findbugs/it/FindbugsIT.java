@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.findbugs.FindbugsConstants;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
 
@@ -169,5 +170,25 @@ class FindbugsIT {
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     List<Issue> issues = issueClient.search(IssueQuery.create().projects(PROJECT_KEY)).getIssuesList();
     assertThat(issues).hasSize(2);
+  }
+
+  @Test
+  void only_analyze() throws Exception {
+    File projectDir = FindbugsTestSuite.projectPom("findbugs").getParentFile();
+    
+    MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
+        .setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "Findbugs1")
+        .setGoals("clean package sonar:sonar");
+    orchestrator.executeBuild(build);
+
+    // Check that class was really excluded from Findbugs analysis:
+    String findbugsXml = Files.toString(new File(projectDir, ".scannerwork/findbugs-result.xml"), StandardCharsets.UTF_8);
+    
+    assertThat(findbugsXml).doesNotContain("Findbugs2.class");
+
+    // Check that other files were analysed by Findbugs:
+    IssuesService issueClient = FindbugsTestSuite.issueClient();
+    List<Issue> issues = issueClient.search(IssueQuery.create().components(FindbugsTestSuite.keyFor(PROJECT_KEY, "", "Findbugs1.java"))).getIssuesList();
+    assertThat(issues).hasSize(1);
   }
 }
