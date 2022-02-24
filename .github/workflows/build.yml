@@ -2,9 +2,13 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '.github/actions/**'
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - '.github/actions/**'
   release:
     types:
       - published
