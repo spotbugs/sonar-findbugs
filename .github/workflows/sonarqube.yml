@@ -3,12 +3,12 @@ on:
     branches:
       - master
     paths-ignore:
-      - 'actions/**'
+      - '.github/actions/**'
   pull_request_target:
     branches:
       - master
     paths-ignore:
-      - 'actions/**'
+      - '.github/actions/**'
   release:
     types:
       - created
