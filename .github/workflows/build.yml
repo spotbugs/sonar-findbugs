@@ -2,9 +2,13 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - 'actions/**'
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - 'actions/**'
   release:
     types:
       - published
