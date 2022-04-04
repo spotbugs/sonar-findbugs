@@ -26,8 +26,8 @@ jobs:
           - SONAR_VERSION: 8.9
             SONAR_JAVA_VERSION: 6.15.1.26025
           # Sonarqube version 9 removed some deprecated APIs
-          - SONAR_VERSION: 9.3.0.51899
-            SONAR_JAVA_VERSION: 7.8.1.28740
+          - SONAR_VERSION: 9.4.0.54424
+            SONAR_JAVA_VERSION: 7.11.0.29148
     steps:
       - uses: actions/checkout@v2
         with:
