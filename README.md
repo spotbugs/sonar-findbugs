@@ -13,7 +13,10 @@ This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/P
 In the quality profile, activate some rules from Spotbugs, fb-contrib or Find Security Bugs rule repositories and run an analysis on your project.
 
 ### Configuration
-This plugin can be configured with sonar web interface (see General/Java section) or with project properties.
+This plugin can be configured with sonar web interface (see the General Settings/Languages/Java section) or with project properties.
+
+**Allow uncompiled code** (`sonar.findbugs.allowuncompiledcode`): Remove the compiled code requirement for all projects. It can lead to a false sense of security if the build process skips certain projects.
+This option might be used to get around the `One (sub)project contains Java source files that are not compiled` error.
 
 **Confidence level** (`sonar.findbugs.confidenceLevel`): Specifies the confidence threshold (previously called "priority") for reporting issues. If set to "low", confidence is not used to filter bugs. If set to "medium" (the default), low confidence issues are supressed. If set to "high", only high confidence bugs are reported.
 
@@ -27,7 +30,7 @@ This plugin can be configured with sonar web interface (see General/Java section
 
 ### Compiled code
 
-FindBugs requires the compiled classes to run.
+FindBugs requires the compiled classes to run, if the project has JSP files they will need to be precompiled.
 
 Make sure that you compile your source code with debug information on (to get the line numbers in the Java bytecode). Debug is usually on by default unless you're compiling with Ant, in which case, you will need to turn it on explicitly. If the debug information is not available, the issues raised by FindBugs will be displayed at the beginning of the file because the correct line numbers were not available.
 
