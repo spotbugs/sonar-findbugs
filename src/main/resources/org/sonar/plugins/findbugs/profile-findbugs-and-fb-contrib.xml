@@ -1362,6 +1362,9 @@
     <Bug pattern='MC_OVERRIDABLE_METHOD_CALL_IN_CLONE' />
   </Match>
   <Match>
+    <Bug pattern='SSD_DO_NOT_USE_INSTANCE_LOCK_ON_SHARED_STATIC_DATA' />
+  </Match>
+  <Match>
     <Bug pattern='ISB_INEFFICIENT_STRING_BUFFERING' />
   </Match>
   <Match>

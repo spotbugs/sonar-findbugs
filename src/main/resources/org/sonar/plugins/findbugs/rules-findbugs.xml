@@ -5602,4 +5602,18 @@ after the call to initLogging, the logger configuration is lost
       &lt;/p&gt;</description>
     <tag>malicious-code</tag>
   </rule>
+  <rule key='SSD_DO_NOT_USE_INSTANCE_LOCK_ON_SHARED_STATIC_DATA' priority='MAJOR'>
+    <name>Correctness - Instance level lock was used on a shared static data</name>
+    <configKey>SSD_DO_NOT_USE_INSTANCE_LOCK_ON_SHARED_STATIC_DATA</configKey>
+    <description>&lt;p&gt;
+        Instance level synchronization, that modifies a static shared object could cause security leaks.
+        If the lock or the method is not static, that modifies the static field, and is synchronized,
+        that could leave the shared static data unprotected against concurrent access.
+        This could occur in two ways, if a synchronization method uses a non-static lock object,
+        or a synchronized method is declared as non-static. Both ways are ineffective.
+        Best solution is to use a private static final lock object to secure the shared static data.
+      &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
 </rules>
