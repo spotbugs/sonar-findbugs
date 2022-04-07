@@ -369,6 +369,15 @@
     <Bug pattern='IMPROPER_UNICODE' />
   </Match>
   <Match>
+    <Bug pattern='MODIFICATION_AFTER_VALIDATION' />
+  </Match>
+  <Match>
+    <Bug pattern='NORMALIZATION_AFTER_VALIDATION' />
+  </Match>
+  <Match>
+    <Bug pattern='DANGEROUS_PERMISSION_COMBINATION' />
+  </Match>
+  <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
   </Match>
   <Match>
