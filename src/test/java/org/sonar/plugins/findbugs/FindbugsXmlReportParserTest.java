@@ -55,7 +55,7 @@ class FindbugsXmlReportParserTest {
 
   @Test
   void testGetViolations() {
-    assertThat(violations.size()).isEqualTo(2);
+    assertThat(violations).hasSize(2);
 
     FindbugsXmlReportParser.XmlBugInstance fbViolation = violations.get(0);
     assertThat(fbViolation.getType()).isEqualTo("AM_CREATES_EMPTY_ZIP_FILE_ENTRY");

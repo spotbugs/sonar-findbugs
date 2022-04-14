@@ -81,10 +81,12 @@ class FindbugsExecutorTest {
 
     assertThat(reportFile).exists();
     String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
-    assertThat(report).as("Report should contain bug instance").contains("<BugInstance");
-    assertThat(report).as("Report should be generated with messages").contains("<Message>");
-    assertThat(report).contains("priority=\"1\"");
-    assertThat(report).doesNotContain("priority=\"3\"");
+    
+    assertThat(report)
+    .as("Report should contain bug instance").contains("<BugInstance")
+    .as("Report should be generated with messages").contains("<Message>")
+    .contains("priority=\"1\"")
+    .doesNotContain("priority=\"3\"");
   }
 
   @Test
@@ -98,10 +100,12 @@ class FindbugsExecutorTest {
 
     assertThat(reportFile).exists();
     String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
-    assertThat(report).as("Report should contain bug instance").contains("<BugInstance");
-    assertThat(report).as("Report should be generated with messages").contains("<Message>");
-    assertThat(report).contains("priority=\"1\"");
-    assertThat(report).contains("priority=\"3\"");
+    
+    assertThat(report)
+    .as("Report should contain bug instance").contains("<BugInstance")
+    .as("Report should be generated with messages").contains("<Message>")
+    .contains("priority=\"1\"")
+    .contains("priority=\"3\"");
   }
 
   public void shouldTerminateAfterTimeout() throws Exception {

@@ -22,6 +22,8 @@ package org.sonar.plugins.findbugs;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
+
+import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
@@ -32,12 +34,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
+import java.util.regex.Pattern;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.PropertyType;
 import org.sonar.api.Startable;
 import org.sonar.api.batch.ScannerSide;
@@ -50,6 +56,8 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -64,7 +72,8 @@ import static java.lang.String.format;
 @ScannerSide
 public class FindbugsConfiguration implements Startable {
 
-  private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
+  private static final Logger LOG = Loggers.get(FindbugsConfiguration.class);
+  private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp[\\$0-9]*\\.class");
 
   private final FileSystem fileSystem;
   private final Configuration config;
@@ -87,29 +96,28 @@ public class FindbugsConfiguration implements Startable {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
 
     for (File file : javaResourceLocator.classpath()) {
-      //Will capture additional classes including precompiled JSP
-      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
-        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
-      }
-
       //Auxiliary dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
 
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
-    boolean hasPrecompiledJsp = false;
-    for (File classToAnalyze : classFilesToAnalyze) {
-      String absolutePath = classToAnalyze.getCanonicalPath();
-      if(hasJspFiles && !hasPrecompiledJsp
-              && (absolutePath.endsWith("_jsp.class") || //Jasper
-                  absolutePath.contains("/jsp_servlet/")) //WebLogic
-              ) {
-        hasPrecompiledJsp = true;
-      }
-      if(!"module-info.class".equals(classToAnalyze.getName())) {
-        findbugsProject.addFile(absolutePath);
-      }
+    
+    if (hasJspFiles) {
+      addPrecompiledJspClasses(classFilesToAnalyze);
     }
+    
+    ClassScreener classScreener = getOnlyAnalyzeFilter();
+    
+    for (File classToAnalyze : classFilesToAnalyze) {   
+      String absolutePath = classToAnalyze.getCanonicalPath(); 	     
+      
+      boolean matchesClassScreener = classScreener!=null && classScreener.matches(absolutePath);
+      boolean noClassScreenerAndMatches = classScreener == null && !"module-info.class".equals(classToAnalyze.getName());
+      
+      if(matchesClassScreener || noClassScreenerAndMatches) {
+        findbugsProject.addFile(absolutePath);
+    	}
+    }    
 
     if (classFilesToAnalyze.isEmpty()) {
       LOG.warn("Findbugs needs sources to be compiled."
@@ -122,20 +130,6 @@ public class FindbugsConfiguration implements Startable {
       }
     }
 
-    if (hasJspFiles && !hasPrecompiledJsp) {
-      LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
-              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
-              fileSystem.baseDir().getPath());
-    }
-
-    for (File classToAnalyze : classFilesToAnalyze) {
-      String absolutePath = classToAnalyze.getCanonicalPath();
-
-      if(!"module-info.class".equals(classToAnalyze.getName())) {
-        findbugsProject.addFile(absolutePath);
-      }
-    }
-
     copyLibs();
     if (annotationsLib != null) {
       // Findbugs dependencies are packaged by Maven. They are not available during execution of unit tests.
@@ -145,6 +139,33 @@ public class FindbugsConfiguration implements Startable {
     findbugsProject.setCurrentWorkingDirectory(fileSystem.workDir());
   }
 
+  /**
+   * Creates a class screener to filter the files for analysis by findbugs.
+   * The filter is based on  sonar.findbugs.onlyAnalyze {@link FindbugsConstants} property
+   * 
+   * @return ClassScreener object if property is present and not empty, null otherwise.
+   */
+  protected @Nullable ClassScreener getOnlyAnalyzeFilter() {
+	  ClassScreener classScreener = new ClassScreener();
+	  Optional<String> onlyAnalyzeProp = config.get(FindbugsConstants.ONLY_ANALYZE_PROPERTY);
+	  if(!onlyAnalyzeProp.isPresent() || StringUtils.isEmpty(onlyAnalyzeProp.get())) {
+		  return null;
+	  }
+	  String onlyAnayzeOptions = onlyAnalyzeProp.get();
+	  StringTokenizer tok = new StringTokenizer(onlyAnayzeOptions, ",");
+	  while (tok.hasMoreTokens()) {
+		  String item = tok.nextToken();
+		  if (item.endsWith(".-")) {
+			  classScreener.addAllowedPrefix(item.substring(0, item.length() - 1));
+		  } else if (item.endsWith(".*")) {
+			  classScreener.addAllowedPackage(item.substring(0, item.length() - 1));
+		  } else {
+			  classScreener.addAllowedClass(item);
+		  }
+	  }
+	  return classScreener;
+  }
+  
   private void exportProfile(ActiveRules activeRules, Writer writer) {
     try {
       FindBugsFilter filter = buildFindbugsFilter(
@@ -208,7 +229,66 @@ public class FindbugsConfiguration implements Startable {
   }
 
   /**
-   * Scan the given folder for classes. It will catch classes from Java, JSP and more.
+   * Updates the class files list by adding precompiled JSP classes
+   * 
+   * @param classFilesToAnalyze The current list of class files to analyze, by default SonarQube does not include precompiled JSP classes
+   * 
+   * @throws IOException In case an exception was thrown when building a file canonical path
+   */
+  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze) throws IOException {
+    for (File file : javaResourceLocator.classpath()) {
+      //Will capture additional classes including precompiled JSP
+      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
+        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
+      }
+    }
+    
+    boolean hasPrecompiledJsp = hasPrecompiledJsp(classFilesToAnalyze);
+
+    if (!hasPrecompiledJsp) {
+      LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
+              "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
+              fileSystem.baseDir().getPath());
+    }
+  }
+
+  public boolean hasPrecompiledJsp(List<File> classFilesToAnalyze) {
+    for (File classToAnalyze : classFilesToAnalyze) {
+      if(isPrecompiledJspClassFile(classToAnalyze)) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
+
+  public static boolean isPrecompiledJspClassFile(File file) {
+    String fileName = file.getName();
+    
+    //Jasper
+    // Replacement for previous implementation absolutePath.endsWith("_jsp.class") to account for inner classes
+    if (JSP_FILE_NAME_PATTERN.matcher(fileName).matches()) {
+      return true; 
+    }
+    
+    if (fileName.endsWith(".class")) {
+      //WebLogic
+      File parent = file.getParentFile();
+      while (parent != null) {
+        // Replacement for previous implementation absolutePath.contains("/jsp_servlet/") to account for windows paths
+        if (parent.getName().equals("jsp_servlet")) {
+          return true;
+        }
+        
+        parent = parent.getParentFile();
+      }
+    }
+    
+    return false;
+  }
+
+  /**
+   * Scan the given folder for classes. It will catch classes compiled JSP classes.
    *
    * @param folder Folder to scan
    * @return {@code List<File>} of class files
@@ -223,7 +303,7 @@ public class FindbugsConfiguration implements Startable {
       for (File f : dirPoll.listFiles()) {
         if (f.isDirectory()) {
           dirs.add(f);
-        } else if (f.isFile()&& f.getName().endsWith(".class")) {
+        } else if (isPrecompiledJspClassFile(f)) {
           allFiles.add(f);
         }
       }
@@ -386,7 +466,14 @@ public class FindbugsConfiguration implements Startable {
         .description("Relative path to SpotBugs report files intended to be reused. (<code>/target/findbugsXml.xml</code> and <code>/target/spotbugsXml.xml</code> are included by default)")
         .onQualifiers(Qualifiers.PROJECT)
         .multiValues(true)
-        .build()
+        .build(),
+        PropertyDefinition.builder(FindbugsConstants.ONLY_ANALYZE_PROPERTY)
+        .category(Java.KEY)
+        .subCategory(subCategory)
+        .name("Only Analyze")
+        .description("To analyze only the given files (in FQCN, comma separted) / package patterns")
+        .type(PropertyType.STRING)
+        .build()      
       );
   }
 

@@ -2,9 +2,13 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '.github/actions/**'
   pull_request:
     branches:
       - master
+    paths-ignore:
+      - '.github/actions/**'
   release:
     types:
       - published
@@ -22,8 +26,8 @@ jobs:
           - SONAR_VERSION: 8.9
             SONAR_JAVA_VERSION: 6.15.1.26025
           # Sonarqube version 9 removed some deprecated APIs
-          - SONAR_VERSION: 9.0.0.45539
-            SONAR_JAVA_VERSION: 7.1.0.26670
+          - SONAR_VERSION: 9.4.0.54424
+            SONAR_JAVA_VERSION: 7.11.0.29148
     steps:
       - uses: actions/checkout@v2
         with:
@@ -86,7 +90,7 @@ jobs:
         uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.5.3, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          description: Use SpotBugs 4.5.2, sb-contrib 7.4.7, and findsecbugs 1.11.0
           minimal-supported-sq-version: 8.9
           latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}

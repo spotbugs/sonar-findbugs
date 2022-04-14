@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>4.0.6-SNAPSHOT</version>
+  <version>4.1.0-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
@@ -52,7 +52,7 @@
       Also need to update profiles, see ./generate_profiles/README.md for detail.
       Update the version table and the rules count badge in README.md
     -->
-    <spotbugs.version>4.5.3</spotbugs.version>
+    <spotbugs.version>4.5.2</spotbugs.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
     <findsecbugs.version>1.11.0</findsecbugs.version>
 
@@ -80,11 +80,6 @@
         <exclusion>
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
-        </exclusion>
-        <exclusion>
-          <!-- For some reasons appeared as a transitive dependency of FindBugs 2.0.3 -->
-          <groupId>net.jcip</groupId>
-          <artifactId>jcip-annotations</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -116,13 +111,6 @@
     </dependency>
 
     <dependency>
-      <!-- For some reasons was not deployed with FindBugs 2.0.3 and not transitive dependency anymore -->
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>annotations</artifactId>
-      <version>3.0.1u2</version>
-    </dependency>
-
-    <dependency>
       <groupId>com.mebigfatguy.sb-contrib</groupId>
       <artifactId>sb-contrib</artifactId>
       <version>${sbcontrib.version}</version>
@@ -139,7 +127,7 @@
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
       <artifactId>xstream</artifactId>
-      <version>1.4.18</version>
+      <version>1.4.19</version>
       <exclusions>
         <!-- we use stax -->
         <exclusion>
@@ -195,12 +183,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.sonarsource.sonarqube</groupId>
-      <artifactId>sonar-testing-harness</artifactId>
-      <version>${sonar.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>xmlunit</groupId>
       <artifactId>xmlunit</artifactId>
       <version>1.6</version>
@@ -210,7 +192,7 @@
     <dependency>
       <groupId>org.sonarsource.orchestrator</groupId>
       <artifactId>sonar-orchestrator</artifactId>
-      <version>3.35.1.2719</version>
+      <version>3.37.0.87</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -218,18 +200,6 @@
       <artifactId>sonar-ws</artifactId>
       <version>9.1.0.47736</version>
       <scope>test</scope>
-    </dependency>
-
-    <!-- Utilities use by the lexer -->
-    <dependency>
-      <groupId>org.sonarsource.sslr</groupId>
-      <artifactId>sslr-core</artifactId>
-      <version>1.23</version>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.sonar</groupId>
-      <artifactId>sonar-channel</artifactId>
-      <version>4.2</version>
     </dependency>
   </dependencies>
 
