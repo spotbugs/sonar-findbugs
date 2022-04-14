@@ -25,6 +25,7 @@ import org.sonar.api.Plugin;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
