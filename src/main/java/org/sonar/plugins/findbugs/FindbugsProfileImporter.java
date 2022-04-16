@@ -86,7 +86,7 @@ public class FindbugsProfileImporter {
   }
 
   private Rule findRule(String ruleKey) {
-    for (String repositoryKey : FindbugsPlugin.RULE_REPOSITORY_KEYS) {
+    for (String repositoryKey : FindbugsSensor.REPOS) {
       Rule rule = ruleFinder.findByKey(repositoryKey, ruleKey);
       if (rule != null) {
         return rule;

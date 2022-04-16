@@ -50,14 +50,6 @@ public class FindbugsPlugin implements Plugin {
             "java", "jsp", "scala", "clj"
     };
 
-    protected static final String[] RULE_REPOSITORY_KEYS = {
-        FindbugsRulesDefinition.REPOSITORY_KEY,
-        FbContribRulesDefinition.REPOSITORY_KEY,
-        FindSecurityBugsRulesDefinition.REPOSITORY_KEY,
-        FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY,
-        FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY,
-    };
-
     public static FilePredicate[] getSupportedLanguagesFilePredicate(FilePredicates pred) {
         return Arrays.stream(SUPPORTED_JVM_LANGUAGES)
                 .map(s -> pred.hasLanguage(s))
