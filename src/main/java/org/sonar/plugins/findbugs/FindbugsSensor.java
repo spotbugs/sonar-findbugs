@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.resource.ClassMetadataLoadingException;
 import org.sonar.plugins.findbugs.resource.SmapParser;
@@ -105,16 +107,19 @@ public class FindbugsSensor implements Sensor {
   private boolean hasActiveFindSecBugsRules() {
     boolean hasActiveFindSecBugsRules = hasActiveRules(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
     boolean hasActiveFindSecBugsJspRules = hasActiveRules(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
+    boolean hasActiveFindSecBugsScalaRules = hasActiveRules(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY);
     
-    return hasActiveFindSecBugsRules || (hasActiveFindSecBugsJspRules && fs.languages().contains(Jsp.KEY));
+    SortedSet<String> languages = fs.languages();
+    boolean hasActiveFindSecBugsJspRulesAndJspFiles = hasActiveFindSecBugsJspRules && languages.contains(Jsp.KEY);
+    boolean hasActiveFindSecBugsScalaRulesAndScalaFiles = hasActiveFindSecBugsScalaRules && languages.contains(Scala.KEY);
+    
+    return hasActiveFindSecBugsRules || hasActiveFindSecBugsJspRulesAndJspFiles || hasActiveFindSecBugsScalaRulesAndScalaFiles;
   }
-
-  private boolean hasActiveFindSecScalaBugsRules() { return hasActiveRules("findsecbugs-scala"); }
 
   @Override
   public void execute(SensorContext context) {
 
-    if (!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules() && !hasActiveFindSecScalaBugsRules()) {
+    if (!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules()) {
       return;
     }
 
