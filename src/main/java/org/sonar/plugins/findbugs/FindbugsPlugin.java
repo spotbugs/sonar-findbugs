@@ -69,8 +69,6 @@ public class FindbugsPlugin implements Plugin {
   public void define(Context context) {
     context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
     context.addExtensions(Arrays.asList(
-            Jsp.class,
-
             FindbugsSensor.class,
             FindbugsProfileExporter.class,
             FindbugsProfileImporter.class,
