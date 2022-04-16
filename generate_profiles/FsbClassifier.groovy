@@ -114,6 +114,8 @@ class FsbClassifier {
           "ENTITY_LEAK",
           "ENTITY_MASS_ASSIGNMENT",
           "OVERLY_PERMISSIVE_FILE_PERMISSION",
+          "MODIFICATION_AFTER_VALIDATION",
+          "NORMALIZATION_AFTER_VALIDATION",
   ]
 
   static criticalBugs = [ //RCE or powerful function
@@ -164,6 +166,7 @@ class FsbClassifier {
           "SQL_INJECTION_VERTX",
           "IMPROPER_UNICODE",
           "SAML_IGNORE_COMMENTS",
+          "DANGEROUS_PERMISSION_COMBINATION",
   ]
 
   static majorJspBugs = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER",

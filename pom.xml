@@ -52,9 +52,9 @@
       Also need to update profiles, see ./generate_profiles/README.md for detail.
       Update the version table and the rules count badge in README.md
     -->
-    <spotbugs.version>4.5.2</spotbugs.version>
+    <spotbugs.version>4.6.0</spotbugs.version>
     <sbcontrib.version>7.4.7</sbcontrib.version>
-    <findsecbugs.version>1.11.0</findsecbugs.version>
+    <findsecbugs.version>1.12.0</findsecbugs.version>
 
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.0.0-M5</surefire.version>

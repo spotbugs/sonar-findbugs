@@ -1340,13 +1340,13 @@ transformer.transform(input, result);&lt;/pre&gt;
 The following snippets show two available solutions. You can set one feature or both.
 &lt;/p&gt;
 
-&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
 This setting will protect you against remote file access but not denial of service.
 &lt;pre&gt;
 TransformerFactory factory = TransformerFactory.newInstance();
-factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "all");
-factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "all");
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 Transformer transformer = factory.newTransformer();
 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -1354,7 +1354,9 @@ transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 transformer.transform(input, result);&lt;/pre&gt;
 &lt;/p&gt;
 
-&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;An empty string denies all access to external references for both attributes.&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
 This setting will protect you against remote file access but not denial of service.
 &lt;pre&gt;
@@ -1415,13 +1417,13 @@ transformer.transform(input, result);&lt;/pre&gt;
 &lt;p&gt;
 The following snippets show two available solutions. You can set one feature or both.
 &lt;/p&gt;
-&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
 This setting will protect you against remote file access but not denial of service.
 &lt;pre&gt;
 TransformerFactory factory = TransformerFactory.newInstance();
-factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "all");
-factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "all");
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+factory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, "");
 
 Transformer transformer = factory.newTransformer();
 transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -1429,7 +1431,9 @@ transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 transformer.transform(input, result);&lt;/pre&gt;
 &lt;/p&gt;
 
-&lt;p&gt;&lt;b&gt;Solution disabling DTD:&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;An empty string denies all access to external references for both attributes.&lt;/p&gt;
+
+&lt;p&gt;&lt;b&gt;Solution using "Secure processing" mode:&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;
 This setting will protect you against remote file access but not denial of service.
 &lt;pre&gt;
@@ -4904,6 +4908,121 @@ if(Normalizer.normalize(input, Normalizer.Form.NFC).equals("BACKUP")) {
 &lt;a href="http://unicode.org/reports/tr36/"&gt;Unicode: Unicode Security Considerations&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='MODIFICATION_AFTER_VALIDATION' priority='MAJOR'>
+    <name>Security - String is modified after validation and not before it</name>
+    <configKey>MODIFICATION_AFTER_VALIDATION</configKey>
+    <description>&lt;p&gt;
+A string must not be modified after validation because it may allow an attacker to bypass validation using a tricky
+string which becomes malicious after the modification. For example, a program may filter out the &amp;langle;script&amp;rangle; tags from
+HTML input to avoid cross-site scripting (XSS) and other vulnerabilities. If non-character code points  are deleted
+from the input following validation, an attacker may pass the string "&amp;langle;scr"+"\uFDEF"+"ipt&amp;rangle;" so that the validation
+check fails to detect the &amp;langle;script&amp;rangle; tag, but the subsequent removal of the non-character code pont creates a &amp;langle;script&amp;rangle;
+tag in the input:
+&lt;pre&gt;
+Pattern pattern = Pattern.compile("&amp;lt;script&amp;gt;");
+Matcher matcher = pattern.matcher(s);
+if (matcher.find()) {
+  throw new IllegalArgumentException("Invalid input");
+}
+
+s = s.replaceAll("[\\p{Cn}]", "");
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+The proper way is to perform the modification before the validation so the passed string is first changed to &amp;langle;script&amp;rangle;
+which fails to be validated:
+&lt;pre&gt;
+s = s.replaceAll("[\\p{Cn}]", "\uFFFD");
+Pattern pattern = Pattern.compile("&amp;lt;script&amp;gt;");
+Matcher matcher = pattern.matcher(s);
+if (matcher.find()) {
+  throw new IllegalArgumentException("Invalid input");
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/IDS11-J.+Perform+any+string+modifications+before+validation"&gt;CERT: IDS11-J. Perform any string modifications before validation&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='NORMALIZATION_AFTER_VALIDATION' priority='MAJOR'>
+    <name>Security - String is normalzied after validation and not before it</name>
+    <configKey>NORMALIZATION_AFTER_VALIDATION</configKey>
+    <description>&lt;p&gt;
+A string must not be normalized after validation because it may allow an attacker to bypass validation using a tricky
+string which becomes malicious after the normalization. For example, a program may filter out the &amp;langle;script&amp;rangle; tags from
+HTML input to avoid cross-site scripting (XSS) and other vulnerabilities. However, in unicode, the same string can have
+many different representations. For example, \uFE64 is normalized to &amp;langle; and \uFE65 is normalized to &amp;rangle;. Thus the
+if an attacker passes the string "\uFE64" + "script" + "\uFE65" the validation check fails to detect the &amp;langle;script&amp;rangle; tag,
+but thereafter the string is normalized to the &amp;langle;script&amp;rangle; tag in the input:
+&lt;pre&gt;
+Pattern pattern = Pattern.compile("[&lt;&gt;]"); // Check for angle brackets
+Matcher matcher = pattern.matcher(s);
+if (matcher.find()) {
+  throw new IllegalStateException();
+}
+s = Normalizer.normalize(s, Form.NFKC);
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+The proper way is to do the normalization before the validation so the passed string is first changed to &amp;langle;script&amp;rangle;
+which fails to be validated:
+&lt;pre&gt;
+s = Normalizer.normalize(s, Form.NFKC);
+Pattern pattern = Pattern.compile("[&lt;&gt;]");
+Matcher matcher = pattern.matcher(s);
+if (matcher.find()) {
+  throw new IllegalStateException();
+}
+&lt;/pre&gt;
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
+&lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/IDS01-J.+Normalize+strings+before+validating+them"&gt;CERT: IDS01-J. Normalize strings before validating them&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='DANGEROUS_PERMISSION_COMBINATION' priority='CRITICAL'>
+    <name>Security - Dangerous combination of permissions granted</name>
+    <configKey>DANGEROUS_PERMISSION_COMBINATION</configKey>
+    <description>&lt;p&gt;
+Certain combinations of permissions can produce significant capability increases and should not be granted. Granting
+ReflectPermission on the target suppressAccessChecks is dangerous in that information (possibly confidential) and
+methods normally unavailable would be accessible to malicious code. Similarly, the permission
+&lt;code&gt;java.lang.RuntimePermission&lt;/code&gt; applied to target createClassLoader grants code the permission to create a
+&lt;code&gt;ClassLoader&lt;/code&gt; object.
+This is extremely dangerous, because malicious applications that can instantiate their own class loaders could
+then load their own rogue classes into the system. These newly loaded classes could be placed into any protection
+domain by the class loader, thereby automatically granting the classes the permissions for that domain.
+&lt;/p&gt;
+
+
+&lt;p&gt;
+&lt;b&gt;Dangerous permission combinations:&lt;/b&gt;&lt;br/&gt;
+
+&lt;pre&gt;
+PermissionCollection pc = super.getPermissions(cs);
+pc.add(new ReflectPermission("suppressAccessChecks"));
+&lt;/pre&gt;
+&lt;br/&gt;
+
+&lt;pre&gt;
+PermissionCollection pc = super.getPermissions(cs);
+pc.add(new RuntimePermission("createClassLoader"));
+&lt;/pre&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;References&lt;/b&gt;&lt;br&gt;
+&lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ENV03-J.+Do+not+grant+dangerous+combinations+of+permissions"&gt;CERT: ENV03-J. Do not grant dangerous combinations of permissions&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
     <tag>security</tag>
   </rule>
 </rules>
