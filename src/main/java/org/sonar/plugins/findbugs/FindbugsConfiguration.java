@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.regex.Pattern;
 import java.util.StringTokenizer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -93,17 +94,11 @@ public class FindbugsConfiguration implements Startable {
   }
 
   public void initializeFindbugsProject(Project findbugsProject) throws IOException {
-    List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+    List<File> classFilesToAnalyze = buildClassFilesToAnalyze();
 
     for (File file : javaResourceLocator.classpath()) {
       //Auxiliary dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
-    }
-
-    boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
-    
-    if (hasJspFiles) {
-      addPrecompiledJspClasses(classFilesToAnalyze);
     }
     
     ClassScreener classScreener = getOnlyAnalyzeFilter();
@@ -116,7 +111,7 @@ public class FindbugsConfiguration implements Startable {
       
       if(matchesClassScreener || noClassScreenerAndMatches) {
         findbugsProject.addFile(absolutePath);
-    	}
+      }
     }    
 
     if (classFilesToAnalyze.isEmpty()) {
@@ -213,9 +208,7 @@ public class FindbugsConfiguration implements Startable {
                     //package-info.java will not generate any class files.
                     //See: https://github.com/SonarQubeCommunity/sonar-findbugs/issues/36
                     pred.not(pred.matchesPathPattern("**/package-info.java")),
-                    pred.not(pred.matchesPathPattern("**/module-info.java")),
-                    pred.not(pred.matchesPathPattern("**/*.jsp")),
-                    pred.not(pred.matchesPathPattern("**/*.scala"))
+                    pred.not(pred.matchesPathPattern("**/module-info.java"))
             )
     );
   }
@@ -227,6 +220,25 @@ public class FindbugsConfiguration implements Startable {
     FileUtils.write(file, conf.toString(), StandardCharsets.UTF_8);
     return file;
   }
+  
+  private List<File> buildClassFilesToAnalyze() throws IOException {
+    List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+    
+    boolean hasScalaFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("scala"));
+    boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));    
+
+    // javaResourceLocator.classFilesToAnalyze() only contains .class files from Java sources
+    if (hasScalaFiles) {
+      // Add all the .class files from the classpath
+      // For Gradle multi-module projects this will unfortunately include compiled .class files from dependency modules
+      addClassFilesFromClasspath(classFilesToAnalyze);
+    } else if (hasJspFiles) {
+      // Add the precompiled JSP .class files
+      addPrecompiledJspClasses(classFilesToAnalyze);
+    }
+
+    return classFilesToAnalyze;
+  }
 
   /**
    * Updates the class files list by adding precompiled JSP classes
@@ -236,12 +248,7 @@ public class FindbugsConfiguration implements Startable {
    * @throws IOException In case an exception was thrown when building a file canonical path
    */
   public void addPrecompiledJspClasses(List<File> classFilesToAnalyze) throws IOException {
-    for (File file : javaResourceLocator.classpath()) {
-      //Will capture additional classes including precompiled JSP
-      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
-        classFilesToAnalyze.addAll(scanForAdditionalClasses(file));
-      }
-    }
+    addClassFilesFromClasspath(classFilesToAnalyze, FindbugsConfiguration::isPrecompiledJspClassFile);
     
     boolean hasPrecompiledJsp = hasPrecompiledJsp(classFilesToAnalyze);
 
@@ -249,6 +256,24 @@ public class FindbugsConfiguration implements Startable {
       LOG.warn("JSP files were found in the current (sub)project ({}) but FindBugs requires their precompiled form. " +
               "For more information on how to configure JSP precompilation : https://github.com/find-sec-bugs/find-sec-bugs/wiki/JSP-precompilation",
               fileSystem.baseDir().getPath());
+    }
+  }
+  
+  /**
+   * Updates the class files list by adding all .class files from the classpath
+   * 
+   * @param classFilesToAnalyze The current list of class files to analyze
+   */
+  private void addClassFilesFromClasspath(List<File> classFilesToAnalyze) {
+    addClassFilesFromClasspath(classFilesToAnalyze, f -> f.getName().endsWith(".class"));
+  }
+
+  private void addClassFilesFromClasspath(List<File> classFilesToAnalyze, Predicate<File> filePredicate) {
+    for (File file : javaResourceLocator.classpath()) {
+      //Will capture additional classes including precompiled JSP
+      if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
+        classFilesToAnalyze.addAll(scanForAdditionalClasses(file, filePredicate));
+      }
     }
   }
 
@@ -291,9 +316,10 @@ public class FindbugsConfiguration implements Startable {
    * Scan the given folder for classes. It will catch classes compiled JSP classes.
    *
    * @param folder Folder to scan
+   * @param filePredicate The {@link Predicate} applied to filter files (folders are not tested against the predicate)
    * @return {@code List<File>} of class files
    */
-  public static List<File> scanForAdditionalClasses(File folder) {
+  public static List<File> scanForAdditionalClasses(File folder, Predicate<File> filePredicate) {
     List<File> allFiles = new ArrayList<>();
     Queue<File> dirs = new LinkedList<>();
     dirs.add(folder);
@@ -303,7 +329,7 @@ public class FindbugsConfiguration implements Startable {
       for (File f : dirPoll.listFiles()) {
         if (f.isDirectory()) {
           dirs.add(f);
-        } else if (isPrecompiledJspClassFile(f)) {
+        } else if (filePredicate.test(f)) {
           allFiles.add(f);
         }
       }
