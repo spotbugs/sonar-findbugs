@@ -75,25 +75,25 @@ public class FindbugsProfileImporter {
 
   private void activateRulesByPattern(NewBuiltInQualityProfile profile, FindBugsFilter filter) {
     for (Map.Entry<String, String> patternLevel : filter.getPatternLevels(new FindbugsLevelUtils()).entrySet()) {
-      Rule rule = ruleFinder.findByKey(FindbugsRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-      if (rule == null) {
-        rule = ruleFinder.findByKey(FbContribRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-        if (rule == null) {
-          rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-          if (rule == null) {
-            rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-          }
-          if (rule == null) {
-            rule = ruleFinder.findByKey(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-          }
-        }
-      }
+      Rule rule = findRule(patternLevel.getKey());
+      
       if (rule != null) {
         activateRule(profile, rule, patternLevel.getValue());
       } else {
         LOGGER.warn("Unable to activate unknown rule : '" + patternLevel.getKey() + "'");
       }
     }
+  }
+
+  private Rule findRule(String ruleKey) {
+    for (String repositoryKey : FindbugsPlugin.RULE_REPOSITORY_KEYS) {
+      Rule rule = ruleFinder.findByKey(repositoryKey, ruleKey);
+      if (rule != null) {
+        return rule;
+      }
+    }
+    
+    return null;
   }
 
   private void activateRulesByCode(NewBuiltInQualityProfile profile, FindBugsFilter filter) {
