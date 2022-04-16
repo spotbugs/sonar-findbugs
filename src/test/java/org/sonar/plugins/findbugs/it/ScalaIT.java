@@ -1,7 +1,5 @@
 /*
- * Findbugs :: IT :: Plugin
- * Copyright (C) 2014 SonarSource
- * sonarqube@googlegroups.com
+ * SonarQube SpotBugs Plugin
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -49,6 +47,8 @@ class ScalaIT {
 
   @Test
   void test() throws Exception {
+    System.out.println(orchestrator.getServer().getUrl());
+    
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("scala"))
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -57,6 +57,7 @@ class ScalaIT {
       //.setProperty("sonar.java.binaries", "target/classes")
       .setGoals("clean package sonar:sonar");
     orchestrator.executeBuild(build);
+    
 
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     List<Issue> issues = issueClient.search(IssueQuery.create().projects(PROJECT_KEY)).getIssuesList();
