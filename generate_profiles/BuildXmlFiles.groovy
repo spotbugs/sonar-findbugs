@@ -233,9 +233,9 @@ def securityJspRules = majorJspBugs + criticalJspBugs
 def securityScalaRules = criticalScalaBugs
 
 //FindBugs
-writeRules("findbugs", [FB], [], [securityJspRules, securityScalaRules])
+writeRules("findbugs", [FB], [], securityJspRules + securityScalaRules)
 //Find Security Bugs
-writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, [securityJspRules, securityScalaRules])
+writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, securityJspRules + securityScalaRules)
 writeRules("jsp", [FSB,FB], securityJspRules)
 writeRules("scala", [FSB,FB], securityScalaRules)
 //FB-contrib
