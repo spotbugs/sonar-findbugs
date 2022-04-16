@@ -28,7 +28,7 @@ import java.io.Reader;
 
 public class FindbugsSecurityScalaProfile implements BuiltInQualityProfilesDefinition {
 
-    private static final String FINDBUGS_SECURITY_SCALA_PROFILE_NAME = "FindBugs Security Scala";
+    public static final String FINDBUGS_SECURITY_SCALA_PROFILE_NAME = "FindBugs Security Scala";
     private final FindbugsProfileImporter importer;
 
     public FindbugsSecurityScalaProfile(FindbugsProfileImporter importer) {

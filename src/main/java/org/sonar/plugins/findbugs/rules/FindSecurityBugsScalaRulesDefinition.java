@@ -7,6 +7,7 @@ import org.sonar.plugins.findbugs.language.scala.Scala;
 public class FindSecurityBugsScalaRulesDefinition implements RulesDefinition {
     public static final String REPOSITORY_KEY = "findsecbugs-scala";
     public static final String REPOSITORY_SCALA_NAME = "Find Security Bugs (Scala)";
+    public static final int RULE_COUNT = 9;
 
     @Override
     public void define(Context context) {
