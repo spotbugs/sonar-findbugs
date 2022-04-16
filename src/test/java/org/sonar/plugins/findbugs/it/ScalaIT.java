@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityScalaProfile;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
 
@@ -38,6 +39,7 @@ class ScalaIT {
   @BeforeEach
   public void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Scala Integration Tests", "IT", "java");
+    FindbugsTestSuite.setupProfile(PROJECT_KEY, FindbugsSecurityScalaProfile.FINDBUGS_SECURITY_SCALA_PROFILE_NAME, "scala");
   }
   
   @AfterEach
@@ -47,8 +49,6 @@ class ScalaIT {
 
   @Test
   void test() throws Exception {
-    System.out.println(orchestrator.getServer().getUrl());
-    
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("scala"))
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -57,11 +57,11 @@ class ScalaIT {
       //.setProperty("sonar.java.binaries", "target/classes")
       .setGoals("clean package sonar:sonar");
     orchestrator.executeBuild(build);
-    
 
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     List<Issue> issues = issueClient.search(IssueQuery.create().projects(PROJECT_KEY)).getIssuesList();
-    assertThat(issues).hasSize(1);
+    assertThat(issues).hasSize(2);
     assertThat(issues.get(0).getMessage()).isEqualTo("Hello$.main(String[]) invokes toString() method on a String");
+    assertThat(issues.get(1).getMessage()).isEqualTo("This Scala random generator (scala.util.Random.nextInt()) is predictable");
   }
 }
