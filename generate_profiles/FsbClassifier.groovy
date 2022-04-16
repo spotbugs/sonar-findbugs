@@ -187,15 +187,6 @@ class FsbClassifier {
                        "PREDICTABLE_RANDOM_SCALA"]
 
   static exclusions = ['CUSTOM_INJECTION']
-//                       'SCALA_SENSITIVE_DATA_EXPOSURE',
-//                       'SCALA_PLAY_SSRF',
-//                       'SCALA_XSS_TWIRL',
-//                       'SCALA_XSS_MVC_API',
-////                       'SCALA_PATH_TRAVERSAL_IN',
-//                       'SCALA_COMMAND_INJECTION',
-//                       "SCALA_SQL_INJECTION_SLICK",
-//                       "SCALA_SQL_INJECTION_ANORM",
-//                       "PREDICTABLE_RANDOM_SCALA"]
 
   static deprecatedRules = []
 
