@@ -42,15 +42,15 @@ import org.sonar.plugins.java.Java;
 
 public class FindbugsPlugin implements Plugin {
 
-    public static final String SUPPORTED_JVM_LANGUAGES[] = {
+    protected static final String[] SUPPORTED_JVM_LANGUAGES = {
             Java.KEY, Jsp.KEY, Scala.KEY, "clojure"
     };
 
-    public static final String SUPPORTED_JVM_LANGUAGES_EXTENSIONS[] = {
+    protected static final String[] SUPPORTED_JVM_LANGUAGES_EXTENSIONS = {
             "java", "jsp", "scala", "clj"
     };
 
-    public static final String RULE_REPOSITORY_KEYS[] = {
+    protected static final String[] RULE_REPOSITORY_KEYS = {
         FindbugsRulesDefinition.REPOSITORY_KEY,
         FbContribRulesDefinition.REPOSITORY_KEY,
         FindSecurityBugsRulesDefinition.REPOSITORY_KEY,
