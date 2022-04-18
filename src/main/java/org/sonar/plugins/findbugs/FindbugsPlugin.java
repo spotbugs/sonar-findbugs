@@ -25,25 +25,28 @@ import org.sonar.api.Plugin;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityAuditProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityJspProfile;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityMinimalProfile;
+import org.sonar.plugins.findbugs.profiles.FindbugsSecurityScalaProfile;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.Java;
 
 public class FindbugsPlugin implements Plugin {
 
-    public static final String SUPPORTED_JVM_LANGUAGES[] = {
-            Java.KEY, Jsp.KEY, "scala", "clojure"
+    protected static final String[] SUPPORTED_JVM_LANGUAGES = {
+            Java.KEY, Jsp.KEY, Scala.KEY, "clojure"
     };
 
-    public static final String SUPPORTED_JVM_LANGUAGES_EXTENSIONS[] = {
+    protected static final String[] SUPPORTED_JVM_LANGUAGES_EXTENSIONS = {
             "java", "jsp", "scala", "clj"
     };
 
@@ -69,11 +72,13 @@ public class FindbugsPlugin implements Plugin {
             FindbugsSecurityAuditProfile.class,
             FindbugsSecurityMinimalProfile.class,
             FindbugsSecurityJspProfile.class,
+            FindbugsSecurityScalaProfile.class,
 
             FindbugsRulesDefinition.class,
             FbContribRulesDefinition.class,
             FindSecurityBugsRulesDefinition.class,
             FindSecurityBugsJspRulesDefinition.class,
+            FindSecurityBugsScalaRulesDefinition.class,
             ByteCodeResourceLocator.class));
   }
 }

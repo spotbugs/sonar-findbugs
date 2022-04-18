@@ -230,12 +230,14 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
 }
 
 def securityJspRules = majorJspBugs + criticalJspBugs
+def securityScalaRules = criticalScalaBugs
 
 //FindBugs
-writeRules("findbugs", [FB], [], securityJspRules)
+writeRules("findbugs", [FB], [], securityJspRules + securityScalaRules)
 //Find Security Bugs
-writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, securityJspRules)
+writeRules("findsecbugs", [FSB], informationnalPatterns + cryptoBugs + majorBugs + criticalBugs, securityJspRules + securityScalaRules)
 writeRules("jsp", [FSB,FB], securityJspRules)
+writeRules("scala", [FSB,FB], securityScalaRules)
 //FB-contrib
 writeRules("fbcontrib", [CONTRIB], [])
 
@@ -288,13 +290,15 @@ def getAllPatternsFromPlugin(Plugin plugin) {
 
 totalCount = 0
 writeProfile("findbugs-only", getAllPatternsFromPlugin(FB), securityJspRules)
-totalCount += writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), securityJspRules)
-totalCount += writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns, securityJspRules)
+writeProfile("findbugs-and-fb-contrib", getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB), securityJspRules)
+writeProfile("findbugs-security-audit", getAllPatternsFromPlugin(FSB) - exclusions + findBugsPatterns, securityJspRules)
 writeProfile("findbugs-security-minimal", getAllPatternsFromPlugin(FSB) - informationnalPatterns - exclusions + findBugsPatterns, securityJspRules)
-totalCount += writeProfile("findbugs-security-jsp", securityJspRules)
+writeProfile("findbugs-security-jsp", securityJspRules)
+writeProfile("findbugs-security-scala", securityScalaRules)
 
+List<String> distinctRules = getAllPatternsFromPlugin(FB) + getAllPatternsFromPlugin(CONTRIB) + getAllPatternsFromPlugin(FSB) - exclusions
 
 //unclassifiedBugs = getAllPatternsFromPlugin(FSB) - (informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns + exclusions + criticalJspBugs + majorJspBugs)
 //unclassifiedBugs.each {b -> println(b)}
 
-println "Total bugs patterns "+totalCount
+println "Total bugs patterns "+ (distinctRules.unique().size)

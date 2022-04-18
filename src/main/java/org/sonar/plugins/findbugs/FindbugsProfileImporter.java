@@ -35,6 +35,7 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 
@@ -74,22 +75,25 @@ public class FindbugsProfileImporter {
 
   private void activateRulesByPattern(NewBuiltInQualityProfile profile, FindBugsFilter filter) {
     for (Map.Entry<String, String> patternLevel : filter.getPatternLevels(new FindbugsLevelUtils()).entrySet()) {
-      Rule rule = ruleFinder.findByKey(FindbugsRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-      if (rule == null) {
-        rule = ruleFinder.findByKey(FbContribRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-        if (rule == null) {
-          rule = ruleFinder.findByKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-          if (rule == null) {
-            rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, patternLevel.getKey());
-          }
-        }
-      }
+      Rule rule = findRule(patternLevel.getKey());
+      
       if (rule != null) {
         activateRule(profile, rule, patternLevel.getValue());
       } else {
         LOGGER.warn("Unable to activate unknown rule : '" + patternLevel.getKey() + "'");
       }
     }
+  }
+
+  private Rule findRule(String ruleKey) {
+    for (String repositoryKey : FindbugsSensor.REPOS) {
+      Rule rule = ruleFinder.findByKey(repositoryKey, ruleKey);
+      if (rule != null) {
+        return rule;
+      }
+    }
+    
+    return null;
   }
 
   private void activateRulesByCode(NewBuiltInQualityProfile profile, FindBugsFilter filter) {
@@ -157,7 +161,8 @@ public class FindbugsProfileImporter {
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindbugsRulesDefinition.REPOSITORY_KEY)),
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FbContribRulesDefinition.REPOSITORY_KEY)),
       ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)),
-      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)));
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)),
+      ruleFinder.findAll(RuleQuery.create().withRepositoryKey(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY)));
   }
 
 }

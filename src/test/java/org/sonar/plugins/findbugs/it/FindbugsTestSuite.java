@@ -63,6 +63,10 @@ public class FindbugsTestSuite {
     
     projectClient().create(createRequest);
     
+    setupProfile(projectKey, qualityProfile, language);
+  }
+
+  public static void setupProfile(String projectKey, String qualityProfile, String language) {
     AddProjectRequest addProjectRequest = new AddProjectRequest();
     addProjectRequest.setLanguage(language);
     addProjectRequest.setProject(projectKey);

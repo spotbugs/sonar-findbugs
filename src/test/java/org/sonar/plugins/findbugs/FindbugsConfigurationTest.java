@@ -227,14 +227,14 @@ class FindbugsConfigurationTest {
 
   @Test
   void scanEmptyFolderForAdditionalClasses() throws IOException {
-    List<File> classes = FindbugsConfiguration.scanForAdditionalClasses(temp);
+    List<File> classes = FindbugsConfiguration.scanForAdditionalClasses(temp, f -> true);
     
     assertThat(classes).isEmpty();
   }
   
   @Test
   void should_warn_of_missing_precompiled_jsp() throws IOException {
-    setupJspProject(false);
+    setupSampleProject(false, true, false);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project);
@@ -248,7 +248,7 @@ class FindbugsConfigurationTest {
   
   @Test
   void should_analyze_precompiled_jsp() throws IOException {
-    setupJspProject(true);
+    setupSampleProject(true, true, false);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project);
@@ -258,11 +258,24 @@ class FindbugsConfigurationTest {
     
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
   }
+  
+  @Test
+  void scala_project() throws IOException {
+    setupSampleProject(false, false, true);
+    
+    try (Project project = new Project()) {
+      conf.initializeFindbugsProject(project);
+      
+      assertThat(project.getFileCount()).isEqualTo(1);
+      assertThat(project.getFile(0)).endsWith("Test.class");
+    }
+    
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+  }
 
-  private void setupJspProject(boolean withPrecompiledJsp) throws IOException {
-    FilePredicate jspPredicate = mock(FilePredicate.class);
-    when(filePredicates.hasLanguage("jsp")).thenReturn(jspPredicate);
-    when(fs.hasFiles(jspPredicate)).thenReturn(Boolean.TRUE);
+  private void setupSampleProject(boolean withPrecompiledJsp, boolean withJspFiles, boolean withScalaFiles) throws IOException {
+    mockHasLanguagePredicate("jsp", withJspFiles);
+    mockHasLanguagePredicate("scala", withScalaFiles);
     
     // classpath
     // |_ some.jar
@@ -303,5 +316,11 @@ class FindbugsConfigurationTest {
     List<File> classpathFiles = Arrays.asList(jarFile, classesFolder, jspServletFolder, moduleInfoFile);
     
     when(javaResourceLocator.classpath()).thenReturn(classpathFiles);
+  }
+
+  private void mockHasLanguagePredicate(String language, boolean predicateReturn) {
+    FilePredicate languagePredicate = mock(FilePredicate.class);
+    when(filePredicates.hasLanguage(language)).thenReturn(languagePredicate);
+    when(fs.hasFiles(languagePredicate)).thenReturn(predicateReturn);
   }
 }

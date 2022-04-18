@@ -38,7 +38,6 @@ class FindbugsPluginTest {
     FindbugsPlugin plugin = new FindbugsPlugin();
     plugin.define(ctx);
 
-    assertEquals(22, ctx.getExtensions().size(), "extension count");
+    assertEquals(24, ctx.getExtensions().size(), "extension count");
   }
-
 }
