@@ -86,7 +86,7 @@ jobs:
           asset_name: sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar
           asset_content_type: application/zip
       - name: Request SonarSource to release the plugin to marketplace
-        if: github.event_name == 'release'
+        if: github.event_name == 'release' && github.event.release.prerelease == false
         uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
