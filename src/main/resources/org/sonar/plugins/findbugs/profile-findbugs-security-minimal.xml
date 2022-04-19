@@ -3,22 +3,13 @@
     <Bug pattern='PREDICTABLE_RANDOM' />
   </Match>
   <Match>
-    <Bug pattern='PREDICTABLE_RANDOM_SCALA' />
-  </Match>
-  <Match>
     <Bug pattern='PATH_TRAVERSAL_IN' />
   </Match>
   <Match>
     <Bug pattern='PATH_TRAVERSAL_OUT' />
   </Match>
   <Match>
-    <Bug pattern='SCALA_PATH_TRAVERSAL_IN' />
-  </Match>
-  <Match>
     <Bug pattern='COMMAND_INJECTION' />
-  </Match>
-  <Match>
-    <Bug pattern='SCALA_COMMAND_INJECTION' />
   </Match>
   <Match>
     <Bug pattern='WEAK_TRUST_MANAGER' />
@@ -94,12 +85,6 @@
   </Match>
   <Match>
     <Bug pattern='SQL_INJECTION_JDBC' />
-  </Match>
-  <Match>
-    <Bug pattern='SCALA_SQL_INJECTION_SLICK' />
-  </Match>
-  <Match>
-    <Bug pattern='SCALA_SQL_INJECTION_ANORM' />
   </Match>
   <Match>
     <Bug pattern='SQL_INJECTION_VERTX' />
@@ -228,19 +213,7 @@
     <Bug pattern='MALICIOUS_XSLT' />
   </Match>
   <Match>
-    <Bug pattern='SCALA_SENSITIVE_DATA_EXPOSURE' />
-  </Match>
-  <Match>
-    <Bug pattern='SCALA_PLAY_SSRF' />
-  </Match>
-  <Match>
     <Bug pattern='URLCONNECTION_SSRF_FD' />
-  </Match>
-  <Match>
-    <Bug pattern='SCALA_XSS_TWIRL' />
-  </Match>
-  <Match>
-    <Bug pattern='SCALA_XSS_MVC_API' />
   </Match>
   <Match>
     <Bug pattern='TEMPLATE_INJECTION_VELOCITY' />
