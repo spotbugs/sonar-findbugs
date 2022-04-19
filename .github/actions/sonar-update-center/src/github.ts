@@ -227,7 +227,7 @@ export async function createPullRequest(
     head: `${owner}:${branch}`,
     base: 'master',
     maintainer_can_modify: true,
-    draft: true
+    draft: false
   })
   return {
     pr_number: result.data.number,
