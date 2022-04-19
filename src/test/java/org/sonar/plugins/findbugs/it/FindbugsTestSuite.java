@@ -23,6 +23,7 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.OrchestratorBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
+import com.sonar.orchestrator.locator.MavenLocation;
 
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
@@ -33,6 +34,11 @@ import org.sonarqube.ws.client.qualityprofiles.AddProjectRequest;
 import org.sonarqube.ws.client.qualityprofiles.QualityprofilesService;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FindbugsTestSuite {
 
@@ -42,16 +48,34 @@ public class FindbugsTestSuite {
     // build, start and stop the orchestrator here, making sure that it happens exactly once whether we run one or multiple tests
     String sonarVersion = System.getProperty("sonar.version", "8.9");
     
+    // We will test here the case where an older version of the plugin was already installed and upgrade it
+    // This should be its own test case but it takes a long time to build a server so we're doing it here
+    
     OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
-      .addPlugin(FileLocation.of("./target/sonar-findbugs-plugin.jar"))
+        // Build the SonarQube server with an older version of the plugin
+      .addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", "4.0.6"))
       .keepBundledPlugins()
       .setSonarVersion("LATEST_RELEASE[" + sonarVersion + "]")
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/empty-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/fbcontrib-backup.xml"));
     ORCHESTRATOR = orchestratorBuilder.build();
+    // Start the server with the older version of the plugin so it will save the older version of the rules/profiles
     ORCHESTRATOR.start();
+    
+    ORCHESTRATOR.stop();
+    // Now install the version of the plugin we have built locally
+    File pluginTargetFile = new File(ORCHESTRATOR.getServer().getHome(), "extensions/plugins/sonar-findbugs-plugin.jar");
+    try (OutputStream out = new FileOutputStream(pluginTargetFile)) {
+      // Delete the old version of the plugin
+      Files.delete(ORCHESTRATOR.getServer().getHome().toPath().resolve("extensions/plugins/sonar-findbugs-plugin-4.0.6.jar"));
+      Files.copy(Path.of("target", "sonar-findbugs-plugin.jar"), out);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
 
+    ORCHESTRATOR.start();
+    
     Thread stopOrchestratorThread = new Thread(() -> ORCHESTRATOR.stop(), sonarVersion);
     Runtime.getRuntime().addShutdownHook(stopOrchestratorThread);
   }
