@@ -53,6 +53,8 @@ class FindbugsSecurityJspProfileTest {
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(6);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isZero();
+
+    FindbugsProfileTest.assertHasOnlyRulesForLanguage(profile.rules(), Jsp.KEY);
   }
 
   @Test

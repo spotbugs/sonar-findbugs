@@ -47,5 +47,7 @@ class FindbugsScalaProfileTest {
     assertThat(profile.rules()).hasSize(FindSecurityBugsScalaRulesDefinition.RULE_COUNT);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(FindSecurityBugsScalaRulesDefinition.RULE_COUNT);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
+
+    FindbugsProfileTest.assertHasOnlyRulesForLanguage(profile.rules(), Scala.KEY);
   }
 }

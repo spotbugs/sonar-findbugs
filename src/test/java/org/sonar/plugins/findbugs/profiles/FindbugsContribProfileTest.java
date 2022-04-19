@@ -31,5 +31,7 @@ class FindbugsContribProfileTest {
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(FindbugsRulesDefinition.RULE_COUNT);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FbContribRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(FbContribRulesDefinition.RULE_COUNT);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
+
+    FindbugsProfileTest.assertHasOnlyRulesForLanguage(profile.rules(), Java.KEY);
   }
 }

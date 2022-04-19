@@ -54,5 +54,7 @@ class FindbugsSecurityAuditProfileTest {
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(8);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).count())
     .isEqualTo(FindSecurityBugsRulesDefinition.RULE_COUNT);
+
+    FindbugsProfileTest.assertHasOnlyRulesForLanguage(profile.rules(), Java.KEY);
   }
 }
