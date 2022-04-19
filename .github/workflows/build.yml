@@ -96,6 +96,6 @@ jobs:
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
           public-version: ${{ github.event.release.tag_name }}
-          sonar-cloud-url: https://sonarcloud.io/dashboard?branch=${{ github.event.release.tag_name }}&id=com.github.spotbugs%3Asonar-findbugs-plugin
+          sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs%3Asonar-findbugs-plugin
           github-token: ${{ secrets.PAT_TO_FORK }}
           discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
