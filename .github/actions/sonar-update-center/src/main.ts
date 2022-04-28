@@ -120,14 +120,14 @@ async function run(): Promise<void> {
       const sonarCloudUrl = core.getInput('sonar-cloud-url', {required: true})
       const announceBody = `Hi,
 
-      We are announcing new ${mavenArtifactId} ${publicVersion}.
-      
-      Detailed changelog: ${encodeURI(changelogUrl)}
-      Download URL: ${encodeURI(downloadUrl)}
-      SonarCloud: ${encodeURI(sonarCloudUrl)}
-      PR for metadata: ${encodeURI(html_url)}
-      
-      Thanks in advance!`
+We are announcing new ${mavenArtifactId} ${publicVersion}.
+
+Detailed changelog: ${encodeURI(changelogUrl)}
+Download URL: ${encodeURI(downloadUrl)}
+SonarCloud: ${encodeURI(sonarCloudUrl)}
+PR for metadata: ${encodeURI(html_url)}
+
+Thanks in advance!`
 
       const skipAnnounce = core.getInput('skip-announcing')
       if (skipAnnounce === 'true') {
