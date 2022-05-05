@@ -51,7 +51,7 @@ of the double to create the BigDecimal (e.g., BigDecimal.valueOf(0.1) gives 0.1)
     <name>Correctness - D'oh! A nonsensical method invocation</name>
     <configKey>DMI_DOH</configKey>
     <description>&lt;p&gt;
-This partical method invocation doesn't make sense, for reasons that should be apparent from inspection.
+This particular method invocation doesn't make sense, for reasons that should be apparent from inspection.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -67,7 +67,7 @@ This partical method invocation doesn't make sense, for reasons that should be a
   <rule key='DMI_SCHEDULED_THREAD_POOL_EXECUTOR_WITH_ZERO_CORE_THREADS' priority='MAJOR'>
     <name>Correctness - Creation of ScheduledThreadPoolExecutor with zero core threads</name>
     <configKey>DMI_SCHEDULED_THREAD_POOL_EXECUTOR_WITH_ZERO_CORE_THREADS</configKey>
-    <description>&lt;p&gt;(&lt;a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#ScheduledThreadPoolExecutor%28int%29"&gt;Javadoc&lt;/a&gt;)
+    <description>&lt;p&gt;(&lt;a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html#ScheduledThreadPoolExecutor-int-"&gt;Javadoc&lt;/a&gt;)
 A ScheduledThreadPoolExecutor with zero core threads will never execute anything; changes to the max pool size are ignored.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
@@ -76,7 +76,7 @@ A ScheduledThreadPoolExecutor with zero core threads will never execute anything
   <rule key='DMI_FUTILE_ATTEMPT_TO_CHANGE_MAXPOOL_SIZE_OF_SCHEDULED_THREAD_POOL_EXECUTOR' priority='MAJOR'>
     <name>Correctness - Futile attempt to change max pool size of ScheduledThreadPoolExecutor</name>
     <configKey>DMI_FUTILE_ATTEMPT_TO_CHANGE_MAXPOOL_SIZE_OF_SCHEDULED_THREAD_POOL_EXECUTOR</configKey>
-    <description>&lt;p&gt;(&lt;a href="http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html"&gt;Javadoc&lt;/a&gt;)
+    <description>&lt;p&gt;(&lt;a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/ScheduledThreadPoolExecutor.html"&gt;Javadoc&lt;/a&gt;)
 While ScheduledThreadPoolExecutor inherits from ThreadPoolExecutor, a few of the inherited tuning methods are not useful for it. In particular, because it acts as a fixed-sized pool using corePoolSize threads and an unbounded queue, adjustments to maximumPoolSize have no useful effect.
     &lt;/p&gt;</description>
     <tag>correctness</tag>
@@ -520,9 +520,9 @@ Consider using &lt;code&gt;java.net.URI&lt;/code&gt; instead.
     <tag>bug</tag>
   </rule>
   <rule key='DMI_ANNOTATION_IS_NOT_VISIBLE_TO_REFLECTION' priority='MAJOR'>
-    <name>Correctness - Can't use reflection to check for presence of annotation without runtime retention</name>
+    <name>Correctness - Cannot use reflection to check for presence of annotation without runtime retention</name>
     <configKey>DMI_ANNOTATION_IS_NOT_VISIBLE_TO_REFLECTION</configKey>
-    <description>&lt;p&gt; Unless an annotation has itself been annotated with  @Retention(RetentionPolicy.RUNTIME), the annotation can't be observed using reflection
+    <description>&lt;p&gt; Unless an annotation has itself been annotated with  @Retention(RetentionPolicy.RUNTIME), the annotation cannot be observed using reflection
 (e.g., by using the isAnnotationPresent method).
    .&lt;/p&gt;</description>
     <tag>correctness</tag>
@@ -570,7 +570,7 @@ dangerous methods in the Java libraries.&lt;/em&gt; -- Joshua Bloch&lt;/p&gt;</d
   <rule key='DM_STRING_TOSTRING' priority='MAJOR'>
     <name>Performance - Method invokes toString() method on a String</name>
     <configKey>DM_STRING_TOSTRING</configKey>
-    <description>&lt;p&gt; Calling &lt;code&gt;String.toString()&lt;/code&gt; is just a redundant operation.
+    <description>&lt;p&gt; Calling &lt;code&gt;String.toString()&lt;/code&gt; is a redundant operation.
   Just use the String.&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -594,7 +594,7 @@ dangerous methods in the Java libraries.&lt;/em&gt; -- Joshua Bloch&lt;/p&gt;</d
     <description>&lt;p&gt; Creating new instances of &lt;code&gt;java.lang.Boolean&lt;/code&gt; wastes
   memory, since &lt;code&gt;Boolean&lt;/code&gt; objects are immutable and there are
   only two useful values of this type.&amp;nbsp; Use the &lt;code&gt;Boolean.valueOf()&lt;/code&gt;
-  method (or Java 1.5 autoboxing) to create &lt;code&gt;Boolean&lt;/code&gt; objects instead.&lt;/p&gt;</description>
+  method (or Java 5 autoboxing) to create &lt;code&gt;Boolean&lt;/code&gt; objects instead.&lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
@@ -612,7 +612,7 @@ dangerous methods in the Java libraries.&lt;/em&gt; -- Joshua Bloch&lt;/p&gt;</d
       For values outside the constant range the performance of both styles is the same.
       &lt;/p&gt;
       &lt;p&gt;
-      Unless the class must be compatible with JVMs predating Java 1.5,
+      Unless the class must be compatible with JVMs predating Java 5,
       use either autoboxing or the &lt;code&gt;valueOf()&lt;/code&gt; method when creating instances of
       &lt;code&gt;Long&lt;/code&gt;, &lt;code&gt;Integer&lt;/code&gt;, &lt;code&gt;Short&lt;/code&gt;, &lt;code&gt;Character&lt;/code&gt;, and &lt;code&gt;Byte&lt;/code&gt;.
       &lt;/p&gt;</description>
@@ -628,7 +628,7 @@ dangerous methods in the Java libraries.&lt;/em&gt; -- Joshua Bloch&lt;/p&gt;</d
       Using of cached values avoids object allocation and the code will be faster.
       &lt;/p&gt;
       &lt;p&gt;
-      Unless the class must be compatible with JVMs predating Java 1.5,
+      Unless the class must be compatible with JVMs predating Java 5,
       use either autoboxing or the &lt;code&gt;valueOf()&lt;/code&gt; method when creating instances of &lt;code&gt;Double&lt;/code&gt; and &lt;code&gt;Float&lt;/code&gt;.
       &lt;/p&gt;</description>
     <tag>performance</tag>
@@ -715,8 +715,8 @@ to immediately undo the work of the boxing.
   <rule key='DM_BOXED_PRIMITIVE_FOR_COMPARE' priority='MAJOR'>
     <name>Performance - Boxing a primitive to compare</name>
     <configKey>DM_BOXED_PRIMITIVE_FOR_COMPARE</configKey>
-    <description>&lt;p&gt;A boxed primitive is created just to call compareTo method. It's more efficient to use static compare method
-  (for double and float since Java 1.4, for other primitive types since Java 1.7) which works on primitives directly.
+    <description>&lt;p&gt;A boxed primitive is created just to call &lt;code&gt;compareTo()&lt;/code&gt; method. It's more efficient to use static compare method
+  (for double and float since Java 1.4, for other primitive types since Java 7) which works on primitives directly.
   &lt;/p&gt;</description>
     <tag>performance</tag>
     <tag>bug</tag>
@@ -804,7 +804,7 @@ be used to make the prepared statement do something unexpected and undesirable.
     <tag>bug</tag>
   </rule>
   <rule key='DC_DOUBLECHECK' priority='MAJOR'>
-    <name>Multi-threading - Possible double check of field</name>
+    <name>Multi-threading - Possible double-check of field</name>
     <configKey>DC_DOUBLECHECK</configKey>
     <description>&lt;p&gt; This method may contain an instance of double-checked locking.&amp;nbsp;
   This idiom is not correct according to the semantics of the Java memory
@@ -1499,14 +1499,9 @@ Language Specification&lt;/a&gt; for details.
   <rule key='TLW_TWO_LOCK_WAIT' priority='MAJOR'>
     <name>Multi-threading - Wait with two locks held</name>
     <configKey>TLW_TWO_LOCK_WAIT</configKey>
-    <description>&lt;p&gt; Waiting on a monitor while two locks are held may cause
-  deadlock.
-   &amp;nbsp;
-   Performing a wait only releases the lock on the object
-   being waited on, not any other locks.
-   &amp;nbsp;
-This not necessarily a bug, but is worth examining
-  closely.&lt;/p&gt;</description>
+    <description>&lt;p&gt;Waiting on a monitor while two locks are held may cause deadlock.
+  Performing a wait only releases the lock on the object being waited on, not any other locks.
+  This not necessarily a bug, but is worth examining closely.&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
@@ -1531,7 +1526,7 @@ This not necessarily a bug, but is worth examining
     <name>Multi-threading - Unconditional wait</name>
     <configKey>UW_UNCOND_WAIT</configKey>
     <description>&lt;p&gt; This method contains a call to &lt;code&gt;java.lang.Object.wait()&lt;/code&gt; which
-  is not guarded by conditional control flow.&amp;nbsp; The code should
+    is not guarded by conditional control flow. The code should
     verify that condition it intends to wait for is not already satisfied
     before calling wait; any previous notifications will be ignored.
   &lt;/p&gt;</description>
@@ -1619,7 +1614,7 @@ For example, in the following code, &lt;code&gt;foo&lt;/code&gt; will be null.&l
     <tag>bad-practice</tag>
   </rule>
   <rule key='IT_NO_SUCH_ELEMENT' priority='MAJOR'>
-    <name>Bad practice - Iterator next() method can't throw NoSuchElementException</name>
+    <name>Bad practice - Iterator next() method cannot throw NoSuchElementException</name>
     <configKey>IT_NO_SUCH_ELEMENT</configKey>
     <description>&lt;p&gt; This class implements the &lt;code&gt;java.util.Iterator&lt;/code&gt; interface.&amp;nbsp;
   However, its &lt;code&gt;next()&lt;/code&gt; method is not capable of throwing
@@ -1879,7 +1874,7 @@ could be changed by malicious code or
     <tag>malicious-code</tag>
   </rule>
   <rule key='MS_CANNOT_BE_FINAL' priority='INFO'>
-    <name>Malicious code - Field isn't final and can't be protected from malicious code</name>
+    <name>Malicious code - Field isn't final and cannot be protected from malicious code</name>
     <configKey>MS_CANNOT_BE_FINAL</configKey>
     <description>&lt;p&gt;
  A mutable static field could be changed by malicious code or
@@ -1921,7 +1916,7 @@ that you want to invoke the inherited method, not the method in the outer class.
 &lt;/p&gt;
 &lt;p&gt;If you call &lt;code&gt;this.foo(17)&lt;/code&gt;, then the inherited method will be invoked. However, since SpotBugs only looks at
 classfiles, it
-can't tell the difference between an invocation of &lt;code&gt;this.foo(17)&lt;/code&gt; and &lt;code&gt;foo(17)&lt;/code&gt;, it will still
+cannot tell the difference between an invocation of &lt;code&gt;this.foo(17)&lt;/code&gt; and &lt;code&gt;foo(17)&lt;/code&gt;, it will still
 complain about a potential ambiguous invocation.
 &lt;/p&gt;</description>
     <tag>style</tag>
@@ -2059,7 +2054,7 @@ removing or deprecating the method with the similar but not identical signature.
     <description>&lt;p&gt; This regular method has the same name as the class it is defined in. It is likely that this was intended to be a constructor.
       If it was intended to be a constructor, remove the declaration of a void return value.
     If you had accidentally defined this method, realized the mistake, defined a proper constructor
-    but can't get rid of this method due to backwards compatibility, deprecate the method.
+    but cannot get rid of this method due to backwards compatibility, deprecate the method.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -2826,7 +2821,7 @@ of the parameter or the annotation is wrong.
 a null value will be dereferenced, which
 would generate a &lt;code&gt;NullPointerException&lt;/code&gt; when the code is executed.
 Of course, the problem might be that the branch or statement is infeasible and that
-the null pointer exception can't ever be executed; deciding that is beyond the ability of SpotBugs.
+the null pointer exception cannot ever be executed; deciding that is beyond the ability of SpotBugs.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -2838,7 +2833,7 @@ the null pointer exception can't ever be executed; deciding that is beyond the a
 a null value will be dereferenced, which
 would generate a &lt;code&gt;NullPointerException&lt;/code&gt; when the code is executed.
 Of course, the problem might be that the branch or statement is infeasible and that
-the null pointer exception can't ever be executed; deciding that is beyond the ability of SpotBugs.
+the null pointer exception cannot ever be executed; deciding that is beyond the ability of SpotBugs.
 Due to the fact that this value had been previously tested for nullness,
 this is a definite possibility.
 &lt;/p&gt;</description>
@@ -3049,7 +3044,7 @@ body of an &lt;code&gt;if&lt;/code&gt; statement, e.g.:&lt;/p&gt;
   <rule key='RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE' priority='MAJOR'>
     <name>Correctness - Nullcheck of value previously dereferenced</name>
     <configKey>RCN_REDUNDANT_NULLCHECK_WOULD_HAVE_BEEN_A_NPE</configKey>
-    <description>&lt;p&gt; A value is checked here to see whether it is null, but this value can't
+    <description>&lt;p&gt; A value is checked here to see whether it is null, but this value cannot
 be null because it was previously dereferenced and if it were null a null pointer
 exception would have occurred at the earlier dereference.
 Essentially, this code and the previous dereference
@@ -3183,7 +3178,7 @@ than are different than you would get using &lt;code&gt;.equals(...)&lt;/code&gt
     <name>Correctness - Using pointer equality to compare different types</name>
     <configKey>EC_UNRELATED_TYPES_USING_POINTER_EQUALITY</configKey>
     <description>&lt;p&gt; This method uses pointer equality to compare two references that seem to be of
-different types.  The result of this comparison will always be false at runtime.
+different types. The result of this comparison will always be false at runtime.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3271,8 +3266,7 @@ an &lt;code&gt;IllegalMonitorStateException&lt;/code&gt; being thrown.&lt;/p&gt;
     <name>Correctness - Self assignment of local rather than assignment to field</name>
     <configKey>SA_LOCAL_SELF_ASSIGNMENT_INSTEAD_OF_FIELD</configKey>
     <description>&lt;p&gt; This method contains a self assignment of a local variable, and there
-is a field with an identical name.
-assignment appears to have been ; e.g.&lt;/p&gt;
+is a field with an identical name, e.g.:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;    int foo;
     public void setFoo(int foo) {
         foo = foo;
@@ -3342,8 +3336,7 @@ public void foo() {
     <description>&lt;p&gt; This method performs a nonsensical computation of a field with another
 reference to the same field (e.g., x&amp;x or x-x). Because of the nature
 of the computation, this operation doesn't seem to make sense,
-and may indicate a typo or
-a logic error.  Double check the computation.
+and may indicate a typo or a logic error. Double-check the computation.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3354,8 +3347,7 @@ a logic error.  Double check the computation.
     <description>&lt;p&gt; This method performs a nonsensical computation of a local variable with another
 reference to the same variable (e.g., x&amp;x or x-x). Because of the nature
 of the computation, this operation doesn't seem to make sense,
-and may indicate a typo or
-a logic error.  Double check the computation.
+and may indicate a typo or a logic error. Double-check the computation.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3538,13 +3530,13 @@ to get &lt;code&gt;0xffffffff&lt;/code&gt;, and thus give the value
 
 &lt;p&gt;In particular, the following code for packing a byte array into an int is badly wrong: &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;int result = 0;
-for(int i = 0; i &amp;lt; 4; i++) {
+for (int i = 0; i &amp;lt; 4; i++) {
     result = ((result &amp;lt;&amp;lt; 8) | b[i]);
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The following idiom will work instead: &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;int result = 0;
-for(int i = 0; i &amp;lt; 4; i++) {
+for (int i = 0; i &amp;lt; 4; i++) {
     result = ((result &amp;lt;&amp;lt; 8) | (b[i] &amp;amp; 0xff));
 }
 &lt;/code&gt;&lt;/pre&gt;</description>
@@ -3566,12 +3558,12 @@ to get &lt;code&gt;0xffffffff&lt;/code&gt;, and thus give the value
 
 &lt;p&gt;In particular, the following code for packing a byte array into an int is badly wrong: &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;int result = 0;
-for(int i = 0; i &amp;lt; 4; i++)
+for (int i = 0; i &amp;lt; 4; i++)
     result = ((result &amp;lt;&amp;lt; 8) + b[i]);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;The following idiom will work instead: &lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;int result = 0;
-for(int i = 0; i &amp;lt; 4; i++)
+for (int i = 0; i &amp;lt; 4; i++)
     result = ((result &amp;lt;&amp;lt; 8) + (b[i] &amp;amp; 0xff));
 &lt;/code&gt;&lt;/pre&gt;</description>
     <tag>correctness</tag>
@@ -3703,7 +3695,7 @@ than using the &lt;code&gt;synchronized (...)&lt;/code&gt; construct.
     <description>&lt;p&gt; This method calls
 &lt;code&gt;wait()&lt;/code&gt;,
 &lt;code&gt;notify()&lt;/code&gt; or
-&lt;code&gt;notifyAll()()&lt;/code&gt;
+&lt;code&gt;notifyAll()&lt;/code&gt;
 on an object that also provides an
 &lt;code&gt;await()&lt;/code&gt;,
 &lt;code&gt;signal()&lt;/code&gt;,
@@ -3788,7 +3780,7 @@ In each iteration, the String is converted to a StringBuffer/StringBuilder,
    as the growing string is recopied in each iteration. &lt;/p&gt;
 
 &lt;p&gt;Better performance can be obtained by using
-a StringBuffer (or StringBuilder in Java 1.5) explicitly.&lt;/p&gt;
+a StringBuffer (or StringBuilder in Java 5) explicitly.&lt;/p&gt;
 
 &lt;p&gt; For example:&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;// This is bad
@@ -3993,10 +3985,9 @@ correctly.
     <description>&lt;p&gt;
 This method invokes the .equals(Object o) to compare an array and a reference that doesn't seem
 to be an array. If things being compared are of different types, they are guaranteed to be unequal
-and the comparison is almost certainly an error. Even if they are both arrays, the equals method
-on arrays only determines of the two arrays are the same object.
-To compare the
-contents of the arrays, use java.util.Arrays.equals(Object[], Object[]).
+and the comparison is almost certainly an error. Even if they are both arrays, the &lt;code&gt;equals()&lt;/code&gt; method
+on arrays only determines if the two arrays are the same object.
+To compare the contents of the arrays, use &lt;code&gt;java.util.Arrays.equals(Object[], Object[])&lt;/code&gt;.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -4030,8 +4021,9 @@ only checks to see if they are the same array, and ignores the contents of the a
     <name>Correctness - Unneeded use of currentThread() call, to call interrupted()</name>
     <configKey>STI_INTERRUPTED_ON_CURRENTTHREAD</configKey>
     <description>&lt;p&gt;
-This method invokes the Thread.currentThread() call, just to call the interrupted() method. As interrupted() is a
-static method, is more simple and clear to use Thread.interrupted().
+This method invokes the &lt;code&gt;Thread.currentThread()&lt;/code&gt; call, just to call the
+&lt;code&gt;interrupted()&lt;/code&gt; method. As &lt;code&gt;interrupted()&lt;/code&gt; is a static method, it is more
+simple and clear to use &lt;code&gt;Thread.interrupted()&lt;/code&gt;.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -4082,7 +4074,7 @@ used.
 &lt;/p&gt;
 &lt;p&gt;
 Note that Sun's javac compiler often generates dead stores for
-final local variables.  Because SpotBugs is a bytecode-based tool,
+final local variables. Because SpotBugs is a bytecode-based tool,
 there is no easy way to eliminate these false positives.
 &lt;/p&gt;</description>
     <tag>style</tag>
@@ -4092,7 +4084,7 @@ there is no easy way to eliminate these false positives.
     <configKey>DLS_DEAD_LOCAL_STORE_IN_RETURN</configKey>
     <description>&lt;p&gt;
 This statement assigns to a local variable in a return statement. This assignment
-has effect. Please verify that this statement does the right thing.
+has no effect. Please verify that this statement does the right thing.
 &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -4117,8 +4109,8 @@ In Java 1.4 and earlier, a reference to &lt;code&gt;Foo.class&lt;/code&gt; would
 for &lt;code&gt;Foo&lt;/code&gt; to be executed, if it has not been executed already.
 In Java 5 and later, it does not.
 &lt;/p&gt;
-&lt;p&gt;See Sun's &lt;a href="http://www.oracle.com/technetwork/java/javase/compatibility-137462.html#literal"&gt;article on Java SE compatibility&lt;/a&gt;
-for more details and examples, and suggestions on how to force class initialization in Java 5.
+&lt;p&gt;See Oracle's &lt;a href="http://www.oracle.com/technetwork/java/javase/compatibility-137462.html#literal"&gt;article on Java SE compatibility&lt;/a&gt;
+for more details and examples, and suggestions on how to force class initialization in Java 5+.
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -4451,7 +4443,7 @@ This code converts an int value to a float precision
 floating point number and then
 passing the result to the Math.round() function, which returns the int/long closest
 to the argument. This operation should always be a no-op,
-since the converting an integer to a float should give a number with no fractional part.
+since converting an integer to a float should give a number with no fractional part.
 It is likely that the operation that generated the value to be passed
 to Math.round was intended to be performed using
 floating point arithmetic.
@@ -4468,7 +4460,7 @@ to a double precision
 floating point number and then
 passing the result to the Math.ceil() function, which rounds a double to
 the next higher integer value. This operation should always be a no-op,
-since the converting an integer to a double should give a number with no fractional part.
+since converting an integer to a double should give a number with no fractional part.
 It is likely that the operation that generated the value to be passed
 to Math.ceil was intended to be performed using double precision
 floating point arithmetic.
@@ -4481,10 +4473,9 @@ floating point arithmetic.
     <configKey>ICAST_IDIV_CAST_TO_DOUBLE</configKey>
     <description>&lt;p&gt;
 This code casts the result of an integral division (e.g., int or long division)
-operation to double or
-float.
+operation to double or float.
 Doing division on integers truncates the result
-to the integer value closest to zero.  The fact that the result
+to the integer value closest to zero. The fact that the result
 was cast to double suggests that this precision should have been retained.
 What was probably meant was to cast one or both of the operands to
 double &lt;em&gt;before&lt;/em&gt; performing the division.  Here is an example:
@@ -4575,10 +4566,9 @@ This cast will always throw a ClassCastException.
 SpotBugs tracks type information from instanceof checks,
 and also uses more precise information about the types
 of values returned from methods and loaded from fields.
-Thus, it may have more precise information that just
+Thus, it may have more precise information than just
 the declared type of a variable, and can use this to determine
 that a cast will always throw an exception at runtime.
-
 &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -4606,11 +4596,13 @@ to a type more specific than &lt;code&gt;Object[]&lt;/code&gt;, as in:&lt;/p&gt;
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;This will usually fail by throwing a ClassCastException. The &lt;code&gt;toArray()&lt;/code&gt;
-of almost all collections return an &lt;code&gt;Object[]&lt;/code&gt;. They can't really do anything else,
+of almost all collections return an &lt;code&gt;Object[]&lt;/code&gt;. They cannot really do anything else,
 since the Collection object has no reference to the declared generic type of the collection.
 &lt;p&gt;The correct way to do get an array of a specific type from a collection is to use
-  &lt;code&gt;c.toArray(new String[]);&lt;/code&gt;
-  or &lt;code&gt;c.toArray(new String[c.size()]);&lt;/code&gt; (the latter is slightly more efficient).
+  &lt;code&gt;c.toArray(new String[0]);&lt;/code&gt;
+  or &lt;code&gt;c.toArray(new String[c.size()]);&lt;/code&gt; (the former is
+  &lt;a href="https://shipilev.net/blog/2016/arrays-wisdom-ancients/#_historical_perspective"&gt;slightly more efficient&lt;/a&gt;
+  since late Java 6 updates).
 &lt;p&gt;There is one common/known exception to this. The &lt;code&gt;toArray()&lt;/code&gt;
 method of lists returned by &lt;code&gt;Arrays.asList(...)&lt;/code&gt; will return a covariantly
 typed array. For example, &lt;code&gt;Arrays.asArray(new String[] { "a" }).toArray()&lt;/code&gt;
@@ -4714,7 +4706,10 @@ For example
 &lt;li&gt;s.split(".") &lt;em&gt;always&lt;/em&gt; returns a zero length array of String&lt;/li&gt;
 &lt;li&gt;"ab|cd".replaceAll("|", "/") will return "/a/b/|/c/d/"&lt;/li&gt;
 &lt;li&gt;"ab|cd".split("|") will return array with six (!) elements: [, a, b, |, c, d]&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;/ul&gt;
+&lt;p&gt;
+Consider using &lt;code&gt;s.replace(".", "/")&lt;/code&gt; or &lt;code&gt;s.split("\\.")&lt;/code&gt; instead.
+&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -4862,7 +4857,7 @@ publicized the bug pattern&lt;/a&gt;.
     <description>&lt;p&gt;
 The code uses x % 2 == 1 to check to see if a value is odd, but this won't work
 for negative numbers (e.g., (-5) % 2 == -1). If this code is intending to check
-for oddness, consider using x &amp;amp; 1 == 1, or x % 2 != 0.
+for oddness, consider using (x &amp;amp; 1) == 1, or x % 2 != 0.
 &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -4987,7 +4982,7 @@ and the next method is supposed to change the state of the iterator.
     <configKey>CI_CONFUSED_INHERITANCE</configKey>
     <description>&lt;p&gt;
       This class is declared to be final, but declares fields to be protected. Since the class
-      is final, it can not be derived from, and the use of protected is confusing. The access
+      is final, it cannot be derived from, and the use of protected is confusing. The access
       modifier for the field should be changed to private or public to represent the true
       use for the field.
       &lt;/p&gt;</description>
@@ -5008,7 +5003,7 @@ and the next method is supposed to change the state of the iterator.
     <name>Correctness - Class makes reference to unresolvable class or method</name>
     <configKey>VR_UNRESOLVABLE_REFERENCE</configKey>
     <description>&lt;p&gt;
-      This class makes a reference to a class or method that can not be
+      This class makes a reference to a class or method that cannot be
     resolved using against the libraries it is being analyzed with.
       &lt;/p&gt;</description>
     <tag>correctness</tag>
@@ -5084,8 +5079,8 @@ always be true, and &lt;code&gt;c.retainAll(c)&lt;/code&gt; should have no effec
      of nasty coding mistakes. If a map &lt;code&gt;m&lt;/code&gt; returns
      such an iterator for an entrySet, then
      &lt;code&gt;c.addAll(m.entrySet())&lt;/code&gt; will go badly wrong. All of
-     the Map implementations in OpenJDK 1.7 have been rewritten to avoid this,
-     you should to.
+     the Map implementations in OpenJDK 7 have been rewritten to avoid this,
+     you should too.
     &lt;/p&gt;</description>
     <tag>bad-practice</tag>
   </rule>
@@ -5094,7 +5089,7 @@ always be true, and &lt;code&gt;c.retainAll(c)&lt;/code&gt; should have no effec
     <configKey>DMI_ENTRY_SETS_MAY_REUSE_ENTRY_OBJECTS</configKey>
     <description>&lt;p&gt; The entrySet() method is allowed to return a view of the
      underlying Map in which a single Entry object is reused and returned
-     during the iteration.  As of Java 1.6, both IdentityHashMap
+     during the iteration. As of Java 6, both IdentityHashMap
      and EnumMap did so. When iterating through such a Map,
      the Entry value is only valid until you advance to the next iteration.
      If, for example, you try to pass such an entrySet to an addAll method,
@@ -5220,7 +5215,7 @@ and &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6178997"&gt;
     <name>Correctness - Value without a type qualifier used where a value is required to have that qualifier</name>
     <configKey>TQ_UNKNOWN_VALUE_USED_WHERE_ALWAYS_STRICTLY_REQUIRED</configKey>
     <description>&lt;p&gt;
-        A value is being used in a way that requires the value be annotation with a type qualifier.
+        A value is being used in a way that requires the value to be annotated with a type qualifier.
     The type qualifier is strict, so the tool rejects any values that do not have
     the appropriate annotation.
         &lt;/p&gt;
@@ -5257,7 +5252,7 @@ and &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6178997"&gt;
     <name>Correctness - Value that might not carry a type qualifier is always used in a way requires that type qualifier</name>
     <configKey>TQ_MAYBE_SOURCE_VALUE_REACHES_ALWAYS_SINK</configKey>
     <description>&lt;p&gt;
-      A value that is annotated as possibility not being an instance of
+      A value that is annotated as possibly not being an instance of
     the values denoted by the type qualifier, and the value is guaranteed to be used
     in a way that requires values denoted by that type qualifier.
       &lt;/p&gt;</description>
@@ -5268,7 +5263,7 @@ and &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6178997"&gt;
     <name>Correctness - Value that might carry a type qualifier is always used in a way prohibits it from having that type qualifier</name>
     <configKey>TQ_MAYBE_SOURCE_VALUE_REACHES_NEVER_SINK</configKey>
     <description>&lt;p&gt;
-      A value that is annotated as possibility being an instance of
+      A value that is annotated as possibly being an instance of
     the values denoted by the type qualifier, and the value is guaranteed to be used
     in a way that prohibits values denoted by that type qualifier.
       &lt;/p&gt;</description>
@@ -5299,17 +5294,17 @@ and &lt;a href="http://bugs.java.com/bugdatabase/view_bug.do?bug_id=6178997"&gt;
     <name>Correctness - Doomed attempt to append to an object output stream</name>
     <configKey>IO_APPENDING_TO_OBJECT_OUTPUT_STREAM</configKey>
     <description>&lt;p&gt;
-     This code opens a file in append mode and then wraps the result in an object output stream.
+     This code opens a file in append mode and then wraps the result in an object output stream like as follows:
+      &lt;/p&gt;
+      &lt;pre&gt;&lt;code&gt;OutputStream out = new FileOutputStream(anyFile, true);
+     new ObjectOutputStream(out);&lt;/code&gt;&lt;/pre&gt;
+      &lt;p&gt;
      This won't allow you to append to an existing object output stream stored in a file. If you want to be
      able to append to an object output stream, you need to keep the object output stream open.
       &lt;/p&gt;
       &lt;p&gt;The only situation in which opening a file in append mode and the writing an object output stream
       could work is if on reading the file you plan to open it in random access mode and seek to the byte offset
       where the append started.
-      &lt;/p&gt;
-
-      &lt;p&gt;
-      TODO: example.
       &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -5331,7 +5326,7 @@ String constructComponentName() {
 }
 &lt;/code&gt;&lt;/pre&gt;
      &lt;p&gt;Subclasses of &lt;code&gt;Label&lt;/code&gt; won't synchronize on the same subclass, giving rise to a datarace.
-     Instead, this code should be synchronizing on &lt;code&gt;Label.class&lt;/code&gt;&lt;/p&gt;
+     Instead, this code should be synchronizing on &lt;code&gt;Label.class&lt;/code&gt;.&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;private static final String base = "label";
 private static int nameCounter = 0;
 
@@ -5341,7 +5336,7 @@ String constructComponentName() {
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
-      &lt;p&gt;Bug pattern contributed by Jason Mehrens&lt;/p&gt;</description>
+      &lt;p&gt;Bug pattern contributed by Jason Mehrens.&lt;/p&gt;</description>
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
@@ -5371,8 +5366,8 @@ String constructComponentName() {
           For sending feedback, check:
           &lt;/p&gt;
           &lt;ul&gt;
-            &lt;li&gt;&lt;a href="https://github.com/spotbugs/spotbugs/blob/master/CONTRIBUTING.md"&gt;contributing guideline&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href="https://github.com/spotbugs/discuss/issues?q="&gt;malinglist&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/spotbugs/blob/master/.github/CONTRIBUTING.md"&gt;contributing guideline&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/discuss/issues?q="&gt;mailinglist&lt;/a&gt;&lt;/li&gt;
           &lt;/ul&gt;
 
           &lt;p&gt;
@@ -5383,8 +5378,9 @@ String constructComponentName() {
           &lt;/p&gt;
 
           &lt;p&gt;
-          See Weimer and Necula, &lt;i&gt;Finding and Preventing Run-Time Error Handling Mistakes&lt;/i&gt;, for
-          a description of the analysis technique.
+          See Weimer and Necula, &lt;i&gt;Finding and Preventing Run-Time Error Handling Mistakes&lt;/i&gt;
+          (&lt;a href="https://people.eecs.berkeley.edu/~necula/Papers/rte_oopsla04.pdf"&gt;PDF&lt;/a&gt;),
+          for a description of the analysis technique.
           &lt;/p&gt;</description>
     <tag>experimental</tag>
   </rule>
@@ -5414,8 +5410,8 @@ String constructComponentName() {
           For sending feedback, check:
           &lt;/p&gt;
           &lt;ul&gt;
-            &lt;li&gt;&lt;a href="https://github.com/spotbugs/spotbugs/blob/master/CONTRIBUTING.md"&gt;contributing guideline&lt;/a&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;a href="https://github.com/spotbugs/discuss/issues?q="&gt;malinglist&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/spotbugs/blob/master/.github/CONTRIBUTING.md"&gt;contributing guideline&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="https://github.com/spotbugs/discuss/issues?q="&gt;mailinglist&lt;/a&gt;&lt;/li&gt;
           &lt;/ul&gt;
 
           &lt;p&gt;
@@ -5426,15 +5422,16 @@ String constructComponentName() {
           &lt;/p&gt;
 
           &lt;p&gt;
-          See Weimer and Necula, &lt;i&gt;Finding and Preventing Run-Time Error Handling Mistakes&lt;/i&gt;, for
-          a description of the analysis technique.
+          See Weimer and Necula, &lt;i&gt;Finding and Preventing Run-Time Error Handling Mistakes&lt;/i&gt;
+          (&lt;a href="https://people.eecs.berkeley.edu/~necula/Papers/rte_oopsla04.pdf"&gt;PDF&lt;/a&gt;),
+          for a description of the analysis technique.
           &lt;/p&gt;</description>
     <tag>experimental</tag>
   </rule>
   <rule key='FB_UNEXPECTED_WARNING' priority='MAJOR'>
     <name>Correctness - Unexpected/undesired warning from SpotBugs</name>
     <configKey>FB_UNEXPECTED_WARNING</configKey>
-    <description>&lt;p&gt;SpotBugs generated a warning that, according to a @NoWarning annotated,
+    <description>&lt;p&gt;SpotBugs generated a warning that, according to a &lt;code&gt;@NoWarning&lt;/code&gt; annotation,
             is unexpected or undesired.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -5442,7 +5439,7 @@ String constructComponentName() {
   <rule key='FB_MISSING_EXPECTED_WARNING' priority='MAJOR'>
     <name>Correctness - Missing expected or desired warning from SpotBugs</name>
     <configKey>FB_MISSING_EXPECTED_WARNING</configKey>
-    <description>&lt;p&gt;SpotBugs didn't generate generated a warning that, according to a @ExpectedWarning annotated,
+    <description>&lt;p&gt;SpotBugs didn't generate a warning that, according to an &lt;code&gt;@ExpectedWarning&lt;/code&gt; annotation,
             is expected or desired.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -5503,7 +5500,10 @@ after the call to initLogging, the logger configuration is lost
   <rule key='DM_DEFAULT_ENCODING' priority='INFO'>
     <name>I18n - Reliance on default encoding</name>
     <configKey>DM_DEFAULT_ENCODING</configKey>
-    <description>&lt;p&gt; Found a call to a method which will perform a byte to String (or String to byte) conversion, and will assume that the default platform encoding is suitable. This will cause the application behaviour to vary between platforms. Use an alternative API and specify a charset name or Charset object explicitly.  &lt;/p&gt;</description>
+    <description>&lt;p&gt; Found a call to a method which will perform a byte to String (or String to byte) conversion,
+and will assume that the default platform encoding is suitable. This will cause the application
+behavior to vary between platforms. Use an alternative API and specify a charset name or Charset
+object explicitly.&lt;/p&gt;</description>
     <tag>i18n</tag>
   </rule>
   <rule key='NP_METHOD_PARAMETER_RELAXING_ANNOTATION' priority='INFO'>
@@ -5546,7 +5546,9 @@ after the call to initLogging, the logger configuration is lost
       causes the read (probably in a loop) to end prematurely if the character 0xFF is met. Similarly, the method
       java.io.FileReader.read() also returns an int. If it is converted to a char then -1 becomes 0xFFFF which is
       Character.MAX_VALUE. Comparing the result to -1 is pointless, since characters are unsigned in Java. If the
-      checking for EOF is the condition of a loop then this loop is infinite.
+      checking for EOF is the condition of a loop then this loop is infinite.&lt;/p&gt;
+      &lt;p&gt;
+      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/FIO08-J.+Distinguish+between+characters+or+bytes+read+from+a+stream+and+-1"&gt;FIO08-J. Distinguish between characters or bytes read from a stream and -1&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -5598,7 +5600,8 @@ after the call to initLogging, the logger configuration is lost
       affecting the behavior of clone(). It can also observe or modify the clone object in a partially initialized
       state. Only static, final or private methods should be invoked from the clone() method.&lt;/p&gt;
       &lt;p&gt;
-      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88487921"&gt;MET06-J. Do not invoke overridable methods in clone()&lt;/a&gt;.
+      See SEI CERT rule
+      &lt;a href="https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88487921"&gt;MET06-J. Do not invoke overridable methods in clone()&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>malicious-code</tag>
   </rule>
@@ -5611,9 +5614,99 @@ after the call to initLogging, the logger configuration is lost
         that could leave the shared static data unprotected against concurrent access.
         This could occur in two ways, if a synchronization method uses a non-static lock object,
         or a synchronized method is declared as non-static. Both ways are ineffective.
-        Best solution is to use a private static final lock object to secure the shared static data.
+        Best solution is to use a private static final lock object to secure the shared static data.&lt;/p&gt;
+      &lt;p&gt;
+      See SEI CERT rule
+      &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK06-J.+Do+not+use+an+instance+lock+to+protect+shared+static+data"&gt;
+      LCK06-J. Do not use an instance lock to protect shared static data&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
+  </rule>
+  <rule key='FL_FLOATS_AS_LOOP_COUNTERS' priority='MAJOR'>
+    <name>Correctness - Do not use floating-point variables as loop counters</name>
+    <configKey>FL_FLOATS_AS_LOOP_COUNTERS</configKey>
+    <description>&lt;p&gt;
+Using floating-point variables should not be used as loop counters, as they are not precise, which may result in incorrect loops. A loop counter is a variable that is changed with each iteration and controls when the loop should terminate. It is decreased or increased by a fixed amount each iteration.&lt;/p&gt;
+&lt;p&gt;See rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/NUM09-J.+Do+not+use+floating-point+variables+as+loop+counters"&gt;NUM09-J&lt;/a&gt;.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='THROWS_METHOD_THROWS_RUNTIMEEXCEPTION' priority='MAJOR'>
+    <name>Bad practice - Method intentionally throws RuntimeException.</name>
+    <configKey>THROWS_METHOD_THROWS_RUNTIMEEXCEPTION</configKey>
+    <description>&lt;p&gt;
+        Method intentionally throws RuntimeException.&lt;br&gt;
+        
+        According to the &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR07-J.+Do+not+throw+RuntimeException%2C+Exception%2C+or+Throwable"&gt;SEI CERT ERR07-J rule&lt;/a&gt;, 
+        throwing a RuntimeException may cause errors, like the caller not being able to examine the exception and therefore cannot properly recover from it.&lt;br&gt;
+
+        Moreover, throwing a RuntimeException would force the caller to catch RuntimeException and therefore violate the 
+        &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR08-J.+Do+not+catch+NullPointerException+or+any+of+its+ancestors"&gt;SEI CERT ERR08-J rule&lt;/a&gt;.&lt;br&gt;
+        
+        Please note that you can derive from Exception or RuntimeException and may throw a new instance of that exception.
+        &lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
+  <rule key='THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION' priority='MAJOR'>
+    <name>Bad practice - Method lists Exception in its throws clause.</name>
+    <configKey>THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION</configKey>
+    <description>&lt;p&gt;
+        Method lists Exception in its throws clause.&lt;br&gt;
+
+
+        When declaring a method, the types of exceptions in the throws clause should be the most specific.
+        Therefore, using Exception in the throws clause would force the caller to either use it in its own throws clause, or use it in a try-catch block (when it does not necessarily 
+        contain any meaningful information about the thrown exception).&lt;br&gt;&lt;br&gt;
+        
+        For more information, see the &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR07-J.+Do+not+throw+RuntimeException%2C+Exception%2C+or+Throwable"&gt;SEI CERT ERR07-J rule&lt;/a&gt;.
+        &lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
+  <rule key='THROWS_METHOD_THROWS_CLAUSE_THROWABLE' priority='MAJOR'>
+    <name>Bad practice - Method lists Throwable in its throws clause.</name>
+    <configKey>THROWS_METHOD_THROWS_CLAUSE_THROWABLE</configKey>
+    <description>&lt;p&gt;
+        Method lists Throwable in its throws clause.&lt;br&gt;
+
+        When declaring a method, the types of exceptions in the throws clause should be the most specific.
+        Therefore, using Throwable in the throws clause would force the caller to either use it in its own throws clause, or use it in a try-catch block (when it does not necessarily 
+        contain any meaningful information about the thrown exception).&lt;br&gt;
+        
+        Furthermore, using Throwable like that is semantically a bad practice, considered that Throwables include Errors as well, but by definition they occur in unrecoverable scenarios.&lt;br&gt;&lt;br&gt;
+        
+        For more information, see the &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR07-J.+Do+not+throw+RuntimeException%2C+Exception%2C+or+Throwable"&gt;SEI CERT ERR07-J rule&lt;/a&gt;.
+        &lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
+  <rule key='PERM_SUPER_NOT_CALLED_IN_GETPERMISSIONS' priority='INFO'>
+    <name>Malicious code - Custom class loader does not call its superclass's getPermissions()</name>
+    <configKey>PERM_SUPER_NOT_CALLED_IN_GETPERMISSIONS</configKey>
+    <description>&lt;p&gt;
+       &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC07-J.+Call+the+superclass%27s+getPermissions%28%29+method+when+writing+a+custom+class+loader"&gt;SEI CERT rule SEC07-J&lt;/a&gt; requires that custom class loaders must always call their superclass's getPermissions()
+       method in their own getPermissions() method to initialize the object they return at the end. Omitting it means
+       that a class defined using this custom class loader has permissions that are completely independent of those
+       specified in the systemwide policy file. In effect, the class's permissions override them.
+       &lt;/p&gt;</description>
+    <tag>malicious-code</tag>
+  </rule>
+  <rule key='USC_POTENTIAL_SECURITY_CHECK_BASED_ON_UNTRUSTED_SOURCE' priority='INFO'>
+    <name>Malicious code - Potential security check based on untrusted source.</name>
+    <configKey>USC_POTENTIAL_SECURITY_CHECK_BASED_ON_UNTRUSTED_SOURCE</configKey>
+    <description>&lt;p&gt;
+      A public method of a public class may be called from outside the package which means that untrusted
+      data may be passed to it. Calling a method before the doPrivileged to check its return value and then
+      calling the same method inside the class is dangerous if the method or its enclosing class is not
+      final. An attacker may pass an instance of a malicious descendant of the class instead of an instance
+      of the expected one where this method is overridden in a way that it returns different values upon
+      different invocations. For example, a method returning a file path may return a harmless path to check
+      before entering the doPrivileged block and then a sensitive file upon the call inside the doPrivileged
+      block. To avoid such scenario defensively copy the object received in the parameter, e.g. by using
+      the copy constructor of the class used as the type of the formal parameter. This ensures that the
+      method behaves exactly as expected.
+      &lt;p&gt;
+      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC02-J.+Do+not+base+security+checks+on+untrusted+sources"&gt;SEC02-J. Do not base security checks on untrusted sources&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>malicious-code</tag>
   </rule>
 </rules>
