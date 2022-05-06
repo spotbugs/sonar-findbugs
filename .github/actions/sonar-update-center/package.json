@@ -24,7 +24,7 @@
   "author": "Kengo TODA <skypencil@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0",
+    "@actions/core": "^1.8.0",
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.0.1",
     "promisified-properties": "^2.0.24",
