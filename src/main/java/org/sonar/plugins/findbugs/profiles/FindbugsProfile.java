@@ -36,6 +36,7 @@ import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.findbugs.FindbugsExecutor;
+import org.sonar.plugins.findbugs.FindbugsPluginException;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
@@ -139,7 +140,7 @@ public class FindbugsProfile implements BuiltInQualityProfilesDefinition {
       findbugsSecurityJspProfile.done();
       findbugsSecurityScalaProfile.done();
     } catch (Exception e) {
-      throw new RuntimeException("Error defining quality profiles", e);
+      throw new FindbugsPluginException("Error defining quality profiles", e);
     }
   }
 

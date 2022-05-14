@@ -65,7 +65,8 @@ class FindbugsContribProfileTest {
     		.sorted()
     		.collect(Collectors.toList());
     
-    assertThat(findbugsRulesInFbContribProfile).containsExactlyElementsOf(findbugsRules);
-    assertThat(findbugsRulesInFbContribProfile).hasSize(FindbugsRulesDefinition.RULE_COUNT);
+    assertThat(findbugsRulesInFbContribProfile)
+    .containsExactlyElementsOf(findbugsRules)
+    .hasSize(FindbugsRulesDefinition.RULE_COUNT);
   }
 }

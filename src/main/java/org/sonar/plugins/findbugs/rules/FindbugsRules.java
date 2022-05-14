@@ -41,7 +41,7 @@ public class FindbugsRules {
   public static final String PLUGIN_ID_FINDBUGS_CONTRIB = "com.mebigfatguy.fbcontrib";
 
   //Includes all the bugs that are bundle with FindBugs by default
-  public static final List<String> FINDBUGS_PATTERNS = Arrays.asList(
+  public static final List<String> FINDBUGS_PATTERNS = Collections.unmodifiableList(Arrays.asList(
       "XSS_REQUEST_PARAMETER_TO_SEND_ERROR",
       "XSS_REQUEST_PARAMETER_TO_SERVLET_WRITER",
       "HRS_REQUEST_PARAMETER_TO_HTTP_HEADER",
@@ -50,9 +50,9 @@ public class FindbugsRules {
       "DMI_EMPTY_DB_PASSWORD",
       "SQL_NONCONSTANT_STRING_PASSED_TO_EXECUTE",
       "SQL_PREPARED_STATEMENT_GENERATED_FROM_NONCONSTANT_STRING"
-      );
+      ));
 
-  public static final List<String> CRYPTO_BUGS = Arrays.asList(
+  public static final List<String> CRYPTO_BUGS = Collections.unmodifiableList(Arrays.asList(
       "WEAK_TRUST_MANAGER",
       "WEAK_HOSTNAME_VERIFIER",
       //"WEAK_MESSAGE_DIGEST", //Deprecated
@@ -76,9 +76,9 @@ public class FindbugsRules {
       "INSECURE_SMTP_SSL",
       "UNSAFE_HASH_EQUALS",
       "TDES_USAGE"
-      );
+      ));
 
-  public static final List<String> CRITICAL_BUGS = Arrays.asList( //RCE or powerful function
+  public static final List<String> CRITICAL_BUGS = Collections.unmodifiableList(Arrays.asList( //RCE or powerful function
       "COMMAND_INJECTION",
       "XXE_SAXPARSER",
       "XXE_XMLREADER",
@@ -126,9 +126,10 @@ public class FindbugsRules {
       "SQL_INJECTION_VERTX",
       "IMPROPER_UNICODE",
       "SAML_IGNORE_COMMENTS",
-      "DANGEROUS_PERMISSION_COMBINATION");
+      "DANGEROUS_PERMISSION_COMBINATION"
+      ));
 
-  public static final List<String> MAJOR_BUGS = Arrays.asList(
+  public static final List<String> MAJOR_BUGS = Collections.unmodifiableList(Arrays.asList(
       "PREDICTABLE_RANDOM",
       "PATH_TRAVERSAL_IN",
       "PATH_TRAVERSAL_OUT",
@@ -164,9 +165,10 @@ public class FindbugsRules {
       "ENTITY_MASS_ASSIGNMENT",
       "OVERLY_PERMISSIVE_FILE_PERMISSION",
       "MODIFICATION_AFTER_VALIDATION",
-      "NORMALIZATION_AFTER_VALIDATION");
+      "NORMALIZATION_AFTER_VALIDATION"
+      ));
 
-  public static final List<String> INFORMATIONAL_PATTERNS = Arrays.asList(
+  public static final List<String> INFORMATIONAL_PATTERNS = Collections.unmodifiableList(Arrays.asList(
       "SERVLET_PARAMETER",
       "SERVLET_CONTENT_TYPE",
       "SERVLET_SERVER_NAME",
@@ -196,16 +198,23 @@ public class FindbugsRules {
       "ANDROID_WEB_VIEW_JAVASCRIPT_INTERFACE",
       "FORMAT_STRING_MANIPULATION",
       "DESERIALIZATION_GADGET", //Prone to false positive.. therefore only in audit profile
-      "INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE");
+      "INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE"
+      ));
 
-
-
-  public static final List<String> MAJOR_JSP_BUGS = Arrays.asList("XSS_REQUEST_PARAMETER_TO_JSP_WRITER", "XSS_JSP_PRINT", "JSP_JSTL_OUT");
+  public static final List<String> MAJOR_JSP_BUGS = Collections.unmodifiableList(Arrays.asList(
+      "XSS_REQUEST_PARAMETER_TO_JSP_WRITER", 
+      "XSS_JSP_PRINT", 
+      "JSP_JSTL_OUT"
+      ));
 
   // RCE from JSP specific functions (taglibs)
-  public static final List<String> CRITICAL_JSP_BUGS = Arrays.asList("JSP_INCLUDE","JSP_SPRING_EVAL","JSP_XSLT");
+  public static final List<String> CRITICAL_JSP_BUGS = Collections.unmodifiableList(Arrays.asList(
+      "JSP_INCLUDE",
+      "JSP_SPRING_EVAL",
+      "JSP_XSLT"
+      ));
 
-  public static final List<String>  CRITICAL_SCALA_BUGS = Arrays.asList(
+  public static final List<String>  CRITICAL_SCALA_BUGS = Collections.unmodifiableList(Arrays.asList(
       "SCALA_SENSITIVE_DATA_EXPOSURE",
       "SCALA_PLAY_SSRF",
       "SCALA_XSS_TWIRL",
@@ -214,7 +223,8 @@ public class FindbugsRules {
       "SCALA_COMMAND_INJECTION",
       "SCALA_SQL_INJECTION_SLICK",
       "SCALA_SQL_INJECTION_ANORM",
-      "PREDICTABLE_RANDOM_SCALA");
+      "PREDICTABLE_RANDOM_SCALA"
+      ));
 
   /**
    * Bug patterns for JSP code from the SpotBugs core plugin (not from FindSecBugs)

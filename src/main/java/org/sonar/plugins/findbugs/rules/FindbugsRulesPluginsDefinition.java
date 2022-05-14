@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.rule.RuleStatus;
+import org.sonar.api.rule.Severity;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.findbugs.FindbugsExecutor;
 import org.sonar.plugins.findbugs.language.Jsp;
@@ -135,7 +136,7 @@ public final class FindbugsRulesPluginsDefinition implements RulesDefinition {
   		}
 
   		String htmlDescription = bugPattern.getDetailText();
-  		String severity = getSonarPriority(type, category, htmlDescription);
+  		String severity = getSonarSeverity(type, category, htmlDescription);
   		String name = capitalize(category.toLowerCase()).replace("_"," ") + " - " + bugPattern.getShortDescription();
   		boolean deprecated = bugPattern.isDeprecated();
   		String deprecationReplacement = deprecatedRules.get(type);
@@ -227,39 +228,51 @@ public final class FindbugsRulesPluginsDefinition implements RulesDefinition {
     return s.substring(0, 1).toUpperCase() + s.substring(1);
   }
   
-  public String getSonarPriority(String type, String category, String description) {
-    String priority = getFsbPriorityFromType(type,category);
+  public String getSonarSeverity(String type, String category, String description) {
+    String priority = getFsbSeverityFromType(type,category);
     if(priority != null) {
     	return priority;
     }
 
     //Findbugs critical base on the type or message
     if(type.contains("IMPOSSIBLE")) {
-        return "CRITICAL";
+        return Severity.CRITICAL;
     }
     
     Pattern willResultInExceptionAtRuntimePattern = Pattern.compile("[\\S\\s]*will result in [\\w]+Exception at runtime[\\S\\s]*");
     Pattern willAlwaysThrowExceptionPattern = Pattern.compile("[\\S\\s]*will always throw a [\\w]+Exception[\\S\\s]*");
     
     if(willResultInExceptionAtRuntimePattern.matcher(description).matches() || willAlwaysThrowExceptionPattern.matcher(description).matches()) {
-        return "CRITICAL";
+        return Severity.CRITICAL;
     }
 
     //Findbugs general
-    if(Arrays.asList("CORRECTNESS", "PERFORMANCE", "SECURITY","MULTI-THREADING","BAD_PRACTICE").contains(category)) return "MAJOR";
-    if(Arrays.asList("STYLE", "MALICIOUS_CODE", "I18N","EXPERIMENTAL").contains(category)) return "INFO";
+    if(Arrays.asList("CORRECTNESS", "PERFORMANCE", "SECURITY","MULTI-THREADING","BAD_PRACTICE").contains(category)) {
+      return Severity.MAJOR;
+    }
+    if(Arrays.asList("STYLE", "MALICIOUS_CODE", "I18N","EXPERIMENTAL").contains(category)) {
+      return Severity.INFO;
+    }
 
-    LOG.warn("Unknown priority for "+type+" ("+category+")");
-    return "INFO";
+    LOG.warn("Unknown priority for {} ({})", type, category);
+    return Severity.INFO;
   }
   
-  private String getFsbPriorityFromType(String type, String category) {
-  	if (CRITICAL_BUGS.contains(type) || CRITICAL_JSP_BUGS.contains(type) || CRITICAL_SCALA_BUGS.contains(type)) return "CRITICAL";
-    if (MAJOR_BUGS.contains(type) || CRYPTO_BUGS.contains(type) || MAJOR_JSP_BUGS.contains(type)) return "MAJOR";
-    if (INFORMATIONAL_PATTERNS.contains(type)) return "INFO";
+  private String getFsbSeverityFromType(String type, String category) {
+  	if (CRITICAL_BUGS.contains(type) || CRITICAL_JSP_BUGS.contains(type) || CRITICAL_SCALA_BUGS.contains(type)) {
+  	  return Severity.CRITICAL;
+  	}
+  	
+    if (MAJOR_BUGS.contains(type) || CRYPTO_BUGS.contains(type) || MAJOR_JSP_BUGS.contains(type)) {
+      return Severity.MAJOR;
+    }
+    
+    if (INFORMATIONAL_PATTERNS.contains(type)) {
+      return Severity.INFO;
+    }
 
     if(category.equals("SECURITY")) {
-      return "MAJOR";
+      return Severity.MAJOR;
     }
 
     return null;

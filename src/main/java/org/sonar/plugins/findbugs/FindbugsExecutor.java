@@ -229,9 +229,9 @@ public class FindbugsExecutor {
       } catch (InterruptedException e) {
         LOG.error("Execution was interrupted", e);
         Thread.currentThread().interrupt();
-        throw new RuntimeException("Execution was interrupted", e);
+        throw new FindbugsPluginException("Execution was interrupted", e);
       } catch (IOException e) {
-        throw new RuntimeException("Analysis error: " + e.getMessage(), e);
+        throw new FindbugsPluginException("Analysis error: " + e.getMessage(), e);
       } finally {
         engine.dispose();
       }
@@ -263,7 +263,10 @@ public class FindbugsExecutor {
       		LOG.info("Loading findbugs plugin: " + path);
       	  plugin = Plugin.addCustomPlugin(uri, contextClassLoader);
       	}
-      	plugins.put(plugin.getPluginId(), plugin);
+      	
+      	if (plugin != null) {
+      	  plugins.put(plugin.getPluginId(), plugin);
+      	}
       } catch (PluginException e) {
         LOG.warn("Failed to load plugin for custom detector: " + path);
         LOG.debug("Cause of failure", e);
