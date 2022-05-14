@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.base.Throwables;
 import edu.umd.cs.findbugs.BugCollection;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.BugPattern;
@@ -36,7 +35,7 @@ import edu.umd.cs.findbugs.config.UserPreferences;
 import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.ScannerSide;
@@ -227,8 +226,12 @@ public class FindbugsExecutor {
       try {
         engine.execute();
         return null;
-      } catch (InterruptedException | IOException e) {
-        throw Throwables.propagate(e);
+      } catch (InterruptedException e) {
+        LOG.error("Execution was interrupted", e);
+        Thread.currentThread().interrupt();
+        throw new RuntimeException("Execution was interrupted", e);
+      } catch (IOException e) {
+        throw new RuntimeException("Analysis error: " + e.getMessage(), e);
       } finally {
         engine.dispose();
       }

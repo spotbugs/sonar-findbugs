@@ -19,8 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 
 import edu.umd.cs.findbugs.ClassScreener;
@@ -31,6 +29,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.PropertyType;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -330,7 +330,7 @@ public class FindbugsConfiguration {
   }
 
   List<File> getExcludesFilters() {
-    List<File> result = Lists.newArrayList();
+    List<File> result = new ArrayList<>();
     PathResolver pathResolver = new PathResolver();
     String[] filters = config.getStringArray(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY);
     for (String excludesFilterPath : filters) {
@@ -364,7 +364,7 @@ public class FindbugsConfiguration {
 
   public static List<PropertyDefinition> getPropertyDefinitions() {
     String subCategory = "FindBugs";
-    return ImmutableList.of(
+    return Collections.unmodifiableList(Arrays.asList(
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
         .category(Java.KEY)
@@ -426,7 +426,7 @@ public class FindbugsConfiguration {
         .description("To analyze only the given files (in FQCN, comma separted) / package patterns")
         .type(PropertyType.STRING)
         .build()      
-      );
+      ));
   }
 
 }

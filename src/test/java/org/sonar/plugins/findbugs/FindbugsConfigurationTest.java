@@ -19,14 +19,13 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
-
 import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -130,7 +129,7 @@ class FindbugsConfigurationTest {
   @Test
   void should_set_class_files() throws IOException {
     File file = new File(temp, "MyClass.class");
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(file));
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
       
@@ -141,7 +140,7 @@ class FindbugsConfigurationTest {
   @Test
   void should_set_class_path() throws IOException {
     File classpath = new File(temp, "classpath");
-    when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
+    when(javaResourceLocator.classpath()).thenReturn(Collections.singletonList(classpath));
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
 

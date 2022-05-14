@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.findbugs.rule;
 
-import com.google.common.collect.Lists;
 import java.util.ArrayList;
 import org.mockito.ArgumentMatcher;
 import org.mockito.invocation.InvocationOnMock;
@@ -139,7 +138,7 @@ public class FakeRuleFinder {
   }
 
   private static List<Rule> convert(List<RulesDefinition.Rule> rules) {
-    List<Rule> results = Lists.newArrayListWithCapacity(rules.size());
+    List<Rule> results = new ArrayList<>();
     for (RulesDefinition.Rule rule : rules) {
       Rule newRule = Rule.create(rule.repository().key(), rule.key(), rule.name()).setDescription(rule.htmlDescription()).setRepositoryKey(rule.repository().key());
       results.add(newRule);

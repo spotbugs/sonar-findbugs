@@ -19,9 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import org.codehaus.staxmate.SMInputFactory;
 import org.codehaus.staxmate.in.SMInputCursor;
 
@@ -30,6 +27,8 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class FindbugsXmlReportParser {
@@ -46,7 +45,7 @@ class FindbugsXmlReportParser {
   }
 
   public List<XmlBugInstance> getBugInstances() {
-    List<XmlBugInstance> result = Lists.newArrayList();
+    List<XmlBugInstance> result = new ArrayList<>();
     try {
       SMInputFactory inf = new SMInputFactory(XMLInputFactory.newInstance());
       SMInputCursor cursor = inf.rootElementCursor(findbugsXmlReport).advance();
@@ -57,7 +56,7 @@ class FindbugsXmlReportParser {
         xmlBugInstance.longMessage = "";
         result.add(xmlBugInstance);
 
-        ImmutableList.Builder<XmlSourceLineAnnotation> lines = ImmutableList.builder();
+        List<XmlSourceLineAnnotation> lines = new ArrayList<>();
         SMInputCursor bugInstanceChildCursor = bugInstanceCursor.childElementCursor().advance();
         while (bugInstanceChildCursor.asEvent() != null) {
           String nodeName = bugInstanceChildCursor.getLocalName();
@@ -73,7 +72,7 @@ class FindbugsXmlReportParser {
           }
           bugInstanceChildCursor.advance();
         }
-        xmlBugInstance.sourceLines = lines.build();
+        xmlBugInstance.sourceLines = Collections.unmodifiableList(lines);
         bugInstanceCursor.advance();
       }
       cursor.getStreamReader().closeCompletely();
@@ -114,7 +113,6 @@ class FindbugsXmlReportParser {
     private boolean primary;
     private Integer start;
     private Integer end;
-    @VisibleForTesting
     protected String className;
 
     public void parseStart(String attrValue) {

@@ -19,7 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
 import edu.umd.cs.findbugs.MethodAnnotation;
@@ -140,7 +139,7 @@ class FindbugsSensorTest extends FindbugsTests {
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(activeRules)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
@@ -159,7 +158,7 @@ class FindbugsSensorTest extends FindbugsTests {
 
     when(javaResourceLocator.findResourceByClassName(anyString())).thenReturn(null);
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
@@ -177,7 +176,7 @@ class FindbugsSensorTest extends FindbugsTests {
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(activeRules)).thenReturn(collection);
     JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFbContribRules());
 
@@ -195,7 +194,7 @@ class FindbugsSensorTest extends FindbugsTests {
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(activeRules)).thenReturn(collection);
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsRules());
 
@@ -213,7 +212,7 @@ class FindbugsSensorTest extends FindbugsTests {
     Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
     when(executor.execute(activeRules)).thenReturn(collection);
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
 
@@ -227,7 +226,7 @@ class FindbugsSensorTest extends FindbugsTests {
   @Test
   void should_not_execute_findbugs_if_no_active() throws Exception {
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithNoRules());
 
@@ -248,7 +247,7 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
     when(fs.languages()).thenReturn(languages);
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
 
@@ -267,7 +266,7 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml", "jsp"));
     when(fs.languages()).thenReturn(languages);
     
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
 
