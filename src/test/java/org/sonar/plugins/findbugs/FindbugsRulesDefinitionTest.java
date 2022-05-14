@@ -19,28 +19,31 @@
  */
 package org.sonar.plugins.findbugs;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesPluginsDefinition;
 import org.sonar.plugins.java.Java;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class FindbugsRulesDefinitionTest {
   /**
    * The SpotBugs rules repository
    */
   private RulesDefinition.Repository repository;
+  private RulesDefinition.Context context;
   
   @BeforeEach
   public void setupRepository() {
-    FindbugsRulesDefinition definition = new FindbugsRulesDefinition();
-    RulesDefinition.Context context = new RulesDefinition.Context();
+    FindbugsRulesPluginsDefinition definition = new FindbugsRulesPluginsDefinition();
+    
+    context = new RulesDefinition.Context();
     definition.define(context);
     
     repository = context.repository(FindbugsRulesDefinition.REPOSITORY_KEY);

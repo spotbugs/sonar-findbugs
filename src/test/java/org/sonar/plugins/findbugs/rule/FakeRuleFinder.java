@@ -51,39 +51,33 @@ public class FakeRuleFinder {
     RuleFinder ruleFinder = mock(RuleFinder.class);
     RulesDefinition.Context context = new RulesDefinition.Context();
     List<Rule> allRules = new ArrayList<>();
+    
+    RulesDefinition rulesDefinition = new FindbugsRulesPluginsDefinition();
+    rulesDefinition.define(context);
+    
     if (findbugs) {
-      RulesDefinition rulesDefinition = new FindbugsRulesDefinition();
-      rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindbugsRulesDefinition.REPOSITORY_KEY);
       allRules.addAll(convert(context.repository(FindbugsRulesDefinition.REPOSITORY_KEY).rules()));
     }
 
     if (fbContrib) {
-      RulesDefinition rulesDefinition = new FbContribRulesDefinition();
-      rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FbContribRulesDefinition.REPOSITORY_KEY);
       allRules.addAll(convert(context.repository(FbContribRulesDefinition.REPOSITORY_KEY).rules()));
     }
 
     if (findSecBug) {
-      RulesDefinition rulesDefinition = new FindSecurityBugsRulesDefinition();
-      rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsRulesDefinition.REPOSITORY_KEY);
       allRules.addAll(convert(context.repository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY).rules()));
 
     }
 
     if (findSecBugJsp) {
-      RulesDefinition rulesDefinition = new FindSecurityBugsJspRulesDefinition();
-      rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY);
       allRules.addAll(convert(context.repository(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY).rules()));
 
     }
 
     if (findSecBugScala) {
-      RulesDefinition rulesDefinition = new FindSecurityBugsScalaRulesDefinition();
-      rulesDefinition.define(context);
       configRuleFinderForRepo(ruleFinder, context, FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY);
       allRules.addAll(convert(context.repository(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY).rules()));
     }

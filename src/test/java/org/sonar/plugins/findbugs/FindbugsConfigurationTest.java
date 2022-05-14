@@ -135,7 +135,6 @@ class FindbugsConfigurationTest {
       conf.initializeFindbugsProject(findbugsProject);
       
       assertThat(findbugsProject.getFileList()).containsOnly(file.getCanonicalPath());
-      conf.stop();
     }
   }
 
@@ -147,45 +146,7 @@ class FindbugsConfigurationTest {
       conf.initializeFindbugsProject(findbugsProject);
 
       assertThat(findbugsProject.getAuxClasspathEntryList()).contains(classpath.getCanonicalPath());
-      conf.stop();
     }
-  }
-
-  @Test
-  void should_copy_lib_in_working_dir() throws IOException {
-    String jsr305 = "findbugs/jsr305.jar";
-    String annotations = "findbugs/annotations.jar";
-
-    // stop at start
-    conf.stop();
-    assertThat(new File(fs.workDir(), jsr305)).doesNotExist();
-    assertThat(new File(fs.workDir(), annotations)).doesNotExist();
-
-    conf.copyLibs();
-    assertThat(new File(fs.workDir(), jsr305)).isFile();
-    assertThat(new File(fs.workDir(), annotations)).isFile();
-
-    // copy again
-    conf.copyLibs();
-    assertThat(new File(fs.workDir(), jsr305)).isFile();
-    assertThat(new File(fs.workDir(), annotations)).isFile();
-
-    conf.stop();
-    assertThat(new File(fs.workDir(), jsr305)).doesNotExist();
-    assertThat(new File(fs.workDir(), annotations)).doesNotExist();
-
-  }
-
-  @Test
-  void should_get_fbcontrib() throws IOException {
-    conf.copyLibs();
-    assertThat(conf.getFbContribJar()).isFile();
-  }
-
-  @Test
-  void should_get_findSecBugs() throws IOException {
-    conf.copyLibs();
-    assertThat(conf.getFindSecBugsJar()).isFile();
   }
   
   @Test

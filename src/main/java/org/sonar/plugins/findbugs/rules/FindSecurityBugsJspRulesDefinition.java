@@ -19,35 +19,23 @@
  */
 package org.sonar.plugins.findbugs.rules;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
-import org.sonar.plugins.findbugs.language.Jsp;
+import org.sonar.api.server.rule.RulesDefinition.NewRepository;
+import org.sonar.api.server.rule.RulesDefinition.NewRule;
 
 /**
  * This RulesDefinition build a separate repository from the FindSecurityBugsRulesDefinition to allow a separate ruleset
  * for JSP language.
  * @see FindSecurityBugsRulesDefinition
  */
-public class FindSecurityBugsJspRulesDefinition implements RulesDefinition {
+public class FindSecurityBugsJspRulesDefinition {
 
     public static final String REPOSITORY_KEY = "findsecbugs-jsp";
     public static final String REPOSITORY_JSP_NAME = "Find Security Bugs (JSP)";
-
-    @Override
-    public void define(Context context) {
-        NewRepository repositoryJsp = context
-                .createRepository(REPOSITORY_KEY, Jsp.KEY)
-                .setName(REPOSITORY_JSP_NAME);
-
-        RulesDefinitionXmlLoader ruleLoaderJsp = new RulesDefinitionXmlLoader();
-        ruleLoaderJsp.load(repositoryJsp, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-jsp.xml"), "UTF-8");
-        
-        addDeprecatedRuleKeys(repositoryJsp);
-        
-        repositoryJsp.done();
+    
+    private FindSecurityBugsJspRulesDefinition() {
     }
-
-    public void addDeprecatedRuleKeys(NewRepository repositoryJsp) {
+    
+    public static void addDeprecatedRuleKeys(NewRepository repositoryJsp) {
         String[] rulesMovedFromFindSecurityBugs = new String[] {
             "XSS_JSP_PRINT",
             "XSS_REQUEST_PARAMETER_TO_JSP_WRITER"

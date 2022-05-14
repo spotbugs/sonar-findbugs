@@ -19,14 +19,14 @@ package org.sonar.plugins.findbugs.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.sonar.plugins.findbugs.profiles.FindbugsSecurityScalaProfile;
+import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
-
-import java.util.List;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
@@ -39,7 +39,7 @@ class ScalaIT {
   @BeforeEach
   public void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Scala Integration Tests", "IT", "java");
-    FindbugsTestSuite.setupProfile(PROJECT_KEY, FindbugsSecurityScalaProfile.FINDBUGS_SECURITY_SCALA_PROFILE_NAME, "scala");
+    FindbugsTestSuite.setupProfile(PROJECT_KEY, FindbugsProfile.FINDBUGS_SECURITY_SCALA_PROFILE_NAME, "scala");
   }
   
   @AfterEach

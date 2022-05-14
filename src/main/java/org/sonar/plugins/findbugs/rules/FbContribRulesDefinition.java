@@ -19,26 +19,13 @@
  */
 package org.sonar.plugins.findbugs.rules;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
-import org.sonar.plugins.java.Java;
-
-public class FbContribRulesDefinition implements RulesDefinition {
+public class FbContribRulesDefinition {
 
   public static final String REPOSITORY_KEY = "fb-contrib";
   public static final String REPOSITORY_NAME = "FindBugs Contrib";
   public static final int RULE_COUNT = 307;
   public static final int DEACTIVED_RULE_COUNT = 0;
-
-  @Override
-  public void define(Context context) {
-    NewRepository repository = context
-      .createRepository(REPOSITORY_KEY, Java.KEY)
-      .setName(REPOSITORY_NAME);
-
-    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
-    ruleLoader.load(repository, FbContribRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-fbcontrib.xml"), "UTF-8");
-    repository.done();
+  
+  private FbContribRulesDefinition() {
   }
-
 }

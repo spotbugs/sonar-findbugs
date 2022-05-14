@@ -21,7 +21,14 @@ package org.sonar.plugins.findbugs;
 
 import com.google.common.collect.Lists;
 
+import edu.umd.cs.findbugs.DetectorFactory;
+import edu.umd.cs.findbugs.DetectorFactoryCollection;
+import edu.umd.cs.findbugs.Plugin;
 import edu.umd.cs.findbugs.Project;
+import edu.umd.cs.findbugs.config.UserPreferences;
+import edu.umd.cs.findbugs.detect.DumbMethods;
+import edu.umd.cs.findbugs.detect.FindFinalizeInvocations;
+import edu.umd.cs.findbugs.detect.TrainFieldStoreTypes;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,13 +38,18 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.rule.ActiveRule;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,6 +68,8 @@ class FindbugsExecutorTest {
   FilePredicates predicatesEmpty;
 
   Configuration configEmpty;
+  
+  ActiveRules activeRules;
 
   @BeforeEach
   public void setUp() {
@@ -68,6 +82,8 @@ class FindbugsExecutorTest {
     configEmpty = mock(Configuration.class);
     when(configEmpty.getStringArray(any())).thenReturn(new String[0]);
     when(configEmpty.get(any())).thenReturn(Optional.of(""));
+    
+    activeRules = mock(ActiveRules.class);
   }
 
   @Test
@@ -77,7 +93,7 @@ class FindbugsExecutorTest {
     File reportFile = new File(temporaryFolder, "findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
 
-    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute(activeRules);
 
     assertThat(reportFile).exists();
     String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
@@ -96,7 +112,7 @@ class FindbugsExecutorTest {
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
     when(conf.getConfidenceLevel()).thenReturn("low");
 
-    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute();
+    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute(activeRules);
 
     assertThat(reportFile).exists();
     String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
@@ -114,7 +130,7 @@ class FindbugsExecutorTest {
 
     FindbugsExecutor executor = new FindbugsExecutor(conf, fsEmpty, configEmpty);
     assertThrows(IllegalStateException.class, () -> {
-      executor.execute();
+      executor.execute(activeRules);
     });
   }
 
@@ -127,7 +143,7 @@ class FindbugsExecutorTest {
     
     FindbugsExecutor executor = new FindbugsExecutor(conf, fsEmpty, configEmpty);
     assertThrows(IllegalStateException.class, () -> {
-      executor.execute();
+      executor.execute(activeRules);
     });
   }
 
@@ -148,4 +164,24 @@ class FindbugsExecutorTest {
     return conf;
   }
 
+  @Test
+  void disableUnnecessaryDetectors() {
+		Map<String, Plugin> plugins = FindbugsExecutor.loadFindbugsPlugins();
+		
+  	when(activeRules.find(RuleKey.of(FindbugsRulesDefinition.REPOSITORY_KEY, "DM_INVALID_MIN_MAX"))).thenReturn(mock(ActiveRule.class));
+  	
+  	UserPreferences userPreferences = UserPreferences.createDefaultUserPreferences();
+		FindbugsExecutor.disableUnnecessaryDetectors(userPreferences, activeRules);
+		
+		DetectorFactory dumbMethods = DetectorFactoryCollection.instance().getFactoryByClassName(DumbMethods.class.getName());
+		DetectorFactory findFinalize = DetectorFactoryCollection.instance().getFactoryByClassName(FindFinalizeInvocations.class.getName());
+		DetectorFactory trainFieldStoreTypes = DetectorFactoryCollection.instance().getFactoryByClassName(TrainFieldStoreTypes.class.getName());
+
+		// DM_INVALID_MIN_MAX is reported by DumbMethods so the detector should be enabled
+		assertThat(userPreferences.isDetectorEnabled(dumbMethods)).withFailMessage("DumbMethods should be enabled").isTrue();
+		// No active rule reported by FindFinalizeInvocations so it should be disabled
+		assertThat(userPreferences.isDetectorEnabled(findFinalize)).withFailMessage("FindFinalizeInvocations should be enabled").isFalse();
+		// TrainFieldStoreTypes is not a reporting detector so it should always be enabled
+		assertThat(userPreferences.isDetectorEnabled(trainFieldStoreTypes)).withFailMessage("TrainFieldStoreTypes should be enabled").isTrue();
+  }
 }

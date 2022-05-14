@@ -27,7 +27,6 @@ import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -46,7 +45,6 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.PropertyType;
-import org.sonar.api.Startable;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -71,7 +69,7 @@ import org.sonar.plugins.java.api.JavaResourceLocator;
 import static java.lang.String.format;
 
 @ScannerSide
-public class FindbugsConfiguration implements Startable {
+public class FindbugsConfiguration {
 
   private static final Logger LOG = Loggers.get(FindbugsConfiguration.class);
   private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp[\\$0-9]*\\.class");
@@ -125,12 +123,6 @@ public class FindbugsConfiguration implements Startable {
       }
     }
 
-    copyLibs();
-    if (annotationsLib != null) {
-      // Findbugs dependencies are packaged by Maven. They are not available during execution of unit tests.
-      findbugsProject.addAuxClasspathEntry(annotationsLib.getCanonicalPath());
-      findbugsProject.addAuxClasspathEntry(jsr305Lib.getCanonicalPath());
-    }
     findbugsProject.setCurrentWorkingDirectory(fileSystem.workDir());
   }
 
@@ -368,72 +360,6 @@ public class FindbugsConfiguration implements Startable {
 
   public boolean isAllowUncompiledCode() {
     return config.getBoolean(FindbugsConstants.ALLOW_UNCOMPILED_CODE).orElse(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE);
-  }
-
-  private File jsr305Lib;
-  private File annotationsLib;
-  private File fbContrib;
-  private File findSecBugs;
-
-  public void copyLibs() {
-    if (jsr305Lib == null) {
-      jsr305Lib = copyLib("/jsr305.jar");
-    }
-    if (annotationsLib == null) {
-      annotationsLib = copyLib("/annotations.jar");
-    }
-    if (fbContrib == null) {
-      fbContrib = copyLib("/sb-contrib.jar");
-    }
-    if (findSecBugs == null) {
-      findSecBugs = copyLib("/findsecbugs-plugin.jar");
-    }
-  }
-
-  @Override
-  public void start() {
-    // do nothing
-  }
-
-  /**
-   * Invoked by PicoContainer to remove temporary files.
-   */
-  @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
-  @Override
-  public void stop() {
-    if (jsr305Lib != null) {
-      jsr305Lib.delete();
-    }
-    if (annotationsLib != null) {
-      annotationsLib.delete();
-    }
-    if (fbContrib != null) {
-      fbContrib.delete();
-    }
-
-    if (findSecBugs != null) {
-      findSecBugs.delete();
-    }
-  }
-
-  private File copyLib(String name) {
-    try (InputStream input = getClass().getResourceAsStream(name)) {
-      File dir = new File(fileSystem.workDir(), "findbugs");
-      FileUtils.forceMkdir(dir);
-      File target = new File(dir, name);
-      FileUtils.copyInputStreamToFile(input, target);
-      return target;
-    } catch (IOException e) {
-      throw new IllegalStateException("Fail to extract Findbugs dependency", e);
-    }
-  }
-
-  public File getFbContribJar() {
-    return fbContrib;
-  }
-
-  public File getFindSecBugsJar() {
-    return findSecBugs;
   }
 
   public static List<PropertyDefinition> getPropertyDefinitions() {

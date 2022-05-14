@@ -84,19 +84,6 @@
       </exclusions>
     </dependency>
 
-
-    <dependency>
-      <groupId>org.sonarsource.sslr-squid-bridge</groupId>
-      <artifactId>sslr-squid-bridge</artifactId>
-      <version>2.7.0.377</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.codehaus.sonar</groupId>
-          <artifactId>sonar-plugin-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
@@ -114,14 +101,12 @@
       <groupId>com.mebigfatguy.sb-contrib</groupId>
       <artifactId>sb-contrib</artifactId>
       <version>${sbcontrib.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>com.h3xstream.findsecbugs</groupId>
       <artifactId>findsecbugs-plugin</artifactId>
       <version>${findsecbugs.version}</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -188,6 +173,13 @@
       <version>1.6</version>
       <scope>test</scope>
     </dependency>
+
+<dependency>
+    <groupId>org.picocontainer</groupId>
+    <artifactId>picocontainer</artifactId>
+    <version>2.15</version>
+      <scope>test</scope>
+</dependency>
 
     <dependency>
       <groupId>org.sonarsource.orchestrator</groupId>
@@ -359,25 +351,6 @@
         </executions>
       </plugin>
 
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <stripVersion>true</stripVersion>
-              <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-              <includeArtifactIds>annotations,jsr305,sb-contrib,findsecbugs-plugin</includeArtifactIds>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
