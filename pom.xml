@@ -186,12 +186,6 @@
       <artifactId>sonar-orchestrator</artifactId>
       <version>3.37.0.87</version>
       <scope>test</scope>
-      <exclusions>
-      	<exclusion>
-      		<groupId>commons-lang</groupId>
-      		<artifactId>commons-lang</artifactId>
-      	</exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
