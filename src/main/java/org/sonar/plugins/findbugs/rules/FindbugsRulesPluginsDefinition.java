@@ -44,6 +44,7 @@ import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.findbugs.FindbugsExecutor;
+import org.sonar.plugins.findbugs.FindbugsPluginException;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.java.Java;
@@ -109,7 +110,7 @@ public final class FindbugsRulesPluginsDefinition implements RulesDefinition {
   		findsecbugsJspRepository.done();
   		findsecbugsScalaRepository.done();
     } catch (Exception e) {
-    	throw new RuntimeException(e);
+    	throw new FindbugsPluginException("Error building rules", e);
     }
   }
 	
