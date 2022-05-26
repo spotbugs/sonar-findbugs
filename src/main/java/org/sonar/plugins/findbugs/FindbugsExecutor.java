@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 import edu.umd.cs.findbugs.BugCollection;
 import edu.umd.cs.findbugs.BugInstance;
+import edu.umd.cs.findbugs.BugPattern;
+import edu.umd.cs.findbugs.DetectorFactory;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
 import edu.umd.cs.findbugs.FindBugs;
 import edu.umd.cs.findbugs.FindBugs2;
@@ -36,18 +35,22 @@ import edu.umd.cs.findbugs.config.UserPreferences;
 import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.findbugs.rules.FindbugsRules;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
@@ -89,17 +92,8 @@ public class FindbugsExecutor {
     this.fs = fs;
     this.config = config;
   }
-
-  @VisibleForTesting
-  Collection<ReportedBug> execute() {
-    return execute(true);
-  }
-
-  public Collection<ReportedBug> execute(boolean useAllPlugin) {
-    return execute(useAllPlugin,useAllPlugin);
-  }
-
-  public Collection<ReportedBug> execute(boolean useFbContrib, boolean useFindSecBugs) {
+  
+  public Collection<ReportedBug> execute(ActiveRules activeRules) {
     // We keep a handle on the current security manager because FB plays with it and we need to restore it before shutting down the executor
     // service
     SecurityManager currentSecurityManager = System.getSecurityManager();
@@ -111,7 +105,6 @@ public class FindbugsExecutor {
     Locale.setDefault(Locale.ENGLISH);
 
     OutputStream xmlOutput = null;
-    Collection<Plugin> customPlugins = null;
     ExecutorService executorService = Executors.newSingleThreadExecutor();
     try (FindBugs2 engine = new FindBugs2(); Project project = new Project()) {
       configuration.initializeFindbugsProject(project);
@@ -121,8 +114,8 @@ public class FindbugsExecutor {
         return new ArrayList<>();
       }
 
-      customPlugins = loadFindbugsPlugins(useFbContrib,useFindSecBugs);
-
+      loadFindbugsPlugins();
+      disableUnnecessaryDetectors(project.getConfiguration(), activeRules);
       disableUpdateChecksOnEveryPlugin();
 
       engine.setProject(project);
@@ -189,7 +182,6 @@ public class FindbugsExecutor {
     } finally {
       // we set back the original security manager BEFORE shutting down the executor service, otherwise there's a problem with Java 5
       System.setSecurityManager(currentSecurityManager);
-      resetCustomPluginList(customPlugins);
       executorService.shutdown();
       IOUtils.closeQuietly(xmlOutput);
       Thread.currentThread().setContextClassLoader(initialClassLoader);
@@ -234,47 +226,47 @@ public class FindbugsExecutor {
       try {
         engine.execute();
         return null;
-      } catch (InterruptedException | IOException e) {
-        throw Throwables.propagate(e);
+      } catch (InterruptedException e) {
+        LOG.error("Execution was interrupted", e);
+        Thread.currentThread().interrupt();
+        throw new FindbugsPluginException("Execution was interrupted", e);
+      } catch (IOException e) {
+        throw new FindbugsPluginException("Analysis error: " + e.getMessage(), e);
       } finally {
         engine.dispose();
       }
     }
   }
 
-  private Collection<Plugin> loadFindbugsPlugins(boolean useFbContrib,boolean useFindSecBugs) {
-    ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+  public static Map<String, Plugin> loadFindbugsPlugins() {
+    ClassLoader contextClassLoader = FindbugsExecutor.class.getClassLoader();
 
-    List<String> pluginJarPathList = Lists.newArrayList();
+    List<String> pluginJarPathList = new ArrayList<>();
     try {
       Enumeration<URL> urls = contextClassLoader.getResources("findbugs.xml");
       while (urls.hasMoreElements()) {
         URL url = urls.nextElement();
         pluginJarPathList.add(normalizeUrl(url));
       }
-      //Add fb-contrib plugin.
-      if (useFbContrib && configuration.getFbContribJar() != null) {
-        // fb-contrib plugin is packaged by Maven. It is not available during execution of unit tests.
-        pluginJarPathList.add(configuration.getFbContribJar().getAbsolutePath());
-      }
-      //Add find-sec-bugs plugin. (same as fb-contrib)
-      if (useFindSecBugs && configuration.getFindSecBugsJar() != null) {
-        pluginJarPathList.add(configuration.getFindSecBugsJar().getAbsolutePath());
-      }
     } catch (IOException e) {
       throw new IllegalStateException(e);
     } catch (URISyntaxException e) {
       throw new IllegalStateException(e);
     }
-    List<Plugin> customPluginList = Lists.newArrayList();
+    Map<String, Plugin> plugins = new HashMap<>();
 
     for (String path : pluginJarPathList) {
       try {
-        Plugin plugin = Plugin.addCustomPlugin(new File(path).toURI(), contextClassLoader);
-        if (plugin != null) {
-          customPluginList.add(plugin);
-          LOG.info("Loading findbugs plugin: " + path);
-        }
+      	URI uri = new File(path).toURI();
+      	Plugin plugin = Plugin.getAllPluginsMap().get(uri);
+      	if (plugin == null) {
+      		LOG.info("Loading findbugs plugin: " + path);
+      	  plugin = Plugin.addCustomPlugin(uri, contextClassLoader);
+      	}
+      	
+      	if (plugin != null) {
+      	  plugins.put(plugin.getPluginId(), plugin);
+      	}
       } catch (PluginException e) {
         LOG.warn("Failed to load plugin for custom detector: " + path);
         LOG.debug("Cause of failure", e);
@@ -287,7 +279,7 @@ public class FindbugsExecutor {
       }
     }
 
-    return customPluginList;
+    return plugins;
   }
 
   private static String normalizeUrl(URL url) throws URISyntaxException {
@@ -303,12 +295,34 @@ public class FindbugsExecutor {
     }
   }
 
-  private static void resetCustomPluginList(Collection<Plugin> customPlugins) {
-    if (customPlugins != null) {
-      for (Plugin plugin : customPlugins) {
-        Plugin.removeCustomPlugin(plugin);
-      }
+  public static void disableUnnecessaryDetectors(UserPreferences userPreferences, ActiveRules activeRules) {
+    for (DetectorFactory detectorFactory : DetectorFactoryCollection.instance().getFactories()) {
+      boolean enabled = !detectorFactory.isReportingDetector() || detectorFactoryHasActiveRules(detectorFactory, activeRules);
+      
+      userPreferences.enableDetector(detectorFactory, enabled);
     }
   }
+  
+  private static boolean detectorFactoryHasActiveRules(DetectorFactory detectorFactory, ActiveRules activeRules) {
+    Collection<String> repositories = FindbugsRules.repositoriesForPlugin(detectorFactory.getPlugin());
+    
+    if (repositories.isEmpty()) {
+      LOG.warn("Detector {} is activated because it is not from a built-in plugin, cannot check if there are some active rules", detectorFactory);
+      return true;
+    }
+    
+    for (BugPattern bugPattern : detectorFactory.getReportedBugPatterns()) {
+      String bugPatternType = bugPattern.getType();
+      
+      for (String repository : repositories) {
+        RuleKey ruleKey = RuleKey.of(repository, bugPatternType);
 
+        if (activeRules.find(ruleKey) != null) {
+          return true;
+        }
+      }
+    }
+    
+    return false;
+  }
 }

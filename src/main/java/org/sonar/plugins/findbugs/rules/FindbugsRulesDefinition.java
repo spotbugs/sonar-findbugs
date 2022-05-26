@@ -19,35 +19,13 @@
  */
 package org.sonar.plugins.findbugs.rules;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
-import org.sonar.plugins.java.Java;
-import org.sonar.squidbridge.rules.SqaleXmlLoader;
-
-public final class FindbugsRulesDefinition implements RulesDefinition {
+public final class FindbugsRulesDefinition {
 
   public static final String REPOSITORY_KEY = "findbugs";
   public static final String REPOSITORY_NAME = "FindBugs";
   public static final int RULE_COUNT = 461;
-  public static final int DEACTIVED_RULE_COUNT = 6;
-
-  @Override
-  public void define(Context context) {
-    NewRepository repository = context
-      .createRepository(REPOSITORY_KEY, Java.KEY)
-      .setName(REPOSITORY_NAME);
-
-
-    RulesDefinitionXmlLoader ruleLoaderJsp = new RulesDefinitionXmlLoader();
-    ruleLoaderJsp.load(repository, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-findbugs.xml"), "UTF-8");
-    SqaleXmlLoader.load(repository, "/com/sonar/sqale/findbugs-model.xml");
-    repository.done();
-
-//    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
-//    ruleLoader.load(repository, FindbugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules.xml"), "UTF-8");
-//    ExternalDescriptionLoader.loadHtmlDescriptions(repository, "/org/sonar/l10n/findbugs/rules/findbugs");
-//    SqaleXmlLoader.load(repository, "/com/sonar/sqale/findbugs-model.xml");
-//    repository.done();
+  public static final int DEACTIVED_RULE_COUNT = 4;
+  
+  private FindbugsRulesDefinition() {
   }
-
 }

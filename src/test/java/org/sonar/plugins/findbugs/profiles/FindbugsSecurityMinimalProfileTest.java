@@ -21,11 +21,11 @@ package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -41,12 +41,12 @@ class FindbugsSecurityMinimalProfileTest {
 
   @Test
   void shouldCreateProfile() {
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityMinimalProfile findbugsProfile = new FindbugsSecurityMinimalProfile(importer);
+    RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
+    FindbugsProfile findbugsProfile = new FindbugsProfile(ruleFinder);
     Context context = new Context();
     findbugsProfile.define(context);
 
-    BuiltInQualityProfile profile = context.profile(Java.KEY, FindbugsSecurityMinimalProfile.FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
+    BuiltInQualityProfile profile = context.profile(Java.KEY, FindbugsProfile.FINDBUGS_SECURITY_MINIMAL_PROFILE_NAME);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     // FSB rules must be added to FsbClassifier.groovy otherwise new rules metadata are not added in rules-findsecbugs.xml
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();

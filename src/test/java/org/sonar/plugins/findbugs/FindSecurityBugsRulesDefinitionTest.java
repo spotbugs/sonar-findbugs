@@ -23,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesPluginsDefinition;
 import org.sonar.plugins.java.Java;
 
 import java.util.List;
@@ -33,7 +34,7 @@ class FindSecurityBugsRulesDefinitionTest {
   
   @Test
   void testLoadRepositoryFromXml() {
-    FindSecurityBugsRulesDefinition definition = new FindSecurityBugsRulesDefinition();
+    FindbugsRulesPluginsDefinition definition = new FindbugsRulesPluginsDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);
     RulesDefinition.Repository repository = context.repository(FindSecurityBugsRulesDefinition.REPOSITORY_KEY);

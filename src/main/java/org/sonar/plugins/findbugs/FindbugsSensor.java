@@ -123,7 +123,7 @@ public class FindbugsSensor implements Sensor {
       return;
     }
 
-    Collection<ReportedBug> collection = executor.execute(hasActiveFbContribRules(), hasActiveFindSecBugsRules());
+    Collection<ReportedBug> collection = executor.execute(context.activeRules());
 
     try {
 

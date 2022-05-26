@@ -19,25 +19,12 @@
  */
 package org.sonar.plugins.findbugs.rules;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.server.rule.RulesDefinitionXmlLoader;
-import org.sonar.plugins.java.Java;
-
-public final class FindSecurityBugsRulesDefinition implements RulesDefinition {
+public final class FindSecurityBugsRulesDefinition {
 
   public static final String REPOSITORY_KEY = "findsecbugs";
   public static final String REPOSITORY_NAME = "Find Security Bugs";
   public static final int RULE_COUNT = 126;
 
-  @Override
-  public void define(Context context) {
-    NewRepository repository = context
-      .createRepository(REPOSITORY_KEY, Java.KEY)
-      .setName(REPOSITORY_NAME);
-
-    RulesDefinitionXmlLoader ruleLoader = new RulesDefinitionXmlLoader();
-    ruleLoader.load(repository, FindSecurityBugsRulesDefinition.class.getResourceAsStream("/org/sonar/plugins/findbugs/rules-findsecbugs.xml"), "UTF-8");
-    repository.done();
-
+  private FindSecurityBugsRulesDefinition() {
   }
 }

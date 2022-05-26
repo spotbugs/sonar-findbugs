@@ -21,11 +21,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
@@ -38,12 +38,12 @@ class FindbugsScalaProfileTest {
 
   @Test
   void shouldCreateProfile() {
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityScalaProfile findbugsProfile = new FindbugsSecurityScalaProfile(importer);
+    RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
+    FindbugsProfile findbugsProfile = new FindbugsProfile(ruleFinder);
     Context context = new Context();
     findbugsProfile.define(context);
     
-    BuiltInQualityProfile profile = context.profile(Scala.KEY, FindbugsSecurityScalaProfile.FINDBUGS_SECURITY_SCALA_PROFILE_NAME);
+    BuiltInQualityProfile profile = context.profile(Scala.KEY, FindbugsProfile.FINDBUGS_SECURITY_SCALA_PROFILE_NAME);
     assertThat(profile.rules()).hasSize(FindSecurityBugsScalaRulesDefinition.RULE_COUNT);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(FindSecurityBugsScalaRulesDefinition.RULE_COUNT);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();

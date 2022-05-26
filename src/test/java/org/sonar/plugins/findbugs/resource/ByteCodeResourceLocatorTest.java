@@ -8,8 +8,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 
 import java.util.ArrayList;
-
-import com.google.common.collect.ImmutableList;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -103,7 +102,7 @@ class ByteCodeResourceLocatorTest {
   @Test
   void findRegularSourceFile() throws Exception {
     InputFile givenJavaFile = mock(InputFile.class);
-    when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
+    when(fsEmpty.inputFiles(any())).thenReturn(Collections.singletonList(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findSourceFile("com/helloworld/TestJavaClass.java", fsEmpty));
@@ -112,7 +111,7 @@ class ByteCodeResourceLocatorTest {
   @Test
   void findSourceFileFromScalaClassName() throws Exception {
     InputFile givenJavaFile = mock(InputFile.class);
-    when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
+    when(fsEmpty.inputFiles(any())).thenReturn(Collections.singletonList(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findSourceFile("TestOperationalProfileIccidModel$TestOperationalProfileIccid$.class", fsEmpty));

@@ -26,7 +26,6 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQual
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
@@ -42,13 +41,13 @@ class FindbugsSecurityJspProfileTest {
 
   @Test
   void shouldCreateProfile() {
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithAllRules());
-    FindbugsSecurityJspProfile findbugsProfile = new FindbugsSecurityJspProfile(importer);
+    RuleFinder ruleFinder = FakeRuleFinder.createWithAllRules();
+    FindbugsProfile findbugsProfile = new FindbugsProfile(ruleFinder);
     Context context = new Context();
     findbugsProfile.define(context);
 
     //There are 6 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
-    BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsSecurityJspProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
+    BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(6);
@@ -64,14 +63,13 @@ class FindbugsSecurityJspProfileTest {
     // Mark a rule as removed
     org.sonar.api.rules.Rule rule = ruleFinder.findByKey(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY, "XSS_JSP_PRINT");
     rule.setStatus(org.sonar.api.rules.Rule.STATUS_REMOVED);
-    
-    FindbugsProfileImporter importer = new FindbugsProfileImporter(ruleFinder);
-    FindbugsSecurityJspProfile findbugsProfile = new FindbugsSecurityJspProfile(importer);
+
+    FindbugsProfile findbugsProfile = new FindbugsProfile(ruleFinder);
     Context context = new Context();
     findbugsProfile.define(context);
 
     //There should be 5 rules left since we removed one
-    BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsSecurityJspProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
+    BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
     assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(5);
