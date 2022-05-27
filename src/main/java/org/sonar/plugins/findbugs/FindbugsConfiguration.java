@@ -235,6 +235,9 @@ public class FindbugsConfiguration implements Startable {
     } else if (hasJspFiles) {
       // Add the precompiled JSP .class files
       addPrecompiledJspClasses(classFilesToAnalyze);
+    } else if (classFilesToAnalyze.isEmpty()) {
+      // For some users javaResourceLocator.classFilesToAnalyze() seems to return an empty list, it is unclear why
+      addClassFilesFromClasspath(classFilesToAnalyze);
     }
 
     return classFilesToAnalyze;
