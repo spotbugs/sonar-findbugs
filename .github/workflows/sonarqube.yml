@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       # previous LTS version
-      SONAR_VERSION: 8.9
+      SONAR_VERSION: 8.9.8.54436
       SONAR_JAVA_VERSION: 6.15.1.26025
     steps:
       - name: Decide the ref to check out
