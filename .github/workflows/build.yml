@@ -38,6 +38,14 @@ jobs:
           java-version: 11
           distribution: temurin
           cache: 'maven'
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.sonar/cache
+            ~/.sonar/orchestrator/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
           mvn verify -B -e -V
