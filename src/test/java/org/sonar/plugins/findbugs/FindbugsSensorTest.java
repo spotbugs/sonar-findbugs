@@ -35,6 +35,7 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -44,7 +45,7 @@ import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
@@ -327,10 +328,12 @@ class FindbugsSensorTest extends FindbugsTests {
   void describe() {
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
-    DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
+    SensorDescriptor descriptor = mock(SensorDescriptor.class);
     
     sensor.describe(descriptor);
     
-    assertEquals(Arrays.asList(FindbugsSensor.REPOS), descriptor.ruleRepositories());
+    ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+    verify(descriptor).name(argument.capture());
+    assertEquals("FindBugs Sensor", argument.getValue());
   }
 }
