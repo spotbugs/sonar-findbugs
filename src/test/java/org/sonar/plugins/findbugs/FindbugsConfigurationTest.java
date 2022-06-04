@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -322,5 +323,25 @@ class FindbugsConfigurationTest {
     FilePredicate languagePredicate = mock(FilePredicate.class);
     when(filePredicates.hasLanguage(language)).thenReturn(languagePredicate);
     when(fs.hasFiles(languagePredicate)).thenReturn(predicateReturn);
+  }
+  
+  @Test
+  void buildMissingCompiledCodeException() {
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.emptyList());
+    when(javaResourceLocator.classpath()).thenReturn(Collections.emptyList());
+    
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Property sonar.java.binaries was not set");
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classpath was empty");
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classFilesToAnalyze was empty");
+    
+    configuration.setProperty(FindbugsConfiguration.SONAR_JAVA_BINARIES, "foo/bar");
+    
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("sonar.java.binaries was set to");
+    
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(baseDir));
+    when(javaResourceLocator.classpath()).thenReturn(Collections.singletonList(baseDir));
+    
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classpath was empty");
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classFilesToAnalyze was empty");
   }
 }

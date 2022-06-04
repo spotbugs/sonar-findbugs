@@ -75,6 +75,7 @@ public class FindbugsConfiguration implements Startable {
 
   private static final Logger LOG = Loggers.get(FindbugsConfiguration.class);
   private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp[\\$0-9]*\\.class");
+  public static final String SONAR_JAVA_BINARIES = "sonar.java.binaries";
 
   private final FileSystem fileSystem;
   private final Configuration config;
@@ -120,8 +121,7 @@ public class FindbugsConfiguration implements Startable {
               + " make it possible for Findbugs to analyse your (sub)project ({}).", fileSystem.baseDir().getPath());
       
       if (!isAllowUncompiledCode() && hasSourceFiles()) { //This excludes test source files
-        throw new IllegalStateException(format("One (sub)project contains Java source files that are not compiled (%s).",
-                fileSystem.baseDir().getPath()));
+        throw buildMissingCompiledCodeException();
       }
     }
 
@@ -132,6 +132,26 @@ public class FindbugsConfiguration implements Startable {
       findbugsProject.addAuxClasspathEntry(jsr305Lib.getCanonicalPath());
     }
     findbugsProject.setCurrentWorkingDirectory(fileSystem.workDir());
+  }
+
+  public IllegalStateException buildMissingCompiledCodeException() {
+    String message = "One (sub)project contains Java source files that are not compiled (" + fileSystem.baseDir().getPath() + ").";
+    
+    if (!config.hasKey(SONAR_JAVA_BINARIES) || config.getStringArray(SONAR_JAVA_BINARIES).length == 0) {
+      message += "\nProperty sonar.java.binaries was not set, it is required to locate the compiled .class files. For instance set the property to: sonar.java.binaries=target/classes";
+    } else {
+      message += "\nsonar.java.binaries was set to " + config.get(SONAR_JAVA_BINARIES).orElse(null);
+    }
+    
+    if (javaResourceLocator.classpath().isEmpty()) {
+      message += "\nSonar JavaResourceLocator.classpath was empty";
+    }
+
+    if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
+      message += "\nSonar JavaResourceLocator.classFilesToAnalyze was empty";
+    }
+    
+    return new IllegalStateException(message);
   }
 
   /**
