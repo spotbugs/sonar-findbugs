@@ -53,12 +53,11 @@ jobs:
         with:
           path: |
             ~/.sonar/cache
-            ~/.sonar/orchestrator/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
-          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V \
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -DskipITs \
             -Dsonar.version=${{ env.SONAR_VERSION }} \
             -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }} \
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
