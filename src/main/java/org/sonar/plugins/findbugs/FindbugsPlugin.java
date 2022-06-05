@@ -43,11 +43,19 @@ import org.sonar.plugins.java.Java;
 public class FindbugsPlugin implements Plugin {
 
     protected static final String[] SUPPORTED_JVM_LANGUAGES = {
-            Java.KEY, Jsp.KEY, Scala.KEY, "clojure"
+        Java.KEY,
+        Jsp.KEY,
+        Scala.KEY,
+        "clojure",
+        "kotlin",
     };
 
     protected static final String[] SUPPORTED_JVM_LANGUAGES_EXTENSIONS = {
-            "java", "jsp", "scala", "clj"
+        "java",
+        "jsp",
+        "scala",
+        "clj",
+        "kt",
     };
 
     public static FilePredicate[] getSupportedLanguagesFilePredicate(FilePredicates pred) {

@@ -5,23 +5,36 @@
 		<artifactId>multi-module</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>multi-module-app</artifactId>
+	<artifactId>multi-module-scala</artifactId>
 	<packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<sonar.sources>src/main/scala</sonar.sources>
 	</properties>
 
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
-				<configuration>
-					<source>7</source>
-					<target>7</target>
-				</configuration>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<version>4.6.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>scala-sources</id>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<phase>process-sources</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -32,10 +45,11 @@
 			<artifactId>multi-module-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
-			<groupId>spotbugs</groupId>
-			<artifactId>multi-module-fx</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala3-library_3</artifactId>
+			<version>3.1.2</version>
 		</dependency>
 	</dependencies>
 </project>

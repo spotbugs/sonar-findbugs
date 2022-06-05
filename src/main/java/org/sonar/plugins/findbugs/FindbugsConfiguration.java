@@ -244,11 +244,11 @@ public class FindbugsConfiguration implements Startable {
   private List<File> buildClassFilesToAnalyze() throws IOException {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
     
-    boolean hasScalaFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("scala"));
+    boolean hasScalaOrKotlinFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguages("scala", "kotlin"));
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));    
 
     // javaResourceLocator.classFilesToAnalyze() only contains .class files from Java sources
-    if (hasScalaFiles) {
+    if (hasScalaOrKotlinFiles) {
       // Add all the .class files from the classpath
       // For Gradle multi-module projects this will unfortunately include compiled .class files from dependency modules
       addClassFilesFromClasspath(classFilesToAnalyze);

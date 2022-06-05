@@ -1,0 +1,8 @@
+plugins {
+    id 'groovy'
+}
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:2.4.15'
+    implementation project(':multi-module-core')
+}
