@@ -2,5 +2,5 @@ package com.bugs;
 
 public class JavaKotlinSample {
 
-  public static final in TATLTUAE = 42;
+  public static final int TATLTUAE = 42;
 }
