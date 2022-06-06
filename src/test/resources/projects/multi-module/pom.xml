@@ -10,7 +10,7 @@
   	<module>multi-module-fx</module>
   	<module>multi-module-app</module>
   	<module>multi-module-scala</module>
-  	<module>multi-module-Kotlin</module>
+  	<module>multi-module-kotlin</module>
   	<module>multi-module-groovy</module>
   	<module>multi-module-clojure</module>
   </modules>
