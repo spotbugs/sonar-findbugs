@@ -2,12 +2,21 @@ package org.sonar.plugins.findbugs.resource;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.java.api.JavaResourceLocator;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.google.common.collect.ImmutableList;
 
@@ -18,11 +27,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ByteCodeResourceLocatorTest {
 
-  //File system that return mock input files
-//  FileSystem fs;
-//  FilePredicates predicates;
+  @TempDir
+  public File temp;
 
   //File system that return no Input files
   FileSystem fsEmpty;
@@ -116,5 +126,37 @@ class ByteCodeResourceLocatorTest {
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findSourceFile("TestOperationalProfileIccidModel$TestOperationalProfileIccid$.class", fsEmpty));
+  }
+  
+  @Test
+  void findSourceFileKeyByClassNameFromJavaResourceLocator() throws URISyntaxException {
+    JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
+    InputFile inputFile = mock(InputFile.class);
+    
+    when(javaResourceLocator.findResourceByClassName("foo.bar.Test")).thenReturn(inputFile);
+    
+    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
+    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNull();
+    
+    when(inputFile.uri()).thenReturn(new URI("https://foo.bar"));
+    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNull();
+    
+    when(inputFile.uri()).thenReturn(new URI("file:///C:/foo.bar"));
+    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNotNull();
+  }
+  
+  @Test
+  void findSourceFileKeyByClassNameFromClasspath() throws IOException {
+    JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
+    InputFile inputFile = mock(InputFile.class);
+    
+    Path folderPath = Files.createDirectories(temp.toPath().resolve(Path.of("foo", "bar")));
+    Path testFolderPath = Files.createDirectories(temp.toPath().resolve(Path.of("test", "123")));
+    Path filePath = Files.createFile(folderPath.resolve("Test.class"));
+    
+    when(javaResourceLocator.classpath()).thenReturn(Arrays.asList(testFolderPath.toFile(), filePath.toFile(), temp));
+
+    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
+    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNotNull();
   }
 }
