@@ -65,7 +65,7 @@ public class ByteCodeResourceLocator {
             }
         }
 
-        String fileName = className.replaceAll("\\.","/")+".class";
+        String fileName = className.replace(".","/")+".class";
 
         Collection<File> classPathEntries = javaResourceLocator.classpath();
         for(File classPathEntry : classPathEntries) {

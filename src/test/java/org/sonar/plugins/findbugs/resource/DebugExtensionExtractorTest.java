@@ -49,4 +49,15 @@ class DebugExtensionExtractorTest {
         int[] jspLines = smap.getScriptLineNumber(260);
         assertThat(jspLines[1]).isEqualTo(20);
     }
+
+    @Test
+    void loadDebugInfoFromKotlinClass() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/kt_classes/RtpPacket.clazz");
+        String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
+        //System.out.println(debugInfo);
+
+        SmapParser smap = new SmapParser(debugInfo);
+        int[] kotlinLines = smap.getScriptLineNumber(374);
+        assertThat(kotlinLines[1]).isEqualTo(373);
+    }
 }

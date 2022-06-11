@@ -74,7 +74,9 @@ import java.util.regex.Pattern;
  * Utility class to parse Source Debug Extensions and enhance stack traces.
  *
  * Note that only the first stratum is parsed and used.
- *
+ * Kotlin class files have a 2nd stratum named KotlinDebug, we don't seem
+ * to need it
+ * 
  * @author Michael Schierl
  */
 public class SmapParser {
@@ -122,8 +124,9 @@ public class SmapParser {
         }
 
         //Parse the line number mapping section (*L)
+        // *S marks the start of a new stratum and *S the end of the last stratum
         int lastLFI = 0;
-        while((line = getLine(reader)) != null && !line.equals("*E")) {
+        while((line = getLine(reader)) != null && !line.equals("*E") && !line.startsWith("*S")) {
 
             if (!line.startsWith("*")) {
 
