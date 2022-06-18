@@ -129,24 +129,7 @@ class ByteCodeResourceLocatorTest {
   }
   
   @Test
-  void findSourceFileKeyByClassNameFromJavaResourceLocator() throws URISyntaxException {
-    JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
-    InputFile inputFile = mock(InputFile.class);
-    
-    when(javaResourceLocator.findResourceByClassName("foo.bar.Test")).thenReturn(inputFile);
-    
-    ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNull();
-    
-    when(inputFile.uri()).thenReturn(new URI("https://foo.bar"));
-    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNull();
-    
-    when(inputFile.uri()).thenReturn(new URI("file:///C:/foo.bar"));
-    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNotNull();
-  }
-  
-  @Test
-  void findSourceFileKeyByClassNameFromClasspath() throws IOException {
+  void findClassFileByClassName() throws IOException {
     JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
     InputFile inputFile = mock(InputFile.class);
     
@@ -157,6 +140,6 @@ class ByteCodeResourceLocatorTest {
     when(javaResourceLocator.classpath()).thenReturn(Arrays.asList(testFolderPath.toFile(), filePath.toFile(), temp));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    assertThat(locator.findSourceFileKeyByClassName("foo.bar.Test", javaResourceLocator)).isNotNull();
+    assertThat(locator.findClassFileByClassName("foo.bar.Test", javaResourceLocator)).isNotNull();
   }
 }

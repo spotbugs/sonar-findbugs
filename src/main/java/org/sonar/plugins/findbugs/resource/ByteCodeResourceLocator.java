@@ -56,15 +56,7 @@ public class ByteCodeResourceLocator {
      * @param javaResourceLocator The {@link JavaResourceLocator} to find resource by classname
      * @return String filepath
      */
-    public String findSourceFileKeyByClassName(String className, JavaResourceLocator javaResourceLocator) {
-        InputFile input = javaResourceLocator.findResourceByClassName(className);
-        if (input != null) {
-            URI classFile = input.uri();
-            if (classFile != null && "file".equals(classFile.getScheme())) {
-                return new File(classFile).getAbsolutePath();
-            }
-        }
-
+    public String findClassFileByClassName(String className, JavaResourceLocator javaResourceLocator) {
         String fileName = className.replace(".","/")+".class";
 
         Collection<File> classPathEntries = javaResourceLocator.classpath();
@@ -174,9 +166,8 @@ public class ByteCodeResourceLocator {
             String smap = debug.getDebugExtFromClass(in);
             if(smap != null)
                 return getJspLineNumberFromSmap(smap, originalLine);
-        }
-        catch (IOException e) {
-            LOG.warn("An error occurs while opening classfile : {}", classFile.getPath());
+        } catch (IOException | ClassMetadataLoadingException e) {
+            LOG.warn("An error occured while opening classfile : {}", classFile.getPath(), e);
         }
         LOG.debug("No smap file found for the class: " + className);
 
