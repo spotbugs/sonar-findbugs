@@ -30,6 +30,7 @@ jobs:
       # previous LTS version
       SONAR_SERVER_VERSION: 8.9.9.56886
       SONAR_PLUGIN_API_VERSION: 8.9.9.56886
+      SONAR_PLUGIN_API_GROUPID: org.sonarsource.sonarqube
       SONAR_JAVA_VERSION: 6.15.1.26025
     steps:
       - name: Decide the ref to check out
@@ -61,6 +62,7 @@ jobs:
           mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -DskipITs \
             -Dsonar.server.version=${{ env.SONAR_SERVER_VERSION }} \
             -Dsonar-plugin-api.version=${{ env.SONAR_PLUGIN_API_VERSION }} \
+            -Dsonar-plugin-api.groupId=${{ matrix.SONAR_PLUGIN_API_GROUPID }} \
             -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }}
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
             -Dsonar.organization=spotbugs \
