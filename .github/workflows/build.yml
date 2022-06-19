@@ -56,9 +56,9 @@ jobs:
       - name: Build
         run: |
           mvn verify -B -e -V \
-            -Dsonar.server.version=${{ env.SONAR_SERVER_VERSION }} \
-            -Dsonar-plugin-api.version=${{ env.SONAR_PLUGIN_API_VERSION }} \
-            -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }}
+            -Dsonar.server.version=${{ matrix.SONAR_SERVER_VERSION }} \
+            -Dsonar-plugin-api.version=${{ matrix.SONAR_PLUGIN_API_VERSION }} \
+            -Dsonar-java.version=${{ matrix.SONAR_JAVA_VERSION }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
