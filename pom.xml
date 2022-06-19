@@ -59,7 +59,8 @@
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.0.0-M5</surefire.version>
     <failsafe.version>3.0.0-M5</failsafe.version>
-    <sonar.version>7.9</sonar.version>
+    <sonar.server.version>7.9</sonar.server.version>
+    <sonar-plugin-api.version>7.9</sonar-plugin-api.version>
     <sonar-java.version>5.13.1.18282</sonar-java.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -145,7 +146,7 @@
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <version>${sonar.version}</version>
+      <version>${sonar-plugin-api.version}</version>
       <scope>provided</scope>
       <exclusions>
         <!-- allows to package xstream into plugin -->
@@ -346,7 +347,7 @@
           <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
           <systemPropertyVariables>
-            <sonar.version>${sonar.version}</sonar.version>
+            <sonar.server.version>${sonar.server.version}</sonar.server.version>
           </systemPropertyVariables>
         </configuration>
         <executions>

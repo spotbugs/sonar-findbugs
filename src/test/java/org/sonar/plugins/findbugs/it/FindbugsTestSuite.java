@@ -46,7 +46,7 @@ public class FindbugsTestSuite {
 
   static {
     // build, start and stop the orchestrator here, making sure that it happens exactly once whether we run one or multiple tests
-    String sonarVersion = System.getProperty("sonar.version", "8.9");
+    String sonarVersion = System.getProperty("sonar.server.version", "8.9");
     
     // We will test here the case where an older version of the plugin was already installed and upgrade it
     // This should be its own test case but it takes a long time to build a server so we're doing it here

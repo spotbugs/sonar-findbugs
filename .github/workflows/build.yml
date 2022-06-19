@@ -20,14 +20,21 @@ jobs:
       matrix:
         include:
           # previous LTS version
-          - SONAR_VERSION: 7.9
+          - SONAR_SERVER_VERSION: 7.9
+            SONAR_PLUGIN_API_VERSION: 7.9
             SONAR_JAVA_VERSION: 5.13.1.18282
           # current LTS version
-          - SONAR_VERSION: 8.9
+          - SONAR_SERVER_VERSION: 8.9.9.56886
+            SONAR_PLUGIN_API_VERSION: 8.9.9.56886
             SONAR_JAVA_VERSION: 6.15.1.26025
           # Sonarqube version 9 removed some deprecated APIs
-          - SONAR_VERSION: 9.4.0.54424
+          - SONAR_SERVER_VERSION: 9.4.0.54424
+            SONAR_PLUGIN_API_VERSION: 9.4.0.54424
             SONAR_JAVA_VERSION: 7.11.0.29148
+          # latest 9.x
+          - SONAR_SERVER_VERSION: 9.5.0.56709
+            SONAR_PLUGIN_API_VERSION: 9.5.0.56709
+            SONAR_JAVA_VERSION: 7.12.0.29739
     steps:
       - uses: actions/checkout@v2
         with:
@@ -48,7 +55,10 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
-          mvn verify -B -e -V
+          mvn verify -B -e -V \
+            -Dsonar.server.version=${{ env.SONAR_SERVER_VERSION }} \
+            -Dsonar-plugin-api.version=${{ env.SONAR_PLUGIN_API_VERSION }} \
+            -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
