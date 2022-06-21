@@ -63,7 +63,7 @@ jobs:
             -Dsonar.server.version=${{ env.SONAR_SERVER_VERSION }} \
             -Dsonar-plugin-api.version=${{ env.SONAR_PLUGIN_API_VERSION }} \
             -Dsonar-plugin-api.groupId=${{ env.SONAR_PLUGIN_API_GROUPID }} \
-            -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }}
+            -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }} \
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
             -Dsonar.organization=spotbugs \
             -Dsonar.host.url=https://sonarcloud.io \
