@@ -45,7 +45,11 @@ import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.resource.ClassMetadataLoadingException;
 import org.sonar.plugins.findbugs.resource.SmapParser;
-import org.sonar.plugins.findbugs.rules.*;
+import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
+import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 public class FindbugsSensor implements Sensor {
@@ -147,21 +151,19 @@ public class FindbugsSensor implements Sensor {
           String sourceFile = bugInstance.getSourceFile();
           String longMessage = bugInstance.getMessage();
           int line = bugInstance.getStartLine();
+          
+          // Example values for an inner class
+          // className:                   multimodule.core.InnerClassSample$InnerClass
+          // bugInstance.getClassFile():  multimodule.core.InnerClassSample
+          // sourceFile:                  multimodule/core/InnerClassSample.java
 
-
-          //Regular Java class mapped to their original .java
-          InputFile resource = byteCodeResourceLocator.findSourceFile(sourceFile, this.fs);
-          if (resource != null) {
-            insertIssue(rule, resource, line, longMessage, bugInstance);
-            continue;
-          }
-
+          // Example values for a Kotlin extension class (classFile and sourceFile are missing Kt at the end
+          // className:                   org.jitsi.rtp.extensions.bytearray.ByteArrayExtensionsKt
+          // bugInstance.getClassFile():  org.jitsi.rtp.extensions.bytearray.ByteArrayExtensions
+          // sourceFile:                  org/jitsi/rtp/extensions/bytearray/ByteArrayExtensions.kt
+          
           //Locate the original class file
-          File classFile = findOriginalClassForBug(bugInstance.getClassFile());
-          if (classFile == null) {
-            LOG.warn("Unable to find the class " + bugInstance.getClassName());
-            continue;
-          }
+          File classFile = findOriginalClassForBug(bugInstance);
 
   //        //If the class was an outer class, the source file will not be analog to the class name.
   //        //The original source file is available in the class file metadata.
@@ -172,6 +174,8 @@ public class FindbugsSensor implements Sensor {
   //        }
 
           //More advanced mapping if the original source is not Java files
+          // Even though we might be able to find the source file right away there might be an SMAP we need to look for:
+          // For Kotlin classes part of the .class file might be from other sources files
           if (classFile != null) {
             //Attempt to load SMAP debug metadata
             try {
@@ -182,14 +186,14 @@ public class FindbugsSensor implements Sensor {
                 }
 
                 //SMAP was found
-                resource = byteCodeResourceLocator.findSourceFile(location.fileInfo.path, fs);
+                InputFile resource = byteCodeResourceLocator.findSourceFile(location.fileInfo.path, fs);
                 if (resource != null) {
                   insertIssue(rule, resource, location.line, longMessage, bugInstance);
                   continue;
                 }
               } else {
                 //SMAP was not found or unparsable.. The orgininal source file will be guess based on the class name
-                resource = byteCodeResourceLocator.findTemplateFile(className, this.fs);
+                InputFile resource = byteCodeResourceLocator.findTemplateFile(className, this.fs);
                 if (resource != null) {
                   insertIssue(rule, resource, line, longMessage, bugInstance);
                   continue;
@@ -199,8 +203,20 @@ public class FindbugsSensor implements Sensor {
               LOG.warn("Failed to load the class file metadata", e);
             }
           }
+          
+          // In case there was no .class file or we could not use the SMAP
+          //Regular Java class mapped to their original .java
+          InputFile resource = byteCodeResourceLocator.findSourceFile(sourceFile, this.fs);
+          if (resource != null) {
+            insertIssue(rule, resource, line, longMessage, bugInstance);
+            continue;
+          }
 
-          LOG.warn("The class '" + className + "' could not be matched to its original source file. It might be a dynamically generated class.");
+          // We have found an issue in a class file but the corresponding source file was not found, this might be because:
+          // - it's a Kotlin extension from another project/module
+          // - the source file was excluded and is not visible in the FileSystem interface
+          // - we're analyzing all the class files on the classpath and some are from another Gradle module, but the source file is not in the FileSystem
+          LOG.debug("The class '{}' could not be matched to its original source file. It might be a dynamically generated class. Class file: {}", className, classFile);
         } catch (Exception e) {
           String bugInstanceDebug = String.format("[BugInstance type=%s, class=%s, line=%s]", bugInstance.getType(), bugInstance.getClassName(), bugInstance.getStartLine());
           LOG.warn("An error occurs while processing the bug instance " + bugInstanceDebug, e);
@@ -240,11 +256,15 @@ public class FindbugsSensor implements Sensor {
 
   /**
    *
-   * @param className Class name
+   * @param bugInstance The bug instance detected by SpotBugs
    * @return File handle of the original class file analyzed
    */
-  private File findOriginalClassForBug(String className) {
-    String sourceFile = byteCodeResourceLocator.findSourceFileKeyByClassName(className,javaResourceLocator);
+  private File findOriginalClassForBug(ReportedBug bugInstance) {
+    String sourceFile = byteCodeResourceLocator.findClassFileByClassName(bugInstance.getClassName(), javaResourceLocator);
+    if (sourceFile == null) {
+      sourceFile = byteCodeResourceLocator.findClassFileByClassName(bugInstance.getClassFile(), javaResourceLocator);
+    }
+    
     if (sourceFile == null) {
       return null;
     }
