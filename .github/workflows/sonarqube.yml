@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+      - sq-10
     paths-ignore:
       - '.github/actions/**'
   pull_request_target:
