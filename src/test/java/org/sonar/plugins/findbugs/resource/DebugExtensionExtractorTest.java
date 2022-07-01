@@ -25,6 +25,7 @@ import java.io.InputStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
+import org.sonar.plugins.findbugs.resource.SmapParser.SmapLocation;
 
 class DebugExtensionExtractorTest {
 
@@ -48,5 +49,62 @@ class DebugExtensionExtractorTest {
         SmapParser smap = new SmapParser(debugInfo);
         int[] jspLines = smap.getScriptLineNumber(260);
         assertThat(jspLines[1]).isEqualTo(20);
+    }
+
+    @Test
+    void loadDebugInfoFromKotlinRtpPacketClass() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/kt_classes/RtpPacket.clazz");
+        String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
+        //System.out.println(debugInfo);
+
+        SmapParser smap = new SmapParser(debugInfo);
+        int[] kotlinLines = smap.getScriptLineNumber(374);
+        assertThat(kotlinLines[1]).isEqualTo(373);
+        
+        SmapLocation smapLocation = smap.getSmapLocation(374);
+        assertThat(smapLocation.isPrimaryFile).isTrue();
+        assertThat(smapLocation.fileInfo.path).isEqualTo("org/jitsi/rtp/rtp/RtpPacket.kt");
+    }
+
+    @Test
+    void loadDebugInfoFromKotlinByteArrayExtensionsKtClass() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/kt_classes/ByteArrayExtensionsKt.clazz");
+        String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
+        //System.out.println(debugInfo);
+
+        SmapParser smap = new SmapParser(debugInfo);
+        int[] kotlinLines = smap.getScriptLineNumber(161);
+        assertThat(kotlinLines[1]).isEqualTo(11664);
+        
+        SmapLocation smapLocation = smap.getSmapLocation(161);
+        assertThat(smapLocation.isPrimaryFile).isFalse();
+    }
+
+    @Test
+    void loadDebugInfoFromKotlinTxtOutputReportClass() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/kt_classes/TxtOutputReport.clazz");
+        String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
+        //System.out.println(debugInfo);
+
+        SmapParser smap = new SmapParser(debugInfo);
+        int[] kotlinLines = smap.getScriptLineNumber(30);
+        assertThat(kotlinLines[1]).isEqualTo(99);
+        
+        SmapLocation smapLocation = smap.getSmapLocation(30);
+        assertThat(smapLocation.isPrimaryFile).isFalse();
+    }
+
+    @Test
+    void loadDebugInfoFromKotlinTlsClientImplClass() throws IOException {
+        InputStream in = getClass().getResourceAsStream("/kt_classes/TlsClientImpl.clazz");
+        String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
+        //System.out.println(debugInfo);
+
+        SmapParser smap = new SmapParser(debugInfo);
+        int[] kotlinLines = smap.getScriptLineNumber(204);
+        assertThat(kotlinLines[1]).isEqualTo(68);
+        
+        SmapLocation smapLocation = smap.getSmapLocation(204);
+        assertThat(smapLocation.isPrimaryFile).isFalse();
     }
 }

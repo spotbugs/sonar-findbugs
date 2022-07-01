@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - master
+      - sq-10
     paths-ignore:
       - '.github/actions/**'
   pull_request_target:
@@ -28,8 +29,10 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       # previous LTS version
-      SONAR_VERSION: 7.9
-      SONAR_JAVA_VERSION: 5.13.1.18282
+      SONAR_SERVER_VERSION: 8.9.9.56886
+      SONAR_PLUGIN_API_VERSION: 8.9.9.56886
+      SONAR_PLUGIN_API_GROUPID: org.sonarsource.sonarqube
+      SONAR_JAVA_VERSION: 6.15.1.26025
     steps:
       - name: Decide the ref to check out
         uses: haya14busa/action-cond@v1
@@ -48,10 +51,19 @@ jobs:
           java-version: 11
           distribution: temurin
           cache: 'maven'
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
-          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V \
-            -Dsonar.version=${{ env.SONAR_VERSION }} \
+          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -DskipITs \
+            -Dsonar.server.version=${{ env.SONAR_SERVER_VERSION }} \
+            -Dsonar-plugin-api.version=${{ env.SONAR_PLUGIN_API_VERSION }} \
+            -Dsonar-plugin-api.groupId=${{ env.SONAR_PLUGIN_API_GROUPID }} \
             -Dsonar-java.version=${{ env.SONAR_JAVA_VERSION }} \
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
             -Dsonar.organization=spotbugs \

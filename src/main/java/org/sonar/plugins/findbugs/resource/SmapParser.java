@@ -74,7 +74,9 @@ import java.util.regex.Pattern;
  * Utility class to parse Source Debug Extensions and enhance stack traces.
  *
  * Note that only the first stratum is parsed and used.
- *
+ * Kotlin class files have a 2nd stratum named KotlinDebug, we don't seem
+ * to need it
+ * 
  * @author Michael Schierl
  */
 public class SmapParser {
@@ -82,6 +84,7 @@ public class SmapParser {
     private String javaFilename;
     private final Map<Integer, FileInfo> fileinfo = new HashMap<>();
     private final Map<Integer, int[]> java2jsp = new HashMap<>();
+    private final String stratumName;
 
     private static final Pattern LINE_INFO_PATTERN = Pattern.compile("([0-9]+)(?:#([0-9]+))?(?:,([0-9]+))?:([0-9]+)(?:,([0-9]+))?");
 
@@ -106,6 +109,8 @@ public class SmapParser {
         if (!header.equals("SMAP") || !stratum.startsWith("*S ") || !f.equals("*F"))
             throw new IllegalArgumentException("Unexpected SMAP file format");
 
+        stratumName = stratum.substring(3);
+        
         //Parse the file info section (*F)
         String line;
         while((line = getLine(reader)) != null && !line.equals("*L")) {
@@ -118,12 +123,13 @@ public class SmapParser {
             int pos = line.indexOf(' ');
             int fileNum = Integer.parseInt(line.substring(0, pos));
             String name = line.substring(pos + 1);
-            fileinfo.put(fileNum, new FileInfo(name, path == null ? name : path));
+            fileinfo.put(fileNum, new FileInfo(name, getPath(path, name)));
         }
 
         //Parse the line number mapping section (*L)
+        // *S marks the start of a new stratum and *S the end of the last stratum
         int lastLFI = 0;
-        while((line = getLine(reader)) != null && !line.equals("*E")) {
+        while((line = getLine(reader)) != null && !line.equals("*E") && !line.startsWith("*S")) {
 
             if (!line.startsWith("*")) {
 
@@ -150,6 +156,16 @@ public class SmapParser {
         }
     }
 
+    public String getPath(String path, String name) {
+      if (path == null) {
+        return name;
+      } else if (name != null && name.endsWith(".kt")) {
+        return path.substring(0, 1 + path.lastIndexOf('/')) + name;
+      } else {
+        return path;
+      }
+    }
+
     public String getJavaFilename() {
         return javaFilename;
     }
@@ -169,7 +185,16 @@ public class SmapParser {
             return null;
         }
         FileInfo info = fileinfo.get(origSource[0]);
-        return new SmapLocation(info,origSource[1], origSource[0] == 0);
+        return new SmapLocation(info, origSource[1], isPrimaryFile(origSource, info));
+    }
+
+    public boolean isPrimaryFile(int[] origSource, FileInfo info) {
+      // For Kotlin classes the first file has index 1, not zero
+      if (stratumName.equals("Kotlin")) {
+          return origSource[0] == 1 && !info.path.startsWith("org/jetbrains/kotlin/psi/psiUtil/PsiUtilsKt");
+      } else {
+          return origSource[0] == 0;
+      }
     }
 
     public static class FileInfo {

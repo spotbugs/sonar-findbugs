@@ -32,6 +32,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.Mockito;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -234,8 +235,8 @@ class FindbugsConfigurationTest {
   }
 
   private void setupSampleProject(boolean withPrecompiledJsp, boolean withJspFiles, boolean withScalaFiles) throws IOException {
-    mockHasLanguagePredicate("jsp", withJspFiles);
-    mockHasLanguagePredicate("scala", withScalaFiles);
+    mockHasLanguagePredicate(withJspFiles, "jsp");
+    mockHasLanguagesPredicate(withScalaFiles, "scala");
     
     // classpath
     // |_ some.jar
@@ -278,9 +279,50 @@ class FindbugsConfigurationTest {
     when(javaResourceLocator.classpath()).thenReturn(classpathFiles);
   }
 
-  private void mockHasLanguagePredicate(String language, boolean predicateReturn) {
+  private void mockHasLanguagePredicate(boolean predicateReturn, String language) {
     FilePredicate languagePredicate = mock(FilePredicate.class);
     when(filePredicates.hasLanguage(language)).thenReturn(languagePredicate);
     when(fs.hasFiles(languagePredicate)).thenReturn(predicateReturn);
+  }
+
+  private void mockHasLanguagesPredicate(boolean predicateReturn, String ... languages) {
+    // First mock the calls to hasLanguage() for individual languages
+    for (String language : languages) {
+      mockHasLanguagePredicate(predicateReturn, language);
+    }
+    
+    // Then mock the call to the vararg method hasLanguages()
+    when(filePredicates.hasLanguages(Mockito.<String>any())).thenAnswer(i -> {
+      Object[] arguments = i.getArguments();
+      for (int j = 0; j < arguments.length; j++) {
+        String language = (String) arguments[j];
+        
+        if (fs.hasFiles(filePredicates.hasLanguage(language))) {
+          return filePredicates.hasLanguage(language);
+        }
+      }
+      
+      return (FilePredicate) file -> false;
+    });
+  }
+  
+  @Test
+  void buildMissingCompiledCodeException() {
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.emptyList());
+    when(javaResourceLocator.classpath()).thenReturn(Collections.emptyList());
+    
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Property sonar.java.binaries was not set");
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classpath was empty");
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classFilesToAnalyze was empty");
+    
+    configuration.setProperty(FindbugsConfiguration.SONAR_JAVA_BINARIES, "foo/bar");
+    
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("sonar.java.binaries was set to");
+    
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(baseDir));
+    when(javaResourceLocator.classpath()).thenReturn(Collections.singletonList(baseDir));
+    
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classpath was empty");
+    assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classFilesToAnalyze was empty");
   }
 }

@@ -34,6 +34,7 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.mockito.ArgumentCaptor;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -44,11 +45,13 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
+import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
+import org.sonar.plugins.findbugs.resource.SmapParser.FileInfo;
+import org.sonar.plugins.findbugs.resource.SmapParser.SmapLocation;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
@@ -276,6 +279,52 @@ class FindbugsSensorTest extends FindbugsTests {
     verify(executor).execute(activeRules);
     verify(sensorContext, never()).newIssue();
   }
+  
+  @Test
+  void should_execute_findbugs_with_missing_smap_and_source() throws Exception {
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
+    Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
+    when(executor.execute(activeRules)).thenReturn(collection);
+    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
+    
+    // return a class file that does not have SMAP (doesn't exist actually)
+    when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.javaResourceLocator)).thenReturn("");
+    // don't return a source file: the input file is not in the file system even if SpotBugs found an issue in a class file
+    when(byteCodeResourceLocator.findSourceFile("org/sonar/commons/org/sonar/commons/ZipUtils.java", fs)).thenReturn(null);
+    
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
+    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    sensor.execute(sensorContext);
+
+    verify(executor).execute(activeRules);
+    verify(sensorContext, never()).newIssue();
+  }
+  
+  @Test
+  void should_execute_findbugs_with_smap() throws Exception {
+    BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
+    Collection<ReportedBug> collection = Arrays.asList(new ReportedBug(bugInstance));
+    when(executor.execute(activeRules)).thenReturn(collection);
+    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
+    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(new File("file")));
+    
+    String classFileName = "org/sonar/commons/ZipUtils.class";
+    
+    when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.javaResourceLocator)).thenReturn(classFileName);
+    
+    // Return a valid SMAP location
+    FileInfo fileInfo = new FileInfo("ZipUtils", "org/sonar/commons/org/sonar/commons/ZipUtils.java");
+    SmapLocation smapLocation = new SmapLocation(fileInfo, 6, true);
+    when(byteCodeResourceLocator.extractSmapLocation("org.sonar.commons.ZipUtils", 6, new File(classFileName))).thenReturn(smapLocation);
+    
+    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
+    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    sensor.execute(sensorContext);
+
+    verify(executor).execute(activeRules);
+    verify(sensorContext, times(1)).newIssue();
+  }
 
   private BugInstance getBugInstance(String name, int line, boolean mockFindSourceFile) {
     BugInstance bugInstance = new BugInstance(name, 2);
@@ -320,10 +369,12 @@ class FindbugsSensorTest extends FindbugsTests {
   void describe() {
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
-    DefaultSensorDescriptor descriptor = new DefaultSensorDescriptor();
+    SensorDescriptor descriptor = mock(SensorDescriptor.class);
     
     sensor.describe(descriptor);
     
-    assertEquals(Arrays.asList(FindbugsSensor.REPOS), descriptor.ruleRepositories());
+    ArgumentCaptor<String> argument = ArgumentCaptor.forClass(String.class);
+    verify(descriptor).name(argument.capture());
+    assertEquals("FindBugs Sensor", argument.getValue());
   }
 }

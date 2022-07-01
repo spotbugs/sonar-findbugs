@@ -43,7 +43,7 @@ public class ReportedBug {
     this.sourceFile = bugInstance.getPrimarySourceLineAnnotation().getSourcePath();
     Matcher m = SOURCE_FILE_PATTERN.matcher(sourceFile);
     if (m.find()) {
-      this.classFile = m.group(1).replaceAll("/",".");
+      this.classFile = m.group(1).replace("/",".");
     }
     else {
       this.classFile = className;

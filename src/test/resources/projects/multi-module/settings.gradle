@@ -1,3 +1,6 @@
 include 'multi-module-app'
 include 'multi-module-core'
 include 'multi-module-fx'
+include 'multi-module-kotlin'
+include 'multi-module-scala'
+include 'multi-module-groovy'
