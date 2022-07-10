@@ -9,7 +9,7 @@ This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/P
 
 ### Supported Languages
 
-The plugin works by analazing the compiled `.class` files and reporting the issues in the corresponding source files. The currently supported JVM languages are:
+The plugin works by analysing the compiled `.class` files and reporting the issues in the corresponding source files. The currently supported JVM languages are:
 
 - Java
 - JSP (Java Server Pages)
