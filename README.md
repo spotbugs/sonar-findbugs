@@ -7,6 +7,14 @@
 
 This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/PLUG/SonarJava), and uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](http://fb-contrib.sourceforge.net/) and [Find Security Bugs](http://h3xstream.github.io/find-sec-bugs/) to provide coding rules.
 
+### Supported Languages
+
+The plugin works by analazing the compiled `.class` files and reporting the issues in the corresponding source files. The currently supported JVM languages are:
+
+- Java
+- JSP (Java Server Pages)
+- Scala
+- Kotlin
 
 ## Usage
 
