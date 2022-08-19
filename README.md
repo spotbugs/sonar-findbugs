@@ -7,6 +7,14 @@
 
 This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/PLUG/SonarJava), and uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](http://fb-contrib.sourceforge.net/) and [Find Security Bugs](http://h3xstream.github.io/find-sec-bugs/) to provide coding rules.
 
+### Supported Languages
+
+The plugin works by analysing the compiled `.class` files and reporting the issues in the corresponding source files. The currently supported JVM languages are:
+
+- Java
+- JSP (Java Server Pages)
+- Scala
+- Kotlin
 
 ## Usage
 
@@ -54,4 +62,5 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 4.1.4                  | 4.6.0 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
 4.1.5                  | 4.7.0 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
 4.1.6                  | 4.7.0 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
-4.2.0-SNAPSHOT         | 4.7.1 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
+4.2.0                  | 4.7.1 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
+4.2.1-SNAPSHOT         | 4.7.1 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
