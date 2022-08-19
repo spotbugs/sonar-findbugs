@@ -30,16 +30,14 @@ jobs:
             SONAR_PLUGIN_API_VERSION: 8.9.9.56886
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.sonarqube
             SONAR_JAVA_VERSION: 6.15.1.26025
-          # Sonarqube version 9 removed some deprecated APIs
-          - SONAR_SERVER_VERSION: 9.4.0.54424
-            SONAR_PLUGIN_API_VERSION: 9.4.0.54424
-            SONAR_PLUGIN_API_GROUPID: org.sonarsource.sonarqube
-            SONAR_JAVA_VERSION: 7.11.0.29148
-          # latest 9.x
           - SONAR_SERVER_VERSION: 9.5.0.56709
             SONAR_PLUGIN_API_VERSION: 9.5.0.71
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_JAVA_VERSION: 7.12.0.29739
+          - SONAR_SERVER_VERSION: 9.6.0.59041
+            SONAR_PLUGIN_API_VERSION: 9.9.0.229
+            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
+            SONAR_JAVA_VERSION: 7.13.0.29990
     steps:
       - uses: actions/checkout@v2
         with:
