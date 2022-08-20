@@ -1,0 +1,14 @@
+plugins {
+    id 'war'
+}
+
+dependencies {
+    implementation project(':multi-module-core')
+}
+
+sonarqube {
+    properties {
+        property 'sonar.sources', 'src/main/webapp'
+        property 'sonar.findbugs.allowuncompiledcode', 'true'
+    }
+}
