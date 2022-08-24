@@ -241,12 +241,14 @@ function commit(token, owner, repo, path, rootDir, message, refOrSha) {
     });
 }
 exports.commit = commit;
-function createPullRequest(token, owner, branch, releaseName, changelogUrl) {
+function createPullRequest(token, owner, branch, releaseName, downloadUrl, sonarCloudUrl, changelogUrl) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = (0, github_1.getOctokit)(token);
         const title = `Release ${releaseName}`;
         const body = `We've released [${releaseName}](${encodeURI(changelogUrl)}), please add it to the marketplace.
-  I'll post to the forum and add its URL here later.
+  Detailed changelog: ${encodeURI(changelogUrl)}
+  Download URL: ${encodeURI(downloadUrl)}
+  SonarCloud: ${encodeURI(sonarCloudUrl)}
 
   Thanks in advance!`;
         const result = yield octokit.rest.pulls.create({
@@ -356,6 +358,7 @@ function run() {
             const latestSupportedVersion = core.getInput('latest-supported-sq-version');
             const changelogUrl = core.getInput('changelog-url', { required: true });
             const downloadUrl = core.getInput('download-url', { required: true });
+            const sonarCloudUrl = core.getInput('sonar-cloud-url', { required: true });
             const publicVersion = core.getInput('public-version', { required: true });
             if (!publicVersion || publicVersion.includes(',')) {
                 throw new Error(`Unsupproted publicVersion found: ${publicVersion}`);
@@ -383,9 +386,8 @@ function run() {
                 core.info('Skipped creating pull request.');
             }
             else {
-                const { pr_number, html_url } = yield (0, github_1.createPullRequest)(githubToken, forked.owner, branch, `${mavenArtifactId} ${publicVersion}`, changelogUrl);
+                const { pr_number, html_url } = yield (0, github_1.createPullRequest)(githubToken, forked.owner, branch, `${mavenArtifactId} ${publicVersion}`, downloadUrl, sonarCloudUrl, changelogUrl);
                 core.info(`Draft PR has been created, visit ${html_url} to review.`);
-                const sonarCloudUrl = core.getInput('sonar-cloud-url', { required: true });
                 const announceBody = `Hi,
 
 We are announcing new ${mavenArtifactId} ${publicVersion}.

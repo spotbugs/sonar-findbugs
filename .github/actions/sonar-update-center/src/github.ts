@@ -209,6 +209,8 @@ export async function createPullRequest(
   owner: string,
   branch: string,
   releaseName: string,
+  downloadUrl: string,
+  sonarCloudUrl: string,
   changelogUrl: string
 ): Promise<{pr_number: number; html_url: string}> {
   const octokit = getOctokit(token)
@@ -216,7 +218,9 @@ export async function createPullRequest(
   const body = `We've released [${releaseName}](${encodeURI(
     changelogUrl
   )}), please add it to the marketplace.
-  I'll post to the forum and add its URL here later.
+  Detailed changelog: ${encodeURI(changelogUrl)}
+  Download URL: ${encodeURI(downloadUrl)}
+  SonarCloud: ${encodeURI(sonarCloudUrl)}
 
   Thanks in advance!`
   const result = await octokit.rest.pulls.create({

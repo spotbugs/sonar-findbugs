@@ -122,4 +122,4 @@ jobs:
           github-token: ${{ secrets.PAT_TO_FORK }}
           discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
           skip-creating-pull-request: false
-          skip-announcing: false
+          skip-announcing: true
