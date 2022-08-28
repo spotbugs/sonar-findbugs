@@ -8,7 +8,7 @@ When you release fixed version of SonarQube SpotBugs Plugin, please follow these
 git checkout -b master-release
 ```
 
-* Make sure profile XMLs are updated. See [`generate_progiles/README.md`](generate_progiles/README.md) for detail.
+* Make sure profile XMLs are updated. See [`generate_profiles/README.md`](generate_profiles/README.md) for detail.
 
 * change version number in `pom.xml` to stable version (e.g. `1.2.3`), then commit changes
 
@@ -32,4 +32,4 @@ Check [Sonatype official page](http://central.sonatype.org/pages/apache-maven.ht
 
 ## Release to SonarQube Marketplace
 
-[sonar-update-center-action](https://github.com/KengoTODA/sonar-update-center-action/) will handle necessary procedures. Please confirm that the PR is made in [SonarSource/sonar-update-center-properties](https://github.com/SonarSource/sonar-update-center-properties/), and a topic is posted to [the community forum](https://community.sonarsource.com/c/plugins).
+[sonar-update-center-action](https://github.com/KengoTODA/sonar-update-center-action/) will handle necessary procedures. Please confirm that the PR is made in [SonarSource/sonar-update-center-properties](https://github.com/SonarSource/sonar-update-center-properties/).
