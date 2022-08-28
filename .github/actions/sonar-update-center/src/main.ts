@@ -46,6 +46,7 @@ async function run(): Promise<void> {
     const latestSupportedVersion = core.getInput('latest-supported-sq-version')
     const changelogUrl = core.getInput('changelog-url', {required: true})
     const downloadUrl = core.getInput('download-url', {required: true})
+    const sonarCloudUrl = core.getInput('sonar-cloud-url', {required: true})
     const publicVersion = core.getInput('public-version', {required: true})
     if (!publicVersion || publicVersion.includes(',')) {
       throw new Error(`Unsupproted publicVersion found: ${publicVersion}`)
@@ -114,10 +115,11 @@ async function run(): Promise<void> {
         forked.owner,
         branch,
         `${mavenArtifactId} ${publicVersion}`,
+        downloadUrl,
+        sonarCloudUrl,
         changelogUrl
       )
       core.info(`Draft PR has been created, visit ${html_url} to review.`)
-      const sonarCloudUrl = core.getInput('sonar-cloud-url', {required: true})
       const announceBody = `Hi,
 
 We are announcing new ${mavenArtifactId} ${publicVersion}.
