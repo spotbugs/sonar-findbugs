@@ -11,8 +11,6 @@ import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -131,10 +129,9 @@ class ByteCodeResourceLocatorTest {
   @Test
   void findClassFileByClassName() throws IOException {
     JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
-    InputFile inputFile = mock(InputFile.class);
     
-    Path folderPath = Files.createDirectories(temp.toPath().resolve(Path.of("foo", "bar")));
-    Path testFolderPath = Files.createDirectories(temp.toPath().resolve(Path.of("test", "123")));
+    Path folderPath = Files.createDirectories(temp.toPath().resolve("foo").resolve("bar"));
+    Path testFolderPath = Files.createDirectories(temp.toPath().resolve("test").resolve("123"));
     Path filePath = Files.createFile(folderPath.resolve("Test.class"));
     
     when(javaResourceLocator.classpath()).thenReturn(Arrays.asList(testFolderPath.toFile(), filePath.toFile(), temp));
