@@ -37,8 +37,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 
 public class FindbugsTestSuite {
 
@@ -69,7 +69,7 @@ public class FindbugsTestSuite {
     try (OutputStream out = new FileOutputStream(pluginTargetFile)) {
       // Delete the old version of the plugin
       Files.delete(ORCHESTRATOR.getServer().getHome().toPath().resolve("extensions/plugins/sonar-findbugs-plugin-4.0.6.jar"));
-      Files.copy(Path.of("target", "sonar-findbugs-plugin.jar"), out);
+      Files.copy(FileSystems.getDefault().getPath("target", "sonar-findbugs-plugin.jar"), out);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
