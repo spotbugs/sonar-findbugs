@@ -7,13 +7,13 @@ import groovy.json.JsonSlurper;
 
 @Grapes([
 
-    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.7.1'),
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.7.2'),
     @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.4.7'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.12.0')]
 )
 
 
-FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.7.1')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.7.2')
 CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.4.7')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.12.0')
 
@@ -123,7 +123,7 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
     printf("Building ruleset %s (%s)%n", rulesSetName, f.getCanonicalPath())
 
     //XML construction of the rules file
-    def xml = new MarkupBuilder(new PrintWriter(Charset.forName("UTF-8"), f))
+    def xml = new MarkupBuilder(new PrintWriter(f, "UTF-8"))
     xml.rules {
         mkp.comment "This file is auto-generated."
 
@@ -249,7 +249,7 @@ def writeProfile(String profileName,List<String> includedBugs,List<String> exclu
 
     def countBugs=0;
 
-    def xml = new MarkupBuilder(new PrintWriter(Charset.forName("UTF-8"), f))
+    def xml = new MarkupBuilder(new PrintWriter(f, "UTF-8"))
     xml.FindBugsFilter {
         mkp.comment "This file is auto-generated."
 
@@ -301,4 +301,4 @@ List<String> distinctRules = getAllPatternsFromPlugin(FB) + getAllPatternsFromPl
 //unclassifiedBugs = getAllPatternsFromPlugin(FSB) - (informationnalPatterns + cryptoBugs + majorBugs + majorBugsAuditOnly + criticalBugs + findBugsPatterns + exclusions + criticalJspBugs + majorJspBugs)
 //unclassifiedBugs.each {b -> println(b)}
 
-println "Total bugs patterns "+ (distinctRules.unique().size)
+println "Total bugs patterns "+ (distinctRules.unique().size())
