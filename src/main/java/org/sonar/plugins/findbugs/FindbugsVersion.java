@@ -19,12 +19,11 @@
  */
 package org.sonar.plugins.findbugs;
 
-import org.apache.commons.io.IOUtils;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import org.slf4j.LoggerFactory;
 
 public enum FindbugsVersion {
   INSTANCE;
@@ -37,20 +36,14 @@ public enum FindbugsVersion {
   }
 
   private FindbugsVersion() {
-    InputStream input = getClass().getResourceAsStream(PROPERTIES_PATH);
-    try {
+    try (InputStream input = getClass().getResourceAsStream(PROPERTIES_PATH)) {
       Properties properties = new Properties();
       properties.load(input);
-      this.version = properties.getProperty("findbugs.version");
-
+      this.version = properties.getProperty("findbugs.plugin.version");
     } catch (IOException e) {
       LoggerFactory.getLogger(getClass()).warn("Can not load the Findbugs version from the file " + PROPERTIES_PATH);
       LoggerFactory.getLogger(getClass()).debug("Error while loading propoerties", e);
       this.version = "";
-
-    } finally {
-      IOUtils.closeQuietly(input);
     }
   }
-
 }

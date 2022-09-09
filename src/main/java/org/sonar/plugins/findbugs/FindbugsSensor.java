@@ -122,7 +122,7 @@ public class FindbugsSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-
+    LOG.info("Findbugs plugin version: {}", FindbugsVersion.getVersion());
     if (!hasActiveFindbugsRules() && !hasActiveFbContribRules() && !hasActiveFindSecBugsRules()) {
       return;
     }
