@@ -32,6 +32,7 @@ import java.util.List;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 
+@IntegrationTest
 class FBContribIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:fb-contrib";

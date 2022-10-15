@@ -31,6 +31,7 @@ import java.util.List;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 
+@IntegrationTest
 class ScalaIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:scala";

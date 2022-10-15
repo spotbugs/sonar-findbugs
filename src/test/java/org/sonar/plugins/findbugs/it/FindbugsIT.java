@@ -37,6 +37,7 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.build.SonarScanner;
 
+@IntegrationTest
 class FindbugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";

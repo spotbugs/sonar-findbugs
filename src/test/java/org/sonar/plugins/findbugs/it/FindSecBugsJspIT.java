@@ -20,6 +20,7 @@ import com.sonar.orchestrator.build.MavenBuild;
  * @author gtoison
  *
  */
+@IntegrationTest
 class FindSecBugsJspIT {
 
   private static final String SLING_PROJECT_KEY = "org.sonar.tests:jspc-sling";

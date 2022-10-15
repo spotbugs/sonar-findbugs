@@ -22,6 +22,7 @@ import com.sonar.orchestrator.build.MavenBuild;
  * @author gtoison
  *
  */
+@IntegrationTest
 class MultiModuleIT {
 
   private static final String MAVEN_PROJECT_KEY = "spotbugs:multi-module";
