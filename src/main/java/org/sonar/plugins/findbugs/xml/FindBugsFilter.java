@@ -30,7 +30,6 @@ import org.sonar.plugins.findbugs.FindbugsLevelUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +40,7 @@ public class FindBugsFilter {
   private static final String PATTERN_SEPARATOR = ",";
   private static final String CODE_SEPARATOR = ",";
   private static final String CATEGORY_SEPARATOR = ",";
-  private static final Class[] ALL_XSTREAM_TYPES = {Bug.class, ClassFilter.class, FieldFilter.class, FindBugsFilter.class, LocalFilter.class, Match.class, MethodFilter.class, OrFilter.class, PackageFilter.class, Priority.class};
+  private static final Class<?>[] ALL_XSTREAM_TYPES = {Bug.class, ClassFilter.class, FieldFilter.class, FindBugsFilter.class, LocalFilter.class, Match.class, MethodFilter.class, OrFilter.class, PackageFilter.class, Priority.class};
 
   @XStreamImplicit
   private List<Match> matchs;
@@ -133,7 +132,7 @@ public class FindBugsFilter {
     XStream xstream = new XStream(new StaxDriver());
     xstream.setClassLoader(FindBugsFilter.class.getClassLoader());
 
-    for (Class modelClass : ALL_XSTREAM_TYPES) {
+    for (Class<?> modelClass : ALL_XSTREAM_TYPES) {
       xstream.processAnnotations(modelClass);
       xstream.allowTypeHierarchy(modelClass); //Build a whitelist of the class allowed
     }
