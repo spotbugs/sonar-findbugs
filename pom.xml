@@ -422,6 +422,7 @@
           <pluginDescription>Analyze Java, Scala, Closure and JSP code with SpotBugs. ${spotbugs.version}</pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>false</useChildFirstClassLoader>
+          <skipDependenciesPackaging>true</skipDependenciesPackaging>
         </configuration>
       </plugin>
       <plugin>
@@ -460,22 +461,21 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <artifactSet>
-                <includes>
-                  <include>commons-io:commons-io</include>
-                  <include>org.codehaus.sonar:sonar-channel</include>
-                </includes>
-              </artifactSet>
-              <relocations>
-                <relocation>
-                  <pattern>org.apache.commons.io</pattern>
-                  <shadedPattern>shaded.io</shadedPattern>
-                </relocation>
-                  <relocation>
-                    <pattern>org.sonar.channel</pattern>
-                    <shadedPattern>shaded.channel</shadedPattern>
-                  </relocation>
-              </relocations>
+              <transformers>
+                <transformer  implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
+                  <addHeader>false</addHeader>
+                </transformer>
+              </transformers>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
               <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
