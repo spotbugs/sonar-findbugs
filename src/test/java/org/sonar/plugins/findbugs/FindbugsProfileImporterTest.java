@@ -49,7 +49,7 @@ import org.sonar.plugins.java.Java;
 
 import com.thoughtworks.xstream.XStream;
 
-public class FindbugsProfileImporterTest {   
+class FindbugsProfileImporterTest {   
 	
 	private static final String TEST_PROFILE = "TEST_PROFILE";
 
