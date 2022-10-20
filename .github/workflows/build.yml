@@ -39,11 +39,11 @@ jobs:
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_JAVA_VERSION: 7.14.0.30229
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: 11
           distribution: temurin
@@ -69,11 +69,11 @@ jobs:
     # Forked repos do not have the secrets to deploy so this would fail
     if: ( github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )) && github.repository == 'spotbugs/sonar-findbugs'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: 11
           distribution: temurin
