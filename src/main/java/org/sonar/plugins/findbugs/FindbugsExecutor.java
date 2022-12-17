@@ -307,6 +307,15 @@ public class FindbugsExecutor {
     if (customPlugins != null) {
       for (Plugin plugin : customPlugins) {
         Plugin.removeCustomPlugin(plugin);
+
+        try {
+          // We have copied the plugin jar in the project's build directory
+          // Now we need to close the classloaders pointing to that jar
+          // so we do not prevent the deletion of the build folder
+          plugin.close();
+        } catch (IOException e) {
+          LOG.error("Error closing plugin", e);
+        }
       }
     }
   }
