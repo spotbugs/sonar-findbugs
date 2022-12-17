@@ -490,6 +490,9 @@
                 <goals>
                   <goal>jar</goal>
                 </goals>
+                <configuration>
+                  <source>8</source>
+                </configuration>
               </execution>
             </executions>
           </plugin>
