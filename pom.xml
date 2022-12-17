@@ -490,6 +490,16 @@
                 <goals>
                   <goal>jar</goal>
                 </goals>
+                <configuration>
+                  <source>8</source>
+                  <tags>
+                    <tag>
+                      <name>ParametersAreNonnullByDefault</name>
+                      <placement>a</placement>
+                      <head>Parameters Are Nonnull By Default</head>
+                    </tag>
+                  </tags>
+                </configuration>
               </execution>
             </executions>
           </plugin>
