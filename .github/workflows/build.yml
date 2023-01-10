@@ -30,14 +30,14 @@ jobs:
             SONAR_PLUGIN_API_VERSION: 8.9.9.56886
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.sonarqube
             SONAR_JAVA_VERSION: 6.15.1.26025
-          - SONAR_SERVER_VERSION: 9.6.0.59041
-            SONAR_PLUGIN_API_VERSION: 9.9.0.229
-            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
-            SONAR_JAVA_VERSION: 7.13.0.29990
           - SONAR_SERVER_VERSION: 9.7.0.61563
             SONAR_PLUGIN_API_VERSION: 9.11.0.290
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_JAVA_VERSION: 7.14.0.30229
+          - SONAR_SERVER_VERSION: 9.8.0.63668
+            SONAR_PLUGIN_API_VERSION: 9.13.0.360
+            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
+            SONAR_JAVA_VERSION: 7.15.0.30507
     steps:
       - uses: actions/checkout@v3
         with:

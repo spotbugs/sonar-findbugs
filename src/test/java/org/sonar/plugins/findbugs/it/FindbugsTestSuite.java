@@ -56,6 +56,8 @@ public class FindbugsTestSuite {
         // Build the SonarQube server with an older version of the plugin
       .addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", "4.0.6"))
       .keepBundledPlugins()
+      // Since SQ 9.8 permissions for 'Anyone' group has been limited for new instances
+      .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion("LATEST_RELEASE[" + sonarVersion + "]")
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/empty-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
