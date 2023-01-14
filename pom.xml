@@ -344,6 +344,10 @@
           <argLine>${surefireArgLine}</argLine>
           <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
+          <!-- Exclude the unit tests from the sample projects -->
+          <excludes>
+            <exclude>projects/**</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>

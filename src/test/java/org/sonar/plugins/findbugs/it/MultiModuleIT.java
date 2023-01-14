@@ -93,6 +93,11 @@ class MultiModuleIT {
     // There's one native SQ issue for the Hello.scala sample
     assertThat(issues.stream().filter(component(projectKey, "multi-module-scala/src/main/scala/Hello.scala"))).hasSize(2);
     assertThat(issues.stream().filter(component(projectKey, "multi-module-kotlin/src/main/kotlin/com/bugs/KotlinSample.kt"))).hasSize(2);
+    
+    // The API to get the test binaries was added in 9.8
+    if (orchestrator.getServer().version().isGreaterThanOrEquals(9, 8)) {
+      assertThat(issues.stream().filter(component(projectKey, "multi-module-core/src/test/java/multimodule/core/SampleCoreTest.java"))).hasSize(4);
+    }
   }
   
   private Predicate<Issue> component(String projectKey, String fileName) {

@@ -19,10 +19,13 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import edu.umd.cs.findbugs.ClassScreener;
-import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -34,6 +37,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -41,17 +46,16 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.plugins.findbugs.classpath.ClassPathLocator;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import com.google.common.collect.ImmutableList;
+
+import edu.umd.cs.findbugs.ClassScreener;
+import edu.umd.cs.findbugs.Project;
 
 class FindbugsConfigurationTest {
 
@@ -69,6 +73,7 @@ class FindbugsConfigurationTest {
   private ActiveRules activeRules;
   private FindbugsConfiguration conf;
   private JavaResourceLocator javaResourceLocator;
+  private ClassPathLocator classPathLocator;
 
   @BeforeEach
   public void setUp() throws Exception {
@@ -86,6 +91,7 @@ class FindbugsConfigurationTest {
 
     configuration = new SimpleConfiguration();
     javaResourceLocator = mock(JavaResourceLocator.class);
+    classPathLocator = mock(ClassPathLocator.class);
     conf = new FindbugsConfiguration(fs, configuration, activeRules, javaResourceLocator);
   }
 
@@ -234,48 +240,67 @@ class FindbugsConfigurationTest {
     assertThat(classes).isEmpty();
   }
   
-  @Test
-  void should_warn_of_missing_precompiled_jsp() throws IOException {
-    setupSampleProject(false, true, false);
+  @ParameterizedTest
+  @ValueSource(booleans = {true, false})
+  void should_warn_of_missing_precompiled_jsp(boolean withSq98Api) throws IOException {
+    setupSampleProject(false, true, false, withSq98Api);
     
     try (Project project = new Project()) {
-      conf.initializeFindbugsProject(project);
+      conf.initializeFindbugsProject(project, classPathLocator);
     }
     
-    // There should be two warnings:
+    // With the pre SonarQube 9.8 we There should be two warnings:
     //  - There are JSP but they are not precompiled
     //  - Findbugs needs sources to be compiled
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(2);
-  }
-  
-  @Test
-  void should_analyze_precompiled_jsp() throws IOException {
-    setupSampleProject(true, true, false);
-    
-    try (Project project = new Project()) {
-      conf.initializeFindbugsProject(project);
-      
-      assertThat(project.getFileCount()).isEqualTo(3);
+    // With the SonarQube 9.8+ API we get the Test.class so only one warning
+    if (withSq98Api) {
+      assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(1);
+    } else {
+      assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(2);
     }
-    
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
   }
-  
-  @Test
-  void scala_project() throws IOException {
-    setupSampleProject(false, false, true);
+
+  @ParameterizedTest
+  @ValueSource(booleans = {true, false})
+  void should_analyze_precompiled_jsp(boolean withSq98Api) throws IOException {
+    setupSampleProject(true, true, false, withSq98Api);
     
     try (Project project = new Project()) {
-      conf.initializeFindbugsProject(project);
+      conf.initializeFindbugsProject(project, classPathLocator);
       
-      assertThat(project.getFileCount()).isEqualTo(1);
-      assertThat(project.getFile(0)).endsWith("Test.class");
+      if (withSq98Api) {
+        // we should also capture the .class that are not from JSP sources and also the unit tests
+        assertThat(project.getFileCount()).isEqualTo(5);
+      } else {
+        assertThat(project.getFileCount()).isEqualTo(3);
+      }
     }
     
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
   }
 
-  private void setupSampleProject(boolean withPrecompiledJsp, boolean withJspFiles, boolean withScalaFiles) throws IOException {
+  @ParameterizedTest
+  @ValueSource(booleans = {true, false})
+  void scala_project(boolean withSq98Api) throws IOException {
+    setupSampleProject(false, false, true, withSq98Api);
+    
+    try (Project project = new Project()) {
+      conf.initializeFindbugsProject(project, classPathLocator);
+      
+      if (withSq98Api) {
+        assertThat(project.getFileCount()).isEqualTo(2);
+        assertThat(project.getFile(0)).endsWith("Test.class");
+        assertThat(project.getFile(1)).endsWith("UnitTest.class");
+      } else {
+        assertThat(project.getFileCount()).isEqualTo(1);
+        assertThat(project.getFile(0)).endsWith("Test.class");
+      }
+    }
+    
+    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+  }
+
+  private void setupSampleProject(boolean withPrecompiledJsp, boolean withJspFiles, boolean withScalaFiles, boolean withSq98Api) throws IOException {
     mockHasLanguagePredicate(withJspFiles, "jsp");
     mockHasLanguagesPredicate(withScalaFiles, "scala");
     
@@ -288,6 +313,9 @@ class FindbugsConfigurationTest {
     //     |_ package
     //       |_ Test.class
     //       |_ message.txt
+    //   |_ test-classes
+    //     |_ package
+    //       |_ UnitTest.class
     File classpath = new File(temp, "classpath");
     File jarFile = new File(classpath, "some.jar");
     File targetFolder = new File(classpath, "target");
@@ -305,6 +333,14 @@ class FindbugsConfigurationTest {
     Files.createFile(txtFile.toPath());
     Files.createFile(moduleInfoFile.toPath());
     
+    // test binaries
+    File testClassesFolder = new File(targetFolder, "test-classes");
+    File testPackageFolder = new File(testClassesFolder, "package");
+    File unitTestClassFile = new File(testPackageFolder, "UnitTest.class");
+    
+    Files.createDirectories(testPackageFolder.toPath());
+    Files.createFile(unitTestClassFile.toPath());
+    
     if (withPrecompiledJsp) {
       File jspClassFile = new File(packageFolder, "page1_jsp.class");
       File jspInnerClassFile = new File(packageFolder, "page1_jsp$1.class");
@@ -318,6 +354,14 @@ class FindbugsConfigurationTest {
     List<File> classpathFiles = Arrays.asList(jarFile, classesFolder, jspServletFolder, moduleInfoFile);
     
     when(javaResourceLocator.classpath()).thenReturn(classpathFiles);
+    
+    if (withSq98Api) {
+      List<File> binaryDirs = Arrays.asList(classesFolder, jspServletFolder);
+      List<File> testBinaryDirs = Collections.singletonList(testClassesFolder);
+      
+      when(classPathLocator.binaryDirs()).thenReturn(binaryDirs);
+      when(classPathLocator.testBinaryDirs()).thenReturn(testBinaryDirs);
+    }
   }
 
   private void mockHasLanguagePredicate(boolean predicateReturn, String language) {

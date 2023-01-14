@@ -47,7 +47,16 @@ public class ByteCodeResourceLocator {
 
     private static final Logger LOG = LoggerFactory.getLogger(ByteCodeResourceLocator.class);
 
-    private static final String[] SOURCE_DIRECTORIES = {"src/main/java","src/main/webapp","src/main/resources", "src", "src/java", "app", "src/main/scala"};
+    private static final String[] SOURCE_DIRECTORIES = {
+        "src/main/java",
+        "src/main/webapp",
+        "src/main/resources", 
+        "src", 
+        "src/java", 
+        "app", 
+        "src/main/scala",
+        "src/test/java"
+    };
 
     /**
      * findSourceFileKeyByClassName() is broken in SonarQube 6.3.1.. This method is fixing it.

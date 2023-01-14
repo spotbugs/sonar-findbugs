@@ -183,7 +183,9 @@ class FindbugsIT {
     orchestrator.executeBuild(build);
 
     // Check that class was really excluded from Findbugs analysis:
-    String findbugsXml = Files.toString(new File(projectDir, ".scannerwork/findbugs-result.xml"), StandardCharsets.UTF_8);
+    // Not sure why but depending on the build the output is either is scannerwork or in target/sonar
+    // For this build the output seems to be in target/sonar
+    String findbugsXml = Files.toString(new File(projectDir, "target/sonar/findbugs-result.xml"), StandardCharsets.UTF_8);
     
     assertThat(findbugsXml).doesNotContain("Findbugs2.class");
 
