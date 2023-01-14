@@ -21,14 +21,14 @@ jobs:
           cond: ${{ github.event_name == 'pull_request_target' }}
           if_true: refs/pull/${{ github.event.pull_request.number }}/merge
           if_false: ${{ github.ref }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ steps.condval.outputs.value }}
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvm
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
           cache: npm
@@ -48,7 +48,7 @@ jobs:
           cond: ${{ github.event_name == 'pull_request_target' }}
           if_true: refs/pull/${{ github.event.pull_request.number }}/merge
           if_false: ${{ github.ref }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           ref: ${{ steps.condval.outputs.value }}
       - uses: ./.github/actions/sonar-update-center
