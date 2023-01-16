@@ -10,7 +10,7 @@ public class JasperUtils {
    * @return JSP file name
    */
   public static String decodeJspClassName(String className) {
-    className = className.replaceAll("\\.", "/");
+    className = className.replace(".", "/");
 
     for(char ch = Character.MIN_VALUE; ch < 128 ; ch++) {
       //Condition minimize the number of replace operations
@@ -21,7 +21,7 @@ public class JasperUtils {
         className = className.replace(mangleChar(ch), Character.toString(ch));
       }
     }
-    return className.replaceAll("_jsp", ".jsp");
+    return className.replace("_jsp", ".jsp");
   }
 
   /**

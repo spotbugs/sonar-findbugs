@@ -30,13 +30,14 @@ import org.sonarqube.ws.client.issues.IssuesService;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.List;
 
+import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.build.SonarScanner;
 
+@IntegrationTest
 class FindbugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
@@ -139,7 +140,7 @@ class FindbugsIT {
     orchestrator.executeBuild(sonarScanner);
 
     // Check that class was really excluded from Findbugs analysis:
-    String findbugsXml = Files.readString(projectDir.toPath().resolve(".scannerwork/findbugs-result.xml"), StandardCharsets.UTF_8);
+    String findbugsXml = Files.toString(new File(projectDir, ".scannerwork/findbugs-result.xml"), StandardCharsets.UTF_8);
     
     // FIXME Even though a source file is excluded, the corresponding .class file is currently analyzed by the plugin
     // assertThat(findbugsXml).doesNotContain("Findbugs2.class");
@@ -182,7 +183,9 @@ class FindbugsIT {
     orchestrator.executeBuild(build);
 
     // Check that class was really excluded from Findbugs analysis:
-    String findbugsXml = Files.readString(projectDir.toPath().resolve(".scannerwork/findbugs-result.xml"), StandardCharsets.UTF_8);
+    // Not sure why but depending on the build the output is either is scannerwork or in target/sonar
+    // For this build the output seems to be in target/sonar
+    String findbugsXml = Files.toString(new File(projectDir, "target/sonar/findbugs-result.xml"), StandardCharsets.UTF_8);
     
     assertThat(findbugsXml).doesNotContain("Findbugs2.class");
 

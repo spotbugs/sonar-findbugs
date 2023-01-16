@@ -16,6 +16,7 @@ import com.sonar.orchestrator.build.MavenBuild;
  * @author gtoison
  *
  */
+@IntegrationTest
 class FindSecBugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";

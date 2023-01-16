@@ -220,7 +220,7 @@ public final class FindbugsRulesPluginsDefinition implements RulesDefinition {
   			.setName(name)
   			.setHtmlDescription(htmlDescription)
   			.setStatus(ruleStatus)
-  			.setTags(tags.toArray(String[]::new));
+  			.setTags(tags.toArray(new String[0]));
   		}
   	}
   }

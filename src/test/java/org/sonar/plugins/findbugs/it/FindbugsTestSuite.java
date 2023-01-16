@@ -40,6 +40,7 @@ import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
+@IntegrationTest
 public class FindbugsTestSuite {
 
   public static final Orchestrator ORCHESTRATOR;

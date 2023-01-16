@@ -19,10 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.thoughtworks.xstream.XStream;
-
-import edu.umd.cs.findbugs.ClassScreener;
-import edu.umd.cs.findbugs.Project;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -35,9 +31,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.regex.Pattern;
 import java.util.StringTokenizer;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -66,7 +62,10 @@ import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import static java.lang.String.format;
+import com.thoughtworks.xstream.XStream;
+
+import edu.umd.cs.findbugs.ClassScreener;
+import edu.umd.cs.findbugs.Project;
 
 @ScannerSide
 public class FindbugsConfiguration {
@@ -198,9 +197,12 @@ public class FindbugsConfiguration {
       String repoKey = activeRule.ruleKey().repository();
 
       if (repoKey.contains(FindSecurityBugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FindbugsRulesDefinition.REPOSITORY_KEY) || repoKey.contains(FbContribRulesDefinition.REPOSITORY_KEY)) {
-        Match child = new Match();
-        child.setBug(new Bug(activeRule.internalKey()));
-        root.addMatch(child);
+        String internalKey = activeRule.internalKey();
+        if (internalKey != null) {
+          Match child = new Match();
+          child.setBug(new Bug(internalKey));
+          root.addMatch(child);
+        }
       }
     }
     return root;
