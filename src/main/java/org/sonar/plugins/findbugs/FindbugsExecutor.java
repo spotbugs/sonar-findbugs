@@ -320,6 +320,7 @@ public class FindbugsExecutor {
         if (activeRules.find(ruleKey) != null) {
           return true;
         }
+        // No need to close the plugin
       }
     }
     

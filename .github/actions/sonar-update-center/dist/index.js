@@ -452,28 +452,35 @@ exports.replacePatch = exports.dropAdditionalVer = exports.searchLatestMinorVers
 const github_1 = __nccwpck_require__(5438);
 const gt_1 = __importDefault(__nccwpck_require__(4123));
 function searchLatestMinorVersion(token) {
-    var e_1, _a;
+    var _a, e_1, _b, _c;
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = (0, github_1.getOctokit)(token);
         let latest = '';
         try {
-            for (var _b = __asyncValues(octokit.paginate.iterator(octokit.rest.repos.listReleases, {
+            for (var _d = true, _e = __asyncValues(octokit.paginate.iterator(octokit.rest.repos.listReleases, {
                 owner: 'SonarSource',
                 repo: 'sonarqube'
-            })), _c; _c = yield _b.next(), !_c.done;) {
-                const response = _c.value;
-                for (const release of response.data) {
-                    const tag = dropAdditionalVer(release.tag_name);
-                    if (!latest || (0, gt_1.default)(tag, latest, false)) {
-                        latest = tag;
+            })), _f; _f = yield _e.next(), _a = _f.done, !_a;) {
+                _c = _f.value;
+                _d = false;
+                try {
+                    const response = _c;
+                    for (const release of response.data) {
+                        const tag = dropAdditionalVer(release.tag_name);
+                        if (!latest || (0, gt_1.default)(tag, latest, false)) {
+                            latest = tag;
+                        }
                     }
+                }
+                finally {
+                    _d = true;
                 }
             }
         }
         catch (e_1_1) { e_1 = { error: e_1_1 }; }
         finally {
             try {
-                if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
             }
             finally { if (e_1) throw e_1.error; }
         }

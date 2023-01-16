@@ -6,7 +6,7 @@
 
 	<properties>
 		<encoding>UTF-8</encoding>
-		<scala.version>2.13.9</scala.version>
+		<scala.version>2.13.10</scala.version>
 	</properties>
 
 	<dependencies>
