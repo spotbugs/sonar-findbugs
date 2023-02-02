@@ -63,7 +63,7 @@ public class DefaultClassPathLocator implements ClassPathLocator {
   
   @Override
   public Collection<File> testClasspath() {
-    return callNoArgMethodReturningFilesCollection("testClassPath");
+    return callNoArgMethodReturningFilesCollection("testClasspath");
   }
 
   @SuppressWarnings("unchecked")
