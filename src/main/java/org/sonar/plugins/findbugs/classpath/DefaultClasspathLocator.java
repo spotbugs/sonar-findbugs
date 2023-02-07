@@ -33,16 +33,16 @@ import org.sonar.plugins.java.api.JavaResourceLocator;
  * @author gtoison
  *
  */
-public class DefaultClassPathLocator implements ClassPathLocator {
+public class DefaultClasspathLocator implements ClasspathLocator {
   @SuppressWarnings("rawtypes")
   private static final Class[] EMPTY_CLASS_ARRAY = new Class[0];
   private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
   
-  private static final Logger LOG = Loggers.get(DefaultClassPathLocator.class);
+  private static final Logger LOG = Loggers.get(DefaultClasspathLocator.class);
 
   private JavaResourceLocator javaResourceLocator;
   
-  public DefaultClassPathLocator(JavaResourceLocator javaResourceLocator) {
+  public DefaultClasspathLocator(JavaResourceLocator javaResourceLocator) {
     this.javaResourceLocator = javaResourceLocator;
   }
 

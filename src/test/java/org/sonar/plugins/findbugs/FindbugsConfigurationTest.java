@@ -46,7 +46,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.api.utils.log.LoggerLevel;
-import org.sonar.plugins.findbugs.classpath.ClassPathLocator;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 import org.sonar.plugins.findbugs.util.JupiterLogTester;
@@ -73,7 +73,7 @@ class FindbugsConfigurationTest {
   private ActiveRules activeRules;
   private FindbugsConfiguration conf;
   private JavaResourceLocator javaResourceLocator;
-  private ClassPathLocator classPathLocator;
+  private ClasspathLocator classpathLocator;
 
   @BeforeEach
   public void setUp() throws Exception {
@@ -91,7 +91,7 @@ class FindbugsConfigurationTest {
 
     configuration = new SimpleConfiguration();
     javaResourceLocator = mock(JavaResourceLocator.class);
-    classPathLocator = mock(ClassPathLocator.class);
+    classpathLocator = mock(ClasspathLocator.class);
     conf = new FindbugsConfiguration(fs, configuration, activeRules, javaResourceLocator);
   }
 
@@ -246,7 +246,7 @@ class FindbugsConfigurationTest {
     setupSampleProject(false, true, false, withSq98Api);
     
     try (Project project = new Project()) {
-      conf.initializeFindbugsProject(project, classPathLocator);
+      conf.initializeFindbugsProject(project, classpathLocator);
     }
     
     // With the pre SonarQube 9.8 we There should be two warnings:
@@ -266,7 +266,7 @@ class FindbugsConfigurationTest {
     setupSampleProject(true, true, false, withSq98Api);
     
     try (Project project = new Project()) {
-      conf.initializeFindbugsProject(project, classPathLocator);
+      conf.initializeFindbugsProject(project, classpathLocator);
       
       if (withSq98Api) {
         // we should also capture the .class that are not from JSP sources and also the unit tests
@@ -285,7 +285,7 @@ class FindbugsConfigurationTest {
     setupSampleProject(false, false, true, withSq98Api);
     
     try (Project project = new Project()) {
-      conf.initializeFindbugsProject(project, classPathLocator);
+      conf.initializeFindbugsProject(project, classpathLocator);
       
       if (withSq98Api) {
         assertThat(project.getFileCount()).isEqualTo(2);
@@ -359,8 +359,8 @@ class FindbugsConfigurationTest {
       List<File> binaryDirs = Arrays.asList(classesFolder, jspServletFolder);
       List<File> testBinaryDirs = Collections.singletonList(testClassesFolder);
       
-      when(classPathLocator.binaryDirs()).thenReturn(binaryDirs);
-      when(classPathLocator.testBinaryDirs()).thenReturn(testBinaryDirs);
+      when(classpathLocator.binaryDirs()).thenReturn(binaryDirs);
+      when(classpathLocator.testBinaryDirs()).thenReturn(testBinaryDirs);
     }
   }
 

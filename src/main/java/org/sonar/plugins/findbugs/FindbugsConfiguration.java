@@ -54,8 +54,8 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.findbugs.classpath.ClassPathLocator;
-import org.sonar.plugins.findbugs.classpath.DefaultClassPathLocator;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
+import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -97,18 +97,18 @@ public class FindbugsConfiguration implements Startable {
   }
 
   public void initializeFindbugsProject(Project findbugsProject) throws IOException {
-    initializeFindbugsProject(findbugsProject, new DefaultClassPathLocator(javaResourceLocator));
+    initializeFindbugsProject(findbugsProject, new DefaultClasspathLocator(javaResourceLocator));
   }
   
-  void initializeFindbugsProject(Project findbugsProject, ClassPathLocator classPathLocator) throws IOException {
-    List<File> classFilesToAnalyze = buildClassFilesToAnalyze(classPathLocator);
+  void initializeFindbugsProject(Project findbugsProject, ClasspathLocator classpathLocator) throws IOException {
+    List<File> classFilesToAnalyze = buildClassFilesToAnalyze(classpathLocator);
 
-    for (File file : classPathLocator.classpath()) {
+    for (File file : classpathLocator.classpath()) {
       //Auxiliary dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
 
-    for (File file : classPathLocator.testClasspath()) {
+    for (File file : classpathLocator.testClasspath()) {
       //Auxiliary tests dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
@@ -255,8 +255,8 @@ public class FindbugsConfiguration implements Startable {
     return file;
   }
   
-  private List<File> buildClassFilesToAnalyze(ClassPathLocator classPathLocator) throws IOException {
-    Collection<File> binaryDirs = classPathLocator.binaryDirs();
+  private List<File> buildClassFilesToAnalyze(ClasspathLocator classpathLocator) throws IOException {
+    Collection<File> binaryDirs = classpathLocator.binaryDirs();
     
     if (binaryDirs.isEmpty()) {
       return buildClassFilesToAnalyzePre98();
@@ -271,7 +271,7 @@ public class FindbugsConfiguration implements Startable {
         checkForMissingPrecompiledJsp(classFilesToAnalyze);
       }
 
-      addClassFilesFromClasspath(classFilesToAnalyze, classPathLocator.testBinaryDirs());
+      addClassFilesFromClasspath(classFilesToAnalyze, classpathLocator.testBinaryDirs());
 
       return classFilesToAnalyze;
     }
@@ -283,19 +283,19 @@ public class FindbugsConfiguration implements Startable {
     boolean hasScalaOrKotlinFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguages("scala", "kotlin"));
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));    
 
-    Collection<File> classPath = javaResourceLocator.classpath();
+    Collection<File> classpath = javaResourceLocator.classpath();
     
     // javaResourceLocator.classFilesToAnalyze() only contains .class files from Java sources
     if (hasScalaOrKotlinFiles) {
       // Add all the .class files from the classpath
       // For Gradle multi-module projects this will unfortunately include compiled .class files from dependency modules
-      addClassFilesFromClasspath(classFilesToAnalyze, classPath);
+      addClassFilesFromClasspath(classFilesToAnalyze, classpath);
     } else if (hasJspFiles) {
       // Add the precompiled JSP .class files
-      addPrecompiledJspClasses(classFilesToAnalyze, classPath);
+      addPrecompiledJspClasses(classFilesToAnalyze, classpath);
     } else if (classFilesToAnalyze.isEmpty()) {
       // For some users javaResourceLocator.classFilesToAnalyze() seems to return an empty list, it is unclear why
-      addClassFilesFromClasspath(classFilesToAnalyze, classPath);
+      addClassFilesFromClasspath(classFilesToAnalyze, classpath);
     }
 
     return classFilesToAnalyze;
@@ -308,8 +308,8 @@ public class FindbugsConfiguration implements Startable {
    * 
    * @throws IOException In case an exception was thrown when building a file canonical path
    */
-  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze, Collection<File> classPath) throws IOException {
-    addClassFilesFromClasspath(classFilesToAnalyze, classPath, FindbugsConfiguration::isPrecompiledJspClassFile);
+  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze, Collection<File> classpath) throws IOException {
+    addClassFilesFromClasspath(classFilesToAnalyze, classpath, FindbugsConfiguration::isPrecompiledJspClassFile);
     
     checkForMissingPrecompiledJsp(classFilesToAnalyze);
   }
@@ -329,12 +329,12 @@ public class FindbugsConfiguration implements Startable {
    * 
    * @param classFilesToAnalyze The current list of class files to analyze
    */
-  private void addClassFilesFromClasspath(Collection<File> classFilesToAnalyze, Collection<File> classPath) {
-    addClassFilesFromClasspath(classFilesToAnalyze, classPath, f -> f.getName().endsWith(".class"));
+  private void addClassFilesFromClasspath(Collection<File> classFilesToAnalyze, Collection<File> classpath) {
+    addClassFilesFromClasspath(classFilesToAnalyze, classpath, f -> f.getName().endsWith(".class"));
   }
   
-  private void addClassFilesFromClasspath(Collection<File> classFilesToAnalyze, Collection<File> classPath, Predicate<File> filePredicate) {
-    for (File file : classPath) {
+  private void addClassFilesFromClasspath(Collection<File> classFilesToAnalyze, Collection<File> classpath, Predicate<File> filePredicate) {
+    for (File file : classpath) {
       //Will capture additional classes including precompiled JSP
       if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
         classFilesToAnalyze.addAll(scanForAdditionalClasses(file, filePredicate));

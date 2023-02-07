@@ -26,7 +26,7 @@ import java.util.Collection;
  * @author gtoison
  *
  */
-public interface ClassPathLocator {
+public interface ClasspathLocator {
 
   Collection<File> binaryDirs();
 
