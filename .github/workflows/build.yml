@@ -65,7 +65,7 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
       - name: Set the Sonar Java Path
-        run: echo SONAR_JAVA_PATH=${{ env.JAVA_HOME_${{ matrix.SONAR_SERVER_JAVA_VERSION }}_x64 }} >> $GITHUB_ENV
+        run: echo "SONAR_JAVA_PATH=${{ env.JAVA_HOME_${{ matrix.SONAR_SERVER_JAVA_VERSION }}_x64 }}" >> $GITHUB_ENV
       - name: Build
         run: |
           mvn verify -B -e -V \
