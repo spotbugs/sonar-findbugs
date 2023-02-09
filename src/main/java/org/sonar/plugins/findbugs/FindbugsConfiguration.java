@@ -26,6 +26,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -53,6 +54,8 @@ import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
+import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -94,10 +97,19 @@ public class FindbugsConfiguration implements Startable {
   }
 
   public void initializeFindbugsProject(Project findbugsProject) throws IOException {
-    List<File> classFilesToAnalyze = buildClassFilesToAnalyze();
+    initializeFindbugsProject(findbugsProject, new DefaultClasspathLocator(javaResourceLocator));
+  }
+  
+  void initializeFindbugsProject(Project findbugsProject, ClasspathLocator classpathLocator) throws IOException {
+    List<File> classFilesToAnalyze = buildClassFilesToAnalyze(classpathLocator);
 
-    for (File file : javaResourceLocator.classpath()) {
+    for (File file : classpathLocator.classpath()) {
       //Auxiliary dependencies
+      findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
+    }
+
+    for (File file : classpathLocator.testClasspath()) {
+      //Auxiliary tests dependencies
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
     
@@ -243,23 +255,47 @@ public class FindbugsConfiguration implements Startable {
     return file;
   }
   
-  private List<File> buildClassFilesToAnalyze() throws IOException {
+  private List<File> buildClassFilesToAnalyze(ClasspathLocator classpathLocator) throws IOException {
+    Collection<File> binaryDirs = classpathLocator.binaryDirs();
+    
+    if (binaryDirs.isEmpty()) {
+      return buildClassFilesToAnalyzePre98();
+    } else {
+      // It's probably redundant to use javaResourceLocator.classFilesToAnalyze() here, we'll get all the binaries later
+      List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+
+      addClassFilesFromClasspath(classFilesToAnalyze, binaryDirs);
+
+      boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
+      if (hasJspFiles) {
+        checkForMissingPrecompiledJsp(classFilesToAnalyze);
+      }
+
+      addClassFilesFromClasspath(classFilesToAnalyze, classpathLocator.testBinaryDirs());
+
+      return classFilesToAnalyze;
+    }
+  }
+  
+  private List<File> buildClassFilesToAnalyzePre98() throws IOException {
     List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
     
     boolean hasScalaOrKotlinFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguages("scala", "kotlin"));
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));    
 
+    Collection<File> classpath = javaResourceLocator.classpath();
+    
     // javaResourceLocator.classFilesToAnalyze() only contains .class files from Java sources
     if (hasScalaOrKotlinFiles) {
       // Add all the .class files from the classpath
       // For Gradle multi-module projects this will unfortunately include compiled .class files from dependency modules
-      addClassFilesFromClasspath(classFilesToAnalyze);
+      addClassFilesFromClasspath(classFilesToAnalyze, classpath);
     } else if (hasJspFiles) {
       // Add the precompiled JSP .class files
-      addPrecompiledJspClasses(classFilesToAnalyze);
+      addPrecompiledJspClasses(classFilesToAnalyze, classpath);
     } else if (classFilesToAnalyze.isEmpty()) {
       // For some users javaResourceLocator.classFilesToAnalyze() seems to return an empty list, it is unclear why
-      addClassFilesFromClasspath(classFilesToAnalyze);
+      addClassFilesFromClasspath(classFilesToAnalyze, classpath);
     }
 
     return classFilesToAnalyze;
@@ -272,9 +308,13 @@ public class FindbugsConfiguration implements Startable {
    * 
    * @throws IOException In case an exception was thrown when building a file canonical path
    */
-  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze) throws IOException {
-    addClassFilesFromClasspath(classFilesToAnalyze, FindbugsConfiguration::isPrecompiledJspClassFile);
+  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze, Collection<File> classpath) throws IOException {
+    addClassFilesFromClasspath(classFilesToAnalyze, classpath, FindbugsConfiguration::isPrecompiledJspClassFile);
     
+    checkForMissingPrecompiledJsp(classFilesToAnalyze);
+  }
+  
+  public void checkForMissingPrecompiledJsp(List<File> classFilesToAnalyze) {
     boolean hasPrecompiledJsp = hasPrecompiledJsp(classFilesToAnalyze);
 
     if (!hasPrecompiledJsp) {
@@ -289,12 +329,12 @@ public class FindbugsConfiguration implements Startable {
    * 
    * @param classFilesToAnalyze The current list of class files to analyze
    */
-  private void addClassFilesFromClasspath(List<File> classFilesToAnalyze) {
-    addClassFilesFromClasspath(classFilesToAnalyze, f -> f.getName().endsWith(".class"));
+  private void addClassFilesFromClasspath(Collection<File> classFilesToAnalyze, Collection<File> classpath) {
+    addClassFilesFromClasspath(classFilesToAnalyze, classpath, f -> f.getName().endsWith(".class"));
   }
-
-  private void addClassFilesFromClasspath(List<File> classFilesToAnalyze, Predicate<File> filePredicate) {
-    for (File file : javaResourceLocator.classpath()) {
+  
+  private void addClassFilesFromClasspath(Collection<File> classFilesToAnalyze, Collection<File> classpath, Predicate<File> filePredicate) {
+    for (File file : classpath) {
       //Will capture additional classes including precompiled JSP
       if(file.isDirectory()) { // will include "/target/classes" and other non-standard folders
         classFilesToAnalyze.addAll(scanForAdditionalClasses(file, filePredicate));
