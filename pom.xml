@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>4.2.3-SNAPSHOT</version>
+  <version>4.2.4-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
@@ -281,7 +281,7 @@
         <plugin>
          <groupId>org.jacoco</groupId>
          <artifactId>jacoco-maven-plugin</artifactId>
-         <version>0.8.6</version>
+         <version>0.8.8</version>
         </plugin>
         <plugin>
          <groupId>org.apache.maven.plugins</groupId>
@@ -336,6 +336,10 @@
           <argLine>${surefireArgLine}</argLine>
           <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
+          <!-- Exclude the unit tests from the sample projects -->
+          <excludes>
+            <exclude>projects/**</exclude>
+          </excludes>
         </configuration>
       </plugin>
       <plugin>
