@@ -94,9 +94,6 @@ public class FindbugsExecutor {
   }
   
   public Collection<ReportedBug> execute(ActiveRules activeRules) {
-    // We keep a handle on the current security manager because FB plays with it and we need to restore it before shutting down the executor
-    // service
-    SecurityManager currentSecurityManager = System.getSecurityManager();
     ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(FindBugs2.class.getClassLoader());
 
@@ -180,8 +177,6 @@ public class FindbugsExecutor {
     } catch (Exception e) {
       throw new IllegalStateException("Can not execute Findbugs", e);
     } finally {
-      // we set back the original security manager BEFORE shutting down the executor service, otherwise there's a problem with Java 5
-      System.setSecurityManager(currentSecurityManager);
       executorService.shutdown();
       IOUtils.closeQuietly(xmlOutput);
       Thread.currentThread().setContextClassLoader(initialClassLoader);
