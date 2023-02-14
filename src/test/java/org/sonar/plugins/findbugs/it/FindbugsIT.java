@@ -206,6 +206,7 @@ class FindbugsIT {
       String line = reader.readLine();
       while (line != null) {
         builder.append(line);
+        line = reader.readLine();
       }
     }
     return builder.toString();
