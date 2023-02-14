@@ -203,7 +203,10 @@ class FindbugsIT {
   private static String fileToString(File file) throws IOException {
     StringBuilder builder = new StringBuilder();
     try (FileReader fileReader = new FileReader(file); BufferedReader reader = new BufferedReader(fileReader)) {
-      builder.append(reader.readLine());
+      String line = reader.readLine();
+      while (line != null) {
+        builder.append(line);
+      }
     }
     return builder.toString();
   }
