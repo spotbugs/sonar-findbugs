@@ -28,11 +28,13 @@ import org.sonar.plugins.findbugs.FindbugsConstants;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
-import com.google.common.io.Files;
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.build.SonarScanner;
@@ -140,7 +142,7 @@ class FindbugsIT {
     orchestrator.executeBuild(sonarScanner);
 
     // Check that class was really excluded from Findbugs analysis:
-    String findbugsXml = Files.toString(new File(projectDir, ".scannerwork/findbugs-result.xml"), StandardCharsets.UTF_8);
+    String findbugsXml = fileToString(new File(projectDir, ".scannerwork/findbugs-result.xml"));
     
     // FIXME Even though a source file is excluded, the corresponding .class file is currently analyzed by the plugin
     // assertThat(findbugsXml).doesNotContain("Findbugs2.class");
@@ -185,7 +187,7 @@ class FindbugsIT {
     // Check that class was really excluded from Findbugs analysis:
     // Not sure why but depending on the build the output is either is scannerwork or in target/sonar
     // For this build the output seems to be in target/sonar
-    String findbugsXml = Files.toString(new File(projectDir, "target/sonar/findbugs-result.xml"), StandardCharsets.UTF_8);
+    String findbugsXml = fileToString(new File(projectDir, "target/sonar/findbugs-result.xml"));
     
     assertThat(findbugsXml).doesNotContain("Findbugs2.class");
 
@@ -194,4 +196,15 @@ class FindbugsIT {
     List<Issue> issues = issueClient.search(IssueQuery.create().components(FindbugsTestSuite.keyFor(PROJECT_KEY, "", "Findbugs1.java"))).getIssuesList();
     assertThat(issues).hasSize(1);
   }
-}
+  
+  /**
+   * To be replaced by {@link Files#toString()} once we upgrade the project to java 11
+   */
+  private static String fileToString(File file) throws IOException {
+    StringBuilder builder = new StringBuilder();
+    try (FileReader fileReader = new FileReader(file); BufferedReader reader = new BufferedReader(fileReader)) {
+      builder.append(reader.readLine());
+    }
+    return builder.toString();
+  }
+ }
