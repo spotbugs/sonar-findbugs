@@ -42,6 +42,8 @@ public final class FindbugsConstants {
   
   public static final String ONLY_ANALYZE_PROPERTY = "sonar.findbugs.onlyAnalyze";
 
+  public static final String ANALYZE_TESTS = "sonar.findbugs.analyzeTests";
+  public static final boolean ANALYZE_TESTS_VALUE = true;
 
   private FindbugsConstants() {
   }

@@ -36,6 +36,8 @@ This option might be used to get around the `One (sub)project contains Java sour
 
 **Only analyze** (`sonar.findbugs.onlyAnalyze`): Restrict analysis to a comma-separated list of classes and packages. For large projects, this may greatly reduce the amount of time needed to run the analysis. (However, some detectors may produce inaccurate results if they aren’t run on the entire application.) Classes should be specified using their full classnames (including package), and packages should be specified in the same way they would in a Java import statement to import all classes in the package (i.e., add .* to the full name of the package). Replace .* with .- to also analyze all subpackages.
 
+**Analyze tests** (`sonar.findbugs.analyzeTests`): Starting with version 4.2.3 AND when running SonarQube 9.8 and above, unit tests are analyzed by default. Use this option to enable/disable the analysis of tests. See the [SonarQube documentation](https://docs.sonarqube.org/latest/project-administration/narrowing-the-focus/) for the definition of test and non-test code.
+
 ### Compiled code
 
 FindBugs requires the compiled classes to run, if the project has JSP files they will need to be precompiled.

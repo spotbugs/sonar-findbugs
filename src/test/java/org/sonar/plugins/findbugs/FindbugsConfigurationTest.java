@@ -24,6 +24,9 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
@@ -38,6 +41,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -197,7 +201,7 @@ class FindbugsConfigurationTest {
   }
   
   @Test
-  public void should_get_only_analyze_filter() {
+  void should_get_only_analyze_filter() {
 	 // No onlyAnalyze option present 
 	 assertNull(conf.getOnlyAnalyzeFilter());
 	 // Empty Property
@@ -241,9 +245,14 @@ class FindbugsConfigurationTest {
   }
   
   @ParameterizedTest
-  @ValueSource(booleans = {true, false})
-  void should_warn_of_missing_precompiled_jsp(boolean withSq98Api) throws IOException {
-    setupSampleProject(false, true, false, withSq98Api);
+  @CsvSource({
+    "true,true",
+    "true,false",
+    "false,true",
+    "false,false",
+  })
+  void should_warn_of_missing_precompiled_jsp(boolean withSq98Api, boolean analyzeTests) throws IOException {
+    setupSampleProject(false, true, false, withSq98Api, analyzeTests);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project, classpathLocator);
@@ -261,16 +270,28 @@ class FindbugsConfigurationTest {
   }
 
   @ParameterizedTest
-  @ValueSource(booleans = {true, false})
-  void should_analyze_precompiled_jsp(boolean withSq98Api) throws IOException {
-    setupSampleProject(true, true, false, withSq98Api);
+  @CsvSource({
+    "true,true",
+    "true,false",
+    "false,true",
+    "false,false",
+  })
+  void should_analyze_precompiled_jsp(boolean withSq98Api, boolean analyzeTests) throws IOException {
+    setupSampleProject(true, true, false, withSq98Api, analyzeTests);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project, classpathLocator);
       
-      if (withSq98Api) {
+      if (withSq98Api && analyzeTests) {
         // we should also capture the .class that are not from JSP sources and also the unit tests
         assertThat(project.getFileCount()).isEqualTo(5);
+        
+        verify(classpathLocator, times(1)).testClasspath();
+      } else if (withSq98Api) {
+        // we should also capture the .class that are not from JSP sources but not the unit tests
+        assertThat(project.getFileCount()).isEqualTo(4);
+        
+        verify(classpathLocator, never()).testClasspath();
       } else {
         assertThat(project.getFileCount()).isEqualTo(3);
       }
@@ -280,17 +301,30 @@ class FindbugsConfigurationTest {
   }
 
   @ParameterizedTest
-  @ValueSource(booleans = {true, false})
-  void scala_project(boolean withSq98Api) throws IOException {
-    setupSampleProject(false, false, true, withSq98Api);
+  @CsvSource({
+    "true,true",
+    "true,false",
+    "false,true",
+    "false,false",
+  })
+  void scala_project(boolean withSq98Api, boolean analyzeTests) throws IOException {
+    setupSampleProject(false, false, true, withSq98Api, analyzeTests);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project, classpathLocator);
       
-      if (withSq98Api) {
+      if (withSq98Api && analyzeTests) {
         assertThat(project.getFileCount()).isEqualTo(2);
         assertThat(project.getFile(0)).endsWith("Test.class");
         assertThat(project.getFile(1)).endsWith("UnitTest.class");
+        
+        verify(classpathLocator, times(1)).testClasspath();
+      } else if (withSq98Api) {
+        assertThat(project.getFileCount()).isEqualTo(1);
+        // Even though it is named "Test" it is in the "main" folder so it should be analyzed
+        assertThat(project.getFile(0)).endsWith("Test.class");
+        
+        verify(classpathLocator, never()).testClasspath();
       } else {
         assertThat(project.getFileCount()).isEqualTo(1);
         assertThat(project.getFile(0)).endsWith("Test.class");
@@ -300,12 +334,20 @@ class FindbugsConfigurationTest {
     assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
   }
 
-  private void setupSampleProject(boolean withPrecompiledJsp, boolean withJspFiles, boolean withScalaFiles, boolean withSq98Api) throws IOException {
+  private void setupSampleProject(boolean withPrecompiledJsp,
+      boolean withJspFiles,
+      boolean withScalaFiles,
+      boolean withSq98Api,
+      boolean analyzeTests) throws IOException {
+    configuration.setProperty(FindbugsConstants.ANALYZE_TESTS, Boolean.toString(analyzeTests));
+    
     mockHasLanguagePredicate(withJspFiles, "jsp");
     mockHasLanguagesPredicate(withScalaFiles, "scala");
     
     // classpath
     // |_ some.jar
+    // |_ some-test.jar
+    // |_ some-other-test.jar
     // |_ target
     //   |_ jsp_servlet
     //   |_ classes
@@ -318,6 +360,8 @@ class FindbugsConfigurationTest {
     //       |_ UnitTest.class
     File classpath = new File(temp, "classpath");
     File jarFile = new File(classpath, "some.jar");
+    File testJarFile = new File(classpath, "some-test.jar");
+    File testOtherJarFile = new File(classpath, "some-other-test.jar");
     File targetFolder = new File(classpath, "target");
     File classesFolder = new File(targetFolder, "classes");
     File jspServletFolder = new File(targetFolder, "jsp_servlet");
@@ -352,8 +396,10 @@ class FindbugsConfigurationTest {
     }
     
     List<File> classpathFiles = Arrays.asList(jarFile, classesFolder, jspServletFolder, moduleInfoFile);
+    List<File> testClasspathFiles = Arrays.asList(testJarFile, testOtherJarFile);
     
     when(javaResourceLocator.classpath()).thenReturn(classpathFiles);
+    when(classpathLocator.testClasspath()).thenReturn(testClasspathFiles);
     
     if (withSq98Api) {
       List<File> binaryDirs = Arrays.asList(classesFolder, jspServletFolder);
