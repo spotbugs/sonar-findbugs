@@ -26,7 +26,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +41,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sonar.api.PropertyType;
+import org.sonar.api.Plugin.Context;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -52,6 +52,7 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
@@ -106,9 +107,11 @@ public class FindbugsConfiguration {
       findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
     }
 
-    for (File file : classpathLocator.testClasspath()) {
-      //Auxiliary tests dependencies
-      findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
+    if (isAnalyzeTests()) {
+      for (File file : classpathLocator.testClasspath()) {
+        //Auxiliary tests dependencies
+        findbugsProject.addAuxClasspathEntry(file.getCanonicalPath());
+      }
     }
     
     ClassScreener classScreener = getOnlyAnalyzeFilter();
@@ -263,7 +266,9 @@ public class FindbugsConfiguration {
         checkForMissingPrecompiledJsp(classFilesToAnalyze);
       }
 
-      addClassFilesFromClasspath(classFilesToAnalyze, classpathLocator.testBinaryDirs());
+      if (isAnalyzeTests()) {
+        addClassFilesFromClasspath(classFilesToAnalyze, classpathLocator.testBinaryDirs());
+      }
 
       return classFilesToAnalyze;
     }
@@ -427,9 +432,13 @@ public class FindbugsConfiguration {
     return config.getBoolean(FindbugsConstants.ALLOW_UNCOMPILED_CODE).orElse(FindbugsConstants.ALLOW_UNCOMPILED_CODE_VALUE);
   }
 
-  public static List<PropertyDefinition> getPropertyDefinitions() {
+  public boolean isAnalyzeTests() {
+    return config.getBoolean(FindbugsConstants.ANALYZE_TESTS).orElse(FindbugsConstants.ANALYZE_TESTS_VALUE);
+  }
+
+  public static List<PropertyDefinition> getPropertyDefinitions(Context context) {
     String subCategory = "FindBugs";
-    return Collections.unmodifiableList(Arrays.asList(
+    List<PropertyDefinition> properties = Arrays.asList(
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
         .category(Java.KEY)
@@ -491,7 +500,26 @@ public class FindbugsConfiguration {
         .description("To analyze only the given files (in FQCN, comma separted) / package patterns")
         .type(PropertyType.STRING)
         .build()      
-      ));
+      );
+    
+    if (context.getSonarQubeVersion().isGreaterThanOrEqual(Version.create(9, 8))) {
+      // The sonar-java plugin API only has the methods to get the test binaries/classpath starting with SonarQube 9.8
+      // For clarity we hide the property in earlier versions because it would have no effect (tests are not analyzed)
+      properties = new ArrayList<>(properties);
+      properties.add(
+          PropertyDefinition.builder(FindbugsConstants.ANALYZE_TESTS)
+          .defaultValue(Boolean.toString(FindbugsConstants.ANALYZE_TESTS_VALUE))
+          .category(Java.KEY)
+          .subCategory(subCategory)
+          .name("Analyze tests")
+          .description("Look for bugs in the project test code")
+          .onQualifiers(Qualifiers.PROJECT)
+          .type(PropertyType.BOOLEAN)
+          .build()
+          );
+    }
+    
+    return properties;
   }
 
 }

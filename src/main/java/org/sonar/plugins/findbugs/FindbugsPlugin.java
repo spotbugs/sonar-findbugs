@@ -59,7 +59,7 @@ public class FindbugsPlugin implements Plugin {
 
     @Override
   public void define(Context context) {
-    context.addExtensions(FindbugsConfiguration.getPropertyDefinitions());
+    context.addExtensions(FindbugsConfiguration.getPropertyDefinitions(context));
     context.addExtensions(Arrays.asList(
             FindbugsSensor.class,
             FindbugsProfileExporter.class,
