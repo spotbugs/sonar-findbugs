@@ -42,18 +42,16 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import org.slf4j.event.Level;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.rule.ActiveRules;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
-import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import com.google.common.collect.ImmutableList;
@@ -67,7 +65,7 @@ class FindbugsConfigurationTest {
   public File temp;
   
   @RegisterExtension
-  public LogTester logTester = new JupiterLogTester();
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   private FilePredicates filePredicates;
   private FileSystem fs;
@@ -263,9 +261,9 @@ class FindbugsConfigurationTest {
     //  - Findbugs needs sources to be compiled
     // With the SonarQube 9.8+ API we get the Test.class so only one warning
     if (withSq98Api) {
-      assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(1);
+      assertThat(logTester.getLogs(Level.WARN)).hasSize(1);
     } else {
-      assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(2);
+      assertThat(logTester.getLogs(Level.WARN)).hasSize(2);
     }
   }
 
@@ -297,7 +295,7 @@ class FindbugsConfigurationTest {
       }
     }
     
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(logTester.getLogs(Level.WARN)).isEmpty();
   }
 
   @ParameterizedTest
@@ -331,7 +329,7 @@ class FindbugsConfigurationTest {
       }
     }
     
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(logTester.getLogs(Level.WARN)).isEmpty();
   }
 
   private void setupSampleProject(boolean withPrecompiledJsp,

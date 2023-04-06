@@ -33,16 +33,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.slf4j.event.Level;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
-import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.Java;
@@ -54,7 +53,7 @@ class FindbugsProfileImporterTest {
 	private static final String TEST_PROFILE = "TEST_PROFILE";
 
   @RegisterExtension
-  public LogTester logTester = new JupiterLogTester();
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
 	private	Context context = new Context();
   private final FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithOnlyFindbugsRules());
@@ -177,7 +176,7 @@ class FindbugsProfileImporterTest {
     Collection<BuiltInActiveRule> results = profile.rules();
 
     assertThat(results).isEmpty();
-    assertThat(logTester.getLogs(LoggerLevel.ERROR)).hasSize(1);
+    assertThat(logTester.getLogs(Level.ERROR)).hasSize(1);
   }
 
   @ParameterizedTest
@@ -196,8 +195,8 @@ class FindbugsProfileImporterTest {
     Collection<BuiltInActiveRule> results = profile.rules();
 
     assertThat(results).hasSize(expectedSize);
-    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).hasSize(1);
+    assertThat(logTester.getLogs(Level.ERROR)).hasSize(0);
+    assertThat(logTester.getLogs(Level.WARN)).hasSize(1);
   }
   
   private BuiltInActiveRule findActiveRule(BuiltInQualityProfile profile, String repositoryKey, String ruleKey) {

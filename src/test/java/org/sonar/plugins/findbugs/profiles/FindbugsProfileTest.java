@@ -21,11 +21,11 @@ package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInActiveRule;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
@@ -35,7 +35,6 @@ import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
-import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.Java;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +44,7 @@ import java.util.List;
 class FindbugsProfileTest {
 
   @RegisterExtension
-  public LogTester logTester = new JupiterLogTester();
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
   void shouldCreateProfile() {
@@ -57,7 +56,7 @@ class FindbugsProfileTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, FindbugsProfile.FINDBUGS_PROFILE_NAME);
     assertThat(profile.rules()).hasSize(FindbugsRulesDefinition.RULE_COUNT);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(FindbugsRulesDefinition.RULE_COUNT);
-    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
+    assertThat(logTester.getLogs(Level.ERROR)).isEmpty();
 
     FindbugsProfileTest.assertHasOnlyRulesForLanguage(profile.rules(), Java.KEY);
   }
