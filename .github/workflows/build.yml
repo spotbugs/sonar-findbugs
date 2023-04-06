@@ -45,7 +45,7 @@ jobs:
             SONAR_SERVER_JAVA_VERSION: 17
           # 10.x 
           - SONAR_SERVER_VERSION: 10.0.0.68432
-            SONAR_PLUGIN_API_VERSION: 9.15.0.435
+            SONAR_PLUGIN_API_VERSION: 9.14.0.375
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_JAVA_VERSION: 7.16.1.31255
             SONAR_SERVER_JAVA_VERSION: 17
