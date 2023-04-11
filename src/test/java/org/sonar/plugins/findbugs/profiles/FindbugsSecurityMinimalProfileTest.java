@@ -21,15 +21,14 @@ package org.sonar.plugins.findbugs.profiles;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.findbugs.FindbugsProfileImporter;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
-import org.sonar.plugins.findbugs.util.JupiterLogTester;
 import org.sonar.plugins.java.Java;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FindbugsSecurityMinimalProfileTest {
 
   @RegisterExtension
-  public LogTester logTester = new JupiterLogTester();
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
   void shouldCreateProfile() {
@@ -47,9 +46,9 @@ class FindbugsSecurityMinimalProfileTest {
     findbugsProfile.define(context);
 
     BuiltInQualityProfile profile = context.profile(Java.KEY, FindbugsSecurityMinimalProfile.FINDBUGS_SECURITY_AUDIT_PROFILE_NAME);
-    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
+    assertThat(logTester.getLogs(Level.ERROR)).isEmpty();
     // FSB rules must be added to FsbClassifier.groovy otherwise new rules metadata are not added in rules-findsecbugs.xml
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(logTester.getLogs(Level.WARN)).isEmpty();
     // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(8);
     // 94 rules total - 8 fb = 86

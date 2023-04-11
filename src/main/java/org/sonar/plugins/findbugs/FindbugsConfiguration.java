@@ -41,9 +41,11 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.Plugin.Context;
 import org.sonar.api.PropertyType;
 import org.sonar.api.Startable;
-import org.sonar.api.Plugin.Context;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
@@ -55,8 +57,6 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.utils.Version;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
@@ -77,7 +77,7 @@ import edu.umd.cs.findbugs.Project;
 @ScannerSide
 public class FindbugsConfiguration implements Startable {
 
-  private static final Logger LOG = Loggers.get(FindbugsConfiguration.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FindbugsConfiguration.class);
   private static final Pattern JSP_FILE_NAME_PATTERN = Pattern.compile(".*_jsp[\\$0-9]*\\.class");
   public static final String SONAR_JAVA_BINARIES = "sonar.java.binaries";
 

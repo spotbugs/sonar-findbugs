@@ -209,6 +209,12 @@
       <version>9.1.0.47736</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api-test-fixtures</artifactId>
+      <version>9.15.0.435</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
