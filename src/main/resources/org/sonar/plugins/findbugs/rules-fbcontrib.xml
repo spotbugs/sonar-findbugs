@@ -714,7 +714,7 @@ if (!date1.equals( date2 ))
 			a potential cause of memory bloat.&lt;/p&gt;
 
 			&lt;p&gt;
-			If this collection is a list, set or otherwise of static things (e.g. a List&amp;gt;String&amp;gt; for month names), consider
+			If this collection is a list, set or otherwise of static things (e.g. a List&amp;lt;String&amp;gt; for month names), consider
 			adding all of the elements in a static initializer, which can only be called once:&lt;br/&gt;
 &lt;pre&gt;&lt;code&gt;
 private static List&amp;lt;String&amp;gt; monthNames = new ArrayList&amp;lt;String&amp;gt;();
@@ -1111,15 +1111,6 @@ if (myString.indexOf('e') != -1) {
     <tag>performance</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='SPP_EQUALS_ON_ENUM' priority='MAJOR'>
-    <name>Correctness - Method calls equals on an enum instance</name>
-    <configKey>SPP_EQUALS_ON_ENUM</configKey>
-    <description>&lt;p&gt;This method calls the equals(Object) method on an enum instance. Since enums values are singletons,
-			you can use == to safely compare two enum values. In fact, the implementation for Enum.equals does just
-			that.&lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
-  </rule>
   <rule key='SPP_INVALID_BOOLEAN_NULL_CHECK' priority='MAJOR'>
     <name>Correctness - Method uses invalid C++ style null check on Boolean</name>
     <configKey>SPP_INVALID_BOOLEAN_NULL_CHECK</configKey>
@@ -1212,6 +1203,18 @@ if ({{FLAWED_TEST_LOGIC}}) {
     <description>This method calls the compareTo method on an object and then compares the resultant value to a value other than
 			zero. The compareTo method is really only specified to return 0, a positive number or a negative number, so you should 
 			compare as == 0, or &gt; 0 or &lt; 0, and not to a specific value like == 1.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='SPP_PASSING_THIS_AS_PARM' priority='MAJOR'>
+    <name>Correctness - Method call passes object that the method is called on as a parameter</name>
+    <configKey>SPP_PASSING_THIS_AS_PARM</configKey>
+    <description>&lt;p&gt;This method calls an instance method passing the object that the method is called on as a parameter, such as
+	       &lt;code&gt;
+	           foo.someMethod(foo);
+	       &lt;/code&gt;
+	       As you already have access to this object thru this, you don't need to pass it.
+	       &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3275,6 +3278,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='WI_WIRING_OF_STATIC_FIELD' priority='MAJOR'>
+    <name>Correctness - Static field is autowired</name>
+    <configKey>WI_WIRING_OF_STATIC_FIELD</configKey>
+    <description>&lt;p&gt;Autowiring of static fields does not work using simple @Autowire annotations, not should you attempt to do 
+            so as it's an anti pattern. Use PostConstruct methods to initialize static fields if you must do something 
+            like this.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='CCI_CONCURRENT_COLLECTION_ISSUES_USE_PUT_IS_RACY' priority='MAJOR'>
     <name>Correctness - Method gets and sets a value of a ConcurrentHashMap in a racy manner</name>
     <configKey>CCI_CONCURRENT_COLLECTION_ISSUES_USE_PUT_IS_RACY</configKey>
@@ -3373,6 +3385,28 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>OI_OPTIONAL_ISSUES_USES_ORELSEGET_WITH_NULL</configKey>
     <description>&lt;p&gt;This method uses Optional.orElseGet(null). This method is supposed to to receive a lambda expression for what to execute
     		when the Optional is not there. If you want to just return null, use Optional.orElse(null) instead.
+    		&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='OI_OPTIONAL_ISSUES_ISPRESENT_PREFERRED' priority='MAJOR'>
+    <name>Correctness - Method uses Optional.equals(Optional.empty()), when Optional.isPresent is more readable</name>
+    <configKey>OI_OPTIONAL_ISSUES_ISPRESENT_PREFERRED</configKey>
+    <description>&lt;p&gt;This method uses Optional.equals(Optional.empty()). It is more readable and more clear just to use the Optional.isPresent()
+    		method to determine whether the reference exists or not. Use
+    		&lt;br/&gt;
+    		&lt;pre&gt;&lt;code&gt;
+            Optional f = getSomeOptional();
+    		if (!f.isPresent()) {
+    		}
+    		&lt;/code&gt;&lt;/pre&gt;
+    		rather than
+    		&lt;br/&gt;
+    		&lt;pre&gt;&lt;code&gt;
+   			Optional f = getSomeOptional();
+   			if (f.equals(Optional.empty()) {
+   			}
+    		&lt;/code&gt;&lt;/pre&gt;
     		&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
@@ -3560,8 +3594,8 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' priority='MAJOR'>
-    <name>Correctness - Method calls contains() on a collected lambda expression</name>
+  <rule key='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' priority='INFO'>
+    <name>Experimental - Method calls contains() on a collected lambda expression</name>
     <configKey>FII_AVOID_CONTAINS_ON_COLLECTED_STREAM</configKey>
     <description>&lt;p&gt;This method builds a collection using lambda expressions with a collect terminal operation. It then immediately
         calls the contains() method on it, to see if an item is present. This is sub optimal as the lambda still needs to 
@@ -3578,8 +3612,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         baubles.stream().anyMatch(b -&gt; name.equals(b.getName()))
         &lt;/pre&gt;&lt;/code&gt;
         &lt;/p&gt;</description>
-    <tag>correctness</tag>
-    <tag>bug</tag>
+    <tag>experimental</tag>
   </rule>
   <rule key='FII_USE_METHOD_REFERENCE' priority='MAJOR'>
     <name>Correctness - Method creates an anonymous lambda expression instead of specifying a method reference</name>
@@ -3726,6 +3759,43 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
             &lt;ul&gt;
             &lt;li&gt;&lt;p&gt;For Match.hasEntry it seems unlikely you want to pass a Matcher and non-Matcher at the same time&lt;/p&gt;&lt;/li&gt;
             &lt;/ul&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='ENMI_EQUALS_ON_ENUM' priority='MAJOR'>
+    <name>Correctness - Method calls equals on an enum instance</name>
+    <configKey>ENMI_EQUALS_ON_ENUM</configKey>
+    <description>&lt;p&gt;This method calls the equals(Object) method on an enum instance. Since enums values are singletons,
+            you can use == to safely compare two enum values. In fact, the implementation for Enum.equals does just
+            that.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='ENMI_NULL_ENUM_VALUE' priority='MAJOR'>
+    <name>Correctness - Method sets an enum reference to null</name>
+    <configKey>ENMI_NULL_ENUM_VALUE</configKey>
+    <description>&lt;p&gt;This method sets the value of an enum reference to null. An enum should never have a null value.
+            If there is a state where you do not know what the value of an enum should be, than that should be one of the
+            proper enum value. So add a MyEnum.UNKNOWN or such. This keeps the logic of switch statements, etc, much simpler.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='ENMI_ONE_ENUM_VALUE' priority='MAJOR'>
+    <name>Correctness - Enum class only declares one enum value</name>
+    <configKey>ENMI_ONE_ENUM_VALUE</configKey>
+    <description>&lt;p&gt;This enum class only declares one value (or perhaps 0!). As such it is pointless, as its value will always be the same thing.
+            Therefore use of this enum is just bloating the code base. One exception is if you are using a null value as a second value.
+            This is a mistake, and should be replaced with a second enum value, even if it's NULL, or UNKNOWN, or NON_INTITIALIZED or some other
+            sentinel value.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='AKI_SUPERFLUOUS_ROUTE_SPECIFICATION' priority='MAJOR'>
+    <name>Correctness - Method specifies superfluous routes thru route() or concat()</name>
+    <configKey>AKI_SUPERFLUOUS_ROUTE_SPECIFICATION</configKey>
+    <description>&lt;p&gt;This method uses the route() or concat() method to build optional routes but only passes 1 route to the method. 
+            This just causes an extra route specification to be created for no reason. Only use route() or concat() when you have more than
+            one route to combine into one.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
