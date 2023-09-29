@@ -195,7 +195,7 @@ class FindbugsProfileImporterTest {
     Collection<BuiltInActiveRule> results = profile.rules();
 
     assertThat(results).hasSize(expectedSize);
-    assertThat(logTester.getLogs(Level.ERROR)).hasSize(0);
+    assertThat(logTester.getLogs(Level.ERROR)).isEmpty();
     assertThat(logTester.getLogs(Level.WARN)).hasSize(1);
   }
   
