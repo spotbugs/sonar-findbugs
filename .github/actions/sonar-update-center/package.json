@@ -28,7 +28,7 @@
     "@actions/exec": "^1.1.1",
     "@actions/github": "^5.1.1",
     "promisified-properties": "^2.0.27",
-    "semver": "^7.5.2"
+    "semver": "^7.5.3"
   },
   "devDependencies": {
     "@types/jest": "^29.4.0",
