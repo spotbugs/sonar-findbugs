@@ -58,7 +58,7 @@
     <asm.version>9.5</asm.version>
 
     <jdk.min.version>1.8</jdk.min.version>
-    <surefire.version>3.0.0-M5</surefire.version>
+    <surefire.version>3.1.2</surefire.version>
     <failsafe.version>3.0.0-M5</failsafe.version>
     <sonar.server.version>7.9</sonar.server.version>
     <sonar-plugin-api.version>7.9</sonar-plugin-api.version>
