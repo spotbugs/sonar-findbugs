@@ -61,7 +61,7 @@
     <surefire.version>3.0.0-M5</surefire.version>
     <failsafe.version>3.0.0-M5</failsafe.version>
     <sonar.server.version>7.9</sonar.server.version>
-    <sonar-plugin-api.version>7.9</sonar-plugin-api.version>
+    <sonar-plugin-api.version>7.9.6</sonar-plugin-api.version>
     <sonar-plugin-api.groupId>org.sonarsource.sonarqube</sonar-plugin-api.groupId>
     <sonar-java.version>5.13.1.18282</sonar-java.version>
 
