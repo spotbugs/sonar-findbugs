@@ -412,7 +412,7 @@
       <plugin>
         <groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
         <artifactId>sonar-packaging-maven-plugin</artifactId>
-        <version>1.19.0.397</version>
+        <version>1.23.0.740</version>
         <extensions>true</extensions>
         <configuration>
           <archive>
