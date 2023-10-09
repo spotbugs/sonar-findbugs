@@ -105,7 +105,7 @@ jobs:
       - name: Get release URL
         if: github.event_name == 'release'
         id: get_release
-        uses: bruceadams/get-release@v1.2.2
+        uses: bruceadams/get-release@v1.3.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload .jar file to GitHub Release
