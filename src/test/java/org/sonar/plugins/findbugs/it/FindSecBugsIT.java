@@ -1,15 +1,14 @@
 package org.sonar.plugins.findbugs.it;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import java.io.File;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonarqube.ws.client.qualityprofiles.AddProjectRequest;
 
-import java.io.File;
-
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
@@ -53,6 +52,6 @@ class FindSecBugsIT {
     File resultFile = new File(projectDir, "target/sonar/findbugs-result.xml");
     
     String message = "The analysis must not run because the findbugs sample project does not contain JSP files and there are no spotbugs rules in the profile";
-    assertFalse(message, resultFile.exists());
+    assertFalse(resultFile.exists(), message);
   }
 }

@@ -1,7 +1,6 @@
 package org.sonar.plugins.findbugs.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.sonarqube.ws.Issues.Issue;
@@ -41,7 +40,7 @@ class FindSecBugsJspIT {
     File projectDir = FindbugsTestSuite.projectPom("jspc-sling").getParentFile();
     File resultFile = new File(projectDir, "target/sonar/findbugs-result.xml");
     
-    assertTrue("JSP Sling project must be analyzed", resultFile.exists());
+    assertThat(resultFile).withFailMessage("JSP Sling project must be analyzed").exists();
     
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     
@@ -69,7 +68,7 @@ class FindSecBugsJspIT {
     File projectDir = FindbugsTestSuite.projectPom("jspc-jetty").getParentFile();
     File resultFile = new File(projectDir, "target/sonar/findbugs-result.xml");
     
-    assertTrue("JSP Jetty project must be analyzed", resultFile.exists());
+    assertThat(resultFile).withFailMessage("JSP Jetty project must be analyzed").exists();
     
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     
