@@ -64,6 +64,8 @@
     <sonar-plugin-api.version>7.9.6</sonar-plugin-api.version>
     <sonar-plugin-api.groupId>org.sonarsource.sonarqube</sonar-plugin-api.groupId>
     <sonar-java.version>5.14.0.18788</sonar-java.version>
+    
+    <sonar-orchestrator.version>4.2.0.542</sonar-orchestrator.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -213,9 +215,16 @@
     <dependency>
       <groupId>org.sonarsource.orchestrator</groupId>
       <artifactId>sonar-orchestrator</artifactId>
-      <version>3.42.0.312</version>
+      <version>${sonar-orchestrator.version}</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.sonarsource.orchestrator</groupId>
+      <artifactId>sonar-orchestrator-junit5</artifactId>
+      <version>${sonar-orchestrator.version}</version>
+      <scope>test</scope>
+    </dependency>
+    
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>

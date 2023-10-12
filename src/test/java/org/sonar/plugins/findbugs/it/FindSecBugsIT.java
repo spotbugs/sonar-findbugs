@@ -11,6 +11,7 @@ import java.io.File;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 /**
  * @author gtoison
@@ -20,7 +21,7 @@ import com.sonar.orchestrator.build.MavenBuild;
 class FindSecBugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
-  public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @BeforeEach
   public void setupProfile() {

@@ -29,14 +29,14 @@ import org.sonarqube.ws.client.issues.IssuesService;
 
 import java.util.List;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 @IntegrationTest
 class FBContribIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:fb-contrib";
-  public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
   public void setupProfile() {

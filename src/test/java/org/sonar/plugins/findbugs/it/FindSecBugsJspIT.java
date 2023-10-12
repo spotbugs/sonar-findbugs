@@ -13,8 +13,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 /**
  * @author gtoison
@@ -26,7 +26,7 @@ class FindSecBugsJspIT {
   private static final String SLING_PROJECT_KEY = "org.sonar.tests:jspc-sling";
   private static final String JETTY_PROJECT_KEY = "org.sonar.tests:jspc-jetty";
   
-  public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
   void jspSlingAnalysis() throws Exception {

@@ -33,15 +33,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import com.google.common.io.Files;
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.build.SonarScanner;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 @IntegrationTest
 class FindbugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
-  private static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  private static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
   public void setupProfile() {

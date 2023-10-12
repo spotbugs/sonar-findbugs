@@ -19,8 +19,8 @@
  */
 package org.sonar.plugins.findbugs.it;
 
-import com.sonar.orchestrator.Orchestrator;
-import com.sonar.orchestrator.OrchestratorBuilder;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
 import com.sonar.orchestrator.locator.FileLocation;
 import com.sonar.orchestrator.locator.Location;
 import com.sonar.orchestrator.locator.MavenLocation;
@@ -43,7 +43,7 @@ import java.nio.file.Files;
 @IntegrationTest
 public class FindbugsTestSuite {
 
-  public static final Orchestrator ORCHESTRATOR;
+  public static final OrchestratorExtension ORCHESTRATOR;
 
   static {
     // build, start and stop the orchestrator here, making sure that it happens exactly once whether we run one or multiple tests
@@ -52,7 +52,7 @@ public class FindbugsTestSuite {
     // We will test here the case where an older version of the plugin was already installed and upgrade it
     // This should be its own test case but it takes a long time to build a server so we're doing it here
     
-    OrchestratorBuilder orchestratorBuilder = Orchestrator.builderEnv()
+    OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv()
         // Build the SonarQube server with an older version of the plugin
       .addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", "4.0.6"))
       .keepBundledPlugins()
