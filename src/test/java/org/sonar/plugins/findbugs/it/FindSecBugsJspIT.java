@@ -1,7 +1,6 @@
 package org.sonar.plugins.findbugs.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.sonarqube.ws.Issues.Issue;
@@ -13,8 +12,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 /**
  * @author gtoison
@@ -26,7 +25,7 @@ class FindSecBugsJspIT {
   private static final String SLING_PROJECT_KEY = "org.sonar.tests:jspc-sling";
   private static final String JETTY_PROJECT_KEY = "org.sonar.tests:jspc-jetty";
   
-  public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
   void jspSlingAnalysis() throws Exception {
@@ -41,7 +40,7 @@ class FindSecBugsJspIT {
     File projectDir = FindbugsTestSuite.projectPom("jspc-sling").getParentFile();
     File resultFile = new File(projectDir, "target/sonar/findbugs-result.xml");
     
-    assertTrue("JSP Sling project must be analyzed", resultFile.exists());
+    assertThat(resultFile).withFailMessage("JSP Sling project must be analyzed").exists();
     
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     
@@ -69,7 +68,7 @@ class FindSecBugsJspIT {
     File projectDir = FindbugsTestSuite.projectPom("jspc-jetty").getParentFile();
     File resultFile = new File(projectDir, "target/sonar/findbugs-result.xml");
     
-    assertTrue("JSP Jetty project must be analyzed", resultFile.exists());
+    assertThat(resultFile).withFailMessage("JSP Jetty project must be analyzed").exists();
     
     IssuesService issueClient = FindbugsTestSuite.issueClient();
     
