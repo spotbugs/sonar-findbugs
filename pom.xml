@@ -59,7 +59,7 @@
 
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.2.1</surefire.version>
-    <failsafe.version>3.1.2</failsafe.version>
+    <failsafe.version>3.2.1</failsafe.version>
     <sonar.server.version>7.9</sonar.server.version>
     <sonar-plugin-api.version>7.9.6</sonar-plugin-api.version>
     <sonar-plugin-api.groupId>org.sonarsource.sonarqube</sonar-plugin-api.groupId>
