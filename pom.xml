@@ -234,7 +234,7 @@
     <dependency>
       <groupId>org.sonarsource.api.plugin</groupId>
       <artifactId>sonar-plugin-api-test-fixtures</artifactId>
-      <version>10.1.0.809</version>
+      <version>10.2.0.1908</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
