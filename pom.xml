@@ -63,7 +63,7 @@
     <sonar.server.version>7.9</sonar.server.version>
     <sonar-plugin-api.version>7.9.6</sonar-plugin-api.version>
     <sonar-plugin-api.groupId>org.sonarsource.sonarqube</sonar-plugin-api.groupId>
-    <sonar-java.version>7.27.1.33504</sonar-java.version>
+    <sonar-java.version>5.14.0.18788</sonar-java.version>
     
     <sonar-orchestrator.version>4.2.0.542</sonar-orchestrator.version>
 
