@@ -1,4 +1,5 @@
 import groovy.xml.MarkupBuilder;
+import groovy.xml.XmlParser;
 import java.nio.file.Paths
 import FsbClassifier;
 import static FsbClassifier.*;
