@@ -147,7 +147,7 @@ class FindbugsProfileImporterTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
     Collection<BuiltInActiveRule> results = profile.rules();
 
-    assertThat(results).hasSize(21);
+    assertThat(results).hasSize(23);
     assertThat(findActiveRule(profile, FindbugsRulesDefinition.REPOSITORY_KEY, "RC_REF_COMPARISON_BAD_PRACTICE")).isNotNull();
   }
 
