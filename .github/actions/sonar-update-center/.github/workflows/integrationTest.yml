@@ -53,7 +53,7 @@ jobs:
           sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs:sonar-findbugs-plugin
           github-token: ${{ secrets.PAT_TO_FORK }}
           skip-creating-pull-request: true
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: updated-properties-file
           path: ${{ steps.integrated-test.outputs.prop-file }}
