@@ -27,8 +27,8 @@ mvn versions:set -DnewVersion=1.2.4-SNAPSHOT
 
 ## Release to Maven Central
 
-When we push tag, the build result on Travis CI will be deployed to [Sonatype Nexus](https://oss.sonatype.org/).
-Check [Sonatype official page](http://central.sonatype.org/pages/apache-maven.html) for detail.
+When we push the new tag, the Github Actions release build will be deploy to [Sonatype Nexus](https://oss.sonatype.org/).
+Check [Sonatype official page](http://central.sonatype.org/pages/apache-maven.html) for details.
 
 ## Release to SonarQube Marketplace
 
