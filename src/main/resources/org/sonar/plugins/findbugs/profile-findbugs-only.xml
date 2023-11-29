@@ -1424,4 +1424,7 @@
   <Match>
     <Bug pattern='PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_LOCAL_VARIABLE_NAMES' />
   </Match>
+  <Match>
+    <Bug pattern='ENV_USE_PROPERTY_INSTEAD_OF_ENV' />
+  </Match>
 </FindBugsFilter>
