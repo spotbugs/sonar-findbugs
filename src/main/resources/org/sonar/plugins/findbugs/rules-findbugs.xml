@@ -119,7 +119,7 @@ While ScheduledThreadPoolExecutor inherits from ThreadPoolExecutor, a few of the
   <rule key='HRS_REQUEST_PARAMETER_TO_COOKIE' priority='MAJOR'>
     <name>Security - HTTP cookie formed from untrusted input</name>
     <configKey>HRS_REQUEST_PARAMETER_TO_COOKIE</configKey>
-    <description>&lt;p&gt;This code constructs an HTTP Cookie using an untrusted HTTP parameter. If this cookie is added to an HTTP response, it will allow a HTTP response splitting
+    <description>&lt;p&gt;This code constructs an HTTP Cookie using an untrusted HTTP parameter. If this cookie is added to an HTTP response, it will allow an HTTP response splitting
 vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/HTTP_response_splitting"&gt;http://en.wikipedia.org/wiki/HTTP_response_splitting&lt;/a&gt;
 for more information.&lt;/p&gt;
 &lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of HTTP response splitting.
@@ -132,7 +132,7 @@ consider using a commercial static analysis or pen-testing tool.
   <rule key='HRS_REQUEST_PARAMETER_TO_HTTP_HEADER' priority='MAJOR'>
     <name>Security - HTTP Response splitting vulnerability</name>
     <configKey>HRS_REQUEST_PARAMETER_TO_HTTP_HEADER</configKey>
-    <description>&lt;p&gt;This code directly writes an HTTP parameter to an HTTP header, which allows for a HTTP response splitting
+    <description>&lt;p&gt;This code directly writes an HTTP parameter to an HTTP header, which allows for an HTTP response splitting
 vulnerability. See &lt;a href="http://en.wikipedia.org/wiki/HTTP_response_splitting"&gt;http://en.wikipedia.org/wiki/HTTP_response_splitting&lt;/a&gt;
 for more information.&lt;/p&gt;
 &lt;p&gt;SpotBugs looks only for the most blatant, obvious cases of HTTP response splitting.
@@ -1473,7 +1473,7 @@ Thus, having a mutable instance field generally creates race conditions.</descri
     <description>&lt;p&gt; This code seems to be using non-short-circuit logic (e.g., &amp;amp;
 or |)
 rather than short-circuit logic (&amp;amp;&amp;amp; or ||). In addition,
-it seem possible that, depending on the value of the left hand side, you might not
+it seems possible that, depending on the value of the left hand side, you might not
 want to evaluate the right hand side (because it would have side effects, could cause an exception
 or could be expensive.&lt;/p&gt;
 &lt;p&gt;
@@ -1526,7 +1526,7 @@ Language Specification&lt;/a&gt; for details.
   will only give up one lock and the notify will be unable to get both locks,
   and thus the notify will not succeed.
    &amp;nbsp; If there is also a warning about a two lock wait, the
-   probably of a bug is quite high.
+   probability of a bug is quite high.
 &lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
 &lt;p&gt;This rule is deprecated&lt;/p&gt;</description>
@@ -1934,7 +1934,7 @@ could be changed by malicious code or
     <name>Style - Potentially ambiguous invocation of either an inherited or outer method</name>
     <configKey>IA_AMBIGUOUS_INVOCATION_OF_INHERITED_OR_OUTER_METHOD</configKey>
     <description>&lt;p&gt;
-An inner class is invoking a method that could be resolved to either a inherited method or a method defined in an outer class.
+An inner class is invoking a method that could be resolved to either an inherited method or a method defined in an outer class.
 For example, you invoke &lt;code&gt;foo(17)&lt;/code&gt;, which is defined in both a superclass and in an outer method.
 By the Java semantics,
 it will be resolved to invoke the inherited method, but this may not be what
@@ -2556,7 +2556,7 @@ dereferencing this value will generate a null pointer exception.
     <configKey>UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR</configKey>
     <description>&lt;p&gt; This field is never initialized within any constructor, and is therefore could be null after
 the object is constructed. Elsewhere, it is loaded and dereferenced without a null check.
-This could be a either an error or a questionable design, since
+This could be either an error or a questionable design, since
 it means a null pointer exception will be generated if that field is dereferenced
 before being initialized.
 &lt;/p&gt;</description>
@@ -2734,9 +2734,9 @@ is important or acceptable.
   <rule key='RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT' priority='INFO'>
     <name>Style - Return value of method without side effect is ignored</name>
     <configKey>RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT</configKey>
-    <description>&lt;p&gt;This code calls a method and ignores the return value. However our analysis shows that
+    <description>&lt;p&gt;This code calls a method and ignores the return value. However, our analysis shows that
 the method (including its implementations in subclasses if any) does not produce any effect
-other than return value. Thus this call can be removed.
+other than return value. Thus, this call can be removed.
 &lt;/p&gt;
 &lt;p&gt;We are trying to reduce the false positives as much as possible, but in some cases this warning might be wrong.
 Common false-positive cases include:&lt;/p&gt;
@@ -3235,7 +3235,7 @@ different types. The result of this comparison will always be false at runtime.
     <description>&lt;p&gt; This method calls equals(Object) on two references of different
 class types and analysis suggests they will be to objects of different classes
 at runtime. Further, examination of the equals methods that would be invoked suggest that either
-this call will always return false, or else the equals method is not be symmetric (which is
+this call will always return false, or else the equals method is not symmetric (which is
 a property required by the contract
 for equals in class Object).
 &lt;/p&gt;</description>
@@ -4055,7 +4055,7 @@ less confusing to explicitly check pointer equality using &lt;code&gt;==&lt;/cod
     <name>Correctness - equals(...) used to compare incompatible arrays</name>
     <configKey>EC_INCOMPATIBLE_ARRAY_COMPARE</configKey>
     <description>&lt;p&gt;
-This method invokes the .equals(Object o) to compare two arrays, but the arrays of
+This method invokes the .equals(Object o) to compare two arrays, but the arrays
 of incompatible types (e.g., String[] and StringBuffer[], or String[] and int[]).
 They will never be equal. In addition, when equals(...) is used to compare arrays it
 only checks to see if they are the same array, and ignores the contents of the arrays.
@@ -4429,7 +4429,7 @@ just use the constant. Methods detected are:
     reference). Client classes that use this class, may, in addition, use an instance of this class
     as a synchronizing object. Because two classes are using the same object for synchronization,
     Multithread correctness is suspect. You should not synchronize nor call semaphore methods on
-    a public reference. Consider using a internal private member variable to control synchronization.
+    a public reference. Consider using an internal private member variable to control synchronization.
     &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
@@ -4709,7 +4709,7 @@ better to do a null test rather than an instanceof test.
     <name>Style - Unchecked/unconfirmed cast</name>
     <configKey>BC_UNCONFIRMED_CAST</configKey>
     <description>&lt;p&gt;
-This cast is unchecked, and not all instances of the type casted from can be cast to
+This cast is unchecked, and not all instances of the type cast from can be cast to
 the type it is being cast to. Check that your program logic ensures that this
 cast will not fail.
 &lt;/p&gt;</description>
@@ -5843,7 +5843,7 @@ Using floating-point variables should not be used as loop counters, as they are 
   <rule key='AA_ASSERTION_OF_ARGUMENTS' priority='MAJOR'>
     <name>Bad practice - Assertion is used to validate an argument of a public method</name>
     <configKey>AA_ASSERTION_OF_ARGUMENTS</configKey>
-    <description>&lt;p&gt;Asssertions must not be used to validate arguments of public methods because the validations are
+    <description>&lt;p&gt;Assertions must not be used to validate arguments of public methods because the validations are
         not performed if assertions are disabled.&lt;/p&gt;
 
         &lt;p&gt;
@@ -5856,7 +5856,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Bad practice - Do not reuse public identifiers from JSL as class name</name>
     <configKey>PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_CLASS_NAMES</configKey>
     <description>&lt;p&gt;
-      It's essential to avoid reusing public identifiers from the Java Standard Library as class names.
+      It's a good practice to avoid reusing public identifiers from the Java Standard Library as class names.
       This is because the Java Standard Library is a part of the Java platform and is expected to be available in all Java environments.
       Doing so can lead to naming conflicts and confusion, making it harder to understand and maintain the code.
       It's best practice to choose unique and descriptive class names that accurately represent the purpose and functionality of your own code.
@@ -5925,7 +5925,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Bad practice - Do not reuse public identifiers from JSL as method name</name>
     <configKey>PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_LOCAL_VARIABLE_NAMES</configKey>
     <description>&lt;p&gt;
-      When declaring local variables in Java, it is crucial to refrain from reusing public identifiers from the Java Standard Library.
+      When declaring local variables in Java, it is a good practice to refrain from reusing public identifiers from the Java Standard Library.
       Reusing these identifiers as local variable names can lead to confusion, hinder code comprehension, and potentially cause conflicts
       with existing publicly available identifier names from the Java Standard Library.
       To maintain code clarity and avoid such issues, it is best practice to select unique and descriptive names for your local variables.
@@ -5943,26 +5943,47 @@ Using floating-point variables should not be used as loop counters, as they are 
       &lt;p&gt;See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/DCL01-J.+Do+not+reuse+public+identifiers+from+the+Java+Standard+Library"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
     <tag>bad-practice</tag>
   </rule>
-  <rule key='PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_INNER_CLASS_NAMES' priority='INFO'>
-    <name>Experimental - Do not reuse public identifiers from JSL as inner name</name>
-    <configKey>PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_INNER_CLASS_NAMES</configKey>
+  <rule key='ENV_USE_PROPERTY_INSTEAD_OF_ENV' priority='MAJOR'>
+    <name>Bad practice - It is preferable to use portable Java property instead of environment variable.</name>
+    <configKey>ENV_USE_PROPERTY_INSTEAD_OF_ENV</configKey>
     <description>&lt;p&gt;
-      It's essential to avoid reusing public identifiers from the Java Standard Library as class names.
-      This is because the Java Standard Library is a part of the Java platform and is expected to be available in all Java environments.
-      Doing so can lead to naming conflicts and confusion, making it harder to understand and maintain the code.
-      It's best practice to choose unique and descriptive class names that accurately represent the purpose and functionality of your own code.
-      To provide an example, let's say you want to create an inner class for handling dates inside a specific Calendar class. Instead of using a common name like "Date",
-      which conflicts with the existing java.util.Date class, you could choose a more specific and unique name like or "CalendarDate" or "CalendarDisplayDate".
-
-      A few key points to keep in mind when choosing names as identifier:
-      &lt;ul&gt;
-        &lt;li&gt;Use meaningful prefixes or namespaces: Prepend a project-specific prefix or namespace to your class names to make them distinct. For example, if your project is named "MyApp", you could use "MyAppDate" as your class name.&lt;/li&gt;
-        &lt;li&gt;Use descriptive names: Opt for descriptive class names that clearly indicate their purpose and functionality. This helps avoid shadowing existing Java Standard Library identifiers. For instance, instead of "List", consider using "CustomAppList".&lt;/li&gt;
-        &lt;li&gt;Follow naming conventions: Adhere to Java's naming conventions, such as using camel case (e.g., MyClass) for class names. This promotes code readability and reduces the chances of conflicts.&lt;/li&gt;
-      &lt;/ul&gt;
-
+        Environment variables are not portable, the variable name itself (not only the value) may be different depending on the running OS.
+        Not only the names of the specific environment variables can differ (e.g. `USERNAME` in Windows and `USER` in Unix systems),
+        but even the semantics differ, e.g. the case sensitivity (Windows being case-insensitive and Unix case-sensitive).
+        Moreover, the Map of the environment variables returned by &lt;code&gt;java.lang.System.getenv()&lt;/code&gt; and its collection views may not obey
+        the general contract of the &lt;code&gt;Object.equals(java.lang.Object)&lt;/code&gt; and &lt;code&gt;Object.hashCode()&lt;/code&gt; methods.
+        Consequently, using environment variables may have unintended side effects.
+        Also, the visibility of environment variables is less restricted compared to Java Properties: they are visible to all descendants
+        of the defining process, not just the immediate Java subprocess.
+        For these reasons, even the Java API of &lt;code&gt;java.lang.System&lt;/code&gt; advises to use Java properties (&lt;code&gt;java.lang.System.getProperty(java.lang.String)&lt;/code&gt;)
+        instead of environment variables (&lt;code&gt;java.lang.System.getenv(java.lang.String)&lt;/code&gt;) where possible.
       &lt;/p&gt;
-      &lt;p&gt;See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/DCL01-J.+Do+not+reuse+public+identifiers+from+the+Java+Standard+Library"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
-    <tag>experimental</tag>
+      &lt;p&gt;
+        If a value can be accessed through both System.getProperty() and System.getenv(), it should be accessed using the former.
+      &lt;/p&gt;
+      &lt;p&gt;
+        Mapping of corresponding Java System properties:
+        &lt;table&gt;
+          &lt;tr&gt;
+             &lt;th&gt;Environment variable&lt;/th&gt; &lt;th&gt;Property&lt;/th&gt;
+          &lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;JAVA_HOME&lt;/td&gt; &lt;td&gt;java.home&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;JAVA_VERSION&lt;/td&gt; &lt;td&gt;java.version&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;TEMP&lt;/td&gt; &lt;td&gt;java.io.tmpdir&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;TMP&lt;/td&gt; &lt;td&gt;java.io.tmpdir&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;PROCESSOR_ARCHITECTURE&lt;/td&gt; &lt;td&gt;os.arch&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;OS&lt;/td&gt; &lt;td&gt;os.name&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;USER&lt;/td&gt; &lt;td&gt;user.name&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;USERNAME&lt;/td&gt; &lt;td&gt;user.name&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;HOME&lt;/td&gt; &lt;td&gt;user.home&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;HOMEPATH&lt;/td&gt; &lt;td&gt;user.home&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;CD&lt;/td&gt; &lt;td&gt;user.dir&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td&gt;PWD&lt;/td&gt; &lt;td&gt;user.dir&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+      &lt;/p&gt;
+      &lt;p&gt;
+      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ENV02-J.+Do+not+trust+the+values+of+environment+variables"&gt;ENV02-J. Do not trust the values of environment variables&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>bad-practice</tag>
   </rule>
 </rules>
