@@ -63,7 +63,7 @@ jobs:
           public-version: 4.1.0
           github-token: ${{ secrets.PAT_TO_FORK }}
           skip-creating-pull-request: true
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: updated-properties-file
           path: ${{ steps.integration-test.outputs.prop-file }}
