@@ -57,7 +57,7 @@
     <findsecbugs.version>1.12.0</findsecbugs.version>
 
     <jdk.min.version>1.8</jdk.min.version>
-    <surefire.version>3.2.2</surefire.version>
+    <surefire.version>3.2.3</surefire.version>
     <failsafe.version>3.2.2</failsafe.version>
     <sonar.server.version>7.9</sonar.server.version>
     <sonar-plugin-api.version>7.9.6</sonar-plugin-api.version>
