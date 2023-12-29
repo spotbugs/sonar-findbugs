@@ -88,8 +88,8 @@
           <artifactId>xml-apis</artifactId>
         </exclusion>
         <exclusion>
-        	<groupId>org.apache.logging.log4j</groupId>
-        	<artifactId>log4j-core</artifactId>
+          <groupId>org.apache.logging.log4j</groupId>
+          <artifactId>log4j-core</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -110,7 +110,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.10</version>
       <scope>provided</scope>
     </dependency>
 
@@ -211,7 +211,7 @@
       <version>${sonar-orchestrator.version}</version>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
