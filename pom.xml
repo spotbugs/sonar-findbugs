@@ -357,7 +357,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <argLine>${surefireArgLine}</argLine>
-          <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
           <!-- Exclude the unit tests from the sample projects -->
           <excludes>
@@ -370,7 +369,6 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <argLine>${failsafeArgLine}</argLine>
-          <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
           <systemPropertyVariables>
             <sonar.server.version>${sonar.server.version}</sonar.server.version>
