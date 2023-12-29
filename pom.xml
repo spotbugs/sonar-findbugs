@@ -64,7 +64,7 @@
     <sonar-plugin-api.groupId>org.sonarsource.sonarqube</sonar-plugin-api.groupId>
     <sonar-java.version>5.14.0.18788</sonar-java.version>
     
-    <sonar-orchestrator.version>4.4.0.1640</sonar-orchestrator.version>
+    <sonar-orchestrator.version>4.6.0.1748</sonar-orchestrator.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
