@@ -357,7 +357,6 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <argLine>${surefireArgLine}</argLine>
-          <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
           <!-- Exclude the unit tests from the sample projects -->
           <excludes>
@@ -370,7 +369,6 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <argLine>${failsafeArgLine}</argLine>
-          <disableModules>false</disableModules>
           <useModulePath>false</useModulePath>
           <systemPropertyVariables>
             <sonar.server.version>${sonar.server.version}</sonar.server.version>
@@ -490,41 +488,6 @@
     </snapshotRepository>
   </distributionManagement>
   <profiles>
-    <profile>
-      <id>travis</id>
-      <activation>
-        <property>
-          <name>env.CI</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>attach-javadocs</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <configuration>
-                  <source>8</source>
-                  <tags>
-                    <tag>
-                      <name>ParametersAreNonnullByDefault</name>
-                      <placement>a</placement>
-                      <head>Parameters Are Nonnull By Default</head>
-                    </tag>
-                  </tags>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
     <profile>
       <id>deploy</id>
       <build>
