@@ -152,8 +152,9 @@ private void appendToList(List&amp;lt;String&amp;gt; list) {
     <configKey>DRE_DECLARED_RUNTIME_EXCEPTION</configKey>
     <description>&lt;p&gt;This method declares a RuntimeException derived class in its throws clause.
 			This may indicate a misunderstanding as to how unchecked exceptions are handled.
-			If it is felt that a RuntimeException is so prevalent that it should be declared, it
-			is probably a better idea to prevent the occurrence in code.&lt;/p&gt;</description>
+			If it is felt that a RuntimeException is so prevalent that it should be declared for 
+			documentation purposes, using javadoc's @throws clause is a better idea, as it doesn't 
+			needless pollute the method signature,&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
   <rule key='CE_CLASS_ENVY' priority='INFO'>
@@ -3793,6 +3794,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
   <rule key='AKI_SUPERFLUOUS_ROUTE_SPECIFICATION' priority='MAJOR'>
     <name>Correctness - Method specifies superfluous routes thru route() or concat()</name>
     <configKey>AKI_SUPERFLUOUS_ROUTE_SPECIFICATION</configKey>
+    <description>&lt;p&gt;This method uses the route() or concat() method to build optional routes but only passes 1 route to the method. 
+            This just causes an extra route specification to be created for no reason. Only use route() or concat() when you have more than
+            one route to combine into one.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='PKI_SUPERFLUOUS_ROUTE_SPECIFICATION' priority='MAJOR'>
+    <name>Correctness - Method specifies superfluous routes thru route() or concat()</name>
+    <configKey>PKI_SUPERFLUOUS_ROUTE_SPECIFICATION</configKey>
     <description>&lt;p&gt;This method uses the route() or concat() method to build optional routes but only passes 1 route to the method. 
             This just causes an extra route specification to be created for no reason. Only use route() or concat() when you have more than
             one route to combine into one.</description>
