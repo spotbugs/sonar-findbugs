@@ -42,5 +42,5 @@ outputs:
   prop-file:
     description: 'The full path of the updated properties file in local filesystem'
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
