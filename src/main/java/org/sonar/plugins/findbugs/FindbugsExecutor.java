@@ -22,6 +22,8 @@ package org.sonar.plugins.findbugs;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
+
+import edu.umd.cs.findbugs.AnalysisError;
 import edu.umd.cs.findbugs.BugCollection;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.DetectorFactoryCollection;
@@ -31,6 +33,7 @@ import edu.umd.cs.findbugs.Plugin;
 import edu.umd.cs.findbugs.PluginException;
 import edu.umd.cs.findbugs.Priorities;
 import edu.umd.cs.findbugs.Project;
+import edu.umd.cs.findbugs.SortedBugCollection;
 import edu.umd.cs.findbugs.XMLBugReporter;
 import edu.umd.cs.findbugs.config.UserPreferences;
 import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
@@ -91,15 +94,15 @@ public class FindbugsExecutor {
   }
 
   @VisibleForTesting
-  Collection<ReportedBug> execute() {
+  AnalysisResult execute() {
     return execute(true);
   }
 
-  public Collection<ReportedBug> execute(boolean useAllPlugin) {
+  public AnalysisResult execute(boolean useAllPlugin) {
     return execute(useAllPlugin,useAllPlugin);
   }
 
-  public Collection<ReportedBug> execute(boolean useFbContrib, boolean useFindSecBugs) {
+  public AnalysisResult execute(boolean useFbContrib, boolean useFindSecBugs) {
     ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(FindBugs2.class.getClassLoader());
 
@@ -115,7 +118,7 @@ public class FindbugsExecutor {
 
       if(project.getFileCount() == 0) {
         LOG.info("Findbugs analysis skipped for this project.");
-        return new ArrayList<>();
+        return new AnalysisResult();
       }
 
       customPlugins = loadFindbugsPlugins(useFbContrib,useFindSecBugs);
@@ -178,7 +181,10 @@ public class FindbugsExecutor {
       if(!foundExistingReport) { //Avoid rescanning the project if FindBugs was run already
         executorService.submit(new FindbugsTask(engine)).get(configuration.getTimeout(), TimeUnit.MILLISECONDS);
       }
-      return toReportedBugs(xmlBugReporter.getBugCollection());
+      Collection<ReportedBug> reportedBugs = toReportedBugs(xmlBugReporter.getBugCollection());
+      Collection<? extends AnalysisError> analysisErrors = ((SortedBugCollection) xmlBugReporter.getBugCollection()).getErrors();
+      
+      return new AnalysisResult(reportedBugs, analysisErrors);
     } catch (TimeoutException e) {
       throw new IllegalStateException("Can not execute Findbugs with a timeout threshold value of " + configuration.getTimeout() + " milliseconds", e);
     } catch (Exception e) {
