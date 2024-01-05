@@ -249,6 +249,8 @@ public class FindbugsSensor implements Sensor {
 
   public StringBuilder buildAnalysisErrorMessage(AnalysisError analysisError) {
     StringBuilder message = new StringBuilder(analysisError.getMessage());
+    message.append("Findbugs plugin version: " + FindbugsVersion.getVersion());
+    
     if (analysisError.getStackTrace() != null) {
       for (String trace : analysisError.getStackTrace()) {
         message.append('\n');
