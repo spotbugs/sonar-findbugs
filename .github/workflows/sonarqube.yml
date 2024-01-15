@@ -60,7 +60,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
-          mvn org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -DskipITs \
+          ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent verify sonar:sonar -B -e -V -DskipITs \
             -Dsonar.server.version=${{ env.SONAR_SERVER_VERSION }} \
             -Dsonar-plugin-api.version=${{ env.SONAR_PLUGIN_API_VERSION }} \
             -Dsonar-plugin-api.groupId=${{ env.SONAR_PLUGIN_API_GROUPID }} \
