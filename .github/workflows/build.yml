@@ -72,7 +72,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
-          mvn verify -B -e -V \
+          ./mvnw verify -B -e -V \
             -Dsonar.server.version=${{ matrix.SONAR_SERVER_VERSION }} \
             -Dsonar-plugin-api.version=${{ matrix.SONAR_PLUGIN_API_VERSION }} \
             -Dsonar-plugin-api.groupId=${{ matrix.SONAR_PLUGIN_API_GROUPID }} \
@@ -99,7 +99,7 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE
       - name: Deploy artifacts to Maven Central
         run: |
-          mvn clean deploy -B -e -P deploy -DskipTests
+          ./mvnw clean deploy -B -e -P deploy -DskipTests
         env:
           OSSRH_JIRA_USERNAME: eller86
           OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
