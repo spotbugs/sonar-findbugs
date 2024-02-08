@@ -19,12 +19,11 @@
  */
 package org.sonar.plugins.findbugs.it;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
+import com.sonar.orchestrator.locator.FileLocation;
+import com.sonar.orchestrator.locator.Location;
+import com.sonar.orchestrator.locator.MavenLocation;
 
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
@@ -34,11 +33,12 @@ import org.sonarqube.ws.client.projects.ProjectsService;
 import org.sonarqube.ws.client.qualityprofiles.AddProjectRequest;
 import org.sonarqube.ws.client.qualityprofiles.QualityprofilesService;
 
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
-import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
-import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.Location;
-import com.sonar.orchestrator.locator.MavenLocation;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 
 @IntegrationTest
 public class FindbugsTestSuite {
