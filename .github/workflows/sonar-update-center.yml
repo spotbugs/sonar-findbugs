@@ -21,14 +21,14 @@ jobs:
           cond: ${{ github.event_name == 'pull_request_target' }}
           if_true: refs/pull/${{ github.event.pull_request.number }}/merge
           if_false: ${{ github.ref }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ steps.condval.outputs.value }}
       - name: Read .nvmrc
         run: echo ::set-output name=NVMRC::$(cat .nvmrc)
         id: nvm
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '${{ steps.nvm.outputs.NVMRC }}'
           cache: npm
@@ -48,22 +48,22 @@ jobs:
           cond: ${{ github.event_name == 'pull_request_target' }}
           if_true: refs/pull/${{ github.event.pull_request.number }}/merge
           if_false: ${{ github.ref }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ steps.condval.outputs.value }}
       - uses: ./.github/actions/sonar-update-center
         id: integration-test
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0
+          description: Use SpotBugs 4.8.3, sb-contrib 7.6.4, and findsecbugs 1.12.0
           minimal-supported-sq-version: 7.9
-          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/4.1.0
-          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.1.0/sonar-findbugs-plugin-4.1.0.jar
+          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/4.2.6
+          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.2.6/sonar-findbugs-plugin-4.2.6.jar
           sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs:sonar-findbugs-plugin
-          public-version: 4.1.0
+          public-version: 4.2.6
           github-token: ${{ secrets.PAT_TO_FORK }}
           skip-creating-pull-request: true
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: updated-properties-file
           path: ${{ steps.integration-test.outputs.prop-file }}

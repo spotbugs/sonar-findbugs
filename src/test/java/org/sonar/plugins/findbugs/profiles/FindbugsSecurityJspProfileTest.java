@@ -19,25 +19,24 @@
  */
 package org.sonar.plugins.findbugs.profiles;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.slf4j.event.Level;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.Context;
-import org.sonar.api.utils.log.LogTester;
-import org.sonar.api.utils.log.LoggerLevel;
+import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.rule.FakeRuleFinder;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
-import org.sonar.plugins.findbugs.util.JupiterLogTester;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class FindbugsSecurityJspProfileTest {
 
   @RegisterExtension
-  public LogTester logTester = new JupiterLogTester();
+  public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
   @Test
   void shouldCreateProfile() {
@@ -48,8 +47,8 @@ class FindbugsSecurityJspProfileTest {
 
     //There are 6 rules that are JSP specific (the other findbugs rules can also be found in JSP files)
     BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
-    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(logTester.getLogs(Level.ERROR)).isEmpty();
+    assertThat(logTester.getLogs(Level.WARN)).isEmpty();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(6);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isZero();
 
@@ -70,8 +69,8 @@ class FindbugsSecurityJspProfileTest {
 
     //There should be 5 rules left since we removed one
     BuiltInQualityProfile profile = context.profile(Jsp.KEY, FindbugsProfile.FINDBUGS_SECURITY_JSP_PROFILE_NAME);
-    assertThat(logTester.getLogs(LoggerLevel.ERROR)).isNull();
-    assertThat(logTester.getLogs(LoggerLevel.WARN)).isNull();
+    assertThat(logTester.getLogs(Level.ERROR)).isEmpty();
+    assertThat(logTester.getLogs(Level.WARN)).isEmpty();
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsJspRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(5);
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isZero();
   }

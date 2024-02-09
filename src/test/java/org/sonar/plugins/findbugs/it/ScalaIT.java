@@ -28,14 +28,14 @@ import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 @IntegrationTest
 class ScalaIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:scala";
-  public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
   public void setupProfile() {

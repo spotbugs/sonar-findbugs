@@ -1,4 +1,5 @@
 import groovy.xml.MarkupBuilder;
+import groovy.xml.XmlParser;
 import java.nio.file.Paths
 import FsbClassifier;
 import static FsbClassifier.*;
@@ -7,14 +8,14 @@ import groovy.json.JsonSlurper;
 
 @Grapes([
 
-    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.7.3'),
-    @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.4.7'),
+    @Grab(group='com.github.spotbugs', module='spotbugs', version='4.8.3'),
+    @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.6.4'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.12.0')]
 )
 
 
-FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.7.3')
-CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.4.7')
+FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.8.3')
+CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.6.4')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.12.0')
 
 def destDir() {

@@ -24,7 +24,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
@@ -38,6 +37,7 @@ import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.error.NewAnalysisError;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.plugins.findbugs.language.Jsp;
@@ -51,6 +51,8 @@ import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.api.JavaResourceLocator;
+
+import edu.umd.cs.findbugs.AnalysisError;
 
 public class FindbugsSensor implements Sensor {
 
@@ -127,11 +129,11 @@ public class FindbugsSensor implements Sensor {
       return;
     }
 
-    Collection<ReportedBug> collection = executor.execute(context.activeRules());
+    AnalysisResult analysisResult = executor.execute(context.activeRules());
 
     try {
 
-      for (ReportedBug bugInstance : collection) {
+      for (ReportedBug bugInstance : analysisResult.getReportedBugs()) {
 
         try {
           ActiveRule rule = null;
@@ -224,6 +226,9 @@ public class FindbugsSensor implements Sensor {
         }
       }
 
+      for (AnalysisError analysisError : analysisResult.getAnalysisErrors()) {
+        insertAnalysisError(context, analysisError);
+      }
     }
     finally {
       if(classMappingWriter != null) {
@@ -233,6 +238,33 @@ public class FindbugsSensor implements Sensor {
     }
   }
 
+  public void insertAnalysisError(SensorContext context, AnalysisError analysisError) {
+    NewAnalysisError error = context.newAnalysisError();
+
+    StringBuilder message = buildAnalysisErrorMessage(analysisError);
+    error.message(message.toString());
+
+    error.save();
+  }
+
+  public StringBuilder buildAnalysisErrorMessage(AnalysisError analysisError) {
+    StringBuilder message = new StringBuilder(analysisError.getMessage());
+    message.append("Findbugs plugin version: " + FindbugsVersion.getVersion());
+    
+    if (analysisError.getStackTrace() != null) {
+      for (String trace : analysisError.getStackTrace()) {
+        message.append('\n');
+        message.append(trace);
+      }
+    }
+    if (analysisError.getNestedStackTrace() != null) {
+      for (String trace : analysisError.getNestedStackTrace()) {
+        message.append('\n');
+        message.append(trace);
+      }
+    }
+    return message;
+  }
 
   protected void insertIssue(ActiveRule rule, InputFile resource, int line, String message, ReportedBug bugInstance) {
     NewIssue newIssue = sensorContext.newIssue().forRule(rule.ruleKey());

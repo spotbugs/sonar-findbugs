@@ -23,7 +23,7 @@ public class FbContribRulesDefinition {
 
   public static final String REPOSITORY_KEY = "fb-contrib";
   public static final String REPOSITORY_NAME = "FindBugs Contrib";
-  public static final int RULE_COUNT = 307;
+  public static final int RULE_COUNT = 314;
   public static final int DEACTIVED_RULE_COUNT = 0;
   
   private FbContribRulesDefinition() {

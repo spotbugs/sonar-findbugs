@@ -23,7 +23,7 @@ public final class FindbugsRulesDefinition {
 
   public static final String REPOSITORY_KEY = "findbugs";
   public static final String REPOSITORY_NAME = "FindBugs";
-  public static final int RULE_COUNT = 461;
+  public static final int RULE_COUNT = 476;
   public static final int DEACTIVED_RULE_COUNT = 4;
   
   private FindbugsRulesDefinition() {

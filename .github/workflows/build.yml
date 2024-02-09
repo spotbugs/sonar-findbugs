@@ -43,18 +43,27 @@ jobs:
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_JAVA_VERSION: 7.16.0.30901
             SONAR_SERVER_JAVA_VERSION: 17
+          # 10.x 
+          - SONAR_SERVER_VERSION: 10.3.0.82913
+            SONAR_PLUGIN_API_VERSION: 10.2.0.1908
+            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
+            SONAR_JAVA_VERSION: 7.28.0.33738
+            SONAR_SERVER_JAVA_VERSION: 17
+          # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
+          # https://mvnrepository.com/artifact/org.sonarsource.api.plugin/sonar-plugin-api
+          # https://mvnrepository.com/artifact/org.sonarsource.java/sonar-java-plugin
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: ${{ matrix.SONAR_SERVER_JAVA_VERSION }}
           distribution: temurin
           cache: 'maven'
       - name: Cache SonarCloud packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: |
             ~/.sonar/cache
@@ -63,7 +72,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar
       - name: Build
         run: |
-          mvn verify -B -e -V \
+          ./mvnw verify -B -e -V \
             -Dsonar.server.version=${{ matrix.SONAR_SERVER_VERSION }} \
             -Dsonar-plugin-api.version=${{ matrix.SONAR_PLUGIN_API_VERSION }} \
             -Dsonar-plugin-api.groupId=${{ matrix.SONAR_PLUGIN_API_GROUPID }} \
@@ -74,11 +83,11 @@ jobs:
     # Forked repos do not have the secrets to deploy so this would fail
     if: ( github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )) && github.repository == 'spotbugs/sonar-findbugs'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Set up JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: 11
           distribution: temurin
@@ -90,7 +99,7 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE
       - name: Deploy artifacts to Maven Central
         run: |
-          mvn clean deploy -B -e -P deploy -DskipTests
+          ./mvnw clean deploy -B -e -P deploy -DskipTests
         env:
           OSSRH_JIRA_USERNAME: eller86
           OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
@@ -99,7 +108,7 @@ jobs:
       - name: Get release URL
         if: github.event_name == 'release'
         id: get_release
-        uses: bruceadams/get-release@v1.2.2
+        uses: bruceadams/get-release@v1.3.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Upload .jar file to GitHub Release
@@ -117,8 +126,8 @@ jobs:
         uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.7.3, sb-contrib 7.4.7, and findsecbugs 1.12.0
-          minimal-supported-sq-version: 8.9
+          description: Use SpotBugs 4.8.2, sb-contrib 7.6.2, and findsecbugs 1.12.0
+          minimal-supported-sq-version: 9.9
           latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin

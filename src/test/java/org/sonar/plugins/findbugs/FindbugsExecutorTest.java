@@ -92,7 +92,7 @@ class FindbugsExecutorTest {
     File reportFile = new File(temporaryFolder, "findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
 
-    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute(activeRules);
+    AnalysisResult analysisResult = new FindbugsExecutor(conf, fsEmpty, configEmpty).execute(activeRules);
 
     assertThat(reportFile).exists();
     String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
@@ -102,6 +102,8 @@ class FindbugsExecutorTest {
     .as("Report should be generated with messages").contains("<Message>")
     .contains("priority=\"1\"")
     .doesNotContain("priority=\"3\"");
+
+    checkAnalysisResult(analysisResult);
   }
 
   @Test
@@ -111,7 +113,7 @@ class FindbugsExecutorTest {
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
     when(conf.getConfidenceLevel()).thenReturn("low");
 
-    new FindbugsExecutor(conf, fsEmpty, configEmpty).execute(activeRules);
+    AnalysisResult analysisResult = new FindbugsExecutor(conf, fsEmpty, configEmpty).execute(activeRules);
 
     assertThat(reportFile).exists();
     String report = FileUtils.readFileToString(reportFile, StandardCharsets.UTF_8);
@@ -121,6 +123,8 @@ class FindbugsExecutorTest {
     .as("Report should be generated with messages").contains("<Message>")
     .contains("priority=\"1\"")
     .contains("priority=\"3\"");
+    
+    checkAnalysisResult(analysisResult);
   }
 
   public void shouldTerminateAfterTimeout() throws Exception {
@@ -161,6 +165,16 @@ class FindbugsExecutorTest {
     when(conf.getEffort()).thenReturn("default");
     when(conf.getTimeout()).thenReturn(FindbugsConstants.TIMEOUT_DEFAULT_VALUE);
     return conf;
+  }
+
+  /**
+   * Smoke test checking that no errors where reported.
+   * This might happen when upgrading to a new version of SpotBugs or plugins and would most likely mean that there's a regression in the new version
+   * 
+   * @param analysisResult
+   */
+  public void checkAnalysisResult(AnalysisResult analysisResult) {
+    assertThat(analysisResult.getAnalysisErrors()).isEmpty();
   }
 
   @Test

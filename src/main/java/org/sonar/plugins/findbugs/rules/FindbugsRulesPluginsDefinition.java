@@ -127,6 +127,11 @@ public final class FindbugsRulesPluginsDefinition implements RulesDefinition {
   		String type = bugPattern.getType();
 
   		String category = bugPattern.getCategory();
+  		
+  		if ("".equals(category)) {
+  			// FII_AVOID_CONTAINS_ON_COLLECTED_STREAM does not have a category
+  			category = "CORRECTNESS";
+  		}
 
   		if(category.equals("NOISE") || Arrays.asList("TESTING", "TESTING1", "TESTING2", "TESTING3", "UNKNOWN").contains(type)) {
   			continue;

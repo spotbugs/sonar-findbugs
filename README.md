@@ -1,11 +1,11 @@
 # SonarQube Spotbugs Plugin
 [![.github/workflows/build.yml](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml/badge.svg)](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml)
-![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-909-brightgreen.svg?maxAge=2592000)
+![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-929-brightgreen.svg?maxAge=2592000)
 [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs%3Asonar-findbugs-plugin&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)
 
 ## Description / Features
 
-This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/PLUG/SonarJava), and uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](http://fb-contrib.sourceforge.net/) and [Find Security Bugs](http://h3xstream.github.io/find-sec-bugs/) to provide coding rules.
+This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/PLUG/SonarJava), and uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](https://github.com/mebigfatguy/fb-contrib) and [Find Security Bugs](https://find-sec-bugs.github.io/) to provide coding rules.
 
 ### Supported Languages
 
@@ -68,4 +68,7 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 4.2.1                  | 4.7.2 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
 4.2.2                  | 4.7.3 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
 4.2.3                  | 4.7.3 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
-4.2.4-SNAPSHOT         | 4.7.3 (SpotBugs)                 | 1.12.0                     | 7.4.7 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
+4.2.4                  | 4.7.3 (SpotBugs)                 | 1.12.0                     | 7.6.0 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
+4.2.5                  | 4.8.1 (SpotBugs)                 | 1.12.0                     | 7.6.0 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
+4.2.6                  | 4.8.2 (SpotBugs)                 | 1.12.0                     | 7.6.2 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
+4.2.7-SNAPSHOT         | 4.8.3 (SpotBugs)                 | 1.12.0                     | 7.6.4 (sb-contrib)        | 1.8|7.9~|5.10.1.16922

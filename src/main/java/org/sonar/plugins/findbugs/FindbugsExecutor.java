@@ -19,20 +19,29 @@
  */
 package org.sonar.plugins.findbugs;
 
-import edu.umd.cs.findbugs.BugCollection;
-import edu.umd.cs.findbugs.BugInstance;
-import edu.umd.cs.findbugs.BugPattern;
-import edu.umd.cs.findbugs.DetectorFactory;
-import edu.umd.cs.findbugs.DetectorFactoryCollection;
-import edu.umd.cs.findbugs.FindBugs;
-import edu.umd.cs.findbugs.FindBugs2;
-import edu.umd.cs.findbugs.Plugin;
-import edu.umd.cs.findbugs.PluginException;
-import edu.umd.cs.findbugs.Priorities;
-import edu.umd.cs.findbugs.Project;
-import edu.umd.cs.findbugs.XMLBugReporter;
-import edu.umd.cs.findbugs.config.UserPreferences;
-import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -45,20 +54,22 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.findbugs.rules.FindbugsRules;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import edu.umd.cs.findbugs.AnalysisError;
+import edu.umd.cs.findbugs.BugCollection;
+import edu.umd.cs.findbugs.BugInstance;
+import edu.umd.cs.findbugs.BugPattern;
+import edu.umd.cs.findbugs.DetectorFactory;
+import edu.umd.cs.findbugs.DetectorFactoryCollection;
+import edu.umd.cs.findbugs.FindBugs;
+import edu.umd.cs.findbugs.FindBugs2;
+import edu.umd.cs.findbugs.Plugin;
+import edu.umd.cs.findbugs.PluginException;
+import edu.umd.cs.findbugs.Priorities;
+import edu.umd.cs.findbugs.Project;
+import edu.umd.cs.findbugs.SortedBugCollection;
+import edu.umd.cs.findbugs.XMLBugReporter;
+import edu.umd.cs.findbugs.config.UserPreferences;
+import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
 
 @ScannerSide
 public class FindbugsExecutor {
@@ -93,7 +104,7 @@ public class FindbugsExecutor {
     this.config = config;
   }
   
-  public Collection<ReportedBug> execute(ActiveRules activeRules) {
+  public AnalysisResult execute(ActiveRules activeRules) {
     ClassLoader initialClassLoader = Thread.currentThread().getContextClassLoader();
     Thread.currentThread().setContextClassLoader(FindBugs2.class.getClassLoader());
 
@@ -108,7 +119,7 @@ public class FindbugsExecutor {
 
       if(project.getFileCount() == 0) {
         LOG.info("Findbugs analysis skipped for this project.");
-        return new ArrayList<>();
+        return new AnalysisResult();
       }
 
       loadFindbugsPlugins();
@@ -171,7 +182,10 @@ public class FindbugsExecutor {
       if(!foundExistingReport) { //Avoid rescanning the project if FindBugs was run already
         executorService.submit(new FindbugsTask(engine)).get(configuration.getTimeout(), TimeUnit.MILLISECONDS);
       }
-      return toReportedBugs(xmlBugReporter.getBugCollection());
+      Collection<ReportedBug> reportedBugs = toReportedBugs(xmlBugReporter.getBugCollection());
+      Collection<? extends AnalysisError> analysisErrors = ((SortedBugCollection) xmlBugReporter.getBugCollection()).getErrors();
+      
+      return new AnalysisResult(reportedBugs, analysisErrors);
     } catch (TimeoutException e) {
       throw new IllegalStateException("Can not execute Findbugs with a timeout threshold value of " + configuration.getTimeout() + " milliseconds", e);
     } catch (Exception e) {

@@ -14,9 +14,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.function.Predicate;
 
-import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.GradleBuild;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
 
 /**
  * @author gtoison
@@ -28,7 +28,7 @@ class MultiModuleIT {
   private static final String MAVEN_PROJECT_KEY = "spotbugs:multi-module";
   private static final String GRADLE_PROJECT_KEY = "org.sonarqube:gradle-multimodule";
   
-  public static Orchestrator orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
   void multiModuleMavenAnalysis() throws Exception {
