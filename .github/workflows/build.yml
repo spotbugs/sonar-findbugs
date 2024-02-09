@@ -44,10 +44,10 @@ jobs:
             SONAR_JAVA_VERSION: 7.16.0.30901
             SONAR_SERVER_JAVA_VERSION: 17
           # 10.x 
-          - SONAR_SERVER_VERSION: 10.3.0.82913
-            SONAR_PLUGIN_API_VERSION: 10.2.0.1908
+          - SONAR_SERVER_VERSION: 10.4.0.87286
+            SONAR_PLUGIN_API_VERSION: 10.6.0.2114
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
-            SONAR_JAVA_VERSION: 7.28.0.33738
+            SONAR_JAVA_VERSION: 7.30.1.34514
             SONAR_SERVER_JAVA_VERSION: 17
           # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
           # https://mvnrepository.com/artifact/org.sonarsource.api.plugin/sonar-plugin-api
