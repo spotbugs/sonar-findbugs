@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>4.2.7-SNAPSHOT</version>
+  <version>4.2.8-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
@@ -393,6 +393,7 @@
           <pluginDescription>Analyze Java, Scala, Closure and JSP code with SpotBugs. ${spotbugs.version}</pluginDescription>
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>false</useChildFirstClassLoader>
+          <requiredForLanguages>java,scala,jsp,clojure,kotlin</requiredForLanguages>
         </configuration>
       </plugin>
       <plugin>
