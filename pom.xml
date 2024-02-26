@@ -54,7 +54,7 @@
     -->
     <spotbugs.version>4.8.3</spotbugs.version>
     <sbcontrib.version>7.6.4</sbcontrib.version>
-    <findsecbugs.version>1.12.0</findsecbugs.version>
+    <findsecbugs.version>1.13.0</findsecbugs.version>
 
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.2.5</surefire.version>
