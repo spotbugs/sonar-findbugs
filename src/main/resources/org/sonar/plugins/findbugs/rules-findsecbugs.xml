@@ -1461,6 +1461,209 @@ transformer.transform(input, result);&lt;/pre&gt;
     <tag>cwe</tag>
     <tag>security</tag>
   </rule>
+  <rule key='XXE_SCHEMA_FACTORY' priority='CRITICAL'>
+    <name>Security - XML schema processing vulnerable to XXE</name>
+    <configKey>XXE_SCHEMA_FACTORY</configKey>
+    <description>&lt;h4&gt;Summary&lt;/h4&gt;
+
+&lt;p&gt;
+XML External Entity attacks can occur when an XML SchemaFactory supports access to external entity references or external schema locations while parsing XML Schema Documents.
+&lt;/p&gt;
+
+&lt;h4&gt;Sources&lt;/h4&gt;
+
+&lt;p&gt;
+Malicious sources include XML Schema Documents containing entity definitions in the Document Type Declaration (DTD) that reference external locations.
+Documents can also include references to external schema locations using XML Schema include elements.
+&lt;/p&gt;
+
+&lt;h5&gt;External Entity in Document Type Declaration&lt;/h5&gt;
+
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE schema [
+  &amp;lt;!ENTITY entity SYSTEM &amp;quot;file:///etc/passwd&amp;quot;&amp;gt;
+]&amp;gt;
+&amp;lt;schema&amp;gt;&amp;amp;entity;&amp;lt;/schema&amp;gt;&lt;/pre&gt;
+
+&lt;h5&gt;External Schema Location&lt;/h5&gt;
+
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;schema xmlns="http://www.w3.org/2001/XMLSchema"&amp;gt;
+  &amp;lt;include schemaLocation="file:///etc/passwd"/&amp;gt;
+&amp;lt;/schema&amp;gt;&lt;/pre&gt;
+
+&lt;h4&gt;Vulnerabilities&lt;/h4&gt;
+
+&lt;p&gt;
+Vulnerable instances of javax.xml.validation.SchemaFactory attempt to resolve XML External Entity references and External Schema Locations in the default configuration.
+&lt;/p&gt;
+
+&lt;pre&gt;
+SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+Schema schema = schemaFactory.newSchema(source);
+&lt;/pre&gt;
+
+&lt;h4&gt;Solutions&lt;/h4&gt;
+
+&lt;p&gt;
+Protecting instances of java.xml.validation.SchemaFactory requires disabling external access or enabling secure processing.
+&lt;/p&gt;
+
+&lt;h5&gt;Disabling External Access&lt;/h5&gt;
+
+&lt;p&gt;
+The Java API for XML Processing (JAXP) version 1.5 implementing JEP 185 requires implementations to support properties for disabling external access.
+Java 7 Update 40 and Java 8 incorporated implementations of JAXP 1.5.
+Both &lt;strong&gt;ACCESS_EXTERNAL_DTD&lt;/strong&gt; and &lt;strong&gt;ACCESS_EXTERNAL_SCHEMA&lt;/strong&gt; must be disabled using an empty string to indicate
+that no external protocols are allowed.
+&lt;/p&gt;
+
+&lt;pre&gt;
+SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+
+Schema schema = schemaFactory.newSchema(source);
+&lt;/pre&gt;
+
+&lt;h5&gt;Enabling Secure Processing&lt;/h5&gt;
+
+&lt;p&gt;
+JAXP 1.5 and JEP 185 indicate that implementations supporting the secure processing feature flag must restrict external access.
+The &lt;strong&gt;FEATURE_SECURE_PROCESSING&lt;/strong&gt; flag restricts external access in supported implementations of JAXP 1.5.
+&lt;/p&gt;
+
+&lt;pre&gt;
+SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+schemaFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+Schema schema = schemaFactory.newSchema(source);
+&lt;/pre&gt;
+
+&lt;h4&gt;References&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://cwe.mitre.org/data/definitions/611.html"&gt;CWE-611: Improper Restriction of XML External Entity Reference&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing"&gt;OWASP: XML External Entity (XXE) Processing&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying XML External Entity vulnerability (XXE)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://openjdk.java.net/jeps/185"&gt;JEP 185: Restrict Fetching of External XML Resources&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='XXE_VALIDATOR' priority='CRITICAL'>
+    <name>Security - XML validation vulnerable to XXE</name>
+    <configKey>XXE_VALIDATOR</configKey>
+    <description>&lt;h4&gt;Summary&lt;/h4&gt;
+
+&lt;p&gt;
+XML External Entity attacks can occur when an XML Validator supports access to external entity references or external schema locations while validating malicious sources.
+&lt;/p&gt;
+
+&lt;h4&gt;Sources&lt;/h4&gt;
+
+&lt;p&gt;
+Malicious sources include XML documents containing entity definitions in the Document Type Declaration (DTD) that reference external locations.
+Documents can also include references to external schema locations using XML Schema Instance (XSI) attributes.
+&lt;/p&gt;
+
+&lt;h5&gt;External Entity in Document Type Declaration&lt;/h5&gt;
+
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;!DOCTYPE document [
+  &amp;lt;!ENTITY entity SYSTEM &amp;quot;file:///etc/passwd&amp;quot;&amp;gt;
+]&amp;gt;
+&amp;lt;document&amp;gt;&amp;amp;entity;&amp;lt;/document&amp;gt;&lt;/pre&gt;
+
+&lt;h5&gt;External Schema Location&lt;/h5&gt;
+
+&lt;pre&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot;?&amp;gt;
+&amp;lt;document
+  xmlns="urn:external"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="urn:external file:///etc/passwd" /&amp;gt;&lt;/pre&gt;
+
+&lt;h4&gt;Vulnerabilities&lt;/h4&gt;
+
+&lt;p&gt;
+Vulnerable instances of javax.xml.validation.Validator attempt to resolve XML External Entity references and External Schema Locations in the default configuration.
+&lt;/p&gt;
+
+&lt;pre&gt;
+SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+Schema schema = schemaFactory.newSchema();
+
+Validator validator = schema.newValidator();
+validator.validate(source);
+&lt;/pre&gt;
+
+&lt;h4&gt;Solutions&lt;/h4&gt;
+
+&lt;p&gt;
+Protecting instances of java.xml.validation.Validator requires disabling external access or enabling secure processing.
+&lt;/p&gt;
+
+&lt;h5&gt;Disabling External Access&lt;/h5&gt;
+
+&lt;p&gt;
+The Java API for XML Processing (JAXP) version 1.5 implementing JEP 185 requires implementations to support properties for disabling external access.
+Java 7 Update 40 and Java 8 incorporated implementations of JAXP 1.5.
+Both &lt;strong&gt;ACCESS_EXTERNAL_DTD&lt;/strong&gt; and &lt;strong&gt;ACCESS_EXTERNAL_SCHEMA&lt;/strong&gt; must be disabled using an empty string to indicate
+that no external protocols are allowed.
+&lt;/p&gt;
+
+&lt;pre&gt;
+SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+Schema schema = schemaFactory.newSchema();
+Validator validator = schema.newValidator();
+
+validator.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+validator.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+
+validator.validate(source);
+&lt;/pre&gt;
+
+&lt;h5&gt;Enabling Secure Processing&lt;/h5&gt;
+
+&lt;p&gt;
+JAXP 1.5 and JEP 185 indicate that implementations supporting the secure processing feature flag must restrict external access.
+The &lt;strong&gt;FEATURE_SECURE_PROCESSING&lt;/strong&gt; flag restricts external access in supported implementations of JAXP 1.5.
+&lt;/p&gt;
+
+&lt;pre&gt;
+SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+Schema schema = schemaFactory.newSchema();
+Validator validator = schema.newValidator();
+
+validator.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
+validator.validate(source);
+&lt;/pre&gt;
+
+&lt;h4&gt;References&lt;/h4&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href="https://cwe.mitre.org/data/definitions/611.html"&gt;CWE-611: Improper Restriction of XML External Entity Reference&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing"&gt;OWASP: XML External Entity (XXE) Processing&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.ws-attacks.org/index.php/XML_Entity_Expansion"&gt;WS-Attacks.org: XML Entity Expansion&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.ws-attacks.org/index.php/XML_External_Entity_DOS"&gt;WS-Attacks.org: XML External Entity DOS&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://www.ws-attacks.org/index.php/XML_Entity_Reference_Attack"&gt;WS-Attacks.org: XML Entity Reference Attack&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://blog.h3xstream.com/2014/06/identifying-xml-external-entity.html"&gt;Identifying XML External Entity vulnerability (XXE)&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href="https://openjdk.java.net/jeps/185"&gt;JEP 185: Restrict Fetching of External XML Resources&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    <tag>cwe</tag>
+    <tag>security</tag>
+  </rule>
   <rule key='XPATH_INJECTION' priority='CRITICAL'>
     <name>Security - Potential XPath Injection</name>
     <configKey>XPATH_INJECTION</configKey>
@@ -3088,8 +3291,12 @@ class UserController {
     <name>Security - Mass assignment</name>
     <configKey>ENTITY_MASS_ASSIGNMENT</configKey>
     <description>&lt;p&gt;
-    Persistent objects should never be returned by APIs. They might lead to leaking business logic over the UI, unauthorized tampering of
-    persistent objects in database.
+    Software frameworks sometime allow developers to automatically bind HTTP request parameters into program code variables or objects 
+    to make using that framework easier on developers. This can sometimes cause harm.
+&lt;/p&gt;
+&lt;p&gt;
+    Attackers can sometimes use this methodology to create new parameters that the developer never intended which in turn creates or 
+    overwrites new variable or objects in program code that was not intended.
 &lt;/p&gt;
 &lt;p&gt;
     &lt;b&gt;Vulnerable Code:&lt;/b&gt;&lt;/br/&gt;
@@ -4880,7 +5087,7 @@ A code that applies the uppercase transformation to two strings could mistakenly
 
 &lt;p&gt;
 In the code bellow, the string &lt;code&gt;"ADM\u0131N"&lt;/code&gt; would cause the condition to be true.
-When the uppercase transformation is applied, the character `\u0131` will becomme '\u0049' (I).
+When the uppercase transformation is applied, the character `\u0131` will become '\u0049' (I).
 It can be an issue if the developer only one user to be &lt;code&gt;"ADMIN"&lt;/code&gt;.&lt;br/&gt;
 &lt;pre&gt;
 if(username.toUpperCase().equals("ADMIN")) {
@@ -4892,7 +5099,7 @@ if(username.toUpperCase().equals("ADMIN")) {
 &lt;p&gt;
 Similar characters transformations can occurs with normalization functions.
 In the code bellow, the string &lt;code&gt;"BAC\u212AUP"&lt;/code&gt; would cause the condition to be true.
-When the normalization transformation is applied, the character `\u212A` will becomme '\u0048' (K).&lt;br/&gt;
+When the normalization transformation is applied, the character `\u212A` will become '\u004B' (K).&lt;br/&gt;
 &lt;pre&gt;
 if(Normalizer.normalize(input, Normalizer.Form.NFC).equals("BACKUP")) {
   //...
@@ -5023,6 +5230,47 @@ pc.add(new RuntimePermission("createClassLoader"));
 &lt;p&gt;References&lt;/b&gt;&lt;br&gt;
 &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ENV03-J.+Do+not+grant+dangerous+combinations+of+permissions"&gt;CERT: ENV03-J. Do not grant dangerous combinations of permissions&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='POTENTIAL_XML_INJECTION' priority='CRITICAL'>
+    <name>Security - An unsafe string is potentially injected into an XML string</name>
+    <configKey>POTENTIAL_XML_INJECTION</configKey>
+    <description>&lt;p&gt;
+Unsafe strings (e.g. from a user input) may contain XML tags. If such a string is inserted into an XML document then it
+may change its structure to a valid but semanticallly different document. To prevent this unsafe strings must b
+sanitized first.
+&lt;/p&gt;
+
+&lt;p&gt;
+&lt;b&gt;Example:&lt;/b&gt;&lt;br/&gt;
+
+An XML document may look like this:&lt;br/&gt;
+
+&lt;pre&gt;
+&amp;langle;product&amp;rangle;
+    &amp;langle;name&amp;rangle;Cell Phone&amp;langle;/name&amp;rangle;
+    &amp;langle;price&amp;rangle;800&amp;langle;/price&amp;rangle;
+    &amp;langle;amount&amp;rangle;1&amp;langle;/amount&amp;rangle;
+&amp;langle;/product&amp;rangle;
+&lt;/pre&gt;
+&lt;br/&gt;
+
+An attacker may put the following string to the field "amount":&lt;br/&gt;
+
+&lt;pre&gt;
+1&amp;langle;/amount&amp;rangle;&amp;langle;price&amp;rangle;1&amp;langle;/price&amp;rangle;&amp;langle;amount&amp;rangle;1
+&lt;/pre&gt;
+&lt;br/&gt;
+
+If the XML parser works in a way that the second price overwrites the first one then the attacker may buy the cell
+phone for 1 singe dollar.
+&lt;/p&gt;
+
+&lt;p&gt;References&lt;/b&gt;&lt;br&gt;
+&lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/IDS16-J.+Prevent+XML+Injection"&gt;IDS16-J. Prevent XML Injection&lt;/a&gt;&lt;br/&gt;
+&lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>security</tag>
   </rule>
 </rules>

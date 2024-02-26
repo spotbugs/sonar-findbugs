@@ -52,7 +52,7 @@ class FindbugsSecurityMinimalProfileTest {
     // The standard FindBugs include only 9. Fb-Contrib and FindSecurityBugs include other rules
     assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindbugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(8);
     // 94 rules total - 8 fb = 86
-    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(96);
+    assertThat(profile.rules().stream().filter(r -> r.repoKey().equals(FindSecurityBugsRulesDefinition.REPOSITORY_KEY)).count()).isEqualTo(99);
 
     FindbugsProfileTest.assertHasOnlyRulesForLanguage(profile.rules(), Java.KEY);
   }

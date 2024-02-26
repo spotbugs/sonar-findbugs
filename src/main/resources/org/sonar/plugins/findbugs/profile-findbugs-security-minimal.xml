@@ -57,6 +57,12 @@
     <Bug pattern='XXE_XSLT_TRANSFORM_FACTORY' />
   </Match>
   <Match>
+    <Bug pattern='XXE_SCHEMA_FACTORY' />
+  </Match>
+  <Match>
+    <Bug pattern='XXE_VALIDATOR' />
+  </Match>
+  <Match>
     <Bug pattern='XPATH_INJECTION' />
   </Match>
   <Match>
@@ -286,6 +292,9 @@
   </Match>
   <Match>
     <Bug pattern='DANGEROUS_PERMISSION_COMBINATION' />
+  </Match>
+  <Match>
+    <Bug pattern='POTENTIAL_XML_INJECTION' />
   </Match>
   <Match>
     <Bug pattern='XSS_REQUEST_PARAMETER_TO_SEND_ERROR' />
