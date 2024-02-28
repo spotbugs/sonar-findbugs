@@ -4,7 +4,7 @@
 
   <groupId>com.github.spotbugs</groupId>
   <artifactId>sonar-findbugs-plugin</artifactId>
-  <version>4.2.8-SNAPSHOT</version>
+  <version>4.2.9-SNAPSHOT</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube SpotBugs Plugin</name>
@@ -54,7 +54,7 @@
     -->
     <spotbugs.version>4.8.3</spotbugs.version>
     <sbcontrib.version>7.6.4</sbcontrib.version>
-    <findsecbugs.version>1.12.0</findsecbugs.version>
+    <findsecbugs.version>1.13.0</findsecbugs.version>
 
     <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.2.5</surefire.version>
@@ -64,7 +64,7 @@
     <sonar-plugin-api.groupId>org.sonarsource.sonarqube</sonar-plugin-api.groupId>
     <sonar-java.version>5.14.0.18788</sonar-java.version>
     
-    <sonar-orchestrator.version>4.7.0.1861</sonar-orchestrator.version>
+    <sonar-orchestrator.version>4.8.0.1898</sonar-orchestrator.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -97,7 +97,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>2.0.11</version>
+      <version>2.0.12</version>
       <scope>provided</scope>
     </dependency>
 
@@ -162,19 +162,19 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>5.10.1</version>
+      <version>5.10.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>5.9.0</version>
+      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.25.1</version>
+      <version>3.25.3</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -207,13 +207,13 @@
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
-      <version>9.9.3.79811</version>
+      <version>9.9.4.87374</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.sonarsource.api.plugin</groupId>
       <artifactId>sonar-plugin-api-test-fixtures</artifactId>
-      <version>10.5.0.2090</version>
+      <version>10.6.0.2114</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -424,7 +424,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.5.2</version>
         <executions>
           <execution>
             <phase>package</phase>

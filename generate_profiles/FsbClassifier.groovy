@@ -127,6 +127,8 @@ class FsbClassifier {
           "XXE_XPATH",
           "XXE_XSLT_TRANSFORM_FACTORY",
           "XXE_DTD_TRANSFORM_FACTORY",
+          "XXE_SCHEMA_FACTORY",
+          "XXE_VALIDATOR",
           "SQL_INJECTION_HIBERNATE",
           "SQL_INJECTION_JDO",
           "SQL_INJECTION_JPA",
@@ -167,6 +169,7 @@ class FsbClassifier {
           "IMPROPER_UNICODE",
           "SAML_IGNORE_COMMENTS",
           "DANGEROUS_PERMISSION_COMBINATION",
+          "POTENTIAL_XML_INJECTION",
   ]
 
   static majorJspBugs = ["XSS_REQUEST_PARAMETER_TO_JSP_WRITER",
