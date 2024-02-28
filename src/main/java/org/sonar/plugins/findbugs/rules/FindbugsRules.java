@@ -87,6 +87,8 @@ public class FindbugsRules {
       "XXE_XPATH",
       "XXE_XSLT_TRANSFORM_FACTORY",
       "XXE_DTD_TRANSFORM_FACTORY",
+      "XXE_SCHEMA_FACTORY",
+      "XXE_VALIDATOR",
       "SQL_INJECTION_HIBERNATE",
       "SQL_INJECTION_JDO",
       "SQL_INJECTION_JPA",
@@ -126,7 +128,8 @@ public class FindbugsRules {
       "SQL_INJECTION_VERTX",
       "IMPROPER_UNICODE",
       "SAML_IGNORE_COMMENTS",
-      "DANGEROUS_PERMISSION_COMBINATION"
+      "DANGEROUS_PERMISSION_COMBINATION",
+      "POTENTIAL_XML_INJECTION"
       ));
 
   public static final List<String> MAJOR_BUGS = Collections.unmodifiableList(Arrays.asList(
