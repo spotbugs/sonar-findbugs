@@ -28,7 +28,7 @@ public final class FindbugsRulesDefinition implements RulesDefinition {
 
   public static final String REPOSITORY_KEY = "findbugs";
   public static final String REPOSITORY_NAME = "FindBugs";
-  public static final int RULE_COUNT = 476;
+  public static final int RULE_COUNT = 483;
   public static final int DEACTIVED_RULE_COUNT = 6;
 
   @Override
