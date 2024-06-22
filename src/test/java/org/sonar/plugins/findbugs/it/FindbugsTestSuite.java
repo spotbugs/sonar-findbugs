@@ -58,6 +58,7 @@ public class FindbugsTestSuite {
       .keepBundledPlugins()
       // Since SQ 9.8 permissions for 'Anyone' group has been limited for new instances
       .useDefaultAdminCredentialsForBuilds(true)
+      .setServerProperty("sonar.plugins.downloadOnlyRequired", "false")
       .setSonarVersion("LATEST_RELEASE[" + sonarVersion + "]")
       .setOrchestratorProperty("orchestrator.artifactory.url", "https://repo1.maven.org/maven2")
       .setServerProperty("sonar.plugins.downloadOnlyRequired", "true")
