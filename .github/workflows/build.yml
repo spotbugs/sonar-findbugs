@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     # Forked repos do not have the secrets to deploy so this would fail
-    if: ( github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )) && github.repository == 'spotbugs/sonar-findbugs'
+    if: ( github.event_name == 'release' || ( github.event_name == 'push' )) && github.repository == 'spotbugs/sonar-findbugs'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -93,16 +93,16 @@ jobs:
           distribution: temurin
           cache: 'maven'
           server-id: ossrh
-          server-username: OSSRH_JIRA_USERNAME
-          server-password: OSSRH_JIRA_PASSWORD
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_PASSWORD
           gpg-private-key: ${{ secrets.SIGNING_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
       - name: Deploy artifacts to Maven Central
         run: |
           ./mvnw clean deploy -B -e -P deploy -DskipTests
         env:
-          OSSRH_JIRA_USERNAME: eller86
-          OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
           CI: true
       - name: Get release URL
