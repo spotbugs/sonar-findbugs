@@ -141,23 +141,29 @@ public class FindbugsConfiguration {
   }
 
   public IllegalStateException buildMissingCompiledCodeException() {
-    String message = "One (sub)project contains Java source files that are not compiled (" + fileSystem.baseDir().getPath() + ").";
+    StringBuilder message = new StringBuilder("One (sub)project contains Java source files that are not compiled (" + fileSystem.baseDir().getPath() + ").");
+    
+    for (String language : FindbugsPlugin.SUPPORTED_JVM_LANGUAGES) {
+      if (fileSystem.hasFiles(fileSystem.predicates().hasLanguage(language))) {
+        message.append("\nProject has " + language + " source file(s), they must be compiled to be analyzed.");
+      }
+    }
     
     if (!config.hasKey(SONAR_JAVA_BINARIES) || config.getStringArray(SONAR_JAVA_BINARIES).length == 0) {
-      message += "\nProperty sonar.java.binaries was not set, it is required to locate the compiled .class files. For instance set the property to: sonar.java.binaries=target/classes";
+      message.append("\nProperty sonar.java.binaries was not set, it is required to locate the compiled .class files. For instance set the property to: sonar.java.binaries=target/classes");
     } else {
-      message += "\nsonar.java.binaries was set to " + config.get(SONAR_JAVA_BINARIES).orElse(null);
+      message.append("\nsonar.java.binaries was set to " + config.get(SONAR_JAVA_BINARIES).orElse(null));
     }
     
     if (javaResourceLocator.classpath().isEmpty()) {
-      message += "\nSonar JavaResourceLocator.classpath was empty";
+      message.append("\nSonar JavaResourceLocator.classpath was empty");
     }
 
     if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
-      message += "\nSonar JavaResourceLocator.classFilesToAnalyze was empty";
+      message.append("\nSonar JavaResourceLocator.classFilesToAnalyze was empty");
     }
     
-    return new IllegalStateException(message);
+    return new IllegalStateException(message.toString());
   }
 
   /**

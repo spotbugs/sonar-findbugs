@@ -49,6 +49,11 @@ jobs:
             SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_JAVA_VERSION: 7.30.1.34514
             SONAR_SERVER_JAVA_VERSION: 17
+          - SONAR_SERVER_VERSION: 10.6.0.92116
+            SONAR_PLUGIN_API_VERSION: 10.7.0.2191
+            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
+            SONAR_JAVA_VERSION: 8.0.1.36337
+            SONAR_SERVER_JAVA_VERSION: 17
           # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
           # https://mvnrepository.com/artifact/org.sonarsource.api.plugin/sonar-plugin-api
           # https://mvnrepository.com/artifact/org.sonarsource.java/sonar-java-plugin
@@ -93,16 +98,16 @@ jobs:
           distribution: temurin
           cache: 'maven'
           server-id: ossrh
-          server-username: OSSRH_JIRA_USERNAME
-          server-password: OSSRH_JIRA_PASSWORD
+          server-username: SONATYPE_USERNAME
+          server-password: SONATYPE_TOKEN
           gpg-private-key: ${{ secrets.SIGNING_KEY }}
           gpg-passphrase: GPG_PASSPHRASE
       - name: Deploy artifacts to Maven Central
         run: |
           ./mvnw clean deploy -B -e -P deploy -DskipTests
         env:
-          OSSRH_JIRA_USERNAME: eller86
-          OSSRH_JIRA_PASSWORD: ${{ secrets.OSSRH_JIRA_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_TOKEN: ${{ secrets.SONATYPE_TOKEN }}
           GPG_PASSPHRASE: ${{ secrets.SIGNING_PASSWORD }}
           CI: true
       - name: Get release URL
@@ -126,7 +131,7 @@ jobs:
         uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.8.4, sb-contrib 7.6.4, and findsecbugs 1.13.0
+          description: Use SpotBugs 4.8.5, sb-contrib 7.6.4, and findsecbugs 1.13.0
           minimal-supported-sq-version: 9.9
           latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}

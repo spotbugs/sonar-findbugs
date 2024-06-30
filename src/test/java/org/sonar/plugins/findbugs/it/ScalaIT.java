@@ -54,6 +54,7 @@ class ScalaIT {
       .setPom(FindbugsTestSuite.projectPom("scala"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
+      .setProperty("sonar.plugins.downloadOnlyRequired", "false")
       //.setProperty("sonar.sources", "src/main/scala")
       //.setProperty("sonar.java.binaries", "target/classes")
       .setGoals("clean package sonar:sonar");

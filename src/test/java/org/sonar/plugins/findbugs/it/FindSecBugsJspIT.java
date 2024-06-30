@@ -34,6 +34,7 @@ class FindSecBugsJspIT {
       .setPom(FindbugsTestSuite.projectPom("jspc-sling"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
+      .setProperty("sonar.plugins.downloadOnlyRequired", "false")
       .setGoals("clean package sonar:sonar");
     orchestrator.executeBuild(build);
 
@@ -62,6 +63,7 @@ class FindSecBugsJspIT {
       .setPom(FindbugsTestSuite.projectPom("jspc-jetty"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
+      .setProperty("sonar.plugins.downloadOnlyRequired", "false")
       .setGoals("clean package sonar:sonar");
     orchestrator.executeBuild(build);
 

@@ -60,7 +60,7 @@ public class FindbugsTestSuite {
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion("LATEST_RELEASE[" + sonarVersion + "]")
       .setOrchestratorProperty("orchestrator.artifactory.url", "https://repo1.maven.org/maven2")
-      .setServerProperty("sonar.plugins.downloadOnlyRequired", "true")
+      .setServerProperty("sonar.plugins.downloadOnlyRequired", "false")
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/empty-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/fbcontrib-backup.xml"));
