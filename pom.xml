@@ -52,7 +52,7 @@
       Also need to update profiles, see ./generate_profiles/README.md for detail.
       Update the version table and the rules count badge in README.md
     -->
-    <spotbugs.version>4.8.5</spotbugs.version>
+    <spotbugs.version>4.8.6</spotbugs.version>
     <sbcontrib.version>7.6.4</sbcontrib.version>
     <findsecbugs.version>1.13.0</findsecbugs.version>
 
