@@ -24,16 +24,13 @@ jobs:
           # 9.9 LTS 
           - SONAR_SERVER_VERSION: 9.9.0.65466
             SONAR_PLUGIN_API_VERSION: 9.14.0.375
-            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_SERVER_JAVA_VERSION: 17
           # 10.x 
           - SONAR_SERVER_VERSION: 10.4.0.87286
             SONAR_PLUGIN_API_VERSION: 10.6.0.2114
-            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_SERVER_JAVA_VERSION: 17
           - SONAR_SERVER_VERSION: 10.6.0.92116
             SONAR_PLUGIN_API_VERSION: 10.7.0.2191
-            SONAR_PLUGIN_API_GROUPID: org.sonarsource.api.plugin
             SONAR_SERVER_JAVA_VERSION: 17
           # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
           # https://mvnrepository.com/artifact/org.sonarsource.api.plugin/sonar-plugin-api
@@ -60,8 +57,7 @@ jobs:
         run: |
           ./mvnw verify -B -e -V \
             -Dsonar.server.version=${{ matrix.SONAR_SERVER_VERSION }} \
-            -Dsonar-plugin-api.version=${{ matrix.SONAR_PLUGIN_API_VERSION }} \
-            -Dsonar-plugin-api.groupId=${{ matrix.SONAR_PLUGIN_API_GROUPID }}
+            -Dsonar-plugin-api.version=${{ matrix.SONAR_PLUGIN_API_VERSION }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
