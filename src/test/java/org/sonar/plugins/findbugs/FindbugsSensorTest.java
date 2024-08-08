@@ -19,13 +19,14 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.Lists;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import edu.umd.cs.findbugs.AnalysisError;
-import edu.umd.cs.findbugs.BugInstance;
-import edu.umd.cs.findbugs.ClassAnnotation;
-import edu.umd.cs.findbugs.MethodAnnotation;
-import edu.umd.cs.findbugs.SourceLineAnnotation;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,20 +53,19 @@ import org.sonar.api.batch.sensor.error.NewAnalysisError;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
 import org.sonar.plugins.findbugs.resource.SmapParser.FileInfo;
 import org.sonar.plugins.findbugs.resource.SmapParser.SmapLocation;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
-import org.sonar.plugins.java.api.JavaResourceLocator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import com.google.common.collect.Lists;
+
+import edu.umd.cs.findbugs.AnalysisError;
+import edu.umd.cs.findbugs.BugInstance;
+import edu.umd.cs.findbugs.ClassAnnotation;
+import edu.umd.cs.findbugs.MethodAnnotation;
+import edu.umd.cs.findbugs.SourceLineAnnotation;
 
 class FindbugsSensorTest extends FindbugsTests {
   @TempDir
@@ -76,14 +76,14 @@ class FindbugsSensorTest extends FindbugsTests {
   private MutablePicoContainer pico;
   private SensorContext sensorContext;
   private FindbugsExecutor executor;
-  private JavaResourceLocator javaResourceLocator;
+  private ClasspathLocator classpathLocator;
 
   @BeforeEach
   public void setUp() throws IOException {
     sensorContext = mock(SensorContext.class);
     byteCodeResourceLocator = mock(ByteCodeResourceLocator.class);
     executor = mock(FindbugsExecutor.class);
-    javaResourceLocator = mockJavaResourceLocator();
+    classpathLocator = mock(ClasspathLocator.class);
     
     File baseDir = new File(temp, "findbugs");
 
@@ -128,14 +128,7 @@ class FindbugsSensorTest extends FindbugsTests {
     when(sensorContext.newAnalysisError()).thenReturn(newAnalysisError);
 
     pico.addComponent(executor);
-    pico.addComponent(javaResourceLocator);
-  }
-
-  private static JavaResourceLocator mockJavaResourceLocator() {
-    JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
-    InputFile resource = mock(InputFile.class);
-    when(javaResourceLocator.findResourceByClassName(anyString())).thenReturn(resource);
-    return javaResourceLocator;
+    pico.addComponent(classpathLocator);
   }
 
   @Test
@@ -143,8 +136,6 @@ class FindbugsSensorTest extends FindbugsTests {
 
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
-    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
@@ -160,9 +151,8 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 13, false);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
 
-    when(javaResourceLocator.findResourceByClassName(anyString())).thenReturn(null);
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
@@ -178,8 +168,7 @@ class FindbugsSensorTest extends FindbugsTests {
 
     BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49, true);
     when(executor.execute(true, false)).thenReturn(new AnalysisResult(bugInstance));
-    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFbContribRules());
 
@@ -196,7 +185,7 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0, true);
     when(executor.execute(false, true)).thenReturn(new AnalysisResult(bugInstance));
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsRules());
 
@@ -213,7 +202,7 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
 
@@ -227,7 +216,7 @@ class FindbugsSensorTest extends FindbugsTests {
   @Test
   void should_not_execute_findbugs_if_no_active() throws Exception {
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithNoRules());
 
@@ -248,7 +237,7 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
     when(fs.languages()).thenReturn(languages);
 
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
 
@@ -267,7 +256,7 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml", "jsp"));
     when(fs.languages()).thenReturn(languages);
     
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     when(executor.execute(false, true)).thenReturn(new AnalysisResult());
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
@@ -283,11 +272,10 @@ class FindbugsSensorTest extends FindbugsTests {
   void should_execute_findbugs_with_missing_smap_and_source() throws Exception {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
-    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     
     // return a class file that does not have SMAP (doesn't exist actually)
-    when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.javaResourceLocator)).thenReturn("");
+    when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.classpathLocator)).thenReturn("");
     // don't return a source file: the input file is not in the file system even if SpotBugs found an issue in a class file
     when(byteCodeResourceLocator.findSourceFile("org/sonar/commons/org/sonar/commons/ZipUtils.java", fs)).thenReturn(null);
     
@@ -303,12 +291,11 @@ class FindbugsSensorTest extends FindbugsTests {
   void should_execute_findbugs_with_smap() throws Exception {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
-    JavaResourceLocator javaResourceLocator = mockJavaResourceLocator();
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     
     String classFileName = "org/sonar/commons/ZipUtils.class";
     
-    when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.javaResourceLocator)).thenReturn(classFileName);
+    when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.classpathLocator)).thenReturn(classFileName);
     
     // Return a valid SMAP location
     FileInfo fileInfo = new FileInfo("ZipUtils", "org/sonar/commons/org/sonar/commons/ZipUtils.java");

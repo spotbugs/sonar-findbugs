@@ -40,6 +40,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.error.NewAnalysisError;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.resource.ByteCodeResourceLocator;
@@ -50,7 +51,6 @@ import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
-import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import edu.umd.cs.findbugs.AnalysisError;
 
@@ -67,7 +67,7 @@ public class FindbugsSensor implements Sensor {
 
   private ActiveRules activeRules;
   private FindbugsExecutor executor;
-  private final JavaResourceLocator javaResourceLocator;
+  private final ClasspathLocator classpathLocator;
   private final ByteCodeResourceLocator byteCodeResourceLocator;
   private final FileSystem fs;
   private final SensorContext sensorContext;
@@ -75,11 +75,11 @@ public class FindbugsSensor implements Sensor {
   protected PrintWriter classMappingWriter;
 
   public FindbugsSensor(ActiveRules activeRules, SensorContext sensorContext,
-                        FindbugsExecutor executor, JavaResourceLocator javaResourceLocator, FileSystem fs, ByteCodeResourceLocator byteCodeResourceLocator) {
+                        FindbugsExecutor executor, ClasspathLocator classpathLocator, FileSystem fs, ByteCodeResourceLocator byteCodeResourceLocator) {
     this.activeRules = activeRules;
     this.sensorContext = sensorContext;
     this.executor = executor;
-    this.javaResourceLocator = javaResourceLocator;
+    this.classpathLocator = classpathLocator;
     this.byteCodeResourceLocator = byteCodeResourceLocator;
     this.fs = fs;
     registerRepositories(REPOS);
@@ -292,9 +292,9 @@ public class FindbugsSensor implements Sensor {
    * @return File handle of the original class file analyzed
    */
   private File findOriginalClassForBug(ReportedBug bugInstance) {
-    String sourceFile = byteCodeResourceLocator.findClassFileByClassName(bugInstance.getClassName(), javaResourceLocator);
+    String sourceFile = byteCodeResourceLocator.findClassFileByClassName(bugInstance.getClassName(), classpathLocator);
     if (sourceFile == null) {
-      sourceFile = byteCodeResourceLocator.findClassFileByClassName(bugInstance.getClassFile(), javaResourceLocator);
+      sourceFile = byteCodeResourceLocator.findClassFileByClassName(bugInstance.getClassFile(), classpathLocator);
     }
     
     if (sourceFile == null) {

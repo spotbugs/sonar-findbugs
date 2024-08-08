@@ -20,62 +20,100 @@
 package org.sonar.plugins.findbugs.classpath;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.java.api.JavaResourceLocator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Configuration;
+import org.sonar.java.classpath.ClasspathForMain;
+import org.sonar.java.classpath.ClasspathForTest;
 
 /**
  * @author gtoison
  *
  */
+@ScannerSide
 public class DefaultClasspathLocator implements ClasspathLocator {
-  @SuppressWarnings("rawtypes")
-  private static final Class[] EMPTY_CLASS_ARRAY = new Class[0];
-  private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
-  
-  private static final Logger LOG = Loggers.get(DefaultClasspathLocator.class);
+  private static final Logger LOG = LoggerFactory.getLogger(DefaultClasspathLocator.class);
 
-  private JavaResourceLocator javaResourceLocator;
-  
-  public DefaultClasspathLocator(JavaResourceLocator javaResourceLocator) {
-    this.javaResourceLocator = javaResourceLocator;
+  private ClasspathForMain classpathForMain;
+  private ClasspathForTest classpathForTest;
+
+  public DefaultClasspathLocator(Configuration configuration, FileSystem fileSystem) {
+    classpathForMain = new ClasspathForMain(configuration, fileSystem);
+    classpathForTest = new ClasspathForTest(configuration, fileSystem);
   }
 
   @Override
   public Collection<File> binaryDirs() {
-    return callNoArgMethodReturningFilesCollection("binaryDirs");
+    return classpathForMain.getBinaryDirs();
   }
 
   @Override
   public Collection<File> classpath() {
-    return javaResourceLocator.classpath();
+    return classpathForMain.getElements();
   }
 
   @Override
   public Collection<File> testBinaryDirs() {
-    return callNoArgMethodReturningFilesCollection("testBinaryDirs");
-  }
-  
-  @Override
-  public Collection<File> testClasspath() {
-    return callNoArgMethodReturningFilesCollection("testClasspath");
+    return classpathForTest.getBinaryDirs();
   }
 
-  @SuppressWarnings("unchecked")
-  private Collection<File> callNoArgMethodReturningFilesCollection(String methodName) {
-    try {
-      Method method = JavaResourceLocator.class.getDeclaredMethod(methodName, EMPTY_CLASS_ARRAY);
-      return (Collection<File>) method.invoke(javaResourceLocator, EMPTY_OBJECT_ARRAY);
-    } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-      LOG.info("JavaResourceLocator." + methodName + "() not available before SonarQube 9.8");
-      LOG.debug("Error calling JavaResourceLocator." + methodName + "()", e);
+  @Override
+  public Collection<File> testClasspath() {
+    return classpathForTest.getElements();
+  }
+
+  @Override
+  public Collection<File> classFilesToAnalyze() {
+    ClassFileVisitor visitor = new ClassFileVisitor();
+    for (File binaryDir : binaryDirs()) {
+      try {
+        Files.walkFileTree(binaryDir.toPath(), visitor);
+      } catch (IOException e) {
+        LOG.error("Error listing class files to analyze", e);
+      }
+    }
+
+    return visitor.matchedFiles;
+  }
+
+  private static class ClassFileVisitor implements FileVisitor<Path> {
+    private PathMatcher classFileMatcher = p -> p.toString().endsWith(".class");
+    private Collection<File> matchedFiles = new ArrayList<>();
+    
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+      return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+      if (classFileMatcher.matches(file)) {
+        matchedFiles.add(file.toFile().getCanonicalFile());
+      }
       
-      return Collections.emptySet();
+      return FileVisitResult.CONTINUE;
+    }
+
+    @Override
+    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+      throw exc;
+    }
+
+    @Override
+    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+      return FileVisitResult.CONTINUE;
     }
   }
 }

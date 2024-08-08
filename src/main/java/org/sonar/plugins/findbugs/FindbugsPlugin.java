@@ -21,9 +21,11 @@ package org.sonar.plugins.findbugs;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
+
 import org.sonar.api.Plugin;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.profiles.FindbugsContribProfile;
@@ -87,6 +89,7 @@ public class FindbugsPlugin implements Plugin {
             FindSecurityBugsRulesDefinition.class,
             FindSecurityBugsJspRulesDefinition.class,
             FindSecurityBugsScalaRulesDefinition.class,
+            DefaultClasspathLocator.class,
             ByteCodeResourceLocator.class));
   }
 }

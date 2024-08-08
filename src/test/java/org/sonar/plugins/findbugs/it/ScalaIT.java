@@ -19,14 +19,14 @@ package org.sonar.plugins.findbugs.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sonar.plugins.findbugs.profiles.FindbugsSecurityScalaProfile;
 import org.sonarqube.ws.Issues.Issue;
 import org.sonarqube.ws.client.issues.IssuesService;
-
-import java.util.List;
 
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
@@ -54,7 +54,6 @@ class ScalaIT {
       .setPom(FindbugsTestSuite.projectPom("scala"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
-      .setProperty("sonar.plugins.downloadOnlyRequired", "false")
       //.setProperty("sonar.sources", "src/main/scala")
       //.setProperty("sonar.java.binaries", "target/classes")
       .setGoals("clean package sonar:sonar");
