@@ -56,7 +56,6 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.utils.Version;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
@@ -517,7 +516,7 @@ public class FindbugsConfiguration implements Startable {
 
   public static List<PropertyDefinition> getPropertyDefinitions(Context context) {
     String subCategory = "FindBugs";
-    List<PropertyDefinition> properties = Arrays.asList(
+	return Arrays.asList(
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
         .category(Java.KEY)
@@ -578,27 +577,15 @@ public class FindbugsConfiguration implements Startable {
         .name("Only Analyze")
         .description("To analyze only the given files (in FQCN, comma separted) / package patterns")
         .type(PropertyType.STRING)
-        .build()      
-      );
-    
-    if (context.getSonarQubeVersion().isGreaterThanOrEqual(Version.create(9, 8))) {
-      // The sonar-java plugin API only has the methods to get the test binaries/classpath starting with SonarQube 9.8
-      // For clarity we hide the property in earlier versions because it would have no effect (tests are not analyzed)
-      properties = new ArrayList<>(properties);
-      properties.add(
-          PropertyDefinition.builder(FindbugsConstants.ANALYZE_TESTS)
-          .defaultValue(Boolean.toString(FindbugsConstants.ANALYZE_TESTS_VALUE))
-          .category(Java.KEY)
-          .subCategory(subCategory)
-          .name("Analyze tests")
-          .description("Look for bugs in the project test code")
-          .onQualifiers(Qualifiers.PROJECT)
-          .type(PropertyType.BOOLEAN)
-          .build()
-          );
-    }
-    
-    return properties;
+        .build(),
+        PropertyDefinition.builder(FindbugsConstants.ANALYZE_TESTS)
+        .defaultValue(Boolean.toString(FindbugsConstants.ANALYZE_TESTS_VALUE))
+        .category(Java.KEY)
+        .subCategory(subCategory)
+        .name("Analyze tests")
+        .description("Look for bugs in the project test code")
+        .onQualifiers(Qualifiers.PROJECT)
+        .type(PropertyType.BOOLEAN)
+        .build());
   }
-
 }

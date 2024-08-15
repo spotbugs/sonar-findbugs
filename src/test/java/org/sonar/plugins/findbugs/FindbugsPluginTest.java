@@ -21,31 +21,21 @@ package org.sonar.plugins.findbugs;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarRuntime;
-import org.sonar.api.utils.Version;
 
 class FindbugsPluginTest {
 
-  @ParameterizedTest
-  @CsvSource({
-    "9.7,25",
-    // We expect one more extension (the "sonar.findbugs.analyzeTests" property) when the version is >= 9.8
-    "9.8,26"
-  })
-  void testGetExtensions(String version, int expectedExtensionsCount) {
-
+  @Test
+  void testGetExtensions() {
     SonarRuntime runtime = mock(SonarRuntime.class);
-    when(runtime.getApiVersion()).thenReturn(Version.parse(version));
     Plugin.Context ctx = new Plugin.Context(runtime);
 
     FindbugsPlugin plugin = new FindbugsPlugin();
     plugin.define(ctx);
 
-    assertEquals(expectedExtensionsCount, ctx.getExtensions().size(), "extensions count");
+    assertEquals(26, ctx.getExtensions().size(), "extensions count");
   }
 }
