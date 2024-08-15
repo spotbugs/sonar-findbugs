@@ -52,7 +52,6 @@ import org.sonar.api.testfixtures.log.LogTesterJUnit5;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
-import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import com.google.common.collect.ImmutableList;
 
@@ -74,7 +73,6 @@ class FindbugsConfigurationTest {
   private File workDir;
   private ActiveRules activeRules;
   private FindbugsConfiguration conf;
-  private JavaResourceLocator javaResourceLocator;
   private ClasspathLocator classpathLocator;
 
   @BeforeEach
@@ -92,9 +90,8 @@ class FindbugsConfigurationTest {
     activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
 
     configuration = new SimpleConfiguration();
-    javaResourceLocator = mock(JavaResourceLocator.class);
     classpathLocator = mock(ClasspathLocator.class);
-    conf = new FindbugsConfiguration(fs, configuration, activeRules, javaResourceLocator);
+    conf = new FindbugsConfiguration(fs, configuration, activeRules, classpathLocator);
   }
 
   @Test
@@ -140,7 +137,7 @@ class FindbugsConfigurationTest {
   @Test
   void should_set_class_files() throws IOException {
     File file = new File(temp, "MyClass.class");
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
       
@@ -152,7 +149,7 @@ class FindbugsConfigurationTest {
   @Test
   void should_set_class_path() throws IOException {
     File classpath = new File(temp, "classpath");
-    when(javaResourceLocator.classpath()).thenReturn(ImmutableList.of(classpath));
+    when(classpathLocator.classpath()).thenReturn(ImmutableList.of(classpath));
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
 
@@ -396,7 +393,7 @@ class FindbugsConfigurationTest {
     List<File> classpathFiles = Arrays.asList(jarFile, classesFolder, jspServletFolder, moduleInfoFile);
     List<File> testClasspathFiles = Arrays.asList(testJarFile, testOtherJarFile);
     
-    when(javaResourceLocator.classpath()).thenReturn(classpathFiles);
+    when(classpathLocator.classpath()).thenReturn(classpathFiles);
     when(classpathLocator.testClasspath()).thenReturn(testClasspathFiles);
     
     if (withSq98Api) {
@@ -437,8 +434,8 @@ class FindbugsConfigurationTest {
   
   @Test
   void buildMissingCompiledCodeException() {
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.emptyList());
-    when(javaResourceLocator.classpath()).thenReturn(Collections.emptyList());
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Collections.emptyList());
+    when(classpathLocator.classpath()).thenReturn(Collections.emptyList());
     
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Property sonar.java.binaries was not set");
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classpath was empty");
@@ -448,8 +445,8 @@ class FindbugsConfigurationTest {
     
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("sonar.java.binaries was set to");
     
-    when(javaResourceLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(baseDir));
-    when(javaResourceLocator.classpath()).thenReturn(Collections.singletonList(baseDir));
+    when(classpathLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(baseDir));
+    when(classpathLocator.classpath()).thenReturn(Collections.singletonList(baseDir));
     
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classpath was empty");
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classFilesToAnalyze was empty");

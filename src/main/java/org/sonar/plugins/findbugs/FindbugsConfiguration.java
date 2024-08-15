@@ -56,9 +56,7 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.utils.Version;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
-import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
@@ -66,7 +64,6 @@ import org.sonar.plugins.findbugs.xml.Bug;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.Java;
-import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
@@ -84,14 +81,14 @@ public class FindbugsConfiguration implements Startable {
   private final FileSystem fileSystem;
   private final Configuration config;
   private final ActiveRules activeRules;
-  private final JavaResourceLocator javaResourceLocator;
+  private final ClasspathLocator classpathLocator;
 
   public FindbugsConfiguration(FileSystem fileSystem, Configuration config, ActiveRules activeRules,
-                               JavaResourceLocator javaResourceLocator) {
+      ClasspathLocator classpathLocator) {
     this.fileSystem = fileSystem;
     this.config = config;
     this.activeRules = activeRules;
-    this.javaResourceLocator = javaResourceLocator;
+    this.classpathLocator = classpathLocator;
   }
 
   public File getTargetXMLReport() {
@@ -99,7 +96,7 @@ public class FindbugsConfiguration implements Startable {
   }
 
   public void initializeFindbugsProject(Project findbugsProject) throws IOException {
-    initializeFindbugsProject(findbugsProject, new DefaultClasspathLocator(javaResourceLocator));
+    initializeFindbugsProject(findbugsProject, classpathLocator);
   }
   
   void initializeFindbugsProject(Project findbugsProject, ClasspathLocator classpathLocator) throws IOException {
@@ -164,11 +161,11 @@ public class FindbugsConfiguration implements Startable {
       message.append("\nsonar.java.binaries was set to " + config.get(SONAR_JAVA_BINARIES).orElse(null));
     }
     
-    if (javaResourceLocator.classpath().isEmpty()) {
+    if (classpathLocator.classpath().isEmpty()) {
       message.append("\nSonar JavaResourceLocator.classpath was empty");
     }
 
-    if (javaResourceLocator.classFilesToAnalyze().isEmpty()) {
+    if (classpathLocator.classFilesToAnalyze().isEmpty()) {
       message.append("\nSonar JavaResourceLocator.classFilesToAnalyze was empty");
     }
     
@@ -272,7 +269,7 @@ public class FindbugsConfiguration implements Startable {
       return buildClassFilesToAnalyzePre98();
     } else {
       // It's probably redundant to use javaResourceLocator.classFilesToAnalyze() here, we'll get all the binaries later
-      List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+      List<File> classFilesToAnalyze = new ArrayList<>(classpathLocator.classFilesToAnalyze());
 
       addClassFilesFromClasspath(classFilesToAnalyze, binaryDirs);
 
@@ -290,12 +287,12 @@ public class FindbugsConfiguration implements Startable {
   }
   
   private List<File> buildClassFilesToAnalyzePre98() throws IOException {
-    List<File> classFilesToAnalyze = new ArrayList<>(javaResourceLocator.classFilesToAnalyze());
+    List<File> classFilesToAnalyze = new ArrayList<>(classpathLocator.classFilesToAnalyze());
     
     boolean hasScalaOrKotlinFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguages("scala", "kotlin"));
     boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));    
 
-    Collection<File> classpath = javaResourceLocator.classpath();
+    Collection<File> classpath = classpathLocator.classpath();
     
     // javaResourceLocator.classFilesToAnalyze() only contains .class files from Java sources
     if (hasScalaOrKotlinFiles) {
@@ -519,7 +516,7 @@ public class FindbugsConfiguration implements Startable {
 
   public static List<PropertyDefinition> getPropertyDefinitions(Context context) {
     String subCategory = "FindBugs";
-    List<PropertyDefinition> properties = Arrays.asList(
+	return Arrays.asList(
       PropertyDefinition.builder(FindbugsConstants.EFFORT_PROPERTY)
         .defaultValue(FindbugsConstants.EFFORT_DEFAULT_VALUE)
         .category(Java.KEY)
@@ -580,27 +577,15 @@ public class FindbugsConfiguration implements Startable {
         .name("Only Analyze")
         .description("To analyze only the given files (in FQCN, comma separted) / package patterns")
         .type(PropertyType.STRING)
-        .build()      
-      );
-    
-    if (context.getSonarQubeVersion().isGreaterThanOrEqual(Version.create(9, 8))) {
-      // The sonar-java plugin API only has the methods to get the test binaries/classpath starting with SonarQube 9.8
-      // For clarity we hide the property in earlier versions because it would have no effect (tests are not analyzed)
-      properties = new ArrayList<>(properties);
-      properties.add(
-          PropertyDefinition.builder(FindbugsConstants.ANALYZE_TESTS)
-          .defaultValue(Boolean.toString(FindbugsConstants.ANALYZE_TESTS_VALUE))
-          .category(Java.KEY)
-          .subCategory(subCategory)
-          .name("Analyze tests")
-          .description("Look for bugs in the project test code")
-          .onQualifiers(Qualifiers.PROJECT)
-          .type(PropertyType.BOOLEAN)
-          .build()
-          );
-    }
-    
-    return properties;
+        .build(),
+        PropertyDefinition.builder(FindbugsConstants.ANALYZE_TESTS)
+        .defaultValue(Boolean.toString(FindbugsConstants.ANALYZE_TESTS_VALUE))
+        .category(Java.KEY)
+        .subCategory(subCategory)
+        .name("Analyze tests")
+        .description("Look for bugs in the project test code")
+        .onQualifiers(Qualifiers.PROJECT)
+        .type(PropertyType.BOOLEAN)
+        .build());
   }
-
 }
