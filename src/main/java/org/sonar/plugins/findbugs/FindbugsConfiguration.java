@@ -164,10 +164,6 @@ public class FindbugsConfiguration implements Startable {
     if (classpathLocator.classpath().isEmpty()) {
       message.append("\nSonar JavaResourceLocator.classpath was empty");
     }
-
-    if (classpathLocator.classFilesToAnalyze().isEmpty()) {
-      message.append("\nSonar JavaResourceLocator.classFilesToAnalyze was empty");
-    }
     
     return new IllegalStateException(message.toString());
   }
@@ -262,65 +258,23 @@ public class FindbugsConfiguration implements Startable {
     return file;
   }
   
-  private List<File> buildClassFilesToAnalyze(ClasspathLocator classpathLocator) throws IOException {
+  private List<File> buildClassFilesToAnalyze(ClasspathLocator classpathLocator) {
     Collection<File> binaryDirs = classpathLocator.binaryDirs();
-    
-    if (binaryDirs.isEmpty()) {
-      return buildClassFilesToAnalyzePre98();
-    } else {
-      // It's probably redundant to use javaResourceLocator.classFilesToAnalyze() here, we'll get all the binaries later
-      List<File> classFilesToAnalyze = new ArrayList<>(classpathLocator.classFilesToAnalyze());
 
-      addClassFilesFromClasspath(classFilesToAnalyze, binaryDirs);
+    List<File> classFilesToAnalyze = new ArrayList<>();
 
-      boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
-      if (hasJspFiles) {
-        checkForMissingPrecompiledJsp(classFilesToAnalyze);
-      }
+    addClassFilesFromClasspath(classFilesToAnalyze, binaryDirs);
 
-      if (isAnalyzeTests()) {
-        addClassFilesFromClasspath(classFilesToAnalyze, classpathLocator.testBinaryDirs());
-      }
-
-      return classFilesToAnalyze;
+    boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));
+    if (hasJspFiles) {
+      checkForMissingPrecompiledJsp(classFilesToAnalyze);
     }
-  }
-  
-  private List<File> buildClassFilesToAnalyzePre98() throws IOException {
-    List<File> classFilesToAnalyze = new ArrayList<>(classpathLocator.classFilesToAnalyze());
-    
-    boolean hasScalaOrKotlinFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguages("scala", "kotlin"));
-    boolean hasJspFiles = fileSystem.hasFiles(fileSystem.predicates().hasLanguage("jsp"));    
 
-    Collection<File> classpath = classpathLocator.classpath();
-    
-    // javaResourceLocator.classFilesToAnalyze() only contains .class files from Java sources
-    if (hasScalaOrKotlinFiles) {
-      // Add all the .class files from the classpath
-      // For Gradle multi-module projects this will unfortunately include compiled .class files from dependency modules
-      addClassFilesFromClasspath(classFilesToAnalyze, classpath);
-    } else if (hasJspFiles) {
-      // Add the precompiled JSP .class files
-      addPrecompiledJspClasses(classFilesToAnalyze, classpath);
-    } else if (classFilesToAnalyze.isEmpty()) {
-      // For some users javaResourceLocator.classFilesToAnalyze() seems to return an empty list, it is unclear why
-      addClassFilesFromClasspath(classFilesToAnalyze, classpath);
+    if (isAnalyzeTests()) {
+      addClassFilesFromClasspath(classFilesToAnalyze, classpathLocator.testBinaryDirs());
     }
 
     return classFilesToAnalyze;
-  }
-
-  /**
-   * Updates the class files list by adding precompiled JSP classes
-   * 
-   * @param classFilesToAnalyze The current list of class files to analyze, by default SonarQube does not include precompiled JSP classes
-   * 
-   * @throws IOException In case an exception was thrown when building a file canonical path
-   */
-  public void addPrecompiledJspClasses(List<File> classFilesToAnalyze, Collection<File> classpath) throws IOException {
-    addClassFilesFromClasspath(classFilesToAnalyze, classpath, FindbugsConfiguration::isPrecompiledJspClassFile);
-    
-    checkForMissingPrecompiledJsp(classFilesToAnalyze);
   }
   
   public void checkForMissingPrecompiledJsp(List<File> classFilesToAnalyze) {

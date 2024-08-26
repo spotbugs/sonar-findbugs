@@ -59,8 +59,6 @@ import org.sonar.plugins.findbugs.resource.SmapParser.FileInfo;
 import org.sonar.plugins.findbugs.resource.SmapParser.SmapLocation;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 
-import com.google.common.collect.Lists;
-
 import edu.umd.cs.findbugs.AnalysisError;
 import edu.umd.cs.findbugs.BugInstance;
 import edu.umd.cs.findbugs.ClassAnnotation;
@@ -152,7 +150,6 @@ class FindbugsSensorTest extends FindbugsTests {
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
 
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
@@ -168,7 +165,6 @@ class FindbugsSensorTest extends FindbugsTests {
 
     BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49, true);
     when(executor.execute(true, false)).thenReturn(new AnalysisResult(bugInstance));
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithOnlyFbContribRules());
 
@@ -185,8 +181,6 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0, true);
     when(executor.execute(false, true)).thenReturn(new AnalysisResult(bugInstance));
 
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
-
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
@@ -202,8 +196,6 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
 
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
-
     pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
@@ -215,8 +207,6 @@ class FindbugsSensorTest extends FindbugsTests {
 
   @Test
   void should_not_execute_findbugs_if_no_active() throws Exception {
-
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
 
     pico.addComponent(FakeActiveRules.createWithNoRules());
 
@@ -237,8 +227,6 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
     when(fs.languages()).thenReturn(languages);
 
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
-
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
 
     FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
@@ -256,7 +244,6 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml", "jsp"));
     when(fs.languages()).thenReturn(languages);
     
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     when(executor.execute(false, true)).thenReturn(new AnalysisResult());
 
     pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
@@ -272,7 +259,6 @@ class FindbugsSensorTest extends FindbugsTests {
   void should_execute_findbugs_with_missing_smap_and_source() throws Exception {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     
     // return a class file that does not have SMAP (doesn't exist actually)
     when(byteCodeResourceLocator.findClassFileByClassName("org.sonar.commons.ZipUtils", this.classpathLocator)).thenReturn("");
@@ -291,7 +277,6 @@ class FindbugsSensorTest extends FindbugsTests {
   void should_execute_findbugs_with_smap() throws Exception {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Lists.newArrayList(new File("file")));
     
     String classFileName = "org/sonar/commons/ZipUtils.class";
     

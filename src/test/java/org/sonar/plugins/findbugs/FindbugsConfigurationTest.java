@@ -76,7 +76,7 @@ class FindbugsConfigurationTest {
   private ClasspathLocator classpathLocator;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  public void setUp() {
     baseDir = new File(temp, "findbugs");
     workDir = new File(temp, "findbugs");
 
@@ -136,8 +136,13 @@ class FindbugsConfigurationTest {
 
   @Test
   void should_set_class_files() throws IOException {
-    File file = new File(temp, "MyClass.class");
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(ImmutableList.of(file));
+    File classesDir = new File(temp, "xyz");
+    File file = new File(classesDir, "MyClass.class");
+
+    Files.createDirectories(classesDir.toPath());
+    Files.createFile(file.toPath());
+    
+    when(classpathLocator.binaryDirs()).thenReturn(ImmutableList.of(classesDir));
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
       
@@ -159,7 +164,7 @@ class FindbugsConfigurationTest {
   }
 
   @Test
-  void should_copy_lib_in_working_dir() throws IOException {
+  void should_copy_lib_in_working_dir() {
     String jsr305 = "findbugs/jsr305.jar";
     String annotations = "findbugs/annotations.jar";
 
@@ -184,13 +189,13 @@ class FindbugsConfigurationTest {
   }
 
   @Test
-  void should_get_fbcontrib() throws IOException {
+  void should_get_fbcontrib() {
     conf.copyLibs();
     assertThat(conf.getFbContribJar()).isFile();
   }
 
   @Test
-  void should_get_findSecBugs() throws IOException {
+  void should_get_findSecBugs() {
     conf.copyLibs();
     assertThat(conf.getFindSecBugsJar()).isFile();
   }
@@ -233,7 +238,7 @@ class FindbugsConfigurationTest {
   }
 
   @Test
-  void scanEmptyFolderForAdditionalClasses() throws IOException {
+  void scanEmptyFolderForAdditionalClasses() {
     List<File> classes = FindbugsConfiguration.scanForAdditionalClasses(temp, f -> true);
     
     assertThat(classes).isEmpty();
@@ -241,54 +246,40 @@ class FindbugsConfigurationTest {
   
   @ParameterizedTest
   @CsvSource({
-    "true,true",
-    "true,false",
-    "false,true",
-    "false,false",
+    "true",
+    "false",
   })
-  void should_warn_of_missing_precompiled_jsp(boolean withSq98Api, boolean analyzeTests) throws IOException {
-    setupSampleProject(false, true, false, withSq98Api, analyzeTests);
+  void should_warn_of_missing_precompiled_jsp(boolean analyzeTests) throws IOException {
+    setupSampleProject(false, true, false, analyzeTests);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project, classpathLocator);
     }
     
-    // With the pre SonarQube 9.8 we There should be two warnings:
-    //  - There are JSP but they are not precompiled
-    //  - Findbugs needs sources to be compiled
-    // With the SonarQube 9.8+ API we get the Test.class so only one warning
-    if (withSq98Api) {
-      assertThat(logTester.getLogs(Level.WARN)).hasSize(1);
-    } else {
-      assertThat(logTester.getLogs(Level.WARN)).hasSize(2);
-    }
+    assertThat(logTester.getLogs(Level.WARN)).hasSize(1);
   }
 
   @ParameterizedTest
   @CsvSource({
-    "true,true",
-    "true,false",
-    "false,true",
-    "false,false",
+    "true",
+    "false",
   })
-  void should_analyze_precompiled_jsp(boolean withSq98Api, boolean analyzeTests) throws IOException {
-    setupSampleProject(true, true, false, withSq98Api, analyzeTests);
+  void should_analyze_precompiled_jsp(boolean analyzeTests) throws IOException {
+    setupSampleProject(true, true, false, analyzeTests);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project, classpathLocator);
       
-      if (withSq98Api && analyzeTests) {
+      if (analyzeTests) {
         // we should also capture the .class that are not from JSP sources and also the unit tests
         assertThat(project.getFileCount()).isEqualTo(5);
         
         verify(classpathLocator, times(1)).testClasspath();
-      } else if (withSq98Api) {
+      } else {
         // we should also capture the .class that are not from JSP sources but not the unit tests
         assertThat(project.getFileCount()).isEqualTo(4);
         
         verify(classpathLocator, never()).testClasspath();
-      } else {
-        assertThat(project.getFileCount()).isEqualTo(3);
       }
     }
     
@@ -297,32 +288,27 @@ class FindbugsConfigurationTest {
 
   @ParameterizedTest
   @CsvSource({
-    "true,true",
-    "true,false",
-    "false,true",
-    "false,false",
+    "true",
+    "false",
   })
-  void scala_project(boolean withSq98Api, boolean analyzeTests) throws IOException {
-    setupSampleProject(false, false, true, withSq98Api, analyzeTests);
+  void scala_project(boolean analyzeTests) throws IOException {
+    setupSampleProject(false, false, true, analyzeTests);
     
     try (Project project = new Project()) {
       conf.initializeFindbugsProject(project, classpathLocator);
       
-      if (withSq98Api && analyzeTests) {
+      if (analyzeTests) {
         assertThat(project.getFileCount()).isEqualTo(2);
         assertThat(project.getFile(0)).endsWith("Test.class");
         assertThat(project.getFile(1)).endsWith("UnitTest.class");
         
         verify(classpathLocator, times(1)).testClasspath();
-      } else if (withSq98Api) {
+      } else {
         assertThat(project.getFileCount()).isEqualTo(1);
         // Even though it is named "Test" it is in the "main" folder so it should be analyzed
         assertThat(project.getFile(0)).endsWith("Test.class");
         
         verify(classpathLocator, never()).testClasspath();
-      } else {
-        assertThat(project.getFileCount()).isEqualTo(1);
-        assertThat(project.getFile(0)).endsWith("Test.class");
       }
     }
     
@@ -332,7 +318,6 @@ class FindbugsConfigurationTest {
   private void setupSampleProject(boolean withPrecompiledJsp,
       boolean withJspFiles,
       boolean withScalaFiles,
-      boolean withSq98Api,
       boolean analyzeTests) throws IOException {
     configuration.setProperty(FindbugsConstants.ANALYZE_TESTS, Boolean.toString(analyzeTests));
     
@@ -396,13 +381,11 @@ class FindbugsConfigurationTest {
     when(classpathLocator.classpath()).thenReturn(classpathFiles);
     when(classpathLocator.testClasspath()).thenReturn(testClasspathFiles);
     
-    if (withSq98Api) {
-      List<File> binaryDirs = Arrays.asList(classesFolder, jspServletFolder);
-      List<File> testBinaryDirs = Collections.singletonList(testClassesFolder);
-      
-      when(classpathLocator.binaryDirs()).thenReturn(binaryDirs);
-      when(classpathLocator.testBinaryDirs()).thenReturn(testBinaryDirs);
-    }
+    List<File> binaryDirs = Arrays.asList(classesFolder, jspServletFolder);
+    List<File> testBinaryDirs = Collections.singletonList(testClassesFolder);
+
+    when(classpathLocator.binaryDirs()).thenReturn(binaryDirs);
+    when(classpathLocator.testBinaryDirs()).thenReturn(testBinaryDirs);
   }
 
   private void mockHasLanguagePredicate(boolean predicateReturn, String language) {
@@ -434,18 +417,15 @@ class FindbugsConfigurationTest {
   
   @Test
   void buildMissingCompiledCodeException() {
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Collections.emptyList());
     when(classpathLocator.classpath()).thenReturn(Collections.emptyList());
     
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Property sonar.java.binaries was not set");
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classpath was empty");
-    assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("Sonar JavaResourceLocator.classFilesToAnalyze was empty");
     
     configuration.setProperty(FindbugsConfiguration.SONAR_JAVA_BINARIES, "foo/bar");
     
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).contains("sonar.java.binaries was set to");
     
-    when(classpathLocator.classFilesToAnalyze()).thenReturn(Collections.singletonList(baseDir));
     when(classpathLocator.classpath()).thenReturn(Collections.singletonList(baseDir));
     
     assertThat(conf.buildMissingCompiledCodeException().getMessage()).doesNotContain("Sonar JavaResourceLocator.classpath was empty");
