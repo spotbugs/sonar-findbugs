@@ -258,7 +258,7 @@ public class FindbugsConfiguration implements Startable {
     return file;
   }
   
-  private List<File> buildClassFilesToAnalyze(ClasspathLocator classpathLocator) throws IOException {
+  private List<File> buildClassFilesToAnalyze(ClasspathLocator classpathLocator) {
     Collection<File> binaryDirs = classpathLocator.binaryDirs();
 
     List<File> classFilesToAnalyze = new ArrayList<>();
