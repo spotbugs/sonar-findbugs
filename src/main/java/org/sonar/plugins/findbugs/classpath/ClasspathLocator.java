@@ -35,6 +35,4 @@ public interface ClasspathLocator {
   Collection<File> testBinaryDirs();
 
   Collection<File> testClasspath();
-  
-  Collection<File> classFilesToAnalyze();
 }

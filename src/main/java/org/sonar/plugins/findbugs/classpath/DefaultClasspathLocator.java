@@ -20,18 +20,8 @@
 package org.sonar.plugins.findbugs.classpath;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.PathMatcher;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Configuration;
@@ -44,10 +34,8 @@ import org.sonar.java.classpath.ClasspathForTest;
  */
 @ScannerSide
 public class DefaultClasspathLocator implements ClasspathLocator {
-  private static final Logger LOG = LoggerFactory.getLogger(DefaultClasspathLocator.class);
-
-  private ClasspathForMain classpathForMain;
-  private ClasspathForTest classpathForTest;
+  private final ClasspathForMain classpathForMain;
+  private final ClasspathForTest classpathForTest;
 
   public DefaultClasspathLocator(Configuration configuration, FileSystem fileSystem) {
     classpathForMain = new ClasspathForMain(configuration, fileSystem);
@@ -72,48 +60,5 @@ public class DefaultClasspathLocator implements ClasspathLocator {
   @Override
   public Collection<File> testClasspath() {
     return classpathForTest.getElements();
-  }
-
-  @Override
-  public Collection<File> classFilesToAnalyze() {
-    ClassFileVisitor visitor = new ClassFileVisitor();
-    for (File binaryDir : binaryDirs()) {
-      try {
-        Files.walkFileTree(binaryDir.toPath(), visitor);
-      } catch (IOException e) {
-        LOG.error("Error listing class files to analyze", e);
-      }
-    }
-
-    return visitor.matchedFiles;
-  }
-
-  private static class ClassFileVisitor implements FileVisitor<Path> {
-    private PathMatcher classFileMatcher = p -> p.toString().endsWith(".class");
-    private Collection<File> matchedFiles = new ArrayList<>();
-    
-    @Override
-    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-      return FileVisitResult.CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-      if (classFileMatcher.matches(file)) {
-        matchedFiles.add(file.toFile().getCanonicalFile());
-      }
-      
-      return FileVisitResult.CONTINUE;
-    }
-
-    @Override
-    public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-      throw exc;
-    }
-
-    @Override
-    public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-      return FileVisitResult.CONTINUE;
-    }
   }
 }
