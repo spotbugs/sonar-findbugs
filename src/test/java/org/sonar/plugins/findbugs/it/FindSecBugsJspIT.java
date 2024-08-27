@@ -2,15 +2,15 @@ package org.sonar.plugins.findbugs.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
-import org.sonarqube.ws.Issues.Issue;
-import org.sonarqube.ws.client.issues.IssuesService;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.sonarqube.ws.Issues.Issue;
+import org.sonarqube.ws.client.issues.IssuesService;
 
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.junit5.OrchestratorExtension;
@@ -34,7 +34,6 @@ class FindSecBugsJspIT {
       .setPom(FindbugsTestSuite.projectPom("jspc-sling"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
-      .setProperty("sonar.plugins.downloadOnlyRequired", "false")
       .setGoals("clean package sonar:sonar");
     orchestrator.executeBuild(build);
 
@@ -63,7 +62,6 @@ class FindSecBugsJspIT {
       .setPom(FindbugsTestSuite.projectPom("jspc-jetty"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
-      .setProperty("sonar.plugins.downloadOnlyRequired", "false")
       .setGoals("clean package sonar:sonar");
     orchestrator.executeBuild(build);
 

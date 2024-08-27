@@ -1,22 +1,6 @@
 package org.sonar.plugins.findbugs.resource;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.api.batch.fs.FilePredicates;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.java.api.JavaResourceLocator;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Arrays;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -24,7 +8,22 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 
 class ByteCodeResourceLocatorTest {
 
@@ -127,15 +126,15 @@ class ByteCodeResourceLocatorTest {
   
   @Test
   void findClassFileByClassName() throws IOException {
-    JavaResourceLocator javaResourceLocator = mock(JavaResourceLocator.class);
+    ClasspathLocator classpathLocator = mock(ClasspathLocator.class);
     
     Path folderPath = Files.createDirectories(temp.toPath().resolve("foo").resolve("bar"));
     Path testFolderPath = Files.createDirectories(temp.toPath().resolve("test").resolve("123"));
     Path filePath = Files.createFile(folderPath.resolve("Test.class"));
     
-    when(javaResourceLocator.classpath()).thenReturn(Arrays.asList(testFolderPath.toFile(), filePath.toFile(), temp));
+    when(classpathLocator.classpath()).thenReturn(Arrays.asList(testFolderPath.toFile(), filePath.toFile(), temp));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
-    assertThat(locator.findClassFileByClassName("foo.bar.Test", javaResourceLocator)).isNotNull();
+    assertThat(locator.findClassFileByClassName("foo.bar.Test", classpathLocator)).isNotNull();
   }
 }

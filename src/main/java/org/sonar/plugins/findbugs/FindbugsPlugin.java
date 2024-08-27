@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import org.sonar.api.Plugin;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
 import org.sonar.plugins.findbugs.profiles.FindbugsProfile;
@@ -69,6 +70,7 @@ public class FindbugsPlugin implements Plugin {
             FindbugsProfile.class,
 
             FindbugsRulesPluginsDefinition.class,
+            DefaultClasspathLocator.class,
             ByteCodeResourceLocator.class));
   }
 }

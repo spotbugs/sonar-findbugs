@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.plugins.java.api.JavaResourceLocator;
+import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 
 /**
  * Utility method related to mapped class name to various resources and extracting addition information.
@@ -61,13 +61,13 @@ public class ByteCodeResourceLocator {
     /**
      * findSourceFileKeyByClassName() is broken in SonarQube 6.3.1.. This method is fixing it.
      * @param className The name of class to find the source file
-     * @param javaResourceLocator The {@link JavaResourceLocator} to find resource by classname
+     * @param classpathLocator The {@link ClasspathLocator} to find resource by classname
      * @return String filepath
      */
-    public String findClassFileByClassName(String className, JavaResourceLocator javaResourceLocator) {
+    public String findClassFileByClassName(String className, ClasspathLocator classpathLocator) {
         String fileName = className.replace(".","/")+".class";
 
-        Collection<File> classPathEntries = javaResourceLocator.classpath();
+        Collection<File> classPathEntries = classpathLocator.classpath();
         for(File classPathEntry : classPathEntries) {
             if(classPathEntry.isDirectory()) { //Skip jars in the classpath
 

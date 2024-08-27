@@ -19,11 +19,12 @@
  */
 package org.sonar.plugins.findbugs.it;
 
-import com.sonar.orchestrator.junit5.OrchestratorExtension;
-import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
-import com.sonar.orchestrator.locator.FileLocation;
-import com.sonar.orchestrator.locator.Location;
-import com.sonar.orchestrator.locator.MavenLocation;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
@@ -33,12 +34,11 @@ import org.sonarqube.ws.client.projects.ProjectsService;
 import org.sonarqube.ws.client.qualityprofiles.AddProjectRequest;
 import org.sonarqube.ws.client.qualityprofiles.QualityprofilesService;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
+import com.sonar.orchestrator.junit5.OrchestratorExtension;
+import com.sonar.orchestrator.junit5.OrchestratorExtensionBuilder;
+import com.sonar.orchestrator.locator.FileLocation;
+import com.sonar.orchestrator.locator.Location;
+import com.sonar.orchestrator.locator.MavenLocation;
 
 @IntegrationTest
 public class FindbugsTestSuite {
@@ -60,7 +60,6 @@ public class FindbugsTestSuite {
       .useDefaultAdminCredentialsForBuilds(true)
       .setSonarVersion("LATEST_RELEASE[" + sonarVersion + "]")
       .setOrchestratorProperty("orchestrator.artifactory.url", "https://repo1.maven.org/maven2")
-      .setServerProperty("sonar.plugins.downloadOnlyRequired", "false")
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/empty-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/fbcontrib-backup.xml"));
