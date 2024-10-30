@@ -5,7 +5,7 @@
 
 ## Description / Features
 
-This plugin requires the [SonarJava Plugin](https://docs.sonarqube.org/display/PLUG/SonarJava), and uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](https://github.com/mebigfatguy/fb-contrib) and [Find Security Bugs](https://find-sec-bugs.github.io/) to provide coding rules.
+This SonarQube plugin uses [SpotBugs](https://spotbugs.github.io), [fb-contrib](https://github.com/mebigfatguy/fb-contrib) and [Find Security Bugs](https://find-sec-bugs.github.io/) to provide coding rules.
 
 ### Supported Languages
 
