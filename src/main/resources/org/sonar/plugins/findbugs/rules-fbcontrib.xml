@@ -2383,6 +2383,14 @@ if (name != null) {
 			more convenient for client developers to use. This is not a bug, per se, just an improvement.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='UVA_REMOVE_NULL_ARG' priority='INFO'>
+    <name>Style - Method passes explicit null value to var arg parameter</name>
+    <configKey>UVA_REMOVE_NULL_ARG</configKey>
+    <description>&lt;p&gt;This method calls a var arg method, and passes an explicit null value as the var arg parameter.
+			It is better to just not pass any value at all, as there is confusion as to whether the null represents
+			the entire vararg array, or the first element of the varargs array&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
   <rule key='PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION' priority='MAJOR'>
     <name>Correctness - Method serializes an instance of a non-static inner class</name>
     <configKey>PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION</configKey>
@@ -3451,6 +3459,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     		&lt;p&gt;Unfortunately there isn't just one @Nullable annotation, but this detector will recognize:&lt;/p&gt;
     		&lt;ul&gt;
     		&lt;li&gt;org.jetbrains.annotations.Nullable&lt;/li&gt;
+	        &lt;li&gt;jakarta.annotation.Nullable&lt;/li&gt;
 	        &lt;li&gt;javax.annotation.Nullable&lt;/li&gt;
 	        &lt;li&gt;javax.annotation.CheckForNull&lt;/li&gt;
 	        &lt;li&gt;edu.umd.cs.findbugs.annotations.Nullable&lt;/li&gt;
@@ -3595,8 +3604,8 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' priority='INFO'>
-    <name>Experimental - Method calls contains() on a collected lambda expression</name>
+  <rule key='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' priority='MAJOR'>
+    <name>Correctness - Method calls contains() on a collected lambda expression</name>
     <configKey>FII_AVOID_CONTAINS_ON_COLLECTED_STREAM</configKey>
     <description>&lt;p&gt;This method builds a collection using lambda expressions with a collect terminal operation. It then immediately
         calls the contains() method on it, to see if an item is present. This is sub optimal as the lambda still needs to 
@@ -3613,7 +3622,8 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         baubles.stream().anyMatch(b -&gt; name.equals(b.getName()))
         &lt;/pre&gt;&lt;/code&gt;
         &lt;/p&gt;</description>
-    <tag>experimental</tag>
+    <tag>correctness</tag>
+    <tag>bug</tag>
   </rule>
   <rule key='FII_USE_METHOD_REFERENCE' priority='MAJOR'>
     <name>Correctness - Method creates an anonymous lambda expression instead of specifying a method reference</name>

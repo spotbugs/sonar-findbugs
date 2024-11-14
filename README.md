@@ -1,6 +1,6 @@
 # SonarQube Spotbugs Plugin
 [![.github/workflows/build.yml](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml/badge.svg)](https://github.com/spotbugs/sonar-findbugs/actions/workflows/build.yml)
-![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-940-brightgreen.svg?maxAge=2592000)
+![FindBugs Rules](https://img.shields.io/badge/SpotBugs_rules-942-brightgreen.svg?maxAge=2592000)
 [![Coverage Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.spotbugs%3Asonar-findbugs-plugin&metric=coverage)](https://sonarcloud.io/component_measures?id=com.github.spotbugs:sonar-findbugs-plugin&metric=coverage)
 
 ## Description / Features
@@ -76,4 +76,4 @@ Findbugs Plugin version|Embedded SpotBugs/Findbugs version|Embedded Findsecbugs 
 4.2.9                  | 4.8.4 (SpotBugs)                 | 1.13.0                     | 7.6.4 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
 4.2.10                 | 4.8.6 (SpotBugs)                 | 1.13.0                     | 7.6.4 (sb-contrib)        | 1.8|7.9~|5.10.1.16922
 4.3.0                  | 4.8.6 (SpotBugs)                 | 1.13.0                     | 7.6.4 (sb-contrib)        |  17|9.9~|8.0.1.36337
-4.3.1-SNAPSHOT         | 4.8.6 (SpotBugs)                 | 1.13.0                     | 7.6.4 (sb-contrib)        |  17|9.9~|8.0.1.36337
+4.3.1-SNAPSHOT         | 4.8.6 (SpotBugs)                 | 1.13.0                     | 7.6.7 (sb-contrib)        |  17|9.9~|8.0.1.36337
