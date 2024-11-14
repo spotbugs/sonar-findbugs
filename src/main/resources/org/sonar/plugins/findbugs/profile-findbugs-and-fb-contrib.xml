@@ -2061,6 +2061,9 @@
     <Bug pattern='UVA_USE_VAR_ARGS' />
   </Match>
   <Match>
+    <Bug pattern='UVA_REMOVE_NULL_ARG' />
+  </Match>
+  <Match>
     <Bug pattern='PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION' />
   </Match>
   <Match>
@@ -2344,6 +2347,9 @@
   </Match>
   <Match>
     <Bug pattern='LUI_USE_COLLECTION_ADD' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' />
   </Match>
   <Match>
     <Bug pattern='FII_USE_METHOD_REFERENCE' />
