@@ -56,7 +56,6 @@
     <sbcontrib.version>7.6.8</sbcontrib.version>
     <findsecbugs.version>1.13.0</findsecbugs.version>
 
-    <jdk.min.version>1.8</jdk.min.version>
     <surefire.version>3.2.5</surefire.version>
     <failsafe.version>3.5.2</failsafe.version>
     <sonar.server.version>9.9.0.65466</sonar.server.version>
@@ -67,8 +66,9 @@
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.source>8</maven.compiler.source>
+    <maven.compiler.target>8</maven.compiler.target>
+    <maven.compiler.release>8</maven.compiler.release>
   </properties>
 
   <dependencies>
@@ -351,15 +351,6 @@
     </pluginManagement>
 
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>${jdk.min.version}</source>
-          <target>${jdk.min.version}</target>
-        </configuration>
-      </plugin>
-
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
