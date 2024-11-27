@@ -55,7 +55,7 @@ jobs:
         id: integration-test
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.8.3, sb-contrib 7.6.4, and findsecbugs 1.12.0
+          description: Use SpotBugs 4.8.6, sb-contrib 7.6.6, and findsecbugs 1.13.0
           minimal-supported-sq-version: 7.9
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/4.2.6
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.2.6/sonar-findbugs-plugin-4.2.6.jar
