@@ -273,10 +273,10 @@
 
     <testResources>
       <testResource>
-        <directory>${basedir}/src/main/resources</directory>
+        <directory>${project.basedir}/src/main/resources</directory>
       </testResource>
       <testResource>
-        <directory>${basedir}/src/test/resources</directory>
+        <directory>${project.basedir}/src/test/resources</directory>
       </testResource>
     </testResources>
 
@@ -347,6 +347,11 @@
          <artifactId>maven-javadoc-plugin</artifactId>
          <version>3.11.1</version>
         </plugin>
+        <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>5.0.0.4389</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -410,7 +415,6 @@
           </execution>
         </executions>
       </plugin>
-
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
