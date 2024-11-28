@@ -54,7 +54,7 @@ public class FindbugsTestSuite {
     
     OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv()
         // Build the SonarQube server with an older version of the plugin
-      .addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", "4.0.6"))
+      .addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", "4.3.0"))
       .keepBundledPlugins()
       // Since SQ 9.8 permissions for 'Anyone' group has been limited for new instances
       .useDefaultAdminCredentialsForBuilds(true)
@@ -72,7 +72,7 @@ public class FindbugsTestSuite {
     File pluginTargetFile = new File(ORCHESTRATOR.getServer().getHome(), "extensions/plugins/sonar-findbugs-plugin.jar");
     try (OutputStream out = new FileOutputStream(pluginTargetFile)) {
       // Delete the old version of the plugin
-      Files.delete(ORCHESTRATOR.getServer().getHome().toPath().resolve("extensions/plugins/sonar-findbugs-plugin-4.0.6.jar"));
+      Files.delete(ORCHESTRATOR.getServer().getHome().toPath().resolve("extensions/plugins/sonar-findbugs-plugin-4.3.0.jar"));
       Files.copy(FileSystems.getDefault().getPath("target", "sonar-findbugs-plugin.jar"), out);
     } catch (IOException e) {
       throw new RuntimeException(e);
