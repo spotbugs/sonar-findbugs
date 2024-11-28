@@ -71,16 +71,6 @@
     <maven.compiler.release>8</maven.compiler.release>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.sonarsource.api.plugin</groupId>
-        <artifactId>sonar-plugin-api</artifactId>
-        <version>9.14.0.375</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <!--
     !!! ORDER OF DEPENDENCIES IS IMPORTANT !!!
