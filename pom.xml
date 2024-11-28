@@ -59,7 +59,7 @@
     <surefire.version>3.5.2</surefire.version>
     <failsafe.version>3.5.2</failsafe.version>
     <sonar.server.version>9.9.7.96285</sonar.server.version>
-    <sonar-plugin-api.version>9.14.0.375</sonar-plugin-api.version>
+    <sonar-plugin-api.version>9.17.0.587</sonar-plugin-api.version>
     <sonar-java.version>8.6.0.37351</sonar-java.version>
     
     <sonar-orchestrator.version>5.0.0.2065</sonar-orchestrator.version>
