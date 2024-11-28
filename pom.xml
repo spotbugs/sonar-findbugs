@@ -76,6 +76,11 @@
     !!! ORDER OF DEPENDENCIES IS IMPORTANT !!!
     FindBugs should be first
     -->
+    <dependency>
+      <groupId>org.sonarsource.api.plugin</groupId>
+      <artifactId>sonar-plugin-api</artifactId>
+      <version>9.17.0.587</version>
+    </dependency>
 
     <dependency>
       <groupId>com.github.spotbugs</groupId>
