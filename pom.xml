@@ -79,7 +79,7 @@
     <dependency>
       <groupId>org.sonarsource.api.plugin</groupId>
       <artifactId>sonar-plugin-api</artifactId>
-      <version>9.17.0.587</version>
+      <version>10.14.0.2599</version>
     </dependency>
 
     <dependency>
