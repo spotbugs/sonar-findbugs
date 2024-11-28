@@ -31,6 +31,7 @@ jobs:
       # previous LTS version
       SONAR_SERVER_VERSION: 9.9.7.96285 
       SONAR_PLUGIN_API_VERSION: 9.17.0.587
+      SONAR_TOKEN: $SONAR_TOKEN
     steps:
       - name: Decide the ref to check out
         uses: haya14busa/action-cond@v1
@@ -64,7 +65,6 @@ jobs:
             -Dsonar.projectKey=com.github.spotbugs:sonar-findbugs-plugin \
             -Dsonar.organization=spotbugs \
             -Dsonar.host.url=https://sonarcloud.io \
-            -DSONAR_TOKEN=$SONAR_TOKEN \
             ${PR_NUMBER:+ -Dsonar.pullrequest.key=$PR_NUMBER -Dsonar.pullrequest.branch=$PR_BRANCH }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
