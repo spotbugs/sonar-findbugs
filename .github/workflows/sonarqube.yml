@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # previous LTS version
-      SONAR_SERVER_VERSION: 9.9.0.65466
+      SONAR_SERVER_VERSION:v9.9.7.96285 
       SONAR_PLUGIN_API_VERSION: 9.14.0.375
     steps:
       - name: Decide the ref to check out
