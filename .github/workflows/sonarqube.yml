@@ -30,7 +30,7 @@ jobs:
     env:
       # previous LTS version
       SONAR_SERVER_VERSION: 9.9.7.96285 
-      SONAR_PLUGIN_API_VERSION: 9.17.0.587
+      SONAR_PLUGIN_API_VERSION: 9.14.0.375
       SONAR_TOKEN: $SONAR_TOKEN
     steps:
       - name: Decide the ref to check out

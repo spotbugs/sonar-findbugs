@@ -23,7 +23,7 @@ jobs:
         include:
           # 9.9 LTS 
           - SONAR_SERVER_VERSION: 9.9.7.96285
-            SONAR_PLUGIN_API_VERSION: 9.17.0.587
+            SONAR_PLUGIN_API_VERSION: 9.14.0.375
             SONAR_SERVER_JAVA_VERSION: 17
           # 10.x 
           - SONAR_SERVER_VERSION: 10.7.0.96327
