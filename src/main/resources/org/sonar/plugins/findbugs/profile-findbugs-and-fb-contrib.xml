@@ -408,9 +408,6 @@
     <Bug pattern='TLW_TWO_LOCK_WAIT' />
   </Match>
   <Match>
-    <Bug pattern='TLW_TWO_LOCK_NOTIFY' />
-  </Match>
-  <Match>
     <Bug pattern='UW_UNCOND_WAIT' />
   </Match>
   <Match>
@@ -954,9 +951,6 @@
     <Bug pattern='BIT_IOR' />
   </Match>
   <Match>
-    <Bug pattern='LI_LAZY_INIT_INSTANCE' />
-  </Match>
-  <Match>
     <Bug pattern='LI_LAZY_INIT_STATIC' />
   </Match>
   <Match>
@@ -1027,9 +1021,6 @@
   </Match>
   <Match>
     <Bug pattern='BOA_BADLY_OVERRIDDEN_ADAPTER' />
-  </Match>
-  <Match>
-    <Bug pattern='BRSA_BAD_RESULTSET_ACCESS' />
   </Match>
   <Match>
     <Bug pattern='SQL_BAD_RESULTSET_ACCESS' />
@@ -1168,9 +1159,6 @@
   </Match>
   <Match>
     <Bug pattern='NP_NULL_INSTANCEOF' />
-  </Match>
-  <Match>
-    <Bug pattern='BC_NULL_INSTANCEOF' />
   </Match>
   <Match>
     <Bug pattern='BC_IMPOSSIBLE_INSTANCEOF' />
