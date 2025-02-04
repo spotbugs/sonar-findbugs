@@ -279,8 +279,11 @@ def getAllPatternsFromPlugin(Plugin plugin) {
     patternsXml.BugPattern.each { pattern ->
 
         category = getFindBugsCategory([plugin], pattern.attribute("type"))
+        deprecated = deprecated = (pattern.attribute("deprecated") == "true")
+
 
         if (category == "EXPERIMENTAL" || category == "NOISE") return;
+        if (deprecated) return;
         //if (category == "MT_CORRECTNESS") category = "MULTI-THREADING";
 
         patterns << pattern.attribute("type")
