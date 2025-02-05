@@ -1146,6 +1146,9 @@
     <Bug pattern='VA_FORMAT_STRING_USES_NEWLINE' />
   </Match>
   <Match>
+    <Bug pattern='FS_BAD_DATE_FORMAT_FLAG_COMBO' />
+  </Match>
+  <Match>
     <Bug pattern='VA_PRIMITIVE_ARRAY_PASSED_TO_OBJECT_VARARG' />
   </Match>
   <Match>
@@ -1342,6 +1345,9 @@
   </Match>
   <Match>
     <Bug pattern='AT_OPERATION_SEQUENCE_ON_CONCURRENT_ABSTRACTION' />
+  </Match>
+  <Match>
+    <Bug pattern='AT_UNSAFE_RESOURCE_ACCESS_IN_THREAD' />
   </Match>
   <Match>
     <Bug pattern='DM_DEFAULT_ENCODING' />
