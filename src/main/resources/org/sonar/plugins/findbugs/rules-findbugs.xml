@@ -472,24 +472,33 @@ will need to be changed in order to compile it in later versions of Java.&lt;/p&
     <name>Malicious code - Method invoked that should be only be invoked inside a doPrivileged block</name>
     <configKey>DP_DO_INSIDE_DO_PRIVILEGED</configKey>
     <description>&lt;p&gt; This code invokes a method that requires a security permission check.
-  If this code will be granted security permissions, but might be invoked by code that does not
-  have security permissions, then the invocation needs to occur inside a doPrivileged block.&lt;/p&gt;</description>
+        If this code will be granted security permissions, but might be invoked by code that does not
+        have security permissions, then the invocation needs to occur inside a doPrivileged block.&lt;/p&gt;
+        The &lt;code&gt;java.security.AccessController&lt;/code&gt; class, which contains the &lt;code&gt;doPrivileged&lt;/code&gt; methods,
+        got deprecated in Java 17 (see &lt;a href="https://openjdk.org/jeps/411"&gt;JEP 411&lt;/a&gt;), and removed in Java 24 (see &lt;a href="https://openjdk.org/jeps/486"&gt;JEP 486&lt;/a&gt;).
+        For this reason, this bug isn't reported in classes targeted Java 17 and above.</description>
     <tag>malicious-code</tag>
   </rule>
   <rule key='DP_DO_INSIDE_DO_PRIVILEDGED' priority='INFO'>
     <name>Experimental - Method invoked that should be only be invoked inside a doPrivileged block</name>
     <configKey>DP_DO_INSIDE_DO_PRIVILEDGED</configKey>
     <description>&lt;p&gt; This code invokes a method that requires a security permission check.
-  If this code will be granted security permissions, but might be invoked by code that does not
-  have security permissions, then the invocation needs to occur inside a doPrivileged block.&lt;/p&gt;</description>
+        If this code will be granted security permissions, but might be invoked by code that does not
+        have security permissions, then the invocation needs to occur inside a doPrivileged block.&lt;/p&gt;
+        The &lt;code&gt;java.security.AccessController&lt;/code&gt; class, which contains the &lt;code&gt;doPrivileged&lt;/code&gt; methods,
+        got deprecated in Java 17 (see &lt;a href="https://openjdk.org/jeps/411"&gt;JEP 411&lt;/a&gt;), and removed in Java 24 (see &lt;a href="https://openjdk.org/jeps/486"&gt;JEP 486&lt;/a&gt;).
+        For this reason, this bug isn't reported in classes targeted Java 17 and above.</description>
     <tag>experimental</tag>
   </rule>
   <rule key='DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED' priority='INFO'>
     <name>Malicious code - Classloaders should only be created inside doPrivileged block</name>
     <configKey>DP_CREATE_CLASSLOADER_INSIDE_DO_PRIVILEGED</configKey>
     <description>&lt;p&gt; This code creates a classloader,  which needs permission if a security manage is installed.
-  If this code might be invoked by code that does not
-  have security permissions, then the classloader creation needs to occur inside a doPrivileged block.&lt;/p&gt;</description>
+        If this code might be invoked by code that does not
+        have security permissions, then the classloader creation needs to occur inside a doPrivileged block.&lt;/p&gt;
+        The &lt;code&gt;java.security.AccessController&lt;/code&gt; class, which contains the &lt;code&gt;doPrivileged&lt;/code&gt; methods,
+        got deprecated in Java 17 (see &lt;a href="https://openjdk.org/jeps/411"&gt;JEP 411&lt;/a&gt;), and removed in Java 24 (see &lt;a href="https://openjdk.org/jeps/486"&gt;JEP 486&lt;/a&gt;).
+        For this reason, this bug isn't reported in classes targeted Java 17 and above.</description>
     <tag>malicious-code</tag>
   </rule>
   <rule key='JCIP_FIELD_ISNT_FINAL_IN_IMMUTABLE_CLASS' priority='MAJOR'>
@@ -4570,6 +4579,36 @@ This format string includes a newline character (\n). In format strings, it is g
 &lt;/p&gt;</description>
     <tag>bad-practice</tag>
   </rule>
+  <rule key='FS_BAD_DATE_FORMAT_FLAG_COMBO' priority='MAJOR'>
+    <name>Bad practice - Date-format strings may lead to unexpected behavior</name>
+    <configKey>FS_BAD_DATE_FORMAT_FLAG_COMBO</configKey>
+    <description>&lt;p&gt;
+      This format string includes a bad combination of flags which may lead to unexpected behavior.
+      Potential bad combinations include the following:
+      &lt;ul&gt;
+        &lt;li&gt;
+          using a week year ("Y") with month in year ("M") and day in month ("d") without
+          specifying week in year ("w"). Flag ("y") may be preferable here instead
+        &lt;/li&gt;
+        &lt;li&gt;
+          using an AM/PM hour ("h" or "K") without specifying an AM/PM marker ("a") or
+          period of day marker ("B")
+        &lt;/li&gt;
+        &lt;li&gt;
+          using a 24-hour format hour ("H" or "k") with specifying AM/PM or period of day markers
+        &lt;/li&gt;
+        &lt;li&gt;
+          using a milli of day ("A") together with hours ("H", "h", "K", "k") and/or
+          minutes ("m") and/or seconds ("s")
+        &lt;/li&gt;
+        &lt;li&gt;use of milli of day ("A") and nano of day ("N") together&lt;/li&gt;
+        &lt;li&gt;use of fraction of second ("S") nano of second together ("n")&lt;/li&gt;
+        &lt;li&gt;use of AM/PM markers ("a") and period of day ("B") together&lt;/li&gt;
+        &lt;li&gt;use of year ("y") and year of era ("u") together&lt;/li&gt;
+      &lt;/ul&gt;
+     &lt;/p&gt;</description>
+    <tag>bad-practice</tag>
+  </rule>
   <rule key='VA_PRIMITIVE_ARRAY_PASSED_TO_OBJECT_VARARG' priority='MAJOR'>
     <name>Correctness - Primitive array passed to function expecting a variable number of object arguments</name>
     <configKey>VA_PRIMITIVE_ARRAY_PASSED_TO_OBJECT_VARARG</configKey>
@@ -5550,6 +5589,20 @@ after the call to initLogging, the logger configuration is lost
     <tag>multi-threading</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='AT_UNSAFE_RESOURCE_ACCESS_IN_THREAD' priority='MAJOR'>
+    <name>Multi-threading - Operation on resource is not safe in a multithreaded context</name>
+    <configKey>AT_UNSAFE_RESOURCE_ACCESS_IN_THREAD</configKey>
+    <description>&lt;p&gt;This code contains an operation on a resource that is not safe in a multithreaded context.
+            The resource may be accessed by multiple threads concurrently without proper synchronization.
+            This may lead to data corruption. Use synchronization or other
+            concurrency control mechanisms to ensure that the resource is accessed safely.&lt;/p&gt;
+        &lt;p&gt;See the related SEI CERT rule, but the detector is not restricted to chained methods:
+          &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/VNA04-J.+Ensure+that+calls+to+chained+methods+are+atomic"&gt;
+          VNA04-J. Ensure that calls to chained methods are atomic&lt;/a&gt;.
+        &lt;/p&gt;</description>
+    <tag>multi-threading</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='DM_DEFAULT_ENCODING' priority='INFO'>
     <name>I18n - Reliance on default encoding</name>
     <configKey>DM_DEFAULT_ENCODING</configKey>
@@ -5789,7 +5842,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <tag>bad-practice</tag>
   </rule>
   <rule key='THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION' priority='MAJOR'>
-    <name>Bad practice - Method lists Exception in its throws clause.</name>
+    <name>Bad practice - Method lists Exception in its throws clause, but it could be more specific.</name>
     <configKey>THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION</configKey>
     <description>&lt;p&gt;
         Method lists Exception in its throws clause.&lt;br&gt;
@@ -5804,7 +5857,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <tag>bad-practice</tag>
   </rule>
   <rule key='THROWS_METHOD_THROWS_CLAUSE_THROWABLE' priority='MAJOR'>
-    <name>Bad practice - Method lists Throwable in its throws clause.</name>
+    <name>Bad practice - Method lists Throwable in its throws clause, but it could be more specific.</name>
     <configKey>THROWS_METHOD_THROWS_CLAUSE_THROWABLE</configKey>
     <description>&lt;p&gt;
         Method lists Throwable in its throws clause.&lt;br&gt;
@@ -5846,7 +5899,10 @@ Using floating-point variables should not be used as loop counters, as they are 
       method behaves exactly as expected.
       &lt;p&gt;
       See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC02-J.+Do+not+base+security+checks+on+untrusted+sources"&gt;SEC02-J. Do not base security checks on untrusted sources&lt;/a&gt;.
-      &lt;/p&gt;</description>
+      &lt;/p&gt;
+      The &lt;code&gt;java.security.AccessController&lt;/code&gt; class, which contains the &lt;code&gt;doPrivileged&lt;/code&gt; methods,
+      got deprecated in Java 17 (see &lt;a href="https://openjdk.org/jeps/411"&gt;JEP 411&lt;/a&gt;), and removed in Java 24 (see &lt;a href="https://openjdk.org/jeps/486"&gt;JEP 486&lt;/a&gt;).
+      For this reason, this bug isn't reported in classes targeted Java 17 and above.</description>
     <tag>malicious-code</tag>
   </rule>
   <rule key='ASE_ASSERTION_WITH_SIDE_EFFECT' priority='MAJOR'>
