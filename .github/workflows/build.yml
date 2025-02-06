@@ -51,8 +51,8 @@ jobs:
           path: |
             ~/.sonar/cache
             ~/.sonar/orchestrator/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          key: ${{ runner.os }}-sonar-${{ matrix.SONAR_SERVER_VERSION }}
+          restore-keys: ${{ runner.os }}-sonar-${{ matrix.SONAR_SERVER_VERSION }}
       - name: Build
         run: |
           ./mvnw verify -B -e -V \
