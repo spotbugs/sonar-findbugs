@@ -1440,6 +1440,9 @@
     <Bug pattern='AA_ASSERTION_OF_ARGUMENTS' />
   </Match>
   <Match>
+    <Bug pattern='HSM_HIDING_METHOD' />
+  </Match>
+  <Match>
     <Bug pattern='PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_CLASS_NAMES' />
   </Match>
   <Match>
@@ -1453,5 +1456,14 @@
   </Match>
   <Match>
     <Bug pattern='ENV_USE_PROPERTY_INSTEAD_OF_ENV' />
+  </Match>
+  <Match>
+    <Bug pattern='AT_NONATOMIC_64BIT_PRIMITIVE' />
+  </Match>
+  <Match>
+    <Bug pattern='AT_STALE_THREAD_WRITE_OF_PRIMITIVE' />
+  </Match>
+  <Match>
+    <Bug pattern='AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE' />
   </Match>
 </FindBugsFilter>
