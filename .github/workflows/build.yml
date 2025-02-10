@@ -107,7 +107,7 @@ jobs:
         uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties
-          description: Use SpotBugs 4.9.0, sb-contrib 7.6.8, and findsecbugs 1.13.0
+          description: Use SpotBugs 4.9.1, sb-contrib 7.6.8, and findsecbugs 1.13.0
           minimal-supported-sq-version: 9.9
           latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
