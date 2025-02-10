@@ -1473,6 +1473,9 @@
     <Bug pattern='OCP_OVERLY_CONCRETE_PARAMETER' />
   </Match>
   <Match>
+    <Bug pattern='OCP_OVERLY_CONCRETE_COLLECTION_PARAMETER' />
+  </Match>
+  <Match>
     <Bug pattern='LII_LIST_INDEXED_ITERATING' />
   </Match>
   <Match>
@@ -2355,6 +2358,9 @@
     <Bug pattern='LUI_USE_COLLECTION_ADD' />
   </Match>
   <Match>
+    <Bug pattern='LUI_VACUOUS_ADDALL' />
+  </Match>
+  <Match>
     <Bug pattern='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' />
   </Match>
   <Match>
@@ -2374,6 +2380,12 @@
   </Match>
   <Match>
     <Bug pattern='FII_AVOID_SIZE_ON_COLLECTED_STREAM' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_USE_COPYCONSTRUCTOR' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_AVOID_MAP_BEFORE_LIMIT' />
   </Match>
   <Match>
     <Bug pattern='SUI_CONTAINS_BEFORE_ADD' />

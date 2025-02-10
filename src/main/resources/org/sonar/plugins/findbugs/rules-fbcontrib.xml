@@ -130,6 +130,36 @@ private void appendToList(List&amp;lt;String&amp;gt; list) {
 			&lt;p&gt;IDEs tend to have tools to help generalize parameters.  For example, in Eclipse, the refactoring tool &lt;a href="http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2Freference%2Fref-menu-refactor.htm"&gt;Generalize Declared Type&lt;/a&gt; helps find an appropriate level of concreteness.&lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
+  <rule key='OCP_OVERLY_CONCRETE_COLLECTION_PARAMETER' priority='INFO'>
+    <name>Style - Method needlessly defines Collection parameter with concrete classes</name>
+    <configKey>OCP_OVERLY_CONCRETE_COLLECTION_PARAMETER</configKey>
+    <description>&lt;p&gt;This method uses specific collection interface/classes for parameters when only methods defined in the
+            Collection class are used. Consider increasing the abstraction of the interface to
+            make low impact changes easier to accomplish in the future.&lt;/p&gt;
+
+            &lt;p&gt;Take the following example:&lt;br/&gt;
+&lt;pre&gt;&lt;code&gt;
+private void printList(List&amp;lt;String&amp;gt; list) {
+    for (String s : list) {
+        System.out.println(s);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+                The parameter list is currently defined as an &lt;code&gt;List&lt;/code&gt;, which is a specific collection interface.
+                Specifying &lt;code&gt;List&lt;/code&gt; is unnecessary here, because we aren't using any &lt;code&gt;AList&lt;/code&gt;-specific methods (like &lt;code&gt;get(0)&lt;/code&gt;).
+                Instead of using the concrete definition, it is better to do something like:&lt;br/&gt;
+&lt;pre&gt;&lt;code&gt;
+private void printList(Collection&amp;lt;String&amp;gt; list) {
+    ...
+&lt;/code&gt;&lt;/pre&gt;
+                If the design ever changes, e.g. a &lt;code&gt;Set&lt;/code&gt; is used instead, this code won't have to change.
+
+            &lt;/p&gt;
+
+            &lt;p&gt;IDEs tend to have tools to help generalize parameters.  For example, in Eclipse, the refactoring tool &lt;a href="http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jdt.doc.user%2Freference%2Fref-menu-refactor.htm"&gt;Generalize Declared Type&lt;/a&gt; helps find an appropriate level of concreteness.&lt;/p&gt;</description>
+    <tag>style</tag>
+  </rule>
   <rule key='LII_LIST_INDEXED_ITERATING' priority='INFO'>
     <name>Style - Method uses integer based for loops to iterate over a List</name>
     <configKey>LII_LIST_INDEXED_ITERATING</configKey>
@@ -3604,6 +3634,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='LUI_VACUOUS_ADDALL' priority='MAJOR'>
+    <name>Correctness - Method passes an empty collection to.addAll()</name>
+    <configKey>LUI_VACUOUS_ADDALL</configKey>
+    <description>&lt;p&gt;This method creates a empty collection only to pass it into an addAll call of another collection.
+        As this collection has no elements, the call is useless.
+        &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='FII_AVOID_CONTAINS_ON_COLLECTED_STREAM' priority='MAJOR'>
     <name>Correctness - Method calls contains() on a collected lambda expression</name>
     <configKey>FII_AVOID_CONTAINS_ON_COLLECTED_STREAM</configKey>
@@ -3708,6 +3747,33 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         baubles.stream().filter(b -&gt; b.getName("orb")).distinct().count()
         &lt;/pre&gt;&lt;/code&gt;
         &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='FII_USE_COPYCONSTRUCTOR' priority='MAJOR'>
+    <name>Correctness - Method calls collect() directly on a stream</name>
+    <configKey>FII_USE_COPYCONSTRUCTOR</configKey>
+    <description>Code perform a "copy constructor" operation by using streams, when it is more simply done
+        	by passing the source collection into a new Collection constructors argument. Use, 
+        	
+        	&lt;code&gt;&lt;pre&gt;
+        		Set&lt;String&gt; s = new HashSet&lt;&gt;(myArrayList);
+        	&lt;/pre&gt;&lt;/code&gt;
+
+            instead of:
+        	
+        	&lt;code&gt;&lt;pre&gt;
+        		Set&lt;String&gt; s = myArrayList.stream().collect(Collectors.toSet);
+        	&lt;/pre&gt;&lt;/code&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='FII_AVOID_MAP_BEFORE_LIMIT' priority='MAJOR'>
+    <name>Correctness - Method calls limit() directly after calling map</name>
+    <configKey>FII_AVOID_MAP_BEFORE_LIMIT</configKey>
+    <description>Method calls a map() operation on a stream directly before a limit(n) call, as the map 
+            will not change the count or order of the objects, it is quicker to call limit before the
+            map, so that any objects passed the limit don't need to have a mapping done.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
