@@ -28,8 +28,8 @@ public final class FindbugsRulesDefinition implements RulesDefinition {
 
   public static final String REPOSITORY_KEY = "findbugs";
   public static final String REPOSITORY_NAME = "FindBugs";
-  public static final int RULE_COUNT = 489;
-  public static final int DEACTIVED_RULE_COUNT = 6;
+  public static final int RULE_COUNT = 490;
+  public static final int DEACTIVED_RULE_COUNT = 5;
 
   @Override
   public void define(Context context) {

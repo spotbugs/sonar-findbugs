@@ -20,6 +20,7 @@
 package org.sonar.plugins.findbugs;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.server.rule.RulesDefinition;
@@ -68,6 +69,7 @@ class FindbugsRulesDefinitionTest {
    * In case that rule is removed in a future release, this unit test will need to be updated to test against another deprecated rule
    */
   @Test
+  @Disabled("No deprecated rule as of SpotBugs 4.9.2")
   void testDeprecatedRules() {
     Rule rule = repository.rule("TLW_TWO_LOCK_NOTIFY");
     
