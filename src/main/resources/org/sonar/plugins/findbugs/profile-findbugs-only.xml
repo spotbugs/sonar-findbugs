@@ -408,9 +408,6 @@
     <Bug pattern='TLW_TWO_LOCK_WAIT' />
   </Match>
   <Match>
-    <Bug pattern='TLW_TWO_LOCK_NOTIFY' />
-  </Match>
-  <Match>
     <Bug pattern='UW_UNCOND_WAIT' />
   </Match>
   <Match>
@@ -954,9 +951,6 @@
     <Bug pattern='BIT_IOR' />
   </Match>
   <Match>
-    <Bug pattern='LI_LAZY_INIT_INSTANCE' />
-  </Match>
-  <Match>
     <Bug pattern='LI_LAZY_INIT_STATIC' />
   </Match>
   <Match>
@@ -1027,9 +1021,6 @@
   </Match>
   <Match>
     <Bug pattern='BOA_BADLY_OVERRIDDEN_ADAPTER' />
-  </Match>
-  <Match>
-    <Bug pattern='BRSA_BAD_RESULTSET_ACCESS' />
   </Match>
   <Match>
     <Bug pattern='SQL_BAD_RESULTSET_ACCESS' />
@@ -1171,9 +1162,6 @@
   </Match>
   <Match>
     <Bug pattern='NP_NULL_INSTANCEOF' />
-  </Match>
-  <Match>
-    <Bug pattern='BC_NULL_INSTANCEOF' />
   </Match>
   <Match>
     <Bug pattern='BC_IMPOSSIBLE_INSTANCEOF' />
@@ -1465,5 +1453,20 @@
   </Match>
   <Match>
     <Bug pattern='AT_NONATOMIC_OPERATIONS_ON_SHARED_VARIABLE' />
+  </Match>
+  <Match>
+    <Bug pattern='US_USELESS_SUPPRESSION_ON_CLASS' />
+  </Match>
+  <Match>
+    <Bug pattern='US_USELESS_SUPPRESSION_ON_FIELD' />
+  </Match>
+  <Match>
+    <Bug pattern='US_USELESS_SUPPRESSION_ON_METHOD' />
+  </Match>
+  <Match>
+    <Bug pattern='US_USELESS_SUPPRESSION_ON_METHOD_PARAMETER' />
+  </Match>
+  <Match>
+    <Bug pattern='US_USELESS_SUPPRESSION_ON_PACKAGE' />
   </Match>
 </FindBugsFilter>

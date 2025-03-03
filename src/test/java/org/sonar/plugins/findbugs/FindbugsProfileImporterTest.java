@@ -116,7 +116,7 @@ class FindbugsProfileImporterTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
     Collection<BuiltInActiveRule> results = profile.rules();
 
-    assertThat(results).hasSize(20);
+    assertThat(results).hasSize(19);
     assertThat(findActiveRule(profile, FindbugsRulesDefinition.REPOSITORY_KEY, "EC_INCOMPATIBLE_ARRAY_COMPARE")).isNotNull();
     assertThat(findActiveRule(profile, FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST_OF_TOARRAY")).isNotNull();
   }
@@ -132,7 +132,7 @@ class FindbugsProfileImporterTest {
     BuiltInQualityProfile profile = context.profile(Java.KEY, TEST_PROFILE);
     Collection<BuiltInActiveRule> results = profile.rules();
 
-    assertThat(results).hasSize(160);
+    assertThat(results).hasSize(158);
     assertThat(findActiveRule(profile, FindbugsRulesDefinition.REPOSITORY_KEY, "BC_IMPOSSIBLE_DOWNCAST")).isNotNull();
   }
 
@@ -182,8 +182,8 @@ class FindbugsProfileImporterTest {
   @ParameterizedTest
   @CsvSource({
       "/org/sonar/plugins/findbugs/findbugsXmlWithUnknownRule.xml,1",
-      "/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCategory.xml,160",
-      "/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCode.xml,12"})
+      "/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCategory.xml,158",
+      "/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCode.xml,11"})
   void profileImport(String profilePath, int expectedSize) {
   	NewBuiltInQualityProfile newProfile = context.createBuiltInQualityProfile(TEST_PROFILE, Java.KEY);
     InputStream uncorrectFindbugsXml = getClass().getResourceAsStream(profilePath);
