@@ -15,8 +15,8 @@ import {promisify} from 'util'
 import {readFile} from 'fs'
 import {update} from './update'
 
-async function md5sum(path: string): Promise<string> {
-  return createHash('md5')
+async function sha256(path: string): Promise<string> {
+  return createHash('sha256')
     .update(await promisify(readFile)(path, 'utf-8'), 'utf8')
     .digest('hex')
 }
@@ -52,10 +52,10 @@ async function run(): Promise<void> {
       throw new Error(`Unsupproted publicVersion found: ${publicVersion}`)
     }
 
-    const sourceHash = md5sum(propFile)
+    const sourceHash = sha256(propFile)
     const prop = await parseFile(propFile)
     await write(prop, propFile)
-    const formattedHash = md5sum(propFile)
+    const formattedHash = sha256(propFile)
     let ref = 'heads/master'
     if (sourceHash !== formattedHash) {
       core.debug(
