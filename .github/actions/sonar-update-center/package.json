@@ -44,7 +44,7 @@
     "js-yaml": "4.1.0",
     "nock": "14.0.1",
     "prettier": "3.5.3",
-    "ts-jest": "29.2.5",
+    "ts-jest": "29.2.6",
     "typescript": "5.7.3"
   }
 }
