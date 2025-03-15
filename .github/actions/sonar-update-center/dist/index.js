@@ -339,9 +339,9 @@ const path_1 = __nccwpck_require__(6928);
 const util_1 = __nccwpck_require__(9023);
 const fs_1 = __nccwpck_require__(9896);
 const update_1 = __nccwpck_require__(6719);
-function sha256(path) {
+function sha512(path) {
     return __awaiter(this, void 0, void 0, function* () {
-        return (0, crypto_1.createHash)('sha256')
+        return (0, crypto_1.createHash)('sha512')
             .update(yield (0, util_1.promisify)(fs_1.readFile)(path, 'utf-8'), 'utf8')
             .digest('hex');
     });
@@ -371,10 +371,10 @@ function run() {
             if (!publicVersion || publicVersion.includes(',')) {
                 throw new Error(`Unsupproted publicVersion found: ${publicVersion}`);
             }
-            const sourceHash = sha256(propFile);
+            const sourceHash = sha512(propFile);
             const prop = yield (0, promisified_properties_1.parseFile)(propFile);
             yield (0, promisified_properties_1.write)(prop, propFile);
-            const formattedHash = sha256(propFile);
+            const formattedHash = sha512(propFile);
             let ref = 'heads/master';
             if (sourceHash !== formattedHash) {
                 core.debug('This is the first run for this sonarqube plugin, so commit the format change first to ease the PR review...');
