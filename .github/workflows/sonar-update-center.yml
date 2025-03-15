@@ -25,7 +25,7 @@ jobs:
         with:
           ref: ${{ steps.condval.outputs.value }}
       - name: Read .nvmrc
-        run: echo "NVMRC=$(cat .nvmrc) >> $GITHUB_OUTPUT
+        run: echo "NVMRC=$(cat .nvmrc)" >> $GITHUB_OUTPUT
         id: nvm
       - name: Setup node
         uses: actions/setup-node@v4
