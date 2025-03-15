@@ -25,6 +25,6 @@ integrationTest('searchLatestMinorVersion()', async () => {
   const scope = nock('https://api.github.com')
     .get('/repos/SonarSource/sonarqube/releases')
     .reply(200, releases)
-  expect(await searchLatestMinorVersion(token)).toBe('8.5.*')
+  expect(await searchLatestMinorVersion(token)).toBe('25.3.*')
   scope.done()
 })
