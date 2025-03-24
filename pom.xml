@@ -168,43 +168,12 @@
       <groupId>org.sonarsource.java</groupId>
       <artifactId>sonar-java-plugin</artifactId>
       <version>${sonar-java.version}</version>
+      <!-- sonar-java-plugin shades its own dependencies. We're excluding them so they aren't bundled twice -->
       <exclusions>
         <exclusion>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>external-reports</artifactId>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>java-checks</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.analyzer-commons</groupId>
-          <artifactId>sonar-xml-parsing</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.analyzer-commons</groupId>
-          <artifactId>sonar-analyzer-commons</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>java-checks-aws</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>java-jsp</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.analyzer-commons</groupId>
-          <artifactId>sonar-performance-measure</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>java-surefire</artifactId>
-        </exclusion>
-        <!--<exclusion>
-          <groupId>org.sonarsource.java</groupId>
-          <artifactId>jdt-package</artifactId>
-        </exclusion>-->
       </exclusions>
     </dependency>
 
@@ -451,7 +420,8 @@
           <pluginClass>org.sonar.plugins.findbugs.FindbugsPlugin</pluginClass>
           <useChildFirstClassLoader>false</useChildFirstClassLoader>
           <requiredForLanguages>java,scala,jsp,clojure,kotlin</requiredForLanguages>
-          <skipDependenciesPackaging>true</skipDependenciesPackaging>
+          <!-- Make the plugin compatible with SonarQube 9.9 LTS by requesting the corresponding plugin API version -->
+          <pluginApiMinVersion>9.14.0.375</pluginApiMinVersion>
         </configuration>
       </plugin>
       <plugin>
@@ -475,37 +445,6 @@
                   </files>
                 </requireFilesSize>
               </rules>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.6.0</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <transformers>
-                <transformer  implementation="org.apache.maven.plugins.shade.resource.ApacheNoticeResourceTransformer">
-                  <addHeader>false</addHeader>
-                </transformer>
-              </transformers>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/*.SF</exclude>
-                    <exclude>META-INF/*.DSA</exclude>
-                    <exclude>META-INF/*.RSA</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
           </execution>
         </executions>
