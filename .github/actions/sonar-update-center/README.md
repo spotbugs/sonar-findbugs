@@ -25,21 +25,21 @@ Note that you needs to review the created PR manually, and mark it as ready-to-r
 
 ## How to configure
 
-In your workflow file under `.github/workdlows`, add a step using this plugin:
+In your workflow file under `.github/workflows`, add a step using this plugin:
 
 ```yml
       # Assume that ${{ github.event.release.tag_name }} follows semver2 and has no 'v' prefix
       # e.g. 1.0.0, 2.3.4
-      - uses: KengoTODA/sonar-update-center-action@main
+      - uses: ./.github/actions/sonar-update-center
         with:
           prop-file: findbugs.properties # the name of your target file
-          description: Use SpotBugs 4.2.0, sb-contrib 7.4.7, and findsecbugs 1.11.0 # The description of your release
-          minimal-supported-sq-version: 7.9 # The minimal supported SonarQube version
+          description: Use SpotBugs 4.9.3, sb-contrib 7.6.8, and findsecbugs 1.13.0 # The description of your release
+          minimal-supported-sq-version: 9.9 # The minimal supported SonarQube version
           latest-supported-sq-version: LATEST # The latest supported SonarQube version, default is 'LATEST'
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }} # The URL of changelog for your release
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
-          public-version: ${{ github.event.release.tag_name }} # The version to publish
           sonar-cloud-url: https://sonarcloud.io/dashboard?branch=${{ github.event.release.tag_name }}&id=com.github.spotbugs%3Asonar-findbugs-plugin # The URL of SQ analysis result
+          public-version: ${{ github.event.release.tag_name }} # The version to publish
           github-token: ${{ secrets.PAT_TO_FORK }} # The GitHub Personal Access Token
           discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }} # The User API key for https://community.sonarsource.com/
           skip-creating-pull-request: false # Skip creating a PR
