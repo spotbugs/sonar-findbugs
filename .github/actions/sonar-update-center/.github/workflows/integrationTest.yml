@@ -22,7 +22,7 @@ jobs:
           npm ci
           npm run all
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TO_FORK }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: LouisBrunner/checks-action@v2.0.0
         if: always()
         with:
@@ -48,7 +48,7 @@ jobs:
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.3.0/sonar-findbugs-plugin-4.3.0.jar
           public-version: 4.3.0
           sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs:sonar-findbugs-plugin
-          github-token: ${{ secrets.PAT_TO_FORK }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-creating-pull-request: true
       - uses: actions/upload-artifact@v4
         with:
