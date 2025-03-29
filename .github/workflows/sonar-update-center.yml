@@ -57,12 +57,15 @@ jobs:
           prop-file: findbugs.properties
           description: Use SpotBugs 4.9.3, sb-contrib 7.6.8, and findsecbugs 1.13.0
           minimal-supported-sq-version: 9.9
+          latest-supported-sq-version: LATEST
           changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/4.3.0
           download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/4.3.0/sonar-findbugs-plugin-4.3.0.jar
           sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs:sonar-findbugs-plugin
           public-version: 4.3.0
           github-token: ${{ secrets.PAT_TO_FORK }}
+          discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
           skip-creating-pull-request: true
+          skip-announcing: true
       - uses: actions/upload-artifact@v4
         with:
           name: updated-properties-file
