@@ -34,6 +34,7 @@ jobs:
           cache: npm
           cache-dependency-path: .github/actions/sonar-update-center/package-lock.json
       - run: |
+          NODE_DEBUG=nock:*
           npm ci
           npm run all
         env:
