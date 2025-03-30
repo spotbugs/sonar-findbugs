@@ -32,4 +32,5 @@ Check [Sonatype official page](http://central.sonatype.org/pages/apache-maven.ht
 
 ## Release to SonarQube Marketplace
 
-[sonar-update-center-action](https://github.com/KengoTODA/sonar-update-center-action/) will handle necessary procedures. Please confirm that the PR is made in [SonarSource/sonar-update-center-properties](https://github.com/SonarSource/sonar-update-center-properties/).
+To release to https://github.com/SonarSource/sonar-update-center-properties/, either use the forked copy in spotbugs and manually apply updates and send a pull request
+or manually fork a copy to your personal account and do the same.
