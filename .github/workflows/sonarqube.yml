@@ -22,11 +22,11 @@ permissions:
   pull-requests: write
   statuses: read
 
-jobs:   
+jobs:
   build:
     # Forked repos do not have access to the Sonar account
     if: github.repository == 'spotbugs/sonar-findbugs'
-    environment: ${{ (github.event.pull_request.author_association == 'OWNER' || github.event.pull_request.author_association == 'COLLABORATOR' || github.event.pull_request.author_association == 'MEMBER') && 'internal' | 'external' }}
+    environment: ${{ (github.event.pull_request.author_association == 'OWNER' || github.event.pull_request.author_association == 'COLLABORATOR' || github.event.pull_request.author_association == 'MEMBER') && 'internal' || 'external' }}
     runs-on: ubuntu-latest
     env:
       # previous LTS version
