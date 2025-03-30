@@ -45,7 +45,7 @@ export async function update(
       ',LATEST]',
       `,${latestMinorVersion}]`
     )
-    core.debug(
+    core.info(
       `Updating ${prevPublicVersions}.sqVersions from ${prevSqVersions} to ${updatedPrevSqVersions}...`
     )
     copiedProp.set(`${prevPublicVersions}.sqVersions`, updatedPrevSqVersions)
