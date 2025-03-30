@@ -45,7 +45,7 @@ export async function update(
       ',LATEST]',
       `,${latestMinorVersion}]`
     )
-    core.info("Version seen is ${latestMinorVersion}")
+    core.info(`Version seen is ${latestMinorVersion}`)
     core.info(
       `Updating ${prevPublicVersions}.sqVersions from ${prevSqVersions} to ${updatedPrevSqVersions}...`
     )
