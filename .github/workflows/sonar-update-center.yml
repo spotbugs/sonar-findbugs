@@ -66,6 +66,8 @@ jobs:
           discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
           skip-creating-pull-request: true
           skip-announcing: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: updated-properties-file
