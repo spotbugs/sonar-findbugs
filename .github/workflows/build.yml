@@ -98,19 +98,3 @@ jobs:
           asset_path: ./target/sonar-findbugs-plugin.jar
           asset_name: sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar
           asset_content_type: application/zip
-      - name: Request SonarSource to release the plugin to marketplace
-        if: github.event_name == 'release' && github.event.release.prerelease == false
-        uses: ./.github/actions/sonar-update-center
-        with:
-          prop-file: findbugs.properties
-          description: Use SpotBugs 4.9.3, sb-contrib 7.6.8, and findsecbugs 1.13.0
-          minimal-supported-sq-version: 9.9
-          latest-supported-sq-version: LATEST
-          changelog-url: https://github.com/spotbugs/sonar-findbugs/releases/tag/${{ github.event.release.tag_name }}
-          download-url: https://repo.maven.apache.org/maven2/com/github/spotbugs/sonar-findbugs-plugin/${{ github.event.release.tag_name }}/sonar-findbugs-plugin-${{ github.event.release.tag_name }}.jar # The URL to download your plugin
-          sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs:sonar-findbugs-plugin
-          public-version: ${{ github.event.release.tag_name }}
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
-          skip-creating-pull-request: false
-          skip-announcing: true

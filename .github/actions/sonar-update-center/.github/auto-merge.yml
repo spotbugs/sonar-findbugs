@@ -1,6 +1,0 @@
-minApprovals:
-  NONE: 0
-requiredLabels:
-  - dependencies
-updateBranch: true
-mergeMethod: rebase
