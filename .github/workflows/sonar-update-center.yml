@@ -13,12 +13,12 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: |
-      (github.event_name != 'pull_request_target' && 'internal') || (
+    environment: >
+      ${{ (github.event_name != 'pull_request_target' && 'internal') || (
       (github.event.pull_request.author_association == 'OWNER' || 
       github.event.pull_request.author_association == 'COLLABORATOR' || 
       github.event.pull_request.author_association == 'MEMBER') && 
-      'internal' || 'external')
+      'internal' || 'external') }}
     steps:
       - name: Decide the ref to check out
         uses: haya14busa/action-cond@v1
