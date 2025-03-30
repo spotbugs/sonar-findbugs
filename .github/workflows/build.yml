@@ -114,3 +114,5 @@ jobs:
           discourse-api-key: ${{ secrets.DISCOURSE_API_KEY }}
           skip-creating-pull-request: false
           skip-announcing: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -31,6 +31,8 @@ jobs:
           sha: ${{ github.event.workflow_run.head_sha }}
           conclusion: ${{ job.status }}
           details_url : https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   integrated-test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'success'
@@ -50,6 +52,8 @@ jobs:
           sonar-cloud-url: https://sonarcloud.io/summary/new_code?id=com.github.spotbugs:sonar-findbugs-plugin
           github-token: ${{ secrets.GITHUB_TOKEN }}
           skip-creating-pull-request: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/upload-artifact@v4
         with:
           name: updated-properties-file
@@ -62,3 +66,5 @@ jobs:
           sha: ${{ github.event.workflow_run.head_sha }}
           conclusion: ${{ job.status }}
           details_url : https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
