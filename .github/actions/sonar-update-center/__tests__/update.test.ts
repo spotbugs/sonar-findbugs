@@ -29,7 +29,7 @@ integrationTest(
       'http://example.com/download/1.0.1.jar'
     )
     scope.done()
-    expect(updated.get('1.0.0.sqVersions')).toBe('[7.9,8.5.*]')
+    expect(updated.get('1.0.0.sqVersions')).toBe('[7.9,25.3.*]')
   }
 )
 
