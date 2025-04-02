@@ -250,7 +250,7 @@
     <dependency>
       <groupId>org.sonarsource.sonarqube</groupId>
       <artifactId>sonar-ws</artifactId>
-      <version>9.9.9.104369</version>
+      <version>25.3.0.104237</version>
       <scope>test</scope>
     </dependency>
     <dependency>
