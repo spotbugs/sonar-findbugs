@@ -21,21 +21,30 @@ package org.sonar.plugins.findbugs;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.sonar.api.Plugin;
 import org.sonar.api.SonarRuntime;
+import org.sonar.api.utils.Version;
 
 class FindbugsPluginTest {
 
-  @Test
-  void testGetExtensions() {
+  @ParameterizedTest
+  @CsvSource({
+    "11.3,26",
+    // We disable the profile importer and the exporter when the plugin API version is >= 11.4 (since 2025.3 commercial editions)
+    "11.4,24"
+  })
+  void testGetExtensions(String version, int expectedExtensionsCount) {
     SonarRuntime runtime = mock(SonarRuntime.class);
+    when(runtime.getApiVersion()).thenReturn(Version.parse(version));
     Plugin.Context ctx = new Plugin.Context(runtime);
 
     FindbugsPlugin plugin = new FindbugsPlugin();
     plugin.define(ctx);
 
-    assertEquals(26, ctx.getExtensions().size(), "extensions count");
+    assertEquals(expectedExtensionsCount, ctx.getExtensions().size(), "extensions count");
   }
 }
