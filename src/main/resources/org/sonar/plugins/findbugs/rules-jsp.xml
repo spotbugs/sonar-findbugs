@@ -21,8 +21,12 @@ attacker gets the ability to execute any code.
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://resources.infosecinstitute.com/file-inclusion-attacks/"&gt;InfosecInstitute: File Inclusion Attacks&lt;/a&gt;&lt;br/&gt;
 &lt;a href="http://projects.webappsec.org/w/page/13246955/Remote%20File%20Inclusion"&gt;WASC-05: Remote File Inclusion&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/917.html"&gt;CWE-917: Improper Neutralization of Special Elements used in an Expression Language Statement ('Expression Language Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>jsp</tag>
     <tag>security</tag>
   </rule>
@@ -52,6 +56,7 @@ attacker gets the ability to execute any code.
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/95.html"&gt;CWE-95: Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/917.html"&gt;CWE-917: Improper Neutralization of Special Elements used in an Expression Language Statement ('Expression Language Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
@@ -164,11 +169,13 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
 &lt;a href="https://www.w3.org/TR/xslt"&gt;w3.org XSL Transformations (XSLT) Version 1.0&lt;/a&gt; : w3c specification&lt;br/&gt;
 [3] &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br/&gt;
 [4] &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
     <tag>owasp-a4</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>jsp</tag>
     <tag>security</tag>
   </rule>
