@@ -429,7 +429,7 @@ Detailed information for a proper implementation is available at:
 &lt;/p&gt;
 &lt;br/&gt;
 &lt;p&gt;
-    &lt;b&gt;Solution (TrustMangager based on a keystore):&lt;/b&gt;&lt;br/&gt;
+    &lt;b&gt;Solution (TrustManager based on a keystore):&lt;/b&gt;&lt;br/&gt;
 &lt;pre&gt;KeyStore ks = //Load keystore containing the certificates trusted
 
 SSLContext sc = SSLContext.getInstance("TLS");
@@ -611,6 +611,7 @@ mapped in this way are properly validated before they are used.&lt;/p&gt;
 &lt;a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf"&gt;NIST: Recommendation for Password-Based Key Derivation&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://stackoverflow.com/q/22580853/89769"&gt;Stackoverflow: Reliable implementation of PBKDF2-HMAC-SHA256 for Java&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/328.html"&gt;CWE-328: Use of Weak Hash&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
@@ -676,6 +677,7 @@ uses. &lt;b&gt;PBKDF2&lt;/b&gt; should be used to hash password for example.&lt;
 &lt;a href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-132.pdf"&gt;NIST: Recommendation for Password-Based Key Derivation&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://stackoverflow.com/q/22580853/89769"&gt;Stackoverflow: Reliable implementation of PBKDF2-HMAC-SHA256 for Java&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/328.html"&gt;CWE-328: Use of Weak Hash&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
@@ -814,7 +816,6 @@ contains no unauthorized path characters (e.g., / \), and refers to an authorize
 &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC-33: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://capec.mitre.org/data/definitions/126.html"&gt;CAPEC-126: Path Traversal&lt;/a&gt;&lt;br/&gt;
-&lt;a href="https://cwe.mitre.org/data/definitions/22.html"&gt;CWE-22: Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a4</tag>
     <tag>wasc</tag>
@@ -2455,9 +2456,11 @@ In general, method evaluating OGNL expression should not receive user input. It 
     &lt;a href="https://blog.gdssecurity.com/labs/2017/3/27/an-analysis-of-cve-2017-5638.html"&gt;Gotham Digital Science: An Analysis Of CVE-2017-5638&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://struts.apache.org/docs/s2-016.html"&gt;Apache Struts2: Vulnerability S2-016&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://struts.apache.org/docs/ognl.html"&gt;Apache Struts 2 Documentation: OGNL&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='GROOVY_SHELL' priority='CRITICAL'>
@@ -2487,7 +2490,11 @@ In general, method evaluating Groovy expression should not receive user input fr
     &lt;a href="https://github.com/orangetw/awesome-jenkins-rce-2019"&gt;Jenkins RCE payloads&lt;/a&gt; by Orange Tsai&lt;br/&gt;
     &lt;a href="https://github.com/adamyordan/cve-2019-1003000-jenkins-rce-poc"&gt;POC for CVE-2019-1003001&lt;/a&gt; by Adam Jordan&lt;br/&gt;
     &lt;a href="https://github.com/welk1n/exploiting-groovy-in-Java/"&gt;Various payloads of exploiting Groovy code evaluation&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>owasp-a1</tag>
+    <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='HTTP_RESPONSE_SPLITTING' priority='INFO'>
@@ -2652,6 +2659,7 @@ In this situation, the method &lt;code&gt;Integer.toHexString()&lt;/code&gt; sho
 &lt;a href="http://projects.webappsec.org/w/page/13246945/Insufficient%20Transport%20Layer%20Protection"&gt;WASC-04: Insufficient Transport Layer Protection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://docs.hazelcast.org/docs/3.5/manual/html/encryption.html"&gt;Hazelcast Documentation: Encryption&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
@@ -2781,6 +2789,7 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.nist.gov/news-events/news/2005/06/nist-withdraws-outdated-data-encryption-standard"&gt;NIST Withdraws Outdated Data Encryption Standard&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
@@ -3008,7 +3017,7 @@ the XSS protection rules defined in the OWASP XSS Prevention Cheat Sheet.
     <configKey>BLOWFISH_KEY_SIZE</configKey>
     <description>&lt;p&gt;
 The Blowfish cipher supports key sizes from 32 bits to 448 bits. A small key size makes the ciphertext vulnerable to brute force attacks.
-At least 128 bits of entropy should be used when generating the key if use of Blowfish is required.
+At least 128 bits of entropy should be used when generating the key if the use of Blowfish is required.
 &lt;/p&gt;
 &lt;p&gt;
 If the algorithm can be changed, the AES block cipher should be used instead.
@@ -3254,7 +3263,7 @@ class UserController {
     &lt;ul&gt;
         &lt;li&gt;Data transfer objects should be used instead including only the parameters needed as input/response to/from the API.&lt;/li&gt;
         &lt;li&gt;Sensitive parameters should be removed properly before transferring to UI.&lt;/li&gt;
-        &lt;li&gt;Data should be persisted in database only after proper sanitisation checks.&lt;/li&gt;
+        &lt;li&gt;Data should be persisted in database only after proper sanitization checks.&lt;/li&gt;
     &lt;/ul&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -3334,7 +3343,7 @@ class UserController {
     &lt;ul&gt;
         &lt;li&gt;Data transfer objects should be used instead including only the parameters needed as input/response to/from the API.&lt;/li&gt;
         &lt;li&gt;Sensitive parameters should be removed properly before transferring to UI.&lt;/li&gt;
-        &lt;li&gt;Data should be persisted in database only after proper sanitisation checks.&lt;/li&gt;
+        &lt;li&gt;Data should be persisted in database only after proper sanitization checks.&lt;/li&gt;
     &lt;/ul&gt;
 &lt;/p&gt;
 &lt;p&gt;
@@ -3466,6 +3475,7 @@ The solution is to avoid using XMLDecoder to parse content from an untrusted sou
 &lt;a href="http://blog.diniscruz.com/2013/08/using-xmldecoder-to-execute-server-side.html"&gt;Dinis Cruz Blog: Using XMLDecoder to execute server-side Java Code on a Restlet application&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://securityblog.redhat.com/2014/01/23/java-deserialization-flaws-part-2-xml-deserialization/"&gt;RedHat blog : Java deserialization flaws: Part 2, XML deserialization&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://cwe.mitre.org/data/definitions/20.html"&gt;CWE-20: Improper Input Validation&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/502.html"&gt;CWE-502: Deserialization of Untrusted Data&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>security</tag>
@@ -3539,9 +3549,11 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
 &lt;a href="https://csrc.nist.gov/projects/block-cipher-techniques/bcm/modes-develoment#01"&gt;NIST: Authenticated Encryption Modes&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://en.wikipedia.org/wiki/Block_cipher_modes_of_operation#Electronic_codebook_.28ECB.29"&gt;Wikipedia: Block cipher modes of operation&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://csrc.nist.gov/publications/detail/sp/800-38a/final"&gt;NIST: Recommendation for Block Cipher Modes of Operation&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/327.html"&gt;CWE-327: Use of a Broken or Risky Cryptographic Algorithm&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='PADDING_ORACLE' priority='MAJOR'>
@@ -3572,6 +3584,7 @@ byte[] cipherText = c.doFinal(plainText);&lt;/pre&gt;
     &lt;a href="https://csrc.nist.gov/projects/block-cipher-techniques/bcm/modes-develoment#01"&gt;NIST: Authenticated Encryption Modes&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://capec.mitre.org/data/definitions/463.html"&gt;CAPEC: Padding Oracle Crypto Attack&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/696.html"&gt;CWE-696: Incorrect Behavior Order&lt;/a&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/326.html"&gt;CWE-326: Inadequate Encryption Strength&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a6</tag>
     <tag>cryptography</tag>
@@ -3742,6 +3755,7 @@ fos.write(string.getBytes());
     &lt;a href="https://www.securecoding.cert.org/confluence/display/java/DRD00-J.+Do+not+store+sensitive+information+on+external+storage+%28SD+card%29+unless+encrypted+first"&gt;CERT: DRD00-J: Do not store sensitive information on external storage [...]&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://developer.android.com/guide/topics/data/data-storage.html#filesExternal"&gt;Android Official Doc: Using the External Storage&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.owasp.org/index.php/Mobile_Top_10_2014-M2"&gt;OWASP Mobile Top 10 2014-M2: Insecure Data Storage&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/276.html"&gt;CWE-276: Incorrect Default Permissions&lt;/a&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/312.html"&gt;CWE-312: Cleartext Storage of Sensitive Information&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -3817,6 +3831,7 @@ sendBroadcast(v1);
     &lt;a href="https://developer.android.com/reference/android/content/BroadcastReceiver.html#Security"&gt;Android Official Doc: BroadcastReceiver (Security)&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://developer.android.com/guide/topics/manifest/receiver-element.html"&gt;Android Official Doc: Receiver configuration (see &lt;code&gt;android:permission&lt;/code&gt;)&lt;/a&gt;&lt;br/&gt;
     &lt;sup&gt;[1]&lt;/sup&gt; &lt;a href="https://stackoverflow.com/a/21513368/89769"&gt;StackOverflow: How to set permissions in broadcast sender and receiver in android&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/276.html"&gt;CWE-276: Incorrect Default Permissions&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/925.html"&gt;CWE-925: Improper Verification of Intent by Broadcast Receiver&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/927.html"&gt;CWE-927: Use of Implicit Intent for Sensitive Communication&lt;/a&gt;
 &lt;/p&gt;</description>
@@ -3860,6 +3875,7 @@ create on external storage. See references below for implementation guidelines.
     &lt;a href="https://www.vogella.com/tutorials/AndroidSQLite/article.html#databasetutorial_database"&gt;vogella.com: Android SQLite database and content provider - Tutorial&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.vogella.com/tutorials/AndroidSQLite/article.html#databasetutorial_database"&gt;vogella.com: Android SQLite database and content provider - Tutorial&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://www.owasp.org/index.php/Mobile_Top_10_2014-M2"&gt;OWASP Mobile Top 10 2014-M2: Insecure Data Storage&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/276.html"&gt;CWE-276: Incorrect Default Permissions&lt;/a&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/312.html"&gt;CWE-312: Cleartext Storage of Sensitive Information&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -3904,7 +3920,9 @@ webView.setWebChromeClient(new WebChromeClient() {
     &lt;a href="https://www.securecoding.cert.org/confluence/display/java/DRD15-J.+Consider+privacy+concerns+when+using+Geolocation+API"&gt;CERT: DRD15-J. Consider privacy concerns when using Geolocation API&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://en.wikipedia.org/wiki/W3C_Geolocation_API"&gt;Wikipedia: W3C Geolocation API&lt;/a&gt;&lt;br/&gt;
     &lt;a href="https://w3c.github.io/geolocation-api/"&gt;W3C: Geolocation Specification&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/359.html"&gt;CWE-359: Exposure of Private Personal Information to an Unauthorized Actor&lt;/a&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>android</tag>
     <tag>security</tag>
   </rule>
@@ -3983,6 +4001,7 @@ class FileWriteUtil {
 &lt;p&gt;
     &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
     &lt;a href="https://developer.android.com/reference/android/webkit/WebView.html#addJavascriptInterface%28java.lang.Object,%20java.lang.String%29"&gt;Android Official Doc: &lt;code&gt;WebView.addJavascriptInterface()&lt;/code&gt;&lt;/a&gt;&lt;br/&gt;
+    &lt;a href="https://cwe.mitre.org/data/definitions/285.html"&gt;CWE-285: Improper Authorization&lt;/a&gt;
     &lt;a href="https://cwe.mitre.org/data/definitions/749.html"&gt;CWE-749: Exposed Dangerous Method or Function&lt;/a&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -4088,7 +4107,9 @@ cookie.setHttpOnly(true); //HttpOnly flag
 &lt;a href="https://blog.codinghorror.com/protecting-your-cookies-httponly/"&gt;Coding Horror blog: Protecting Your Cookies: HttpOnly&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/HttpOnly"&gt;OWASP: HttpOnly&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://www.rapid7.com/db/vulnerabilities/http-cookie-http-only-flag"&gt;Rapid7: Missing HttpOnly Flag From Cookie&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/1004.html"&gt;CWE-1004: Sensitive Cookie Without 'HttpOnly' Flag&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='OBJECT_DESERIALIZATION' priority='CRITICAL'>
@@ -4147,7 +4168,7 @@ Avoid deserializing object provided by remote users.
 &lt;b&gt;Solutions:&lt;/b&gt;&lt;br/&gt;
 &lt;p&gt;
 Explicitly define what types and subtypes you want to be available when using polymorphism through JsonTypeInfo.Id.NAME.
-Also, never call &lt;code&gt;ObjectMapper.enableDefaultTyping&lt;/code&gt; (and then &lt;code&gt;readValue&lt;/code&gt; a type that holds a Object or Serializable or Comparable or a known deserialization type).
+Also, never call &lt;code&gt;ObjectMapper.enableDefaultTyping&lt;/code&gt; (and then &lt;code&gt;readValue&lt;/code&gt; a type that holds an Object or Serializable or Comparable or a known deserialization type).
 &lt;/p&gt;
 
 &lt;p&gt;
@@ -4183,7 +4204,9 @@ public class Example {
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://github.com/FasterXML/jackson-databind/issues/1599"&gt;Jackson Deserializer security vulnerability&lt;/a&gt;&lt;br&gt;
 &lt;a href="https://github.com/mbechler/marshalsec"&gt;Java Unmarshaller Security - Turning your data into code execution&lt;/a&gt;&lt;br&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/502.html"&gt;CWE-502: Deserialization of Untrusted Data&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='DESERIALIZATION_GADGET' priority='INFO'>
@@ -4303,11 +4326,13 @@ Path traversal &lt;sup&gt;[3][4]&lt;/sup&gt; are not possible.
 &lt;a href="https://www.w3.org/TR/xslt"&gt;w3.org XSL Transformations (XSLT) Version 1.0&lt;/a&gt; : w3c specification&lt;br/&gt;
 [3] &lt;a href="http://projects.webappsec.org/w/page/13246952/Path%20Traversal"&gt;WASC: Path Traversal&lt;/a&gt;&lt;br/&gt;
 [4] &lt;a href="https://www.owasp.org/index.php/Path_Traversal"&gt;OWASP: Path Traversal&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
     <tag>owasp-a4</tag>
     <tag>wasc</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='URLCONNECTION_SSRF_FD' priority='MAJOR'>
@@ -4379,9 +4404,11 @@ prefer logic-less template engines such as Handlebars or Moustache (See referenc
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://blog.portswigger.net/2015/08/server-side-template-injection.html"&gt;PortSwigger: Server-Side Template Injection &lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://jknack.github.io/handlebars.java/"&gt;Handlebars.java&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='TEMPLATE_INJECTION_FREEMARKER' priority='CRITICAL'>
@@ -4409,9 +4436,11 @@ prefer logic-less template engines such as Handlebars or Moustache (See referenc
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://portswigger.net/research/server-side-template-injection"&gt;PortSwigger: Server-Side Template Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://jknack.github.io/handlebars.java/"&gt;Handlebars.java&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='TEMPLATE_INJECTION_PEBBLE' priority='CRITICAL'>
@@ -4440,9 +4469,11 @@ prefer logic-less template engines such as Handlebars or Moustache (See referenc
 &lt;a href="https://research.securitum.com/server-side-template-injection-on-the-example-of-pebble/"&gt;Server Side Template Injection – on the example of Pebble&lt;/a&gt; by Michał Bentkowski&lt;br/&gt;
 &lt;a href="https://portswigger.net/research/server-side-template-injection"&gt;PortSwigger: Server-Side Template Injection&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://jknack.github.io/handlebars.java/"&gt;Handlebars.java&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/94.html"&gt;CWE-94: Improper Control of Generation of Code ('Code Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='PERMISSIVE_CORS' priority='MAJOR'>
@@ -4465,7 +4496,9 @@ Avoid using * as the value of the Access-Control-Allow-Origin header, which indi
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.w3.org/TR/cors/"&gt;W3C Cross-Origin Resource Sharing&lt;/a&gt;&lt;br/&gt;
 &lt;a href="https://enable-cors.org/"&gt;Enable Cross-Origin Resource Sharing&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/942.html"&gt;CWE-942: Permissive Cross-domain Policy with Untrusted Domains&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='LDAP_ANONYMOUS' priority='MAJOR'>
@@ -4539,9 +4572,11 @@ ctx.search(query, filter,
 (&lt;a href="https://www.blackhat.com/docs/us-16/materials/us-16-Munoz-A-Journey-From-JNDI-LDAP-Manipulation-To-RCE.pdf"&gt;slides&lt;/a&gt; &amp;amp; &lt;a href="https://www.youtube.com/watch?v=Y8a5nB-vy78"&gt;video&lt;/a&gt;) by Alvaro Mu&amp;#xF1;oz and Oleksandr Mirosh&lt;br/&gt;
 &lt;a href="https://community.hpe.com/t5/Security-Research/Introducing-JNDI-Injection-and-LDAP-Entry-Poisoning/ba-p/6885118"&gt;HP Enterprise: Introducing JNDI Injection and LDAP Entry Poisoning&lt;/a&gt; by Alvaro Mu&amp;#xF1;oz&lt;br/&gt;
 &lt;a href="http://blog.trendmicro.com/trendlabs-security-intelligence/new-headaches-how-the-pawn-storm-zero-day-evaded-javas-click-to-play-protection/"&gt;TrendMicro: How The Pawn Storm Zero-Day Evaded Java's Click-to-Play Protection&lt;/a&gt; by Jack Tang
+&lt;a href="https://cwe.mitre.org/data/definitions/90.html"&gt;CWE-90: Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='COOKIE_PERSISTENT' priority='MAJOR'>
@@ -4605,7 +4640,9 @@ Avoid using those methods. If you are looking to encode a URL String or form par
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://www.owasp.org/index.php/Top_10_2010-A3-Broken_Authentication_and_Session_Management"&gt;OWASP Top 10 2010-A3-Broken Authentication and Session Management&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/601.html"&gt;CWE-601: URL Redirection to Untrusted Site ('Open Redirect')&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='INSECURE_SMTP_SSL' priority='MAJOR'>
@@ -4846,7 +4883,9 @@ HttpGet httpget = new HttpGet(uriBuilder.build().toString()); //OK
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://capec.mitre.org/data/definitions/460.html"&gt;CAPEC-460: HTTP Parameter Pollution (HPP)&lt;/a&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/235.html"&gt;CWE-235: Improper Handling of Extra Parameters&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE' priority='INFO'>
@@ -4877,7 +4916,7 @@ The sensitive information may be valuable information on its own (such as a pass
     <name>Security - SMTP Header Injection</name>
     <configKey>SMTP_HEADER_INJECTION</configKey>
     <description>&lt;p&gt;
-Simple Mail Transfer Protocol (SMTP) is a the text based protocol used for email delivery.
+Simple Mail Transfer Protocol (SMTP) is a text based protocol used for email delivery.
 Like with HTTP, headers are separate by new line separator.
 If user input is place in a header line, the application should remove
 or replace new line characters (&lt;code&gt;CR&lt;/code&gt; / &lt;code&gt;LF&lt;/code&gt;).
@@ -5017,8 +5056,8 @@ If the file affected is a configuration, a binary, a script or sensitive data, i
 &lt;/p&gt;
 &lt;p&gt;
 It is possible that another service, running on the same host as your application, gets compromised.
-Services typically run under a different user. A compromised service account could be use to read your configuration, add execution instruction to scripts or alter the data file.
-To limite the damage from other services or local users, you should limited to permission of your application files.
+Services typically run under a different user. A compromised service account could be used to read your configuration, add execution instruction to scripts or alter the data file.
+To limite the damage from other services or local users, you should limit the permission of your application files.
 &lt;/p&gt;
 
 &lt;p&gt;
@@ -5097,7 +5136,7 @@ if(username.toUpperCase().equals("ADMIN")) {
 &lt;/p&gt;
 
 &lt;p&gt;
-Similar characters transformations can occurs with normalization functions.
+Similar characters transformations can occur with normalization functions.
 In the code bellow, the string &lt;code&gt;"BAC\u212AUP"&lt;/code&gt; would cause the condition to be true.
 When the normalization transformation is applied, the character `\u212A` will become '\u004B' (K).&lt;br/&gt;
 &lt;pre&gt;
@@ -5154,17 +5193,20 @@ if (matcher.find()) {
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/IDS11-J.+Perform+any+string+modifications+before+validation"&gt;CERT: IDS11-J. Perform any string modifications before validation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/179.html"&gt;CWE-179: Incorrect Behavior Order: Early Validation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/182.html"&gt;CWE-182: Collapse of Data into Unsafe Value&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='NORMALIZATION_AFTER_VALIDATION' priority='MAJOR'>
-    <name>Security - String is normalzied after validation and not before it</name>
+    <name>Security - String is normalized after validation and not before it</name>
     <configKey>NORMALIZATION_AFTER_VALIDATION</configKey>
     <description>&lt;p&gt;
 A string must not be normalized after validation because it may allow an attacker to bypass validation using a tricky
 string which becomes malicious after the normalization. For example, a program may filter out the &amp;langle;script&amp;rangle; tags from
 HTML input to avoid cross-site scripting (XSS) and other vulnerabilities. However, in unicode, the same string can have
-many different representations. For example, \uFE64 is normalized to &amp;langle; and \uFE65 is normalized to &amp;rangle;. Thus the
+many different representations. For example, \uFE64 is normalized to &amp;langle; and \uFE65 is normalized to &amp;rangle;. Thus,
 if an attacker passes the string "\uFE64" + "script" + "\uFE65" the validation check fails to detect the &amp;langle;script&amp;rangle; tag,
 but thereafter the string is normalized to the &amp;langle;script&amp;rangle; tag in the input:
 &lt;pre&gt;
@@ -5193,7 +5235,11 @@ if (matcher.find()) {
 &lt;p&gt;
 &lt;b&gt;References&lt;/b&gt;&lt;br/&gt;
 &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/IDS01-J.+Normalize+strings+before+validating+them"&gt;CERT: IDS01-J. Normalize strings before validating them&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/179.html"&gt;CWE-179: Incorrect Behavior Order: Early Validation&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/180.html"&gt;CWE-180: Incorrect Behavior Order: Validate Before Canonicalize&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/289.html"&gt;CWE-289: Authentication Bypass by Alternate Name&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='DANGEROUS_PERMISSION_COMBINATION' priority='CRITICAL'>
@@ -5229,7 +5275,9 @@ pc.add(new RuntimePermission("createClassLoader"));
 
 &lt;p&gt;References&lt;/b&gt;&lt;br&gt;
 &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ENV03-J.+Do+not+grant+dangerous+combinations+of+permissions"&gt;CERT: ENV03-J. Do not grant dangerous combinations of permissions&lt;/a&gt;&lt;br/&gt;
+&lt;a href="https://cwe.mitre.org/data/definitions/732.html"&gt;CWE-732: Incorrect Permission Assignment for Critical Resource&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
+    <tag>cwe</tag>
     <tag>security</tag>
   </rule>
   <rule key='POTENTIAL_XML_INJECTION' priority='CRITICAL'>
@@ -5237,7 +5285,7 @@ pc.add(new RuntimePermission("createClassLoader"));
     <configKey>POTENTIAL_XML_INJECTION</configKey>
     <description>&lt;p&gt;
 Unsafe strings (e.g. from a user input) may contain XML tags. If such a string is inserted into an XML document then it
-may change its structure to a valid but semanticallly different document. To prevent this unsafe strings must b
+may change its structure to a valid but semantically different document. To prevent this unsafe strings must b
 sanitized first.
 &lt;/p&gt;
 

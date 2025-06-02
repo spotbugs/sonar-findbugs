@@ -3091,6 +3091,16 @@ for (Person p : people) {
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='IMC_IMMATURE_CLASS_COLLECTION_RETURN' priority='MAJOR'>
+    <name>Correctness - Method returns java.util.Collection</name>
+    <configKey>IMC_IMMATURE_CLASS_COLLECTION_RETURN</configKey>
+    <description>&lt;p&gt;This method declares that it returns a Collection, when in fact it has created and returned
+            a more specific interface. Since the caller is free to cast any return value to Collection, it is
+            better to return the specific interface created so that it gives the caller the most
+            power. With methods, always expect the least with parameters, and provide the most with return types.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='JXI_GET_ENDPOINT_CONSUMES_CONTENT' priority='MAJOR'>
     <name>Correctness - JAX-RS Method implements a GET request but consumes input</name>
     <configKey>JXI_GET_ENDPOINT_CONSUMES_CONTENT</configKey>
@@ -3751,7 +3761,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>bug</tag>
   </rule>
   <rule key='FII_USE_COPYCONSTRUCTOR' priority='MAJOR'>
-    <name>Correctness - Method calls collect() directly on a stream</name>
+    <name>Correctness - Method calls collect() directly on a collection stream</name>
     <configKey>FII_USE_COPYCONSTRUCTOR</configKey>
     <description>Code perform a "copy constructor" operation by using streams, when it is more simply done
         	by passing the source collection into a new Collection constructors argument. Use, 

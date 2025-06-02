@@ -2250,6 +2250,9 @@
     <Bug pattern='IMC_IMMATURE_CLASS_VAR_NAME' />
   </Match>
   <Match>
+    <Bug pattern='IMC_IMMATURE_CLASS_COLLECTION_RETURN' />
+  </Match>
+  <Match>
     <Bug pattern='JXI_GET_ENDPOINT_CONSUMES_CONTENT' />
   </Match>
   <Match>
