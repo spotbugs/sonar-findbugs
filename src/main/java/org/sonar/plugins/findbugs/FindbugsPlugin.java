@@ -22,9 +22,12 @@ package org.sonar.plugins.findbugs;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.Plugin;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.utils.Version;
 import org.sonar.plugins.findbugs.classpath.DefaultClasspathLocator;
 import org.sonar.plugins.findbugs.language.Jsp;
 import org.sonar.plugins.findbugs.language.scala.Scala;
@@ -43,6 +46,7 @@ import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.java.Java;
 
 public class FindbugsPlugin implements Plugin {
+    private static final Logger LOG = LoggerFactory.getLogger(FindbugsPlugin.class);
 
     protected static final String[] SUPPORTED_JVM_LANGUAGES = {
         Java.KEY,
@@ -60,9 +64,9 @@ public class FindbugsPlugin implements Plugin {
         "kt",
     };
 
-    public static FilePredicate[] getSupportedLanguagesFilePredicate(FilePredicates pred) {
+    public static FilePredicate[] getSupportedLanguagesFilePredicate(FilePredicates predicates) {
         return Arrays.stream(SUPPORTED_JVM_LANGUAGES)
-                .map(s -> pred.hasLanguage(s))
+                .map(predicates::hasLanguage)
                 .collect(Collectors.toList())
                 .toArray(new FilePredicate[SUPPORTED_JVM_LANGUAGES.length]);
     }
@@ -72,8 +76,6 @@ public class FindbugsPlugin implements Plugin {
     context.addExtensions(FindbugsConfiguration.getPropertyDefinitions(context));
     context.addExtensions(Arrays.asList(
             FindbugsSensor.class,
-            FindbugsProfileExporter.class,
-            FindbugsProfileImporter.class,
             FindbugsConfiguration.class,
             FindbugsExecutor.class,
 
@@ -91,5 +93,14 @@ public class FindbugsPlugin implements Plugin {
             FindSecurityBugsScalaRulesDefinition.class,
             DefaultClasspathLocator.class,
             ByteCodeResourceLocator.class));
+    
+    Version apiVersion = context.getRuntime().getApiVersion();
+    
+    if (!apiVersion.isGreaterThanOrEqual(Version.create(11, 4))) {
+      context.addExtension(FindbugsProfileExporter.class);
+      context.addExtension(FindbugsProfileImporter.class);
+    } else {
+      LOG.info("SonarQube plugin API version is {}, disabling the deprecated SpotBugs profile importer and exporter", apiVersion);
+    }
   }
 }
