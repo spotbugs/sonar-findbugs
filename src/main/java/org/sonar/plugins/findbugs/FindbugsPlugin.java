@@ -97,6 +97,7 @@ public class FindbugsPlugin implements Plugin {
     Version apiVersion = context.getRuntime().getApiVersion();
     
     if (!apiVersion.isGreaterThanOrEqual(Version.create(11, 4))) {
+      LOG.info("SonarQube plugin API version is {}, enabling the deprecated SpotBugs profile importer and exporter", apiVersion);
       context.addExtension(FindbugsProfileExporter.class);
       context.addExtension(FindbugsProfileImporter.class);
     } else {
