@@ -79,6 +79,7 @@ public class FindbugsPlugin implements Plugin {
             FindbugsConfiguration.class,
             FindbugsExecutor.class,
 
+            FindbugsProfileImporter.class,
             FindbugsProfile.class,
             FindbugsContribProfile.class,
             FindbugsSecurityAuditProfile.class,
@@ -97,11 +98,10 @@ public class FindbugsPlugin implements Plugin {
     Version apiVersion = context.getRuntime().getApiVersion();
     
     if (!apiVersion.isGreaterThanOrEqual(Version.create(11, 4))) {
-      LOG.info("SonarQube plugin API version is {}, enabling the deprecated SpotBugs profile importer and exporter", apiVersion);
+      LOG.info("SonarQube plugin API version is {}, enabling the deprecated SpotBugs profile exporter", apiVersion);
       context.addExtension(FindbugsProfileExporter.class);
-      context.addExtension(FindbugsProfileImporter.class);
     } else {
-      LOG.info("SonarQube plugin API version is {}, disabling the deprecated SpotBugs profile importer and exporter", apiVersion);
+      LOG.info("SonarQube plugin API version is {}, disabling the deprecated SpotBugs profile exporter", apiVersion);
     }
   }
 }
