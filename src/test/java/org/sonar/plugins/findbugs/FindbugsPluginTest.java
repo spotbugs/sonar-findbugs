@@ -34,8 +34,8 @@ class FindbugsPluginTest {
   @ParameterizedTest
   @CsvSource({
     "11.3,26",
-    // We disable the profile importer and the exporter when the plugin API version is >= 11.4 (since 2025.3 commercial editions)
-    "11.4,24"
+    // We disable the profile exporter when the plugin API version is >= 11.4 (since 2025.3 commercial editions)
+    "11.4,25"
   })
   void testGetExtensions(String version, int expectedExtensionsCount) {
     SonarRuntime runtime = mock(SonarRuntime.class);

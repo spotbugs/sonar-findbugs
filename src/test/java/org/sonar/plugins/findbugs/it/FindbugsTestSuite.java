@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 
+import org.sonar.api.utils.Version;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
 import org.sonarqube.ws.client.projects.CreateRequest;
@@ -47,14 +48,13 @@ public class FindbugsTestSuite {
 
   static {
     // build, start and stop the orchestrator here, making sure that it happens exactly once whether we run one or multiple tests
-    String sonarVersion = System.getProperty("sonar.server.version", "8.9");
+    Version sonarVersion = Version.parse(System.getProperty("sonar.server.version", "8.9"));
     
     // We will test here the case where an older version of the plugin was already installed and upgrade it
     // This should be its own test case but it takes a long time to build a server so we're doing it here
     
     OrchestratorExtensionBuilder orchestratorBuilder = OrchestratorExtension.builderEnv()
-        // Build the SonarQube server with an older version of the plugin
-      .addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", "4.3.0"))
+      
       .keepBundledPlugins()
       // Since SQ 9.8 permissions for 'Anyone' group has been limited for new instances
       .useDefaultAdminCredentialsForBuilds(true)
@@ -63,6 +63,15 @@ public class FindbugsTestSuite {
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/empty-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/findbugs-backup.xml"))
       .restoreProfileAtStartup(FileLocation.ofClasspath("/it/profiles/fbcontrib-backup.xml"));
+    
+    String olderPluginVersion = "4.0.6";
+    // Earlier versions of the plugin are not forward compatible with SonarQube >= 25.6
+    // We'll be able to test the upgrade after a compatible version of the plugin is released
+    if (!sonarVersion.isGreaterThanOrEqual(Version.create(25, 6))) {
+      // Build the SonarQube server with an older version of the plugin
+      orchestratorBuilder = orchestratorBuilder.addPlugin(MavenLocation.of("com.github.spotbugs", "sonar-findbugs-plugin", olderPluginVersion));
+    }
+    
     ORCHESTRATOR = orchestratorBuilder.build();
     // Start the server with the older version of the plugin so it will save the older version of the rules/profiles
     ORCHESTRATOR.start();
@@ -71,8 +80,11 @@ public class FindbugsTestSuite {
     // Now install the version of the plugin we have built locally
     File pluginTargetFile = new File(ORCHESTRATOR.getServer().getHome(), "extensions/plugins/sonar-findbugs-plugin.jar");
     try (OutputStream out = new FileOutputStream(pluginTargetFile)) {
-      // Delete the old version of the plugin
-      Files.delete(ORCHESTRATOR.getServer().getHome().toPath().resolve("extensions/plugins/sonar-findbugs-plugin-4.3.0.jar"));
+      if (!sonarVersion.isGreaterThanOrEqual(Version.create(25, 6))) {
+        // Delete the old version of the plugin
+        Files.delete(ORCHESTRATOR.getServer().getHome().toPath().resolve("extensions/plugins/sonar-findbugs-plugin-" + olderPluginVersion + ".jar"));
+      }
+      
       Files.copy(FileSystems.getDefault().getPath("target", "sonar-findbugs-plugin.jar"), out);
     } catch (IOException e) {
       throw new RuntimeException(e);
@@ -80,7 +92,7 @@ public class FindbugsTestSuite {
 
     ORCHESTRATOR.start();
     
-    Thread stopOrchestratorThread = new Thread(() -> ORCHESTRATOR.stop(), sonarVersion);
+    Thread stopOrchestratorThread = new Thread(ORCHESTRATOR::stop, "SonarQube shutdown hook");
     Runtime.getRuntime().addShutdownHook(stopOrchestratorThread);
   }
   
