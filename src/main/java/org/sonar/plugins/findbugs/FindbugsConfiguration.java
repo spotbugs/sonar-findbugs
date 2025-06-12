@@ -243,7 +243,7 @@ public class FindbugsConfiguration implements Startable {
                     pred.hasType(Type.MAIN),
                     pred.or(FindbugsPlugin.getSupportedLanguagesFilePredicate(pred)),
                     // .kts files are assumed to be executed by kotlin support, so we're not expecting a .class file
-                    pred.not(pred.hasExtension(".kts")),
+                    pred.not(pred.hasExtension("kts")),
                     //package-info.java will not generate any class files.
                     //See: https://github.com/SonarQubeCommunity/sonar-findbugs/issues/36
                     pred.not(pred.matchesPathPattern("**/package-info.java")),
