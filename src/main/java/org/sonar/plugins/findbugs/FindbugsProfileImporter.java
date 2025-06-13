@@ -19,9 +19,13 @@
  */
 package org.sonar.plugins.findbugs;
 
+import java.io.Reader;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
@@ -39,15 +43,9 @@ import org.sonar.plugins.findbugs.rules.FindSecurityBugsScalaRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindbugsRulesDefinition;
 import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 
-import java.io.Reader;
-import java.util.Map;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Iterables;
 import com.thoughtworks.xstream.XStream;
 
-@ScannerSide
 @ServerSide
 @ExtensionPoint
 public class FindbugsProfileImporter {
