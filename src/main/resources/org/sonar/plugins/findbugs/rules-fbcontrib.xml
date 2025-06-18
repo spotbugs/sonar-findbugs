@@ -3863,7 +3863,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>ENMI_NULL_ENUM_VALUE</configKey>
     <description>&lt;p&gt;This method sets the value of an enum reference to null. An enum should never have a null value.
             If there is a state where you do not know what the value of an enum should be, than that should be one of the
-            proper enum value. So add a MyEnum.UNKNOWN or such. This keeps the logic of switch statements, etc, much simpler.</description>
+            proper enum values. So add a MyEnum.UNKNOWN or such. This keeps the logic of switch statements, etc, much simpler.</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
