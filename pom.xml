@@ -53,7 +53,7 @@
       Update the version table and the rules count badge in README.md
     -->
     <spotbugs.version>4.9.3</spotbugs.version>
-    <sbcontrib.version>7.6.11</sbcontrib.version>
+    <sbcontrib.version>7.6.12</sbcontrib.version>
     <findsecbugs.version>1.14.0</findsecbugs.version>
 
     <surefire.version>3.5.3</surefire.version>
