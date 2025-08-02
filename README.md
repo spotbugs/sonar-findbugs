@@ -26,7 +26,7 @@ This plugin can be configured with sonar web interface (see the General Settings
 **Allow uncompiled code** (`sonar.findbugs.allowuncompiledcode`): Remove the compiled code requirement for all projects. It can lead to a false sense of security if the build process skips certain projects.
 This option might be used to get around the `One (sub)project contains Java source files that are not compiled` error.
 
-**Confidence level** (`sonar.findbugs.confidenceLevel`): Specifies the confidence threshold (previously called "priority") for reporting issues. If set to "low", confidence is not used to filter bugs. If set to "medium" (the default), low confidence issues are supressed. If set to "high", only high confidence bugs are reported.
+**Confidence level** (`sonar.findbugs.confidenceLevel`): Specifies the confidence threshold (previously called "priority") for reporting issues. If set to "low", confidence is not used to filter bugs. If set to "medium" (the default), low confidence issues are suppressed. If set to "high", only high confidence bugs are reported.
 
 **Effort** (`sonar.findbugs.effort`): Effort of the bug finders. Valid values are Min, Default and Max. Setting 'Max' increases precision but also increases memory consumption.
 
