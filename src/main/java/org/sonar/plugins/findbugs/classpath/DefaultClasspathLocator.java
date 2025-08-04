@@ -22,9 +22,9 @@ package org.sonar.plugins.findbugs.classpath;
 import java.io.File;
 import java.util.Collection;
 
-import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.config.Configuration;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.java.classpath.ClasspathForMain;
 import org.sonar.java.classpath.ClasspathForTest;
 
