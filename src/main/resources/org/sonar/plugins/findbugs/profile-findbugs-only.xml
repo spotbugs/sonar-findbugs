@@ -1227,6 +1227,9 @@
     <Bug pattern='DMI_USELESS_SUBSTRING' />
   </Match>
   <Match>
+    <Bug pattern='DMI_MISLEADING_SUBSTRING' />
+  </Match>
+  <Match>
     <Bug pattern='DMI_CALLING_NEXT_FROM_HASNEXT' />
   </Match>
   <Match>
@@ -1444,6 +1447,9 @@
   </Match>
   <Match>
     <Bug pattern='ENV_USE_PROPERTY_INSTEAD_OF_ENV' />
+  </Match>
+  <Match>
+    <Bug pattern='CWO_CLOSED_WITHOUT_OPENED' />
   </Match>
   <Match>
     <Bug pattern='AT_NONATOMIC_64BIT_PRIMITIVE' />
