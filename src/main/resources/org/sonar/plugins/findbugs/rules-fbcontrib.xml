@@ -1249,6 +1249,14 @@ if ({{FLAWED_TEST_LOGIC}}) {
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='SPP_FIELD_COULD_BE_STATIC' priority='MAJOR'>
+    <name>Correctness - Instance field likely could be defined as static</name>
+    <configKey>SPP_FIELD_COULD_BE_STATIC</configKey>
+    <description>&lt;p&gt;This instance field appears to only be set to a literal value in a constructor, and never reset. Thus it is likely that this field could just be defined as a static field instead.
+	       &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='MUI_USE_CONTAINSKEY' priority='MAJOR'>
     <name>Correctness - Method calls keySet() just to call contains, use containsKey instead</name>
     <configKey>MUI_USE_CONTAINSKEY</configKey>

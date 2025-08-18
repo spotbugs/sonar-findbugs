@@ -1755,6 +1755,9 @@
     <Bug pattern='SPP_PASSING_THIS_AS_PARM' />
   </Match>
   <Match>
+    <Bug pattern='SPP_FIELD_COULD_BE_STATIC' />
+  </Match>
+  <Match>
     <Bug pattern='MUI_USE_CONTAINSKEY' />
   </Match>
   <Match>
