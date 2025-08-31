@@ -96,7 +96,7 @@ class MultiModuleIT {
     
     // The API to get the test binaries was added in 9.8
     if (orchestrator.getServer().version().isGreaterThanOrEquals(9, 8)) {
-      assertThat(issues.stream().filter(component(projectKey, "multi-module-core/src/test/java/multimodule/core/SampleCoreTest.java"))).hasSize(4);
+      assertThat(issues.stream().filter(component(projectKey, "multi-module-core/src/test/java/multimodule/core/SampleCoreTest.java"))).hasSize(5);
     }
   }
   
