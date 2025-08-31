@@ -87,7 +87,7 @@ class MultiModuleIT {
     List<Issue> issues = issueClient.search(IssueQuery.create().projects(projectKey)).getIssuesList();
     
     assertThat(issues.stream().filter(component(projectKey, "multi-module-app/src/main/java/multimodule/app/SampleApp.java"))).hasSize(5);
-    assertThat(issues.stream().filter(component(projectKey, "multi-module-core/src/main/java/multimodule/core/SampleCore.java"))).hasSize(4);
+    assertThat(issues.stream().filter(component(projectKey, "multi-module-core/src/main/java/multimodule/core/SampleCore.java"))).hasSize(5);
     assertThat(issues.stream().filter(component(projectKey, "multi-module-core/src/main/java/multimodule/core/InnerClassSample.java"))).hasSize(11);
     assertThat(issues.stream().filter(component(projectKey, "multi-module-fx/src/main/java/multimodule/fx/SampleFx.java"))).hasSize(3);
     // There's one native SQ issue for the Hello.scala sample
