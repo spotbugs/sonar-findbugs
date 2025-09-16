@@ -2004,7 +2004,7 @@ threads may be synchronizing on different objects.&lt;/p&gt;
     <name>Malicious code - Field should be moved out of an interface and made package protected</name>
     <configKey>MS_OOI_PKGPROTECT</configKey>
     <description>&lt;p&gt;
- A final static field that is
+ A static final field that is
 defined in an interface references a mutable
    object such as an array or hashtable.
    This mutable object could
@@ -2072,7 +2072,7 @@ could be changed by malicious code or
   <rule key='MS_MUTABLE_HASHTABLE' priority='INFO'>
     <name>Malicious code - Field is a mutable Hashtable</name>
     <configKey>MS_MUTABLE_HASHTABLE</configKey>
-    <description>&lt;p&gt;A final static field references a Hashtable
+    <description>&lt;p&gt;A static final field references a Hashtable
    and can be accessed by malicious code or
         by accident from another package.
    This code can freely modify the contents of the Hashtable.&lt;/p&gt;</description>
@@ -2081,7 +2081,7 @@ could be changed by malicious code or
   <rule key='MS_MUTABLE_COLLECTION' priority='INFO'>
     <name>Malicious code - Field is a mutable collection</name>
     <configKey>MS_MUTABLE_COLLECTION</configKey>
-    <description>&lt;p&gt;A mutable collection instance is assigned to a final static field,
+    <description>&lt;p&gt;A mutable collection instance is assigned to a static final field,
    thus can be changed by malicious code or by accident from another package.
    Consider wrapping this field into Collections.unmodifiableSet/List/Map/etc.
    to avoid this vulnerability.&lt;/p&gt;</description>
@@ -2090,7 +2090,7 @@ could be changed by malicious code or
   <rule key='MS_MUTABLE_COLLECTION_PKGPROTECT' priority='INFO'>
     <name>Malicious code - Field is a mutable collection which should be package protected</name>
     <configKey>MS_MUTABLE_COLLECTION_PKGPROTECT</configKey>
-    <description>&lt;p&gt;A mutable collection instance is assigned to a final static field,
+    <description>&lt;p&gt;A mutable collection instance is assigned to a static final field,
    thus can be changed by malicious code or by accident from another package.
    The field could be made package protected to avoid this vulnerability.
    Alternatively you may wrap this field into Collections.unmodifiableSet/List/Map/etc.
@@ -2100,7 +2100,7 @@ could be changed by malicious code or
   <rule key='MS_MUTABLE_ARRAY' priority='INFO'>
     <name>Malicious code - Field is a mutable array</name>
     <configKey>MS_MUTABLE_ARRAY</configKey>
-    <description>&lt;p&gt; A final static field references an array
+    <description>&lt;p&gt; A static final field references an array
    and can be accessed by malicious code or
         by accident from another package.
    This code can freely modify the contents of the array.&lt;/p&gt;</description>
