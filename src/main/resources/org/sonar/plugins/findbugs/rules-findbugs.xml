@@ -6605,7 +6605,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <tag>bug</tag>
   </rule>
   <rule key='AT_NONATOMIC_64BIT_PRIMITIVE' priority='MAJOR'>
-    <name>Multi-threading - This write of this 64-bit primitive variable may not atomic</name>
+    <name>Multi-threading - This write of this 64-bit primitive variable may not be atomic</name>
     <configKey>AT_NONATOMIC_64BIT_PRIMITIVE</configKey>
     <description>&lt;p&gt;
           The long and the double are 64-bit primitive types, and depending on the Java Virtual Machine implementation assigning a value to them can be treated as two separate 32-bit writes, and as such it's not atomic.
