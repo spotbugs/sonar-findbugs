@@ -3768,6 +3768,27 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='FII_AVOID_TOARRAY_ON_COLLECTED_STREAM' priority='MAJOR'>
+    <name>Correctness - Method calls toArray(new Proto[]) on a collected lambda expression</name>
+    <configKey>FII_AVOID_TOARRAY_ON_COLLECTED_STREAM</configKey>
+    <description>&lt;p&gt;This method builds a collection using lambda expressions with a collect terminal operation. It then immediately
+        calls the toArray() method on it, to convert to an array. This is sub optimal as the lambda still needs to 
+        build the build a useless list. It is better to use the toArray() predicate to short
+        circuit the building of the collection.
+        &lt;/p&gt;
+        &lt;p&gt;
+        Instead of
+        &lt;code&gt;&lt;pre&gt;
+        baubles.stream().filter(b -&gt; b.getName("orb")).collect(Collectors.toList()).toArray(new Bauble[0]))
+        &lt;/pre&gt;&lt;/code&gt;
+        do
+        &lt;code&gt;&lt;/pre&gt;
+        baubles.stream().filter(b -&gt; b.getName("orb")).toArray(Bauble[]::new)
+        &lt;/pre&gt;&lt;/code&gt;
+        &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='FII_USE_COPYCONSTRUCTOR' priority='MAJOR'>
     <name>Correctness - Method calls collect() directly on a collection stream</name>
     <configKey>FII_USE_COPYCONSTRUCTOR</configKey>
