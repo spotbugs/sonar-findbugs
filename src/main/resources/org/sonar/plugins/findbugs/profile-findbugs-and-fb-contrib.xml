@@ -2409,6 +2409,9 @@
     <Bug pattern='FII_AVOID_SIZE_ON_COLLECTED_STREAM' />
   </Match>
   <Match>
+    <Bug pattern='FII_AVOID_TOARRAY_ON_COLLECTED_STREAM' />
+  </Match>
+  <Match>
     <Bug pattern='FII_USE_COPYCONSTRUCTOR' />
   </Match>
   <Match>
