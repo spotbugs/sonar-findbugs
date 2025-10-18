@@ -14,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +24,6 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
-
-import com.google.common.collect.ImmutableList;
 
 class ByteCodeResourceLocatorTest {
 
@@ -110,7 +109,7 @@ class ByteCodeResourceLocatorTest {
   @Test
   void findRegularSourceFile() throws Exception {
     InputFile givenJavaFile = mock(InputFile.class);
-    when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
+    when(fsEmpty.inputFiles(any())).thenReturn(Collections.singletonList(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findSourceFile("com/helloworld/TestJavaClass.java", fsEmpty));
@@ -119,7 +118,7 @@ class ByteCodeResourceLocatorTest {
   @Test
   void findSourceFileFromScalaClassName() throws Exception {
     InputFile givenJavaFile = mock(InputFile.class);
-    when(fsEmpty.inputFiles(any())).thenReturn(ImmutableList.of(givenJavaFile));
+    when(fsEmpty.inputFiles(any())).thenReturn(Collections.singletonList(givenJavaFile));
 
     ByteCodeResourceLocator locator = new ByteCodeResourceLocator();
     assertEquals(givenJavaFile, locator.findSourceFile("TestOperationalProfileIccidModel$TestOperationalProfileIccid$.class", fsEmpty));

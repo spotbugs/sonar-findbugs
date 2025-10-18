@@ -39,14 +39,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.error.NewAnalysisError;
@@ -71,7 +70,7 @@ class FindbugsSensorTest extends FindbugsTests {
 
   private FileSystem fs;
   private ByteCodeResourceLocator byteCodeResourceLocator;
-  private MutablePicoContainer pico;
+  //private MutablePicoContainer pico;
   private SensorContext sensorContext;
   private FindbugsExecutor executor;
   private ClasspathLocator classpathLocator;
@@ -101,14 +100,15 @@ class FindbugsSensorTest extends FindbugsTests {
     //Will make sure that the lookup on the filesystem will always find a file.
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(Arrays.asList(dummyFile));
 
-    pico = new DefaultPicoContainer();
+    //pico = new DefaultPicoContainer();
 
     //Common components are defined in the setup. This way they don't have to be defined in every test.
+    /*
     pico.addComponent(fs);
     pico.addComponent(byteCodeResourceLocator);
     pico.addComponent(FindbugsSensor.class);
     pico.addComponent(sensorContext);
-
+*/
 
     //Stub NewIssue builder when a new issue is raised
     NewIssue newIssue = mock(NewIssue.class);
@@ -125,8 +125,8 @@ class FindbugsSensorTest extends FindbugsTests {
     NewAnalysisError newAnalysisError = mock(NewAnalysisError.class);
     when(sensorContext.newAnalysisError()).thenReturn(newAnalysisError);
 
-    pico.addComponent(executor);
-    pico.addComponent(classpathLocator);
+    //pico.addComponent(executor);
+    //pico.addComponent(classpathLocator);
   }
 
   @Test
@@ -135,8 +135,9 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
-    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
     sensor.execute(sensorContext);
 
     verify(executor).execute(false, false);
@@ -151,9 +152,10 @@ class FindbugsSensorTest extends FindbugsTests {
 
     when(fs.inputFiles(any(FilePredicate.class))).thenReturn(new ArrayList<InputFile>());
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
+    sensor.execute(sensorContext);
 
     verify(executor).execute(false, false);
     verify(sensorContext, never()).newIssue();
@@ -166,10 +168,10 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49, true);
     when(executor.execute(true, false)).thenReturn(new AnalysisResult(bugInstance));
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFbContribRules());
-
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFbContribRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
+    sensor.execute(sensorContext);
 
     verify(executor).execute(true, false);
     verify(sensorContext, times(1)).newIssue();
@@ -181,10 +183,10 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0, true);
     when(executor.execute(false, true)).thenReturn(new AnalysisResult(bugInstance));
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsRules());
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindSecBugsRules();
 
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    sensor.execute(sensorContext);
 
     verify(executor).execute(false, true);
     verify(sensorContext, times(1)).newIssue();
@@ -196,10 +198,10 @@ class FindbugsSensorTest extends FindbugsTests {
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
-
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
+    sensor.execute(sensorContext);
 
     verify(executor).execute(false, false);
     verify(sensorContext, never()).newIssue();
@@ -208,10 +210,10 @@ class FindbugsSensorTest extends FindbugsTests {
   @Test
   void should_not_execute_findbugs_if_no_active() throws Exception {
 
-    pico.addComponent(FakeActiveRules.createWithNoRules());
-
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    ActiveRules activeRules = FakeActiveRules.createWithNoRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
+    sensor.execute(sensorContext);
 
     verify(executor, never()).execute(false, false);
     verify(sensorContext, never()).newIssue();
@@ -227,10 +229,10 @@ class FindbugsSensorTest extends FindbugsTests {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
     when(fs.languages()).thenReturn(languages);
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
-
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindSecBugsJspRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
+    sensor.execute(sensorContext);
 
     verify(executor, never()).execute(false, false);
     verify(sensorContext, never()).newIssue();
@@ -246,10 +248,10 @@ class FindbugsSensorTest extends FindbugsTests {
     
     when(executor.execute(false, true)).thenReturn(new AnalysisResult());
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindSecBugsJspRules());
-
-    FindbugsSensor analyser = pico.getComponent(FindbugsSensor.class);
-    analyser.execute(sensorContext);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindSecBugsJspRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
+    sensor.execute(sensorContext);
 
     verify(executor).execute(false, true);
     verify(sensorContext, never()).newIssue();
@@ -265,8 +267,9 @@ class FindbugsSensorTest extends FindbugsTests {
     // don't return a source file: the input file is not in the file system even if SpotBugs found an issue in a class file
     when(byteCodeResourceLocator.findSourceFile("org/sonar/commons/org/sonar/commons/ZipUtils.java", fs)).thenReturn(null);
     
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
-    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
     sensor.execute(sensorContext);
 
     verify(executor).execute(false, false);
@@ -287,8 +290,8 @@ class FindbugsSensorTest extends FindbugsTests {
     SmapLocation smapLocation = new SmapLocation(fileInfo, 6, true);
     when(byteCodeResourceLocator.extractSmapLocation("org.sonar.commons.ZipUtils", 6, new File(classFileName))).thenReturn(smapLocation);
     
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
-    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
     sensor.execute(sensorContext);
 
     verify(executor).execute(false, false);
@@ -325,9 +328,9 @@ class FindbugsSensorTest extends FindbugsTests {
     ClassAnnotation classAnnotation = new ClassAnnotation(className, sourceFile);
     bugInstance.add(classAnnotation);
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
-    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
     sensor.execute(sensorContext);
 
     verify(sensorContext, never()).newIssue();
@@ -335,8 +338,8 @@ class FindbugsSensorTest extends FindbugsTests {
 
   @Test
   void describe() {
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
-    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
     SensorDescriptor descriptor = mock(SensorDescriptor.class);
     
     sensor.describe(descriptor);
@@ -355,9 +358,10 @@ class FindbugsSensorTest extends FindbugsTests {
     
     AnalysisResult analysisResult = new AnalysisResult(Collections.emptyList(), analysisErrors);
 
-    pico.addComponent(FakeActiveRules.createWithOnlyFindbugsRules());
+    ActiveRules activeRules = FakeActiveRules.createWithOnlyFindbugsRules();
     when(executor.execute(false, false)).thenReturn(analysisResult);
-    FindbugsSensor sensor = pico.getComponent(FindbugsSensor.class);
+    FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
+    
     sensor.execute(sensorContext);
 
     verify(sensorContext, never()).newIssue();
