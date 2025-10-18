@@ -19,20 +19,20 @@
  */
 package org.sonar.plugins.findbugs.xml;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamImplicit;
-import com.thoughtworks.xstream.io.xml.StaxDriver;
-
-import org.apache.commons.lang.StringUtils;
-import org.sonar.api.rule.Severity;
-import org.sonar.plugins.findbugs.FindbugsLevelUtils;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+import org.sonar.api.rule.Severity;
+import org.sonar.plugins.findbugs.FindbugsLevelUtils;
+
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 
 @XStreamAlias("FindBugsFilter")
 public class FindBugsFilter {

@@ -53,8 +53,6 @@ import org.sonar.plugins.findbugs.classpath.ClasspathLocator;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import org.sonar.plugins.findbugs.rule.FakeActiveRules;
 
-import com.google.common.collect.ImmutableList;
-
 import edu.umd.cs.findbugs.ClassScreener;
 import edu.umd.cs.findbugs.Project;
 
@@ -142,7 +140,8 @@ class FindbugsConfigurationTest {
     Files.createDirectories(classesDir.toPath());
     Files.createFile(file.toPath());
     
-    when(classpathLocator.binaryDirs()).thenReturn(ImmutableList.of(classesDir));
+    when(classpathLocator.binaryDirs()).thenReturn(Collections.singletonList(classesDir));
+    
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
       
@@ -154,7 +153,7 @@ class FindbugsConfigurationTest {
   @Test
   void should_set_class_path() throws IOException {
     File classpath = new File(temp, "classpath");
-    when(classpathLocator.classpath()).thenReturn(ImmutableList.of(classpath));
+    when(classpathLocator.classpath()).thenReturn(Collections.singletonList(classpath));
     try (Project findbugsProject = new Project()) {
       conf.initializeFindbugsProject(findbugsProject);
 

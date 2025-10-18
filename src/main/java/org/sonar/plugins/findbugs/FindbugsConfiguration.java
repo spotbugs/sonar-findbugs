@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.Plugin.Context;
@@ -65,7 +65,6 @@ import org.sonar.plugins.findbugs.xml.FindBugsFilter;
 import org.sonar.plugins.findbugs.xml.Match;
 import org.sonar.plugins.java.Java;
 
-import com.google.common.collect.Lists;
 import com.thoughtworks.xstream.XStream;
 
 import edu.umd.cs.findbugs.ClassScreener;
@@ -368,7 +367,7 @@ public class FindbugsConfiguration implements Startable {
   }
 
   List<File> getExcludesFilters() {
-    List<File> result = Lists.newArrayList();
+    List<File> result = new ArrayList<>();
     PathResolver pathResolver = new PathResolver();
     String[] filters = config.getStringArray(FindbugsConstants.EXCLUDES_FILTERS_PROPERTY);
     for (String excludesFilterPath : filters) {

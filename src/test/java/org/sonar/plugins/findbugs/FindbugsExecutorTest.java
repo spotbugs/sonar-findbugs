@@ -19,8 +19,6 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.Lists;
-
 import edu.umd.cs.findbugs.Project;
 
 import org.apache.commons.io.FileUtils;
@@ -37,6 +35,7 @@ import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -146,7 +145,7 @@ class FindbugsExecutorTest {
       return null;
     }).when(conf).initializeFindbugsProject(any());
     when(conf.saveIncludeConfigXml()).thenReturn(new File("test-resources/findbugs-include.xml"));
-    when(conf.getExcludesFilters()).thenReturn(Lists.newArrayList(new File("test-resources/findbugs-exclude.xml"), new File("test-resources/fake-file.xml")));
+    when(conf.getExcludesFilters()).thenReturn(Arrays.asList(new File("test-resources/findbugs-exclude.xml"), new File("test-resources/fake-file.xml")));
     when(conf.getEffort()).thenReturn("default");
     when(conf.getTimeout()).thenReturn(FindbugsConstants.TIMEOUT_DEFAULT_VALUE);
     return conf;

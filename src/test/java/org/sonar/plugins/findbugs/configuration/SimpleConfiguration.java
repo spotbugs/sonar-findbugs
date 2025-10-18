@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.google.common.base.Splitter;
-
 public class SimpleConfiguration implements Configuration {
   private Map<String, String> values = new HashMap<>();
   
@@ -49,7 +47,7 @@ public class SimpleConfiguration implements Configuration {
     }
 
     List<String> values = new ArrayList<>();
-    for (String v : Splitter.on(",").trimResults().split(value)) {
+    for (String v : value.split(",")) {
       values.add(v.replace("%2C", ","));
     }
     return values.toArray(new String[values.size()]);

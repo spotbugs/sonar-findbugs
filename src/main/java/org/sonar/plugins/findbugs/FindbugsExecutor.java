@@ -19,9 +19,37 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.config.Configuration;
+import org.sonar.java.annotations.VisibleForTesting;
 
 import edu.umd.cs.findbugs.AnalysisError;
 import edu.umd.cs.findbugs.BugCollection;
@@ -37,28 +65,6 @@ import edu.umd.cs.findbugs.SortedBugCollection;
 import edu.umd.cs.findbugs.XMLBugReporter;
 import edu.umd.cs.findbugs.config.UserPreferences;
 import edu.umd.cs.findbugs.plugins.DuplicatePluginIdException;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.ScannerSide;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.config.Configuration;
-
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 @ScannerSide
 public class FindbugsExecutor {
@@ -236,7 +242,7 @@ public class FindbugsExecutor {
         engine.execute();
         return null;
       } catch (InterruptedException | IOException e) {
-        throw Throwables.propagate(e);
+        throw new RuntimeException(e);
       } finally {
         engine.dispose();
       }
@@ -246,7 +252,7 @@ public class FindbugsExecutor {
   private Collection<Plugin> loadFindbugsPlugins(boolean useFbContrib,boolean useFindSecBugs) {
     ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
 
-    List<String> pluginJarPathList = Lists.newArrayList();
+    List<String> pluginJarPathList = new ArrayList<>();
     try {
       Enumeration<URL> urls = contextClassLoader.getResources("findbugs.xml");
       while (urls.hasMoreElements()) {
@@ -267,7 +273,7 @@ public class FindbugsExecutor {
     } catch (URISyntaxException e) {
       throw new IllegalStateException(e);
     }
-    List<Plugin> customPluginList = Lists.newArrayList();
+    List<Plugin> customPluginList = new ArrayList<>();
 
     for (String path : pluginJarPathList) {
       try {
@@ -292,7 +298,7 @@ public class FindbugsExecutor {
   }
 
   private static String normalizeUrl(URL url) throws URISyntaxException {
-    return StringUtils.removeStart(StringUtils.substringBefore(url.toURI().getSchemeSpecificPart(), "!"), "file:");
+    return Strings.CS.removeStart(StringUtils.substringBefore(url.toURI().getSchemeSpecificPart(), "!"), "file:");
   }
 
   /**
