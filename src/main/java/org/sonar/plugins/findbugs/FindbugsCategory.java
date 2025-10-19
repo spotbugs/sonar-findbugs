@@ -19,22 +19,28 @@
  */
 package org.sonar.plugins.findbugs;
 
-import com.google.common.collect.ImmutableMap;
-
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public final class FindbugsCategory {
-  private static final Map<String, String> FINDBUGS_TO_SONAR = ImmutableMap.<String, String> builder()
-    .put("BAD_PRACTICE", "Bad practice")
-    .put("CORRECTNESS", "Correctness")
-    .put("MT_CORRECTNESS", "Multithreaded correctness")
-    .put("I18N", "Internationalization")
-    .put("EXPERIMENTAL", "Experimental")
-    .put("MALICIOUS_CODE", "Malicious code")
-    .put("PERFORMANCE", "Performance")
-    .put("SECURITY", "Security")
-    .put("STYLE", "Style")
-    .build();
+  private static final Map<String, String> FINDBUGS_TO_SONAR;
+  
+  static {
+    Map<String, String> map = new HashMap<>();
+
+    map.put("BAD_PRACTICE", "Bad practice");
+    map.put("CORRECTNESS", "Correctness");
+    map.put("MT_CORRECTNESS", "Multithreaded correctness");
+    map.put("I18N", "Internationalization");
+    map.put("EXPERIMENTAL", "Experimental");
+    map.put("MALICIOUS_CODE", "Malicious code");
+    map.put("PERFORMANCE", "Performance");
+    map.put("SECURITY", "Security");
+    map.put("STYLE", "Style");
+    
+    FINDBUGS_TO_SONAR = Collections.unmodifiableMap(map);
+  }
 
   public static String findbugsToSonar(String findbugsCategKey) {
     return FINDBUGS_TO_SONAR.get(findbugsCategKey);
