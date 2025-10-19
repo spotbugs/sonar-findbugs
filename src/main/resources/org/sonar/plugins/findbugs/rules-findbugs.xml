@@ -248,7 +248,7 @@ visible), they could trigger listener notification on the event dispatch thread.
     <name>Correctness - An apparent infinite loop</name>
     <configKey>IL_INFINITE_LOOP</configKey>
     <description>&lt;p&gt;This loop doesn't seem to have a way to terminate (other than by perhaps
-throwing an exception).&lt;/p&gt;
+throwing an exception). Unconditional loops such as &lt;code&gt;while (true) {...}&lt;/code&gt; are assumed to be intentional and are not reported as bugs.&lt;/p&gt;
 &lt;p&gt;See &lt;a href="https://cwe.mitre.org/data/definitions/835.html"&gt;CWE-835: Loop with Unreachable Exit Condition ('Infinite Loop')&lt;/a&gt;.
 &lt;/p&gt;</description>
     <tag>cwe</tag>
