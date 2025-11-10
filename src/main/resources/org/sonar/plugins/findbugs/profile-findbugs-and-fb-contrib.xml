@@ -2418,6 +2418,12 @@
     <Bug pattern='FII_AVOID_MAP_BEFORE_LIMIT' />
   </Match>
   <Match>
+    <Bug pattern='FII_USE_ARRAYS_STREAM' />
+  </Match>
+  <Match>
+    <Bug pattern='FII_USE_ANY_LIMIT_WITH_COUNT' />
+  </Match>
+  <Match>
     <Bug pattern='SUI_CONTAINS_BEFORE_ADD' />
   </Match>
   <Match>
@@ -2440,5 +2446,23 @@
   </Match>
   <Match>
     <Bug pattern='PKI_SUPERFLUOUS_ROUTE_SPECIFICATION' />
+  </Match>
+  <Match>
+    <Bug pattern='MK_CAPTOR_IN_WHEN' />
+  </Match>
+  <Match>
+    <Bug pattern='MK_MOCKED_FIELD_IN_CODE' />
+  </Match>
+  <Match>
+    <Bug pattern='MK_MOCKED_FIELD_REASSIGNED' />
+  </Match>
+  <Match>
+    <Bug pattern='MK_SPIED_FIELD_IN_CODE' />
+  </Match>
+  <Match>
+    <Bug pattern='MK_SPIED_FIELD_REASSIGNED' />
+  </Match>
+  <Match>
+    <Bug pattern='MK_UNNEEDED_OPENMOCKS' />
   </Match>
 </FindBugsFilter>
