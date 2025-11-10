@@ -17,7 +17,7 @@
  */
 package org.sonar.plugins.findbugs.configuration;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.sonar.api.config.Configuration;
 
 import java.util.ArrayList;

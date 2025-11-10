@@ -62,7 +62,7 @@
     <sonar-plugin-api.version>9.14.0.375</sonar-plugin-api.version>
     <sonar-java.version>8.19.0.40387</sonar-java.version>
     
-    <sonar-orchestrator.version>5.6.2.2625</sonar-orchestrator.version>
+    <sonar-orchestrator.version>6.0.0.3852</sonar-orchestrator.version>
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
