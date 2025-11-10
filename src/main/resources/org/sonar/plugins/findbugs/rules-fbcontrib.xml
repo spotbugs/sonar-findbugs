@@ -3707,7 +3707,40 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
   <rule key='FII_USE_ANY_MATCH' priority='MAJOR'>
     <name>Correctness - Method suboptimally finds any match in a stream</name>
     <configKey>FII_USE_ANY_MATCH</configKey>
-    <description>&lt;p&gt;This method looks for one item in a stream using filter().findFirst.isPresent() when .anyMatch() will do the same thing more succintly&lt;/p&gt;</description>
+    <description>&lt;p&gt;This method uses a suboptimal way of determinng whether there are any items in a stream that match some value.
+        Either it uses collect(), and checks the size, or uses the count() stream action. Either way, it is simpler and
+        economical to just use anyMatch, as as soon as an item is found, you can stop the stream.
+        &lt;/p&gt;
+        &lt;p&gt;
+        Instead of
+        &lt;code&gt;&lt;pre&gt;
+        baubles.stream().map(Bauble::getName).collect(Collectors.toSet()).contains(name)
+        &lt;/pre&gt;&lt;/code&gt;
+        do
+        &lt;code&gt;&lt;/pre&gt;
+        baubles.stream().anyMatch(b -&gt; name.equals(b.getName()))
+        &lt;/pre&gt;&lt;/code&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        and instead of
+        &lt;code&gt;&lt;pre&gt;
+        baubles.stream().map(Bauble::getName).count() &amp;lt; 1;
+        &lt;/pre&gt;&lt;/code&gt;
+        do
+        &lt;code&gt;&lt;/pre&gt;
+        !baubles.stream().anyMatch(b -&gt; name.equals(b.getName()))
+        &lt;/pre&gt;&lt;/code&gt;
+        &lt;/p&gt;
+        &lt;p&gt;
+        and instead of
+        &lt;code&gt;&lt;pre&gt;
+        baubles.stream().map(Bauble::getName).count() &gt; 0;
+        &lt;/pre&gt;&lt;/code&gt;
+        do
+        &lt;code&gt;&lt;/pre&gt;
+        baubles.stream().anyMatch(b -&gt; name.equals(b.getName()))
+        &lt;/pre&gt;&lt;/code&gt;
+        &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3816,6 +3849,38 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='FII_USE_ARRAYS_STREAM' priority='MAJOR'>
+    <name>Correctness - Method converts an array to a Collection to build a stream</name>
+    <configKey>FII_USE_ARRAYS_STREAM</configKey>
+    <description>Method converts an array to a collection, just to get a stream from it, like this
+            &lt;code&gt;
+            Arrays.asList(baubles).stream()....
+            &lt;/code&gt;
+            It would be simple to use Arrays.stream, as
+            &lt;code&gt;
+            Arrays.stream(baubles)....
+            &lt;/code&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='FII_USE_ANY_LIMIT_WITH_COUNT' priority='MAJOR'>
+    <name>Correctness - Method compares the count of a stream against a value without limiting the stream</name>
+    <configKey>FII_USE_ANY_LIMIT_WITH_COUNT</configKey>
+    <description>This method uses Stream.count() and compares the value against an integer. There is no need to do a complete count of the stream,
+            you just need to determine how the stream count compares to the provided value. So you can limit() the stream 1 more than the 
+            expected count.
+            
+            So instead of 
+            &lt;code&gt;
+            baubles.stream().count() &gt; 5
+            &lt;/code&gt;
+            use
+            &lt;code&gt;
+            baubles.stream().limit(6).count() &gt; 5;
+            &lt;/code&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='SUI_CONTAINS_BEFORE_ADD' priority='MAJOR'>
     <name>Correctness - Method checks for an item in a set with contains, before using add()</name>
     <configKey>SUI_CONTAINS_BEFORE_ADD</configKey>
@@ -3921,6 +3986,63 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <description>&lt;p&gt;This method uses the route() or concat() method to build optional routes but only passes 1 route to the method. 
             This just causes an extra route specification to be created for no reason. Only use route() or concat() when you have more than
             one route to combine into one.</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_CAPTOR_IN_WHEN' priority='MAJOR'>
+    <name>Correctness - Mockito capture performed in a Mockito.when</name>
+    <configKey>MK_CAPTOR_IN_WHEN</configKey>
+    <description>&lt;p&gt;This method captures values inside a Mockito.when. Capturing should only happen inside
+            Mockito.verify calls.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_MOCKED_FIELD_IN_CODE' priority='MAJOR'>
+    <name>Correctness - Mocked Field is set in code rather than thru annotations</name>
+    <configKey>MK_MOCKED_FIELD_IN_CODE</configKey>
+    <description>&lt;p&gt;This class defines a field that will be mocked in a method. It is more readable to
+            just add a @Mock annotation to it.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_MOCKED_FIELD_REASSIGNED' priority='MAJOR'>
+    <name>Correctness - Mocked Field is reassigned</name>
+    <configKey>MK_MOCKED_FIELD_REASSIGNED</configKey>
+    <description>&lt;p&gt;This class annotates a field with @Mock, but then in code reassigns the reference to something else
+            thereby rendering the @Mocking pointless.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_SPIED_FIELD_IN_CODE' priority='MAJOR'>
+    <name>Correctness - Spied Field is set in code rather than thru annotations</name>
+    <configKey>MK_SPIED_FIELD_IN_CODE</configKey>
+    <description>&lt;p&gt;This class defines a field that will be spied in a method. It is more readable to
+            just add a @Spy annotation to it.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_SPIED_FIELD_REASSIGNED' priority='MAJOR'>
+    <name>Correctness - Spied Field is reassigned</name>
+    <configKey>MK_SPIED_FIELD_REASSIGNED</configKey>
+    <description>&lt;p&gt;This class annotates a field with @Spy, but then in code reassigns the reference to something else
+            thereby rendering the @Mocking pointless.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_UNNEEDED_OPENMOCKS' priority='MAJOR'>
+    <name>Correctness - Class uses MockitoExtension so doesn't need to openMocks</name>
+    <configKey>MK_UNNEEDED_OPENMOCKS</configKey>
+    <description>&lt;p&gt;This class defines that it uses 
+            &lt;code&gt;@ExtendWith(MockitoExtension.class)&lt;/code&gt;
+            therefore there is no need to use
+            &lt;code&gt;MockitoAnnotations.openMocks(this)&lt;/code&gt;
+            This also often means that the throws Exception clause on a method that is defined on a @BeforeEach is unneeded.
+            &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
