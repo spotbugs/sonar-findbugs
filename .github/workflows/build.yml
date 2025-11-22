@@ -28,7 +28,7 @@ jobs:
             SONAR_SERVER_JAVA_VERSION: 17
           # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set up JDK
@@ -55,7 +55,7 @@ jobs:
     # Forked repos do not have the secrets to deploy so this would fail
     if: ( github.event_name == 'release' || ( github.event_name == 'push' && github.ref == 'refs/heads/master' )) && github.repository == 'spotbugs/sonar-findbugs'
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Set up JDK 17
