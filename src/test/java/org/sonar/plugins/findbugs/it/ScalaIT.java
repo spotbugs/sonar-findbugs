@@ -56,7 +56,7 @@ class ScalaIT {
       .setProperty("sonar.findbugs.confidenceLevel", "low")
       //.setProperty("sonar.sources", "src/main/scala")
       //.setProperty("sonar.java.binaries", "target/classes")
-      .setGoals("clean package sonar:sonar");
+      .setCleanPackageSonarGoals();
     orchestrator.executeBuild(build);
 
     IssuesService issueClient = FindbugsTestSuite.issueClient();

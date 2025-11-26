@@ -34,7 +34,7 @@ class FindSecBugsJspIT {
       .setPom(FindbugsTestSuite.projectPom("jspc-sling"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
-      .setGoals("clean package sonar:sonar");
+      .setCleanPackageSonarGoals();
     orchestrator.executeBuild(build);
 
     File projectDir = FindbugsTestSuite.projectPom("jspc-sling").getParentFile();
