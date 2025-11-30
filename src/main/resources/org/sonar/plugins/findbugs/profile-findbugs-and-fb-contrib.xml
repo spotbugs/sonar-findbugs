@@ -2465,4 +2465,7 @@
   <Match>
     <Bug pattern='MK_UNNEEDED_OPENMOCKS' />
   </Match>
+  <Match>
+    <Bug pattern='MK_USE_DORETURN' />
+  </Match>
 </FindBugsFilter>

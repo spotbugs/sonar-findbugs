@@ -3697,6 +3697,14 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         &lt;code&gt;&lt;/pre&gt;
         baubles.stream().map(Bauble::getName).collect(Collectors.toSet())
         &lt;/pre&gt;&lt;/code&gt;
+        or if the lambda expression is a where the parameter is passed a method reference like
+        &lt;code&gt;&lt;pre&gt;
+        baubles.stream().map(b -&gt; magic.getSpell(bauble)).collect(Collectors.toSet())
+        &lt;/pre&gt;&lt;/code&gt;
+        do
+        &lt;code&gt;&lt;/pre&gt;
+        baubles.stream().map(magic::getSpell).collect(Collectors.toSet())
+        &lt;/pre&gt;&lt;/code&gt;
         &lt;/p&gt;
 &lt;h2&gt;Deprecated&lt;/h2&gt;
 &lt;p&gt;This rule is deprecated; use {rule:java:S1612} instead.&lt;/p&gt;</description>
@@ -4042,6 +4050,15 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
             therefore there is no need to use
             &lt;code&gt;MockitoAnnotations.openMocks(this)&lt;/code&gt;
             This also often means that the throws Exception clause on a method that is defined on a @BeforeEach is unneeded.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_USE_DORETURN' priority='MAJOR'>
+    <name>Correctness - Method calls Mockito.when on a spied object</name>
+    <configKey>MK_USE_DORETURN</configKey>
+    <description>&lt;p&gt;Since the object is spied, calling Mockito.when(..) will execute the actual method which could cause unwanted side effects. Instead, when using
+            spied objects, use doReturn().when(...), which will not execute the original code.
             &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
