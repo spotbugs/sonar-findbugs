@@ -38,7 +38,7 @@ class MultiModuleIT {
     
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("multi-module"))
-      .setGoals("clean package sonar:sonar");
+      .setCleanPackageSonarGoals();
     orchestrator.executeBuild(build);
     
     Path appModuleReportPath = projectDir.toPath().resolve("multi-module-app/target/sonar/findbugs-result.xml");
