@@ -3697,9 +3697,9 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
         &lt;code&gt;&lt;/pre&gt;
         baubles.stream().map(Bauble::getName).collect(Collectors.toSet())
         &lt;/pre&gt;&lt;/code&gt;
-        or if the lambda expression is a where the parameter is passed a method reference like
+        or if the lambda expression is one where the parameter is passed to a method of a field, like
         &lt;code&gt;&lt;pre&gt;
-        baubles.stream().map(b -&gt; magic.getSpell(bauble)).collect(Collectors.toSet())
+        baubles.stream().map(b -&gt; magic.getSpell(b)).collect(Collectors.toSet())
         &lt;/pre&gt;&lt;/code&gt;
         do
         &lt;code&gt;&lt;/pre&gt;
@@ -3717,7 +3717,7 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>FII_USE_ANY_MATCH</configKey>
     <description>&lt;p&gt;This method uses a suboptimal way of determinng whether there are any items in a stream that match some value.
         Either it uses collect(), and checks the size, or uses the count() stream action. Either way, it is simpler and
-        economical to just use anyMatch, as as soon as an item is found, you can stop the stream.
+        economical to just use anyMatch, as, as soon as an item is found, you can stop the stream.
         &lt;/p&gt;
         &lt;p&gt;
         Instead of
@@ -4059,6 +4059,17 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
     <configKey>MK_USE_DORETURN</configKey>
     <description>&lt;p&gt;Since the object is spied, calling Mockito.when(..) will execute the actual method which could cause unwanted side effects. Instead, when using
             spied objects, use doReturn().when(...), which will not execute the original code.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MK_UNNEEDED_VALIDATEMOCKITOUSAGE' priority='MAJOR'>
+    <name>Correctness - Class uses MockitoExtension so doesn't need to validateMockitoUsage</name>
+    <configKey>MK_UNNEEDED_VALIDATEMOCKITOUSAGE</configKey>
+    <description>&lt;p&gt;This class defines that it uses 
+            &lt;code&gt;@ExtendWith(MockitoExtension.class)&lt;/code&gt;
+            therefore there is no need to use
+            &lt;code&gt;Mockito.validateMockitoUsage()&lt;/code&gt;
             &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
