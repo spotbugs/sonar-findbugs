@@ -2468,4 +2468,7 @@
   <Match>
     <Bug pattern='MK_USE_DORETURN' />
   </Match>
+  <Match>
+    <Bug pattern='MK_UNNEEDED_VALIDATEMOCKITOUSAGE' />
+  </Match>
 </FindBugsFilter>
