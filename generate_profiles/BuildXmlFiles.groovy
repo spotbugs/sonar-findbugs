@@ -202,6 +202,9 @@ def writeRules(String rulesSetName,List<Plugin> plugins,List<String> includedBug
                     if (pattern.Details.text().toLowerCase().contains('cwe')) {
                         tag("cwe")
                     }
+                    if (pattern.Details.text().toLowerCase().contains('wiki.sei.cmu.edu')) {
+						tag('cert')
+					}
                     if (pattern.ShortDescription.text().toLowerCase().contains('android')) {
                         tag("android")
                     }
