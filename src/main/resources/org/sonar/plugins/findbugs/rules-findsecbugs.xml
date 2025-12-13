@@ -5197,6 +5197,7 @@ if (matcher.find()) {
 &lt;a href="https://cwe.mitre.org/data/definitions/182.html"&gt;CWE-182: Collapse of Data into Unsafe Value&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>cert</tag>
     <tag>security</tag>
   </rule>
   <rule key='NORMALIZATION_AFTER_VALIDATION' priority='MAJOR'>
@@ -5240,6 +5241,7 @@ if (matcher.find()) {
 &lt;a href="https://cwe.mitre.org/data/definitions/289.html"&gt;CWE-289: Authentication Bypass by Alternate Name&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>cert</tag>
     <tag>security</tag>
   </rule>
   <rule key='DANGEROUS_PERMISSION_COMBINATION' priority='CRITICAL'>
@@ -5278,6 +5280,7 @@ pc.add(new RuntimePermission("createClassLoader"));
 &lt;a href="https://cwe.mitre.org/data/definitions/732.html"&gt;CWE-732: Incorrect Permission Assignment for Critical Resource&lt;/a&gt;&lt;br/&gt;
 &lt;/p&gt;</description>
     <tag>cwe</tag>
+    <tag>cert</tag>
     <tag>security</tag>
   </rule>
   <rule key='POTENTIAL_XML_INJECTION' priority='CRITICAL'>
@@ -5319,6 +5322,7 @@ phone for 1 singe dollar.
 &lt;/p&gt;</description>
     <tag>owasp-a1</tag>
     <tag>injection</tag>
+    <tag>cert</tag>
     <tag>security</tag>
   </rule>
 </rules>
