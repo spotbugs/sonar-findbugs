@@ -60,7 +60,7 @@
     <failsafe.version>3.5.4</failsafe.version>
     <sonar.server.version>9.9.7.96285</sonar.server.version>
     <sonar-plugin-api.version>9.14.0.375</sonar-plugin-api.version>
-    <sonar-java.version>8.20.0.40630</sonar-java.version>
+    <sonar-java.version>8.22.0.41895</sonar-java.version>
     
     <sonar-orchestrator.version>6.0.3.3907</sonar-orchestrator.version>
 
