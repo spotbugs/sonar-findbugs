@@ -176,7 +176,7 @@ class FindbugsIT {
     
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
         .setProperty(FindbugsConstants.ONLY_ANALYZE_PROPERTY, "Findbugs1")
-        .setGoals("clean package sonar:sonar");
+        .setGoals("clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar");
     orchestrator.executeBuild(build);
 
     // Check that class was really excluded from Findbugs analysis:
