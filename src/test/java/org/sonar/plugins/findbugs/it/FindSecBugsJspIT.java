@@ -62,7 +62,7 @@ class FindSecBugsJspIT {
       .setPom(FindbugsTestSuite.projectPom("jspc-jetty"))
       .setProperty("sonar.dynamicAnalysis", "false")
       .setProperty("sonar.findbugs.confidenceLevel", "low")
-      .setGoals("clean package sonar:sonar");
+      .setGoals("clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar");
     orchestrator.executeBuild(build);
 
     File projectDir = FindbugsTestSuite.projectPom("jspc-jetty").getParentFile();
