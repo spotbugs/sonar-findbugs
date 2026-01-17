@@ -9,13 +9,13 @@ import groovy.json.JsonSlurper;
 @Grapes([
 
     @Grab(group='com.github.spotbugs', module='spotbugs', version='4.9.8'),
-    @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.7.2'),
+    @Grab(group='com.mebigfatguy.sb-contrib', module='sb-contrib', version='7.7.3'),
     @Grab(group='com.h3xstream.findsecbugs' , module='findsecbugs-plugin', version='1.14.0')]
 )
 
 
 FB = new Plugin(groupId: 'com.github.spotbugs', artifactId: 'spotbugs', version: '4.9.8')
-CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.7.2')
+CONTRIB = new Plugin(groupId: 'com.mebigfatguy.sb-contrib', artifactId: 'sb-contrib', version: '7.7.3')
 FSB = new Plugin(groupId: 'com.h3xstream.findsecbugs', artifactId: 'findsecbugs-plugin', version: '1.14.0')
 
 def destDir() {
