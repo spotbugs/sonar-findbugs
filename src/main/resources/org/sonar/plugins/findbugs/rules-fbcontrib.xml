@@ -1264,6 +1264,28 @@ if ({{FLAWED_TEST_LOGIC}}) {
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
+  <rule key='MUI_USE_COMPUTEIFABSENT' priority='MAJOR'>
+    <name>Correctness - Method checks for a map entry for existence, and then puts the value in a non-atomic way</name>
+    <configKey>MUI_USE_COMPUTEIFABSENT</configKey>
+    <description>&lt;p&gt;This method gets the value of a ConcurrentHashMap entry, checks to see if it's null, and then puts a value into the map.
+            This is not atomic in nature and goes against the value of using a ConcurrentHashMap, better to use
+            &lt;code&gt;
+            ConcurrentHashMap.computeIfAbsent instead.
+            &lt;/code&gt;
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='MUI_RETURNING_NUTABLE_STATIC_MAP' priority='MAJOR'>
+    <name>Correctness - Method returns a mutable static map from a public method</name>
+    <configKey>MUI_RETURNING_NUTABLE_STATIC_MAP</configKey>
+    <description>&lt;p&gt;This method returns a private static map, allowing clients to modify the map without this class knowing it.
+            While this may be intended, it is usually better to wrap this map in Collections.unmodifiableMap to avoid this.
+            &lt;/code&gt;
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
   <rule key='SPP_USE_ISEMPTY' priority='INFO'>
     <name>Style - Method checks the size of a collection against zero rather than using isEmpty()</name>
     <configKey>SPP_USE_ISEMPTY</configKey>
@@ -2428,6 +2450,25 @@ if (name != null) {
 			It is better to just not pass any value at all, as there is confusion as to whether the null represents
 			the entire vararg array, or the first element of the varargs array&lt;/p&gt;</description>
     <tag>style</tag>
+  </rule>
+  <rule key='UVA_POSSIBLE_EXCESS_NULL' priority='MAJOR'>
+    <name>Correctness - Method potentially passes unexpected null to first var args parameter</name>
+    <configKey>UVA_POSSIBLE_EXCESS_NULL</configKey>
+    <description>&lt;p&gt;This method calls a var arg method, and passes an explicit null value as the first argument in the list of 
+            var args. This may be perfectly fine, but can be a sign that the number of parameters passed to the method is incorrect.&lt;/p&gt;
+            For instance, the method
+            
+            &lt;code&gt;&lt;pre&gt;
+                void processFamily(String primary, Long age, String... dependents)
+            &lt;/pre&gt;&lt;/code&gt;
+            might be called accidentally like
+            &lt;code&gt;&lt;pre&gt;
+                processFamily("John Doe", null, null, "Jane Doe", "Mary Doe", "Bob Doe")
+            &lt;/code&gt;&lt;/pre&gt;
+            because the method originally had a weight parameter after the age. Now that null goes to the var arg instead.
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
   </rule>
   <rule key='PUS_POSSIBLE_UNSUSPECTED_SERIALIZATION' priority='MAJOR'>
     <name>Correctness - Method serializes an instance of a non-static inner class</name>
@@ -4073,5 +4114,14 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
             &lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
+  </rule>
+  <rule key='SI_USE_NULL_CASE' priority='INFO'>
+    <name>Style - Method checks a switch variable for null outside of the switch itself</name>
+    <configKey>SI_USE_NULL_CASE</configKey>
+    <description>&lt;p&gt;This method checks to see that a switch variable is not null before entering the switch. This 
+            was required before Java 17, however, now it is cleaner just to add a case null for it.
+            If you are using jdk's below 21, you would need to specify --enable-preview on the command line.
+            &lt;/p&gt;</description>
+    <tag>style</tag>
   </rule>
 </rules>
