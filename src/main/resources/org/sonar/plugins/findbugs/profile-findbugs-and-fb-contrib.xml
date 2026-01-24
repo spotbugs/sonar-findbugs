@@ -1764,7 +1764,7 @@
     <Bug pattern='MUI_USE_COMPUTEIFABSENT' />
   </Match>
   <Match>
-    <Bug pattern='MUI_RETURNING_NUTABLE_STATIC_MAP' />
+    <Bug pattern='MUI_RETURNING_MUTABLE_STATIC_MAP' />
   </Match>
   <Match>
     <Bug pattern='SPP_USE_ISEMPTY' />
@@ -1897,6 +1897,9 @@
   </Match>
   <Match>
     <Bug pattern='UTAO_JUNIT_ASSERTION_ODDITIES_USING_DEPRECATED' />
+  </Match>
+  <Match>
+    <Bug pattern='UTAO_JUNIT_ASSERTION_ODDITIES_PRIVATE_ANNOTATED_METHOD' />
   </Match>
   <Match>
     <Bug pattern='UTAO_TESTNG_ASSERTION_ODDITIES_ACTUAL_CONSTANT' />
@@ -2437,6 +2440,9 @@
   </Match>
   <Match>
     <Bug pattern='SUI_CONTAINS_BEFORE_REMOVE' />
+  </Match>
+  <Match>
+    <Bug pattern='SUI_RETURNING_MUTABLE_STATIC_MAP' />
   </Match>
   <Match>
     <Bug pattern='SAT_SUSPICIOUS_ARGUMENT_TYPES' />

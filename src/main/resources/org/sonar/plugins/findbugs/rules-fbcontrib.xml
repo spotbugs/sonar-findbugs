@@ -1276,9 +1276,9 @@ if ({{FLAWED_TEST_LOGIC}}) {
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
-  <rule key='MUI_RETURNING_NUTABLE_STATIC_MAP' priority='MAJOR'>
+  <rule key='MUI_RETURNING_MUTABLE_STATIC_MAP' priority='MAJOR'>
     <name>Correctness - Method returns a mutable static map from a public method</name>
-    <configKey>MUI_RETURNING_NUTABLE_STATIC_MAP</configKey>
+    <configKey>MUI_RETURNING_MUTABLE_STATIC_MAP</configKey>
     <description>&lt;p&gt;This method returns a private static map, allowing clients to modify the map without this class knowing it.
             While this may be intended, it is usually better to wrap this map in Collections.unmodifiableMap to avoid this.
             &lt;/code&gt;
@@ -1720,6 +1720,13 @@ return new String[0];&lt;br/&gt;
     <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_USING_DEPRECATED</configKey>
     <description>&lt;p&gt;This JUnit 4 test is still using classes from the junit.framework.* package. You should switch them
 			over to the corresponding org.junit.* set of classes, instead.&lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='UTAO_JUNIT_ASSERTION_ODDITIES_PRIVATE_ANNOTATED_METHOD' priority='MAJOR'>
+    <name>Correctness - JUnit 5 annotated method is declared private</name>
+    <configKey>UTAO_JUNIT_ASSERTION_ODDITIES_PRIVATE_ANNOTATED_METHOD</configKey>
+    <description>&lt;p&gt;This JUnit 5 annotated method has visibility private, you should change this to package private at least.&lt;/p&gt;</description>
     <tag>correctness</tag>
     <tag>bug</tag>
   </rule>
@@ -3977,6 +3984,16 @@ if (shouldCalcHalting &amp;&amp; (calculateHaltingProbability() &amp;gt; 0) { }
                 if (mySet.remove("foo")) {
                 }
             &lt;/pre&gt;
+            &lt;/code&gt;
+            &lt;/p&gt;</description>
+    <tag>correctness</tag>
+    <tag>bug</tag>
+  </rule>
+  <rule key='SUI_RETURNING_MUTABLE_STATIC_MAP' priority='MAJOR'>
+    <name>Correctness - Method returns a mutable static set from a public method</name>
+    <configKey>SUI_RETURNING_MUTABLE_STATIC_MAP</configKey>
+    <description>&lt;p&gt;This method returns a private static set, allowing clients to modify the set without this class knowing it.
+            While this may be intended, it is usually better to wrap this set in Collections.unmodifiableSet to avoid this.
             &lt;/code&gt;
             &lt;/p&gt;</description>
     <tag>correctness</tag>
