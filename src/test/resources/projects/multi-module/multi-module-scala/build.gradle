@@ -3,6 +3,6 @@ plugins {
 }
 
 dependencies {
-    implementation 'org.scala-lang:scala3-library_3:3.0.1'
+    implementation 'org.scala-lang:scala3-library_3:3.4.0'
     implementation project(':multi-module-core')
 }

@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>org.scala-lang</groupId>
 			<artifactId>scala3-library_3</artifactId>
-			<version>3.1.2</version>
+			<version>3.4.0</version>
 		</dependency>
 	</dependencies>
 </project>
