@@ -6,3 +6,8 @@ dependencies {
     implementation 'org.codehaus.groovy:groovy-all:2.4.15'
     implementation project(':multi-module-core')
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}

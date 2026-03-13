@@ -2,3 +2,8 @@ dependencies {
     implementation project(':multi-module-core')
     implementation project(':multi-module-fx')
 }
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
