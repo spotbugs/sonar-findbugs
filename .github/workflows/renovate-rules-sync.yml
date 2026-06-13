@@ -1,0 +1,184 @@
+name: Generate Rule Metadata on Plugin Renovate Updates
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches:
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate-rule-metadata:
+    if: >
+      startsWith(github.head_ref, 'renovate/') &&
+      (
+        contains(github.head_ref, 'spotbugs') ||
+        contains(github.head_ref, 'sb-contrib') ||
+        contains(github.head_ref, 'findsecbugs')
+      )
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out PR branch
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Groovy
+        run: |
+          set -euo pipefail
+          GROOVY_VERSION="4.0.21"
+          GROOVY_HOME="/opt/groovy"
+          INSTALL_ROOT="/tmp/groovy-install"
+
+          rm -rf "$INSTALL_ROOT" "$GROOVY_HOME"
+          mkdir -p "$INSTALL_ROOT"
+          cd "$INSTALL_ROOT"
+
+          curl -fLsS -o groovy-sdk.zip "https://groovy.jfrog.io/artifactory/dist-release-local/groovy-zips/apache-groovy-sdk-${GROOVY_VERSION}.zip"
+          unzip -q groovy-sdk.zip -d extracted
+
+          EXTRACTED_DIR="$(find extracted -mindepth 1 -maxdepth 1 -type d | head -n1)"
+          if [[ -z "$EXTRACTED_DIR" ]]; then
+            echo 'Failed to locate extracted Groovy SDK directory' >&2
+            exit 1
+          fi
+
+          mv "$EXTRACTED_DIR" "$GROOVY_HOME"
+          echo "GROOVY_HOME=$GROOVY_HOME" >> "$GITHUB_ENV"
+          echo "$GROOVY_HOME/bin" >> "$GITHUB_PATH"
+          "$GROOVY_HOME/bin/groovy" --version
+
+      - name: Generate XML profiles and update rule counts
+        run: |
+          set -euo pipefail
+          trap 'echo "ERROR: command failed at line ${LINENO}" >&2' ERR
+
+          echo 'Starting Generate XML profiles and update rule counts step'
+          echo "Working directory: $(pwd)"
+
+          update_rule_count() {
+            local xml_path="$1"
+            local java_path="$2"
+            local explicit_deactivated_rule_count="${3:-}"
+
+            local rule_tag_count
+            rule_tag_count="$(grep -oE '<rule([[:space:]]|>)' "$xml_path" | wc -l | tr -d ' ')"
+            if [[ "$rule_tag_count" -le 0 ]]; then
+              echo "No <rule> tags found in $xml_path" >&2
+              exit 1
+            fi
+
+            local deactivated_rule_count
+            if [[ -n "$explicit_deactivated_rule_count" ]]; then
+              deactivated_rule_count="$explicit_deactivated_rule_count"
+            else
+              deactivated_rule_count="$(sed -nE 's/.*DEACTIVED_RULE_COUNT[[:space:]]*=[[:space:]]*([0-9]+).*/\1/p' "$java_path" | head -n1)"
+              deactivated_rule_count="${deactivated_rule_count:-0}"
+            fi
+
+            local new_rule_count=$((rule_tag_count - deactivated_rule_count))
+            if [[ "$new_rule_count" -lt 0 ]]; then
+              echo "Computed negative RULE_COUNT for $java_path" >&2
+              exit 1
+            fi
+
+            local tmp_file
+            tmp_file="$(mktemp)"
+            perl -pe "if (!\$done && s/public static final int RULE_COUNT\\s*=\\s*\\d+;/public static final int RULE_COUNT = ${new_rule_count};/) { \$done=1 }" "$java_path" > "$tmp_file"
+
+            if cmp -s "$java_path" "$tmp_file"; then
+              if grep -qE 'public static final int RULE_COUNT\s*=\s*[0-9]+;' "$java_path"; then
+                echo "RULE_COUNT already up to date in $java_path (target value: $new_rule_count); no change needed"
+              else
+                echo "WARNING: Could not find RULE_COUNT declaration in $java_path; leaving file unchanged"
+              fi
+              rm -f "$tmp_file"
+              return 0
+            fi
+
+            mv "$tmp_file" "$java_path"
+            echo "Updated $java_path to RULE_COUNT=$new_rule_count (rule tags: $rule_tag_count, deactivated: $deactivated_rule_count)"
+          }
+
+          echo 'Running groovy BuildXmlFiles.groovy in generate_profiles/'
+          if ! groovy_output="$(cd generate_profiles && groovy BuildXmlFiles.groovy 2>&1)"; then
+            echo 'BuildXmlFiles.groovy failed; captured output follows:' >&2
+            printf '%s\n' "$groovy_output" >&2
+            exit 1
+          fi
+          printf '%s\n' "$groovy_output"
+
+          total_bug_count="$(printf '%s\n' "$groovy_output" | sed -nE 's/.*Total bugs patterns[[:space:]]+([0-9]+).*/\1/p' | tail -n1)"
+          if [[ -z "$total_bug_count" ]]; then
+            echo 'Could not parse "Total bugs patterns <number>" from BuildXmlFiles.groovy output' >&2
+            echo 'Full BuildXmlFiles.groovy output was:' >&2
+            printf '%s\n' "$groovy_output" >&2
+            exit 1
+          fi
+          echo "Parsed total bug patterns: $total_bug_count"
+
+          before_badge_line="$(grep -m1 'SpotBugs_rules-' README.md || true)"
+          sed -E -i "s#(SpotBugs_rules-)[0-9]+(-brightgreen\.svg\?maxAge=2592000)#\1${total_bug_count}\2#" README.md
+          after_badge_line="$(grep -m1 'SpotBugs_rules-' README.md || true)"
+
+          if [[ "$before_badge_line" == "$after_badge_line" ]]; then
+            echo 'README.md SpotBugs badge count already up to date; no change needed'
+          else
+            echo "Updated README.md SpotBugs badge count to $total_bug_count"
+          fi
+
+          pull_request_context="${{ github.event.pull_request.title }} ${{ github.head_ref }}"
+          pull_request_context="$(printf '%s' "$pull_request_context" | tr '[:upper:]' '[:lower:]')"
+
+          if [[ "$pull_request_context" == *spotbugs* ]]; then
+            update_rule_count \
+              src/main/resources/org/sonar/plugins/findbugs/rules-findbugs.xml \
+              src/main/java/org/sonar/plugins/findbugs/rules/FindbugsRulesDefinition.java
+          fi
+
+          if [[ "$pull_request_context" == *sb-contrib* || "$pull_request_context" == *sbcontrib* ]]; then
+            update_rule_count \
+              src/main/resources/org/sonar/plugins/findbugs/rules-fbcontrib.xml \
+              src/main/java/org/sonar/plugins/findbugs/rules/FbContribRulesDefinition.java
+          fi
+
+          if [[ "$pull_request_context" == *findsecbugs* ]]; then
+            update_rule_count \
+              src/main/resources/org/sonar/plugins/findbugs/rules-findsecbugs.xml \
+              src/main/java/org/sonar/plugins/findbugs/rules/FindSecurityBugsRulesDefinition.java \
+              0
+            update_rule_count \
+              src/main/resources/org/sonar/plugins/findbugs/rules-scala.xml \
+              src/main/java/org/sonar/plugins/findbugs/rules/FindSecurityBugsScalaRulesDefinition.java \
+              0
+          fi
+
+      - name: Commit and push changes
+        run: |
+          set -euo pipefail
+
+          if [[ -z "$(git status --porcelain)" ]]; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+
+          git config user.name 'renovate[bot]'
+          git config user.email '29139614+renovate[bot]@users.noreply.github.com'
+
+          git add -A
+          git commit -m 'chore: regenerate rule profiles and counts'
+          git push origin "HEAD:${{ github.head_ref }}"
+
