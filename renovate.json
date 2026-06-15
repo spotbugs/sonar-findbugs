@@ -2,5 +2,138 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update @Grab dependency versions in BuildXmlFiles.groovy",
+      "managerFilePatterns": [
+        "/^generate_profiles\\/BuildXmlFiles\\.groovy$/"
+      ],
+      "matchStrings": [
+        "@Grab\\(group='(?<groupId>[^']+)', module='(?<artifactId>[^']+)', version='(?<currentValue>[^']+)'\\)"
+      ],
+      "depNameTemplate": "{{{groupId}}}:{{{artifactId}}}",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update Plugin(...) dependency versions in BuildXmlFiles.groovy",
+      "managerFilePatterns": [
+        "/^generate_profiles\\/BuildXmlFiles\\.groovy$/"
+      ],
+      "matchStrings": [
+        "new Plugin\\(groupId: '(?<groupId>[^']+)', artifactId: '(?<artifactId>[^']+)', version: '(?<currentValue>[^']+)'\\)"
+      ],
+      "depNameTemplate": "{{{groupId}}}:{{{artifactId}}}",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update spotbugs.version property in pom.xml",
+      "managerFilePatterns": [
+        "/^pom\\.xml$/"
+      ],
+      "matchStrings": [
+        "<spotbugs.version>(?<currentValue>[^<]+)</spotbugs.version>"
+      ],
+      "depNameTemplate": "com.github.spotbugs:spotbugs",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update sbcontrib.version property in pom.xml",
+      "managerFilePatterns": [
+        "/^pom\\.xml$/"
+      ],
+      "matchStrings": [
+        "<sbcontrib.version>(?<currentValue>[^<]+)</sbcontrib.version>"
+      ],
+      "depNameTemplate": "com.mebigfatguy.sb-contrib:sb-contrib",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update findsecbugs.version property in pom.xml",
+      "managerFilePatterns": [
+        "/^pom\\.xml$/"
+      ],
+      "matchStrings": [
+        "<findsecbugs.version>(?<currentValue>[^<]+)</findsecbugs.version>"
+      ],
+      "depNameTemplate": "com.h3xstream.findsecbugs:findsecbugs-plugin",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the SpotBugs version in the README compatibility table",
+      "managerFilePatterns": [
+        "/^README\\.md$/"
+      ],
+      "matchStrings": [
+        "(?m)^\\s*[^|\\r\\n]*-SNAPSHOT\\s*\\|\\s*(?<currentValue>[^|\\r\\n]+)\\s+\\(SpotBugs\\)\\s*\\|"
+      ],
+      "depNameTemplate": "com.github.spotbugs:spotbugs",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the FindSecBugs version in the README compatibility table",
+      "managerFilePatterns": [
+        "/^README\\.md$/"
+      ],
+      "matchStrings": [
+        "(?m)^\\s*[^|\\r\\n]*-SNAPSHOT\\s*\\|\\s*[^|\\r\\n]+\\s*\\|\\s*(?<currentValue>[^|\\r\\n]+)\\s*\\|"
+      ],
+      "depNameTemplate": "com.h3xstream.findsecbugs:findsecbugs-plugin",
+      "datasourceTemplate": "maven"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the FB-Contrib version in the README compatibility table",
+      "managerFilePatterns": [
+        "/^README\\.md$/"
+      ],
+      "matchStrings": [
+        "(?m)^\\s*[^|\\r\\n]*-SNAPSHOT\\s*\\|\\s*[^|\\r\\n]+\\s*\\|\\s*[^|\\r\\n]+\\s*\\|\\s*(?<currentValue>[^|\\r\\n]+)\\s+\\(sb-contrib\\)\\s*\\|"
+      ],
+      "depNameTemplate": "com.mebigfatguy.sb-contrib:sb-contrib",
+      "datasourceTemplate": "maven"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group SpotBugs updates from pom.xml and BuildXmlFiles.groovy into one PR",
+      "matchPackageNames": [
+        "com.github.spotbugs:spotbugs"
+      ],
+      "matchManagers": [
+        "maven",
+        "regex"
+      ],
+      "groupName": "spotbugs updates"
+    },
+    {
+      "description": "Group sb-contrib updates from pom.xml and BuildXmlFiles.groovy into one PR",
+      "matchPackageNames": [
+        "com.mebigfatguy.sb-contrib:sb-contrib"
+      ],
+      "matchManagers": [
+        "maven",
+        "regex"
+      ],
+      "groupName": "sb-contrib updates"
+    },
+    {
+      "description": "Group FindSecBugs updates from pom.xml and BuildXmlFiles.groovy into one PR",
+      "matchPackageNames": [
+        "com.h3xstream.findsecbugs:findsecbugs-plugin"
+      ],
+      "matchManagers": [
+        "maven",
+        "regex"
+      ],
+      "groupName": "findsecbugs updates"
+    }
   ]
 }
