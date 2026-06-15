@@ -6,7 +6,7 @@
 
             &lt;p&gt;A finalizer attack can be prevented, by declaring the class final, using an empty finalizer declared as final, or by a clever use of a private constructor.&lt;/p&gt;
 
-            &lt;p&gt;See &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/OBJ11-J.+Be+wary+of+letting+constructors+throw+exceptions"&gt;&lt;code&gt;SEI CERT Rule OBJ-11&lt;/code&gt;&lt;/a&gt;
+            &lt;p&gt;See &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/object-orientation-obj/obj11-j/"&gt;&lt;code&gt;SEI CERT Rule OBJ-11&lt;/code&gt;&lt;/a&gt;
             for more information.
             &lt;/p&gt;</description>
     <tag>cert</tag>
@@ -1810,7 +1810,7 @@ is locking on something that other code might also be locking. This could result
 blocking and deadlock behavior. See &lt;a href="http://www.javalobby.org/java/forums/t96352.html"&gt;http://www.javalobby.org/java/forums/t96352.html&lt;/a&gt; and &lt;a href="http://jira.codehaus.org/browse/JETTY-352"&gt;http://jira.codehaus.org/browse/JETTY-352&lt;/a&gt;.
 &lt;/p&gt;
 &lt;p&gt;
-See CERT &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
+See CERT &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck01-j/"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
 and &lt;a href="https://cwe.mitre.org/data/definitions/412.html"&gt;CWE-412: Unrestricted Externally Accessible Lock&lt;/a&gt;
 for more information.
 &lt;/p&gt;</description>
@@ -1835,7 +1835,7 @@ is locking on something that other code might also be locking. This could result
 blocking and deadlock behavior. See &lt;a href="http://www.javalobby.org/java/forums/t96352.html"&gt;http://www.javalobby.org/java/forums/t96352.html&lt;/a&gt; and &lt;a href="http://jira.codehaus.org/browse/JETTY-352"&gt;http://jira.codehaus.org/browse/JETTY-352&lt;/a&gt;.
 &lt;/p&gt;
 &lt;p&gt;
-See CERT &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
+See CERT &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck01-j/"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
 and &lt;a href="https://cwe.mitre.org/data/definitions/412.html"&gt;CWE-412: Unrestricted Externally Accessible Lock&lt;/a&gt;
 for more information.
 &lt;/p&gt;</description>
@@ -1861,7 +1861,7 @@ synchronized(inited) {
 &lt;p&gt;Since there normally exist only two Boolean objects, this code could be synchronizing on the same object as other, unrelated code, leading to unresponsiveness
 and possible deadlock.&lt;/p&gt;
 &lt;p&gt;
-See CERT &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
+See CERT &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck01-j/"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
 and &lt;a href="https://cwe.mitre.org/data/definitions/412.html"&gt;CWE-412: Unrestricted Externally Accessible Lock&lt;/a&gt;
 for more information.
 &lt;/p&gt;</description>
@@ -1892,7 +1892,7 @@ might replace this with the use of an interned Integer object shared
 throughout the JVM, leading to very confusing behavior and potential deadlock.
 &lt;/p&gt;
 &lt;p&gt;
-See CERT &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
+See CERT &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck01-j/"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
 and &lt;a href="https://cwe.mitre.org/data/definitions/412.html"&gt;CWE-412: Unrestricted Externally Accessible Lock&lt;/a&gt;
 for more information.
 &lt;/p&gt;</description>
@@ -1916,7 +1916,7 @@ synchronized(count) {
 this code could be synchronizing on the same object as other, unrelated code, leading to unresponsiveness
 and possible deadlock.&lt;/p&gt;
 &lt;p&gt;
-See CERT &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
+See CERT &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck01-j/"&gt;LCK01-J. Do not synchronize on objects that may be reused&lt;/a&gt;
 and &lt;a href="https://cwe.mitre.org/data/definitions/412.html"&gt;CWE-412: Unrestricted Externally Accessible Lock&lt;/a&gt;
 for more information.
 &lt;/p&gt;</description>
@@ -2344,7 +2344,12 @@ be confusing to users of this class.&lt;/p&gt;</description>
   reads from input streams usually do read the full amount of data requested,
   causing the program to fail only sporadically.&lt;/p&gt;
   &lt;p&gt;See &lt;a href="https://cwe.mitre.org/data/definitions/252.html"&gt;CWE-252: Unchecked Return Value&lt;/a&gt;.
-&lt;/p&gt;</description>
+&lt;/p&gt;
+
+  &lt;p&gt;Additionally, it is not sufficient to simply check for the end of the file (EOF)
+  as an indicator that the entire array has been filled. The return value of
+  &lt;code&gt;read()&lt;/code&gt; must be verified to ensure that the correct number of bytes
+  have been read.&lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>bad-practice</tag>
   </rule>
@@ -4550,7 +4555,7 @@ does not need to be created, just access the static methods directly using the c
     <name>Style - NullPointerException caught</name>
     <configKey>DCN_NULLPOINTER_EXCEPTION</configKey>
     <description>&lt;p&gt;
-According to SEI Cert rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR08-J.+Do+not+catch+NullPointerException+or+any+of+its+ancestors"&gt;ERR08-J&lt;/a&gt; NullPointerException should not be caught. Handling NullPointerException is considered an inferior alternative to null-checking.
+According to SEI Cert rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/exceptional-behavior-err/err08-j/"&gt;ERR08-J&lt;/a&gt; NullPointerException should not be caught. Handling NullPointerException is considered an inferior alternative to null-checking.
 &lt;p&gt;
 This non-compliant code catches a NullPointerException to see if an incoming parameter is null:
 &lt;/p&gt;
@@ -5977,7 +5982,7 @@ after the call to initLogging, the logger configuration is lost
             This may lead to data corruption. Use synchronization or other
             concurrency control mechanisms to ensure that the resource is accessed safely.&lt;/p&gt;
         &lt;p&gt;See the related SEI CERT rule, but the detector is not restricted to chained methods:
-          &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/VNA04-J.+Ensure+that+calls+to+chained+methods+are+atomic"&gt;
+          &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/visibility-and-atomicity-vna/vna04-j/"&gt;
           VNA04-J. Ensure that calls to chained methods are atomic&lt;/a&gt;.
         &lt;/p&gt;
         &lt;p&gt;See the following references:
@@ -6044,7 +6049,7 @@ object explicitly.&lt;/p&gt;
       Character.MAX_VALUE. Comparing the result to -1 is pointless, since characters are unsigned in Java. If the
       checking for EOF is the condition of a loop then this loop is infinite.&lt;/p&gt;
       &lt;p&gt;
-      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/FIO08-J.+Distinguish+between+characters+or+bytes+read+from+a+stream+and+-1"&gt;FIO08-J. Distinguish between characters or bytes read from a stream and -1&lt;/a&gt;.
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/input-output-fio/fio08-j/"&gt;FIO08-J. Distinguish between characters or bytes read from a stream and -1&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>correctness</tag>
@@ -6054,7 +6059,7 @@ object explicitly.&lt;/p&gt;
     <name>Malicious code - Public method uses reflection to create a class it gets in its parameter which could increase the accessibility of any class</name>
     <configKey>REFLC_REFLECTION_MAY_INCREASE_ACCESSIBILITY_OF_CLASS</configKey>
     <description>&lt;p&gt;
-        &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC05-J.+Do+not+use+reflection+to+increase+accessibility+of+classes%2C+methods%2C+or+fields"&gt;SEI CERT SEC05-J&lt;/a&gt; rule forbids the use of reflection to increase accessibility of classes, methods or fields. If
+        &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/platform-security-sec/sec05-j/"&gt;SEI CERT SEC05-J&lt;/a&gt; rule forbids the use of reflection to increase accessibility of classes, methods or fields. If
         a class in a package provides a public method which takes an instance of java.lang.Class as its parameter and
         calls its newInstance() method then it increases accessibility of classes in the same package without public
         constructors. An attacker code may call this method and pass such class to create an instance of it. This should
@@ -6073,7 +6078,7 @@ object explicitly.&lt;/p&gt;
     <name>Malicious code - Public method uses reflection to modify a field it gets in its parameter which could increase the accessibility of any class</name>
     <configKey>REFLF_REFLECTION_MAY_INCREASE_ACCESSIBILITY_OF_FIELD</configKey>
     <description>&lt;p&gt;
-        &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC05-J.+Do+not+use+reflection+to+increase+accessibility+of+classes%2C+methods%2C+or+fields"&gt;SEI CERT SEC05-J&lt;/a&gt; rule forbids the use of reflection to increase accessibility of classes, methods or fields. If
+        &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/platform-security-sec/sec05-j/"&gt;SEI CERT SEC05-J&lt;/a&gt; rule forbids the use of reflection to increase accessibility of classes, methods or fields. If
         a class in a package provides a public method which takes an instance of java.lang.reflect.Field as its
         parameter and calls a setter (or setAccessible()) method then it increases accessibility of fields in the same
         package which are private, protected or package private. An attacker code may call this method and pass such
@@ -6095,7 +6100,7 @@ object explicitly.&lt;/p&gt;
       leak the this reference of the partially constructed object. Only static, final or private methods should be
       invoked from a constructor.&lt;/p&gt;
       &lt;p&gt;
-      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MET05-J.+Ensure+that+constructors+do+not+call+overridable+methods"&gt;MET05-J. Ensure that constructors do not call overridable methods&lt;/a&gt;.
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/methods-met/met05-j/"&gt;MET05-J. Ensure that constructors do not call overridable methods&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>malicious-code</tag>
@@ -6109,7 +6114,7 @@ object explicitly.&lt;/p&gt;
       state. Only static, final or private methods should be invoked from the clone() method.&lt;/p&gt;
       &lt;p&gt;
       See SEI CERT rule
-      &lt;a href="https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88487921"&gt;MET06-J. Do not invoke overridable methods in clone()&lt;/a&gt;.
+      &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/methods-met/met06-j/"&gt;MET06-J. Do not invoke overridable methods in clone()&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>malicious-code</tag>
@@ -6124,7 +6129,7 @@ object explicitly.&lt;/p&gt;
       therefore object initialization is not complete until readObject exits.&lt;/p&gt;
       &lt;p&gt;
       &lt;br/&gt;
-      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SER09-J.+Do+not+invoke+overridable+methods+from+the+readObject%28%29+method"&gt;
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/serialization-ser/ser09-j/"&gt;
       SER09-J. Do not invoke overridable methods from the readObject() method&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>cert</tag>
@@ -6137,7 +6142,7 @@ object explicitly.&lt;/p&gt;
         If a class using singleton design pattern directly implements the Cloneable interface, it is possible to create a copy of the object, thus violating the singleton pattern.&lt;br&gt;
         Therefore, implementing the Cloneable interface should be avoided.&lt;br&gt;&lt;br&gt;
 
-        For more information, see: &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC07-J.+Prevent+multiple+instantiations+of+singleton+objects"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
+        For more information, see: &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/miscellaneous-msc/msc07-j/"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
         &lt;a href="https://cwe.mitre.org/data/definitions/543.html"&gt;CWE-543: Use of Singleton Pattern Without Synchronization in a Multithreaded Context&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -6152,7 +6157,7 @@ object explicitly.&lt;/p&gt;
         If a class using singleton design pattern indirectly implements the Cloneable interface, it is possible to create a copy of the object, thus violating the singleton pattern.&lt;br&gt;
         Therefore, implementing the Cloneable interface should be avoided. If that's not possible because of an extended super-class, the solution would be overriding the clone method to unconditionally throw CloneNotSupportedException.&lt;br&gt;&lt;br&gt;
 
-        For more information, see: &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC07-J.+Prevent+multiple+instantiations+of+singleton+objects"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
+        For more information, see: &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/miscellaneous-msc/msc07-j/"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
         &lt;a href="https://cwe.mitre.org/data/definitions/543.html"&gt;CWE-543: Use of Singleton Pattern Without Synchronization in a Multithreaded Context&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -6168,7 +6173,7 @@ object explicitly.&lt;/p&gt;
         With that, it is possible to create a copy of the object, thus violating the singleton pattern.&lt;br&gt;
         Therefore, implementing the clone method should be avoided, otherwise the solution would be overriding the clone method to unconditionally throw CloneNotSupportedException.&lt;br&gt;&lt;br&gt;
 
-        For more information, see: &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC07-J.+Prevent+multiple+instantiations+of+singleton+objects"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
+        For more information, see: &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/miscellaneous-msc/msc07-j/"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
         &lt;a href="https://cwe.mitre.org/data/definitions/543.html"&gt;CWE-543: Use of Singleton Pattern Without Synchronization in a Multithreaded Context&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -6183,7 +6188,7 @@ object explicitly.&lt;/p&gt;
         This class is using singleton design pattern and has non-private constructor (please note that a default constructor might exist which is not private). Given that, it is possible to create a copy of the object, thus violating the singleton pattern.&lt;br&gt;
         The easier solution would be making the constructor private.&lt;br&gt;&lt;br&gt;
 
-        For more information, see: &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC07-J.+Prevent+multiple+instantiations+of+singleton+objects"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
+        For more information, see: &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/miscellaneous-msc/msc07-j/"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
         &lt;a href="https://cwe.mitre.org/data/definitions/543.html"&gt;CWE-543: Use of Singleton Pattern Without Synchronization in a Multithreaded Context&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -6198,7 +6203,7 @@ object explicitly.&lt;/p&gt;
         This class (using singleton design pattern) directly or indirectly implements the Serializable interface, which allows the class to be serialized.&lt;br&gt;
         Deserialization makes multiple instantiation of a singleton class possible, and therefore should be avoided.&lt;br&gt;&lt;br&gt;
 
-        For more information, see: &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC07-J.+Prevent+multiple+instantiations+of+singleton+objects"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
+        For more information, see: &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/miscellaneous-msc/msc07-j/"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
         &lt;a href="https://cwe.mitre.org/data/definitions/543.html"&gt;CWE-543: Use of Singleton Pattern Without Synchronization in a Multithreaded Context&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -6213,7 +6218,7 @@ object explicitly.&lt;/p&gt;
         Instance-getter method of class using singleton design pattern is not synchronized. When this method is invoked by two or more threads simultaneously,
         multiple instantiation of a singleton class becomes possible.&lt;br&gt;&lt;br&gt;
 
-        For more information, see: &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MSC07-J.+Prevent+multiple+instantiations+of+singleton+objects"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
+        For more information, see: &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/miscellaneous-msc/msc07-j/"&gt;SEI CERT MSC07-J&lt;/a&gt;, and
         &lt;a href="https://cwe.mitre.org/data/definitions/543.html"&gt;CWE-543: Use of Singleton Pattern Without Synchronization in a Multithreaded Context&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cwe</tag>
@@ -6232,7 +6237,7 @@ object explicitly.&lt;/p&gt;
         Best solution is to use a private static final lock object to secure the shared static data.&lt;/p&gt;
       &lt;p&gt;
       See SEI CERT rule
-      &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/LCK06-J.+Do+not+use+an+instance+lock+to+protect+shared+static+data"&gt;
+      &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck06-j/"&gt;
       LCK06-J. Do not use an instance lock to protect shared static data&lt;/a&gt;
       and &lt;a href="https://cwe.mitre.org/data/definitions/667.html"&gt;CWE-667: Improper Locking&lt;/a&gt;.
       &lt;/p&gt;</description>
@@ -6246,7 +6251,7 @@ object explicitly.&lt;/p&gt;
     <configKey>FL_FLOATS_AS_LOOP_COUNTERS</configKey>
     <description>&lt;p&gt;
 Using floating-point variables should not be used as loop counters, as they are not precise, which may result in incorrect loops. A loop counter is a variable that is changed with each iteration and controls when the loop should terminate. It is decreased or increased by a fixed amount each iteration.&lt;/p&gt;
-&lt;p&gt;See rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/NUM09-J.+Do+not+use+floating-point+variables+as+loop+counters"&gt;NUM09-J&lt;/a&gt;
+&lt;p&gt;See rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/numeric-types-and-operations-num/num09-j/"&gt;NUM09-J&lt;/a&gt;
  and &lt;a href="https://cwe.mitre.org/data/definitions/1339.html"&gt;CWE-1339: Insufficient Precision or Accuracy of a Real Number&lt;/a&gt;.&lt;/p&gt;</description>
     <tag>cwe</tag>
     <tag>cert</tag>
@@ -6259,11 +6264,11 @@ Using floating-point variables should not be used as loop counters, as they are 
     <description>&lt;p&gt;
         Method intentionally throws RuntimeException.&lt;br&gt;
 
-        According to the &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR07-J.+Do+not+throw+RuntimeException%2C+Exception%2C+or+Throwable"&gt;SEI CERT ERR07-J rule&lt;/a&gt;,
+        According to the &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/exceptional-behavior-err/err07-j/"&gt;SEI CERT ERR07-J rule&lt;/a&gt;,
         throwing a RuntimeException may cause errors, like the caller not being able to examine the exception and therefore cannot properly recover from it.&lt;br&gt;
 
         Moreover, throwing a RuntimeException would force the caller to catch RuntimeException and therefore violate the
-        &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR08-J.+Do+not+catch+NullPointerException+or+any+of+its+ancestors"&gt;SEI CERT ERR08-J rule&lt;/a&gt;.&lt;br&gt;
+        &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/exceptional-behavior-err/err08-j/"&gt;SEI CERT ERR08-J rule&lt;/a&gt;.&lt;br&gt;
 
         Please note that you can derive from Exception or RuntimeException and may throw a new instance of that exception.
         &lt;/p&gt;&lt;p&gt;
@@ -6284,7 +6289,7 @@ Using floating-point variables should not be used as loop counters, as they are 
         Therefore, using Exception in the throws clause would force the caller to either use it in its own throws clause, or use it in a try-catch block (when it does not necessarily
         contain any meaningful information about the thrown exception).&lt;br&gt;&lt;br&gt;
 
-        For more information, see the &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR07-J.+Do+not+throw+RuntimeException%2C+Exception%2C+or+Throwable"&gt;SEI CERT ERR07-J rule&lt;/a&gt;.
+        For more information, see the &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/exceptional-behavior-err/err07-j/"&gt;SEI CERT ERR07-J rule&lt;/a&gt;.
         &lt;/p&gt;&lt;p&gt;
         See &lt;a href="https://cwe.mitre.org/data/definitions/397.html"&gt;CWE-397: Declaration of Throws for Generic Exception&lt;/a&gt;.
         &lt;/p&gt;</description>
@@ -6304,7 +6309,7 @@ Using floating-point variables should not be used as loop counters, as they are 
 
         Furthermore, using Throwable like that is semantically a bad practice, considered that Throwables include Errors as well, but by definition they occur in unrecoverable scenarios.&lt;br&gt;&lt;br&gt;
 
-        For more information, see the &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ERR07-J.+Do+not+throw+RuntimeException%2C+Exception%2C+or+Throwable"&gt;SEI CERT ERR07-J rule&lt;/a&gt;.
+        For more information, see the &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/exceptional-behavior-err/err07-j/"&gt;SEI CERT ERR07-J rule&lt;/a&gt;.
         &lt;/p&gt;&lt;p&gt;
         See &lt;a href="https://cwe.mitre.org/data/definitions/397.html"&gt;CWE-397: Declaration of Throws for Generic Exception&lt;/a&gt;.
         &lt;/p&gt;</description>
@@ -6316,7 +6321,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Malicious code - Custom class loader does not call its superclass's getPermissions()</name>
     <configKey>PERM_SUPER_NOT_CALLED_IN_GETPERMISSIONS</configKey>
     <description>&lt;p&gt;
-       &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC07-J.+Call+the+superclass%27s+getPermissions%28%29+method+when+writing+a+custom+class+loader"&gt;SEI CERT rule SEC07-J&lt;/a&gt; requires that custom class loaders must always call their superclass's getPermissions()
+       &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/platform-security-sec/sec07-j/"&gt;SEI CERT rule SEC07-J&lt;/a&gt; requires that custom class loaders must always call their superclass's getPermissions()
        method in their own getPermissions() method to initialize the object they return at the end. Omitting it means
        that a class defined using this custom class loader has permissions that are completely independent of those
        specified in the systemwide policy file. In effect, the class's permissions override them.
@@ -6339,7 +6344,7 @@ Using floating-point variables should not be used as loop counters, as they are 
       the copy constructor of the class used as the type of the formal parameter. This ensures that the
       method behaves exactly as expected.
       &lt;p&gt;
-      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/SEC02-J.+Do+not+base+security+checks+on+untrusted+sources"&gt;SEC02-J. Do not base security checks on untrusted sources&lt;/a&gt;,
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/platform-security-sec/sec02-j"&gt;SEC02-J. Do not base security checks on untrusted sources&lt;/a&gt;,
       &lt;a href="https://cwe.mitre.org/data/definitions/302.html"&gt;CWE-302: Authentication Bypass by Assumed-Immutable Data&lt;/a&gt;, and
       &lt;a href="https://cwe.mitre.org/data/definitions/470.html"&gt;CWE-470: Use of Externally-Controlled Input to Select Classes or Code ('Unsafe Reflection')&lt;/a&gt;.
       &lt;/p&gt;
@@ -6355,7 +6360,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <configKey>ASE_ASSERTION_WITH_SIDE_EFFECT</configKey>
     <description>&lt;p&gt;Expressions used in assertions must not produce side effects.&lt;/p&gt;
 
-            &lt;p&gt;See &lt;https://wiki.sei.cmu.edu/confluence/display/java/EXP06-J.+Expressions+used+in+assertions+must+not+produce+side+effects&gt;&lt;code&gt;SEI CERT Rule EXP06&lt;/code&gt;&lt;/a&gt;
+            &lt;p&gt;See &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/expressions-exp/exp06-j"&gt;SEI CERT Rule EXP06&lt;/a&gt;
             for more information.
             &lt;/p&gt;</description>
     <tag>cert</tag>
@@ -6366,7 +6371,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <configKey>ASE_ASSERTION_WITH_SIDE_EFFECT_METHOD</configKey>
     <description>&lt;p&gt;Expressions used in assertions must not produce side effects.&lt;/p&gt;
 
-            &lt;p&gt;See &lt;https://wiki.sei.cmu.edu/confluence/display/java/EXP06-J.+Expressions+used+in+assertions+must+not+produce+side+effects&gt;&lt;code&gt;SEI CERT Rule EXP06&lt;/code&gt;&lt;/a&gt;
+            &lt;p&gt;See &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/expressions-exp/exp06-j"&gt;SEI CERT Rule EXP06&lt;/a&gt;
             for more information.
             &lt;/p&gt;</description>
     <tag>cert</tag>
@@ -6376,7 +6381,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Bad practice - Primitive field is public</name>
     <configKey>PA_PUBLIC_PRIMITIVE_ATTRIBUTE</configKey>
     <description>&lt;p&gt;
-    &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/OBJ01-J.+Limit+accessibility+of+fields"&gt;SEI CERT rule OBJ01-J&lt;/a&gt; requires that accessibility to fields must be limited.
+    &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/object-orientation-obj/obj01-j/"&gt;SEI CERT rule OBJ01-J&lt;/a&gt; requires that accessibility to fields must be limited.
     Otherwise, the values of the fields may be manipulated from outside the class, which may be unexpected or
     undesired behaviour.
     In general, requiring that no fields are allowed to be public is overkill and unrealistic. Even
@@ -6398,7 +6403,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Bad practice - Array-type field is public</name>
     <configKey>PA_PUBLIC_ARRAY_ATTRIBUTE</configKey>
     <description>&lt;p&gt;
-    &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/OBJ01-J.+Limit+accessibility+of+fields"&gt;SEI CERT rule OBJ01-J&lt;/a&gt; requires that accessibility of fields must be limited.
+    &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/object-orientation-obj/obj01-j/"&gt;SEI CERT rule OBJ01-J&lt;/a&gt; requires that accessibility of fields must be limited.
     Making an array-type field final does not prevent other classes from modifying the contents of
     the array. However, in general, requiring that no fields are allowed to be public is overkill
     and unrealistic. There may be usages for public fields: some public fields may serve as "flags"
@@ -6418,7 +6423,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Bad practice - Mutable object-type field is public</name>
     <configKey>PA_PUBLIC_MUTABLE_OBJECT_ATTRIBUTE</configKey>
     <description>&lt;p&gt;
-    &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/OBJ01-J.+Limit+accessibility+of+fields"&gt;SEI CERT rule OBJ01-J&lt;/a&gt; requires that accessibility of fields must be limited.
+    &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/object-orientation-obj/obj01-j/"&gt;SEI CERT rule OBJ01-J&lt;/a&gt; requires that accessibility of fields must be limited.
     Making a mutable object-type field final does not prevent other classes from modifying the
     contents of the object. However, in general, requiring that no fields are allowed to be public
     is overkill and unrealistic. There may be usages for public fields: some public fields may
@@ -6443,7 +6448,7 @@ Using floating-point variables should not be used as loop counters, as they are 
         private or final. Otherwise, these methods can be compromised when a malicious subclass overrides them
         and omits the checks.
         &lt;p&gt;
-        See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MET03-J.+Methods+that+perform+a+security+check+must+be+declared+private+or+final"&gt;MET03-J. Methods that perform a security check must be declared private or final&lt;/a&gt;.
+        See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/methods-met/met03-j/"&gt;MET03-J. Methods that perform a security check must be declared private or final&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>malicious-code</tag>
@@ -6455,7 +6460,7 @@ Using floating-point variables should not be used as loop counters, as they are 
         not performed if assertions are disabled.&lt;/p&gt;
 
         &lt;p&gt;
-        See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MET01-J.+Never+use+assertions+to+validate+method+arguments"&gt;MET01-J. Never use assertions to validate method arguments&lt;/a&gt;
+        See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/methods-met/met01-j/"&gt;MET01-J. Never use assertions to validate method arguments&lt;/a&gt;
         and &lt;a href="https://cwe.mitre.org/data/definitions/617.html"&gt;CWE-617: Reachable Assertion&lt;/a&gt;
         for more information.
         &lt;/p&gt;</description>
@@ -6475,7 +6480,7 @@ Using floating-point variables should not be used as loop counters, as they are 
         Consequently, programmers should avoid the method hiding.
         Programmer should declare the respective method non-static or restrict it as private to eradicate the problem.
         &lt;p&gt;
-        See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/MET07-J.+Never+declare+a+class+method+that+hides+a+method+declared+in+a+superclass+or+superinterface"&gt;MET07-J. Never declare a class method that hides a method declared in a superclass or superinterface&lt;/a&gt;.
+        See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/methods-met/met07-j/"&gt;MET07-J. Never declare a class method that hides a method declared in a superclass or superinterface&lt;/a&gt;.
         &lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>correctness</tag>
@@ -6500,7 +6505,7 @@ Using floating-point variables should not be used as loop counters, as they are 
       &lt;/ul&gt;
 
       &lt;/p&gt;
-      &lt;p&gt;See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/DCL01-J.+Do+not+reuse+public+identifiers+from+the+Java+Standard+Library"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
+      &lt;p&gt;See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/declarations-and-initialization-dcl/dcl01-j/"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>bad-practice</tag>
   </rule>
@@ -6525,7 +6530,7 @@ Using floating-point variables should not be used as loop counters, as they are 
       &lt;/ul&gt;
 
       &lt;/p&gt;
-      &lt;p&gt;See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/DCL01-J.+Do+not+reuse+public+identifiers+from+the+Java+Standard+Library"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
+      &lt;p&gt;See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/declarations-and-initialization-dcl/dcl01-j/"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>bad-practice</tag>
   </rule>
@@ -6549,7 +6554,7 @@ Using floating-point variables should not be used as loop counters, as they are 
       &lt;/ul&gt;
 
       &lt;/p&gt;
-      &lt;p&gt;See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/DCL01-J.+Do+not+reuse+public+identifiers+from+the+Java+Standard+Library"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
+      &lt;p&gt;See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/declarations-and-initialization-dcl/dcl01-j/"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>bad-practice</tag>
   </rule>
@@ -6572,7 +6577,7 @@ Using floating-point variables should not be used as loop counters, as they are 
       &lt;/ul&gt;
 
       &lt;/p&gt;
-      &lt;p&gt;See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/DCL01-J.+Do+not+reuse+public+identifiers+from+the+Java+Standard+Library"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
+      &lt;p&gt;See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/declarations-and-initialization-dcl/dcl01-j/"&gt;DCL01-J. Do not reuse public identifiers from the Java Standard Library&lt;/a&gt;.&lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>bad-practice</tag>
   </rule>
@@ -6615,10 +6620,26 @@ Using floating-point variables should not be used as loop counters, as they are 
         &lt;/table&gt;
       &lt;/p&gt;
       &lt;p&gt;
-      See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/ENV02-J.+Do+not+trust+the+values+of+environment+variables"&gt;ENV02-J. Do not trust the values of environment variables&lt;/a&gt;.
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/runtime-environment-env/env02-j/"&gt;ENV02-J. Do not trust the values of environment variables&lt;/a&gt;.
       &lt;/p&gt;</description>
     <tag>cert</tag>
     <tag>bad-practice</tag>
+  </rule>
+  <rule key='IAOM_DO_NOT_INCREASE_METHOD_ACCESSIBILITY' priority='MAJOR'>
+    <name>Correctness - Accessibility of the overridden or hidden method was increased.</name>
+    <configKey>IAOM_DO_NOT_INCREASE_METHOD_ACCESSIBILITY</configKey>
+    <description>&lt;p&gt;
+        Increasing the accessibility of overridden or hidden methods permits a malicious subclass to offer wider
+        access to the restricted method than was originally intended. Consequently, programs must override methods
+        only when necessary and must declare methods final whenever possible to prevent malicious subclassing. When
+        methods cannot be declared final, programs must refrain from increasing the accessibility of overridden methods.
+      &lt;/p&gt;
+      &lt;p&gt;
+        See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/methods-met/met04-j/"&gt;MET04-J. Do not increase the accessibility of overridden or hidden methods&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>correctness</tag>
+    <tag>bug</tag>
   </rule>
   <rule key='CWO_CLOSED_WITHOUT_OPENED' priority='MAJOR'>
     <name>Multi-threading - Method releases lock without opening it</name>
@@ -6650,7 +6671,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <description>&lt;p&gt;
           The long and the double are 64-bit primitive types, and depending on the Java Virtual Machine implementation assigning a value to them can be treated as two separate 32-bit writes, and as such it's not atomic.
           See &lt;a href="https://docs.oracle.com/javase/specs/jls/se8/html/jls-17.html#jls-17.7"&gt;JSL 17.7. Non-Atomic Treatment of double and long&lt;/a&gt;.
-          See SEI CERT rule &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/VNA05-J.+Ensure+atomicity+when+reading+and+writing+64-bit+values"&gt;VNA05-J. Ensure atomicity when reading and writing 64-bit values&lt;/a&gt; and
+          See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/visibility-and-atomicity-vna/vna05-j/"&gt;VNA05-J. Ensure atomicity when reading and writing 64-bit values&lt;/a&gt; and
           &lt;a href="https://cwe.mitre.org/data/definitions/667.html"&gt;CWE-667: Improper Locking&lt;/a&gt; for more info.
 
           This bug can be ignored in platforms which guarantee that 64-bit long and double type read and write operations are atomic.
@@ -6668,7 +6689,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <name>Multi-threading - This write of this shared primitive variable may not be visible to other threads</name>
     <configKey>AT_STALE_THREAD_WRITE_OF_PRIMITIVE</configKey>
     <description>&lt;p&gt;
-          &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/VNA00-J.+Ensure+visibility+when+accessing+shared+primitive+variables"&gt;SEI CERT rule VNA00-J&lt;/a&gt;
+          &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/visibility-and-atomicity-vna/vna00-j/"&gt;SEI CERT rule VNA00-J&lt;/a&gt;
           describes that reading a shared primitive variable in one thread may not yield the value of the most recent write to the variable from another thread.
           Consequently, the thread may observe a stale value of the shared variable.
         &lt;/p&gt;
@@ -6693,7 +6714,7 @@ Using floating-point variables should not be used as loop counters, as they are 
     <description>&lt;p&gt;
           This write of a variable shared between functions depends on the current value of the variable (either because it's a compound operation - e.g. +=, ++ - or it simply depends on the current value), as such it consists of more than one discrete operation.
           These operations are not atomic in themselves and need further synchronization.
-          See &lt;a href="https://wiki.sei.cmu.edu/confluence/display/java/VNA02-J.+Ensure+that+compound+operations+on+shared+variables+are+atomic"&gt;SEI CERT rule VNA02-J&lt;/a&gt;,
+          See &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/visibility-and-atomicity-vna/vna02-j/"&gt;SEI CERT rule VNA02-J&lt;/a&gt;,
           &lt;a href="https://cwe.mitre.org/data/definitions/366.html"&gt;CWE-366: Race Condition within a Thread&lt;/a&gt;,
           &lt;a href="https://cwe.mitre.org/data/definitions/413.html"&gt;CWE-413: Improper Resource Locking&lt;/a&gt;,
           &lt;a href="https://cwe.mitre.org/data/definitions/567.html"&gt;CWE-567: Unsynchronized Access to Shared Data in a Multithreaded Context&lt;/a&gt;, and
@@ -6767,5 +6788,201 @@ Using floating-point variables should not be used as loop counters, as they are 
       The unnecessary annotation is not reported when the package's &lt;code&gt;package-info&lt;/code&gt; is annotated with an &lt;code&gt;&amp;amp;Generated&lt;/code&gt; annotation with retention CLASS or RUNTIME.
       &lt;/p&gt;</description>
     <tag>style</tag>
+  </rule>
+  <rule key='UNS_UNSAFE_CALL' priority='MAJOR'>
+    <name>Security - Call to Unsafe.</name>
+    <configKey>UNS_UNSAFE_CALL</configKey>
+    <description>&lt;p&gt;Do not use either sun.misc.Unsafe or
+      jdk.internal.misc.Unsafe. As there class name indicates, these
+      methods are not safe to use. They have been superseded by
+      official APIs like the VarHandle API (JDK 9) and the Foreign
+      Function &amp; Memory API (JDK 22). See
+      &lt;a href="https://openjdk.org/jeps/471"&gt;JEP 471&lt;/a&gt;
+      for details on the safer alternatives including before and after
+      code samples.&lt;/p&gt;</description>
+    <tag>security</tag>
+  </rule>
+  <rule key='NCR_NOT_PROPERLY_CHECKED_READ' priority='MAJOR'>
+    <name>Bad practice - Return value of read() is not properly checked, array may be partially filled</name>
+    <configKey>NCR_NOT_PROPERLY_CHECKED_READ</configKey>
+    <description>&lt;p&gt;
+          When using the read() method to fill an array, the method may not always fill the entire array. This can occur when the input stream does not have enough bytes available to completely fill the array, leading to a partial read. This issue can result in unexpected behavior if the partially filled array is assumed to be fully populated.
+        &lt;/p&gt;
+        &lt;p&gt;
+          It is crucial to verify the return value of the read() method, which indicates the number of bytes actually read, and to ensure that the array is fully filled if necessary. Failing to do so can result in incomplete data processing and potential vulnerabilities.
+        &lt;/p&gt;
+        &lt;p&gt;
+          To fix this issue, check the return value of read() and handle cases where fewer bytes are read than expected. Consider looping over the read() call or using methods like readFully() to ensure that the array is filled completely.
+        &lt;/p&gt;
+        &lt;p&gt;
+          See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/input-output-fio/fio10-j/"&gt;FIO10-J. Ensure the array is filled when using read() to fill an array&lt;/a&gt; for more information.
+        &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>bad-practice</tag>
+  </rule>
+  <rule key='USO_UNSAFE_METHOD_SYNCHRONIZATION' priority='MAJOR'>
+    <name>Security - Instead of synchronized methods, use private final lock objects with block synchronization</name>
+    <configKey>USO_UNSAFE_METHOD_SYNCHRONIZATION</configKey>
+    <description>&lt;p&gt;
+      Synchronized methods use the class object as a monitor (that is, its intrinsic lock), thus an attacker, if it has access to the object,
+      can exploit the system by indefinitely locking the object, leading to a Denial of Service (DoS) scenario.
+
+      This can be resolved in two ways: either by using a private final lock object with block synchronization or by restricting access to the class.
+      Using a private final lock object is generally preferred, as it offers enhanced security and granularity of control.
+
+      &lt;p&gt;For more details read SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck00-j/"&gt;LCK00-J. Use private final lock objects to synchronize classes that may interact with untrusted code&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USO_UNSAFE_STATIC_METHOD_SYNCHRONIZATION' priority='MAJOR'>
+    <name>Security - Instead of static synchronized methods, use private final lock objects with block synchronization</name>
+    <configKey>USO_UNSAFE_STATIC_METHOD_SYNCHRONIZATION</configKey>
+    <description>&lt;p&gt;
+      Static synchronized methods use the class object as a monitor (that is, its intrinsic lock), thus an attacker,
+      if it has access to an instance of the class or the subclass, can gain access to the class object using &lt;code&gt;getClass()&lt;/code&gt; and
+      indefinitely lock the object, leading to a Denial of Service (DoS) scenario.
+
+      This can be resolved in two ways: either by using a private static final lock object with block synchronization or by restricting access to the class.
+      Using a private final lock object is generally preferred, as it offers enhanced security and granularity of control.
+
+      &lt;p&gt;For more details read SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck00-j/"&gt;LCK00-J. Use private final lock objects to synchronize classes that may interact with untrusted code&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USO_UNSAFE_OBJECT_SYNCHRONIZATION' priority='MAJOR'>
+    <name>Security - Use private final lock objects in synchronization blocks</name>
+    <configKey>USO_UNSAFE_OBJECT_SYNCHRONIZATION</configKey>
+    <description>&lt;p&gt;
+      Synchronizing on a non-private lock object can lead to security vulnerabilities.
+      Untrusted code can gain access to the lock object, and can exploit the system to execute unsafe operations.
+
+      In scenarios where a thread synchronizes on the lock and enters the synchronized block, untrusted code can manipulate the lock object,
+      allowing another thread to synchronize on the new value and concurrently enter the synchronized block.
+      Alternatively, an attacker can indefinitely hold the lock object, resulting in a Denial of Service (DoS) scenario.
+
+      A public lock object can be accessed directly by untrusted code, while protected lock objects expose the lock object to subclasses. Then subclasses can use the lock object for synchronizing with unrelated operations.
+      Generally a package-private lock object can be useful inside a sealed package if used with care, but it is still exposed to all classes in the package.
+
+      This can be resolved by declaring the lock object as private final, which restricts access to the lock object, providing granularity and enhanced security.
+
+      &lt;p&gt;For more details read SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck00-j/"&gt;LCK00-J. Use private final lock objects to synchronize classes that may interact with untrusted code&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USO_UNSAFE_ACCESSIBLE_OBJECT_SYNCHRONIZATION' priority='MAJOR'>
+    <name>Security - Use private final lock objects in synchronization blocks when the lock is accessible</name>
+    <configKey>USO_UNSAFE_ACCESSIBLE_OBJECT_SYNCHRONIZATION</configKey>
+    <description>&lt;p&gt;
+      Synchronizing on a lock object that is made accessible to outside classes by returning it from a method or updating it through a method can lead to security vulnerabilities.
+      Untrusted code can gain access to the lock or modify its value and exploit the system.
+
+      In scenarios where a thread synchronizes on the lock and enters the synchronized block, an attacker can access the lock object or update its value,
+      allowing another thread to synchronize on the new value and concurrently enter the synchronized block.
+      Alternatively, an attacker can indefinitely hold the lock object, resulting in a Denial of Service (DoS) scenario.
+
+      This can be resolved in two ways: either by using another object as a private final lock object, or by removing or restricting the visibility of the functions, which update or return the lock object.
+      Using a private final lock object is generally preferred, as it offers enhanced security and granularity of control.
+
+      &lt;p&gt;For more details read SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck00-j/"&gt;LCK00-J. Use private final lock objects to synchronize classes that may interact with untrusted code&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USO_UNSAFE_INHERITABLE_OBJECT_SYNCHRONIZATION' priority='MAJOR'>
+    <name>Security - Use private final lock objects in synchronization blocks, when class can be extended</name>
+    <configKey>USO_UNSAFE_INHERITABLE_OBJECT_SYNCHRONIZATION</configKey>
+    <description>&lt;p&gt;
+      Declaring a lock object that is visible to outside classes or subclasses might lead to security vulnerabilities.
+      Untrusted code can access the lock object, and it can exploit the system to execute unsafe operations.
+
+      In scenarios where a thread synchronizes on the lock and enters the synchronized block, an attacker can access the lock object or update its value,
+      allowing another thread to synchronize on the new value and concurrently enter the synchronized block.
+      Alternatively, an attacker can indefinitely hold the lock object, resulting in a Denial of Service (DoS) scenario.
+
+      Generally it is not a problem to use a protected or package-private lock object if it is used with great care and thought, but it still might cause problems.
+      A protected lock object declared in a non-final class can be accessed by subclasses, which can use the lock object for synchronizing with unrelated operations.
+      Similar the case with a package-private lock object, which is exposed to all classes in the package.
+
+      This can be resolved by declaring the lock object as private final, which restricts access to the lock object, providing granularity and enhanced security.
+
+      &lt;p&gt;For more details read SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck00-j/"&gt;LCK00-J. Use private final lock objects to synchronize classes that may interact with untrusted code&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USO_UNSAFE_EXPOSED_OBJECT_SYNCHRONIZATION' priority='MAJOR'>
+    <name>Security - Do not expose inherited lock objects through methods by updating or returning them</name>
+    <configKey>USO_UNSAFE_EXPOSED_OBJECT_SYNCHRONIZATION</configKey>
+    <description>&lt;p&gt;
+      Synchronizing on a lock that is made accessible in the class hierarchy can lead to security vulnerabilities.
+      Untrusted code can access the lock object, and it can exploit the system to execute unsafe operations.
+
+      In scenarios where a thread synchronizes on the lock and enters the synchronized block, an attacker can access the lock object or update its value,
+      allowing another thread to synchronize on the new value and concurrently enter the synchronized block.
+      Alternatively, an attacker can indefinitely hold the lock object, resulting in a Denial of Service (DoS) scenario.
+
+      This can be resolved in two ways: either by restricting access to the current lock object or using another private final object as lock object.
+      Using a private final lock object is generally preferred, as it offers enhanced security and granularity of control.
+
+      &lt;p&gt;For more details read SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck00-j/"&gt;LCK00-J. Use private final lock objects to synchronize classes that may interact with untrusted code&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USBC_UNSAFE_SYNCHRONIZATION_WITH_BACKING_COLLECTION' priority='MAJOR'>
+    <name>Security - Do not synchronize on a collection view when the backing collection is accessible</name>
+    <configKey>USBC_UNSAFE_SYNCHRONIZATION_WITH_BACKING_COLLECTION</configKey>
+    <description>&lt;p&gt;
+      Synchronizing a collection view when its backing collection is accessible can lead to nondeterministic behavior.
+
+      The &lt;a href="https://docs.oracle.com/javase/tutorial/collections/implementations/wrapper.html"&gt;Java Wrapper implementations&lt;/a&gt; warns about the consequences
+      of synchronizing on the collection view rather than the backing collection itself.
+      Failing to comply with this can end up using two distinct locking strategies and violates thread safety.
+
+      To solve this issue, synchronize on the backing collection object instead of the collection view.
+
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck04-j/"&gt;LCK04-J. Do not synchronize on a collection view if the backing collection is accessible&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USBC_UNSAFE_SYNCHRONIZATION_WITH_ACCESSIBLE_BACKING_COLLECTION' priority='MAJOR'>
+    <name>Security - Do not synchronize on a collection view, when the backing collection is accessible through methods</name>
+    <configKey>USBC_UNSAFE_SYNCHRONIZATION_WITH_ACCESSIBLE_BACKING_COLLECTION</configKey>
+    <description>&lt;p&gt;
+      Synchronizing a collection view when its backing collection is made accessible through a method, that updates
+      its value or returns it, can lead to nondeterministic behavior.
+
+      The &lt;a href="https://docs.oracle.com/javase/tutorial/collections/implementations/wrapper.html"&gt;Java Wrapper implementations&lt;/a&gt; warns about the consequences
+      of synchronizing on the collection view rather than the backing collection itself.
+      Failing to comply with this can end up using two distinct locking strategies and violates thread safety.
+
+      To solve this issue, synchronize on the backing collection object instead of the collection view.
+
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck04-j/"&gt;LCK04-J. Do not synchronize on a collection view if the backing collection is accessible&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
+  </rule>
+  <rule key='USBC_UNSAFE_SYNCHRONIZATION_WITH_INHERITABLE_BACKING_COLLECTION' priority='MAJOR'>
+    <name>Security - Do not synchronize on a collection view, when the backing collection is made accessible through class extension</name>
+    <configKey>USBC_UNSAFE_SYNCHRONIZATION_WITH_INHERITABLE_BACKING_COLLECTION</configKey>
+    <description>&lt;p&gt;
+      Synchronizing a collection view with a backing collection that is visible outside classes or subclass,
+      might lead to nondeterministic behavior.
+
+      The &lt;a href="https://docs.oracle.com/javase/tutorial/collections/implementations/wrapper.html"&gt;Java Wrapper implementations&lt;/a&gt; warns about the consequences
+      of synchronizing on the collection view rather than the backing collection itself.
+      Failing to comply with this can end up using two distinct locking strategies and violates thread safety.
+
+      To solve this issue, synchronize on the backing collection object instead of the collection view.
+
+      See SEI CERT rule &lt;a href="https://cmu-sei.github.io/secure-coding-standards/sei-cert-oracle-coding-standard-for-java/rules/locking-lck/lck04-j/"&gt;LCK04-J. Do not synchronize on a collection view if the backing collection is accessible&lt;/a&gt;.
+      &lt;/p&gt;</description>
+    <tag>cert</tag>
+    <tag>security</tag>
   </rule>
 </rules>
