@@ -27,7 +27,7 @@ jobs:
           - SONAR_SERVER_VERSION: 25.12.0.117093
             SONAR_SERVER_JAVA_VERSION: 17
           # 26.x
-          - SONAR_SERVER_VERSION: 26.1.0.118079
+          - SONAR_SERVER_VERSION: 26.7.0.124771
             SONAR_SERVER_JAVA_VERSION: 21
           # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
     steps:
