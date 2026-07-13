@@ -1081,12 +1081,15 @@ Don't do it.
     <name>Style - Class doesn't override equals in superclass</name>
     <configKey>EQ_DOESNT_OVERRIDE_EQUALS</configKey>
     <description>&lt;p&gt; This class extends a class that defines an equals method and adds fields, but doesn't
-define an equals method itself. Thus, equality on instances of this class will
-ignore the identity of the subclass and the added fields. Be sure this is what is intended,
-and that you don't need to override the equals method. Even if you don't need to override
-the equals method, consider overriding it anyway to document the fact
-that the equals method for the subclass just return the result of
-invoking super.equals(o).
+  define an equals method itself. Thus, equality on instances of this class will
+  ignore the identity of the subclass and the added fields. Be sure this is what is intended,
+  and that you don't need to override the equals method.
+  &lt;/p&gt;
+  &lt;p&gt; Warning: Simply overriding equals in the subclass may break the symmetry contract
+  of equals. For example, if the superclass uses &lt;code&gt;instanceof&lt;/code&gt; in its equals method,
+  then &lt;code&gt;parent.equals(child)&lt;/code&gt; may return &lt;code&gt;true&lt;/code&gt; but
+  &lt;code&gt;child.equals(parent)&lt;/code&gt; may return &lt;code&gt;false&lt;/code&gt;.
+  Consider whether overriding equals is truly necessary before doing so.
   &lt;/p&gt;</description>
     <tag>style</tag>
   </rule>
