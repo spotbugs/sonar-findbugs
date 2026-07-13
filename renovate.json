@@ -109,7 +109,7 @@
       ],
       "matchManagers": [
         "maven",
-        "regex"
+        "custom.regex"
       ],
       "groupName": "spotbugs updates"
     },
@@ -120,7 +120,7 @@
       ],
       "matchManagers": [
         "maven",
-        "regex"
+        "custom.regex"
       ],
       "groupName": "sb-contrib updates"
     },
@@ -131,7 +131,7 @@
       ],
       "matchManagers": [
         "maven",
-        "regex"
+        "custom.regex"
       ],
       "groupName": "findsecbugs updates"
     }
