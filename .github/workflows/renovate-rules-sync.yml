@@ -167,18 +167,11 @@ jobs:
           fi
 
       - name: Commit and push changes
-        run: |
-          set -euo pipefail
-
-          if [[ -z "$(git status --porcelain)" ]]; then
-            echo 'No changes to commit.'
-            exit 0
-          fi
-
-          git config user.name 'renovate[bot]'
-          git config user.email '29139614+renovate[bot]@users.noreply.github.com'
-
-          git add -A
-          git commit -m 'chore: regenerate rule profiles and counts'
-          git push origin "HEAD:${{ github.head_ref }}"
+        uses: iarekylew00t/verified-bot-commit@33985d44b7719dcaf0b854a0f4b0caad9bdc5b86 # v2.3.3
+        with:
+          message: 'chore: regenerate rule profiles and counts'
+          ref: ${{ github.head_ref }}
+          files: |
+            **
+          if-no-commit: info
 
