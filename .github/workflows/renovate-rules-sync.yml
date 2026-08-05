@@ -167,7 +167,7 @@ jobs:
           fi
 
       - name: Commit and push changes
-        uses: iarekylew00t/verified-bot-commit@33985d44b7719dcaf0b854a0f4b0caad9bdc5b86 # v2.3.3
+        uses: iarekylew00t/verified-bot-commit@1ccc6afd0f789e8442cff7deec3e9856a693cc7e # v2.3.4
         with:
           message: 'chore: regenerate rule profiles and counts'
           ref: ${{ github.head_ref }}
