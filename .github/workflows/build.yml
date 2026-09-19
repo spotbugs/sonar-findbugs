@@ -50,7 +50,7 @@ jobs:
           restore-keys: ${{ runner.os }}-sonar-${{ matrix.SONAR_SERVER_VERSION }}
       - name: Build
         run: |
-          ./mvnw verify -B -e -V \
+          ./mvnw verify --batch-mode -e --show-version \
             -Dsonar.server.version=${{ matrix.SONAR_SERVER_VERSION }} \
   deploy:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Set up JDK 17
+      - name: Set up JDK 25
         uses: actions/setup-java@v6
         with:
           java-version: 25
@@ -74,7 +74,7 @@ jobs:
           gpg-passphrase: GPG_PASSPHRASE
       - name: Deploy artifacts to Maven Central
         run: |
-          ./mvnw clean deploy -B -e -P deploy -DskipTests
+          ./mvnw clean deploy --batch-mode -e -P deploy -DskipTests
         env:
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           SONATYPE_TOKEN: ${{ secrets.SONATYPE_TOKEN }}
