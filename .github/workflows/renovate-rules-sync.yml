@@ -69,12 +69,41 @@ jobs:
             exit 1
           fi
 
+          if [[ "$branch" == *"/"* && "$branch" != renovate/* ]]; then
+            echo "Invalid branch name: $branch" >&2
+            exit 1
+          fi
+
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
           echo "plugin=$plugin" >> "$GITHUB_OUTPUT"
 
           echo "Execution mode: $EVENT_NAME"
           echo "Target branch: $branch"
           echo "Target plugin: $plugin"
+
+      - name: Check out or create target branch
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref_name || steps.target.outputs.branch }}
+          fetch-depth: 0
+
+      - name: Create target branch if necessary
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          TARGET_BRANCH: ${{ steps.target.outputs.branch }}
+        run: |
+          set -euo pipefail
+
+          if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null 2>&1; then
+            echo "Branch already exists remotely: $TARGET_BRANCH"
+            git fetch origin "$TARGET_BRANCH"
+            git checkout -B "$TARGET_BRANCH" FETCH_HEAD
+          else
+            echo "Creating new branch: $TARGET_BRANCH"
+            git checkout -b "$TARGET_BRANCH"
+            git push -u origin "$TARGET_BRANCH"
+          fi
 
       - name: Check out target branch
         uses: actions/checkout@v7
