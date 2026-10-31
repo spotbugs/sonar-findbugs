@@ -76,13 +76,13 @@ jobs:
           echo "Target branch: $branch"
           echo "Target plugin: $plugin"
 
-      - name: Check out target branch
+      - name: Check out base or target branch
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ steps.target.outputs.branch }}
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref_name || steps.target.outputs.branch }}
           fetch-depth: 0
 
-      - name: Create target branch if necessary
+      - name: Create or check out target branch
         if: github.event_name == 'workflow_dispatch'
         shell: bash
         env:
@@ -90,12 +90,16 @@ jobs:
         run: |
           set -euo pipefail
 
-          if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null 2>&1; then
-            echo "Branch already exists: $TARGET_BRANCH"
+          REMOTE_REF="refs/heads/${TARGET_BRANCH}"
+
+          if git ls-remote --exit-code --heads origin "$REMOTE_REF" >/dev/null 2>&1; then
+            echo "Checking out existing branch: $TARGET_BRANCH"
+            git fetch origin "+${REMOTE_REF}:refs/remotes/origin/${TARGET_BRANCH}"
+            git checkout -B "$TARGET_BRANCH" "refs/remotes/origin/${TARGET_BRANCH}"
           else
-            echo "Creating branch: $TARGET_BRANCH"
+            echo "Creating branch from ${GITHUB_REF_NAME}: $TARGET_BRANCH"
             git checkout -b "$TARGET_BRANCH"
-            git push -u origin "$TARGET_BRANCH"
+            git push --set-upstream origin "$TARGET_BRANCH"
           fi
 
       - name: Set up JDK 25
