@@ -69,11 +69,6 @@ jobs:
             exit 1
           fi
 
-          if [[ "$branch" == *"/"* && "$branch" != renovate/* ]]; then
-            echo "Invalid branch name: $branch" >&2
-            exit 1
-          fi
-
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
           echo "plugin=$plugin" >> "$GITHUB_OUTPUT"
 
@@ -81,10 +76,10 @@ jobs:
           echo "Target branch: $branch"
           echo "Target plugin: $plugin"
 
-      - name: Check out or create target branch
-        uses: actions/checkout@v7
+      - name: Check out target branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && github.ref_name || steps.target.outputs.branch }}
+          ref: ${{ steps.target.outputs.branch }}
           fetch-depth: 0
 
       - name: Create target branch if necessary
@@ -96,23 +91,15 @@ jobs:
           set -euo pipefail
 
           if git ls-remote --exit-code --heads origin "$TARGET_BRANCH" >/dev/null 2>&1; then
-            echo "Branch already exists remotely: $TARGET_BRANCH"
-            git fetch origin "$TARGET_BRANCH"
-            git checkout -B "$TARGET_BRANCH" FETCH_HEAD
+            echo "Branch already exists: $TARGET_BRANCH"
           else
-            echo "Creating new branch: $TARGET_BRANCH"
+            echo "Creating branch: $TARGET_BRANCH"
             git checkout -b "$TARGET_BRANCH"
             git push -u origin "$TARGET_BRANCH"
           fi
 
-      - name: Check out target branch
-        uses: actions/checkout@v7
-        with:
-          ref: ${{ steps.target.outputs.branch }}
-          fetch-depth: 0
-
       - name: Set up JDK 25
-        uses: actions/setup-java@v6
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: '25'
@@ -152,7 +139,6 @@ jobs:
 
           echo 'Starting Generate XML profiles and update rule counts step'
           echo "Working directory: $(pwd)"
-          echo "Target plugin: $TARGET_PLUGIN"
 
           update_rule_count() {
             local xml_path="$1"
