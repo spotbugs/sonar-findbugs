@@ -39,7 +39,7 @@ jobs:
       - name: Install Groovy
         run: |
           set -euo pipefail
-          GROOVY_VERSION="4.0.21"
+          GROOVY_VERSION="6.0.0"
           GROOVY_HOME="/opt/groovy"
           INSTALL_ROOT="/tmp/groovy-install"
 
