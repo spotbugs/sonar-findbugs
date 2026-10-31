@@ -8,7 +8,23 @@ on:
       - reopened
     branches:
       - master
+
   workflow_dispatch:
+    inputs:
+      plugin:
+        description: Plugin whose rule metadata should be regenerated
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - spotbugs
+          - sb-contrib
+          - findsecbugs
+      branch:
+        description: Branch to regenerate (defaults to the selected branch)
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -16,19 +32,54 @@ permissions:
 jobs:
   regenerate-rule-metadata:
     if: >
-      startsWith(github.head_ref, 'renovate/') &&
+      github.event_name == 'workflow_dispatch' ||
       (
-        contains(github.head_ref, 'spotbugs') ||
-        contains(github.head_ref, 'sb-contrib') ||
-        contains(github.head_ref, 'findsecbugs')
+        startsWith(github.head_ref, 'renovate/') &&
+        (
+          contains(github.head_ref, 'spotbugs') ||
+          contains(github.head_ref, 'sb-contrib') ||
+          contains(github.head_ref, 'findsecbugs')
+        )
       )
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out PR branch
+      - name: Determine target branch and plugins
+        id: target
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          PR_BRANCH: ${{ github.head_ref }}
+          MANUAL_BRANCH: ${{ inputs.branch }}
+          MANUAL_PLUGIN: ${{ inputs.plugin }}
+        run: |
+          set -euo pipefail
+
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            branch="${MANUAL_BRANCH:-${GITHUB_REF_NAME}}"
+            plugin="${MANUAL_PLUGIN:-all}"
+          else
+            branch="$PR_BRANCH"
+            plugin="all"
+          fi
+
+          if [[ -z "$branch" ]]; then
+            echo "Unable to determine target branch" >&2
+            exit 1
+          fi
+
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "plugin=$plugin" >> "$GITHUB_OUTPUT"
+
+          echo "Execution mode: $EVENT_NAME"
+          echo "Target branch: $branch"
+          echo "Target plugin: $plugin"
+
+      - name: Check out target branch
         uses: actions/checkout@v7
         with:
-          ref: ${{ github.head_ref }}
+          ref: ${{ steps.target.outputs.branch }}
           fetch-depth: 0
 
       - name: Set up JDK 17
@@ -63,12 +114,16 @@ jobs:
           "$GROOVY_HOME/bin/groovy" --version
 
       - name: Generate XML profiles and update rule counts
+        env:
+          TARGET_PLUGIN: ${{ steps.target.outputs.plugin }}
+        shell: bash
         run: |
           set -euo pipefail
           trap 'echo "ERROR: command failed at line ${LINENO}" >&2' ERR
 
           echo 'Starting Generate XML profiles and update rule counts step'
           echo "Working directory: $(pwd)"
+          echo "Target plugin: $TARGET_PLUGIN"
 
           update_rule_count() {
             local xml_path="$1"
@@ -141,26 +196,24 @@ jobs:
             echo "Updated README.md SpotBugs badge count to $total_bug_count"
           fi
 
-          pull_request_context="${{ github.event.pull_request.title }} ${{ github.head_ref }}"
-          pull_request_context="$(printf '%s' "$pull_request_context" | tr '[:upper:]' '[:lower:]')"
-
-          if [[ "$pull_request_context" == *spotbugs* ]]; then
+          if [[ "$TARGET_PLUGIN" == "all" || "$TARGET_PLUGIN" == "spotbugs" ]]; then
             update_rule_count \
               src/main/resources/org/sonar/plugins/findbugs/rules-findbugs.xml \
               src/main/java/org/sonar/plugins/findbugs/rules/FindbugsRulesDefinition.java
           fi
 
-          if [[ "$pull_request_context" == *sb-contrib* || "$pull_request_context" == *sbcontrib* ]]; then
+          if [[ "$TARGET_PLUGIN" == "all" || "$TARGET_PLUGIN" == "sb-contrib" ]]; then
             update_rule_count \
               src/main/resources/org/sonar/plugins/findbugs/rules-fbcontrib.xml \
               src/main/java/org/sonar/plugins/findbugs/rules/FbContribRulesDefinition.java
           fi
 
-          if [[ "$pull_request_context" == *findsecbugs* ]]; then
+          if [[ "$TARGET_PLUGIN" == "all" || "$TARGET_PLUGIN" == "findsecbugs" ]]; then
             update_rule_count \
               src/main/resources/org/sonar/plugins/findbugs/rules-findsecbugs.xml \
               src/main/java/org/sonar/plugins/findbugs/rules/FindSecurityBugsRulesDefinition.java \
               0
+
             update_rule_count \
               src/main/resources/org/sonar/plugins/findbugs/rules-scala.xml \
               src/main/java/org/sonar/plugins/findbugs/rules/FindSecurityBugsScalaRulesDefinition.java \
@@ -171,8 +224,7 @@ jobs:
         uses: iarekylew00t/verified-bot-commit@1ee4374942e5c5f814e9b3121d766cbe45cea360 # v2.3.6
         with:
           message: 'chore: regenerate rule profiles and counts'
-          ref: ${{ github.head_ref }}
+          ref: ${{ steps.target.outputs.branch }}
           files: |
             **
           if-no-commit: info
-
