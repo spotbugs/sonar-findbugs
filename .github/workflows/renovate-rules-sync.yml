@@ -111,11 +111,11 @@ jobs:
           ref: ${{ steps.target.outputs.branch }}
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK 25
         uses: actions/setup-java@v6
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '25'
 
       - name: Install Groovy
         run: |
