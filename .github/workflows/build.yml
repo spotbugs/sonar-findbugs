@@ -17,9 +17,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # 9.9 LTS 
-          - SONAR_SERVER_VERSION: 9.9.9.104369
-            SONAR_SERVER_JAVA_VERSION: 17
           # 10.x 
           - SONAR_SERVER_VERSION: 10.7.0.96327
             SONAR_SERVER_JAVA_VERSION: 17
@@ -27,7 +24,7 @@ jobs:
           - SONAR_SERVER_VERSION: 25.12.0.117093
             SONAR_SERVER_JAVA_VERSION: 17
           # 26.x
-          - SONAR_SERVER_VERSION: 26.8.0.126808
+          - SONAR_SERVER_VERSION: 26.10.0.133078
             SONAR_SERVER_JAVA_VERSION: 21
           # https://mvnrepository.com/artifact/org.sonarsource.sonarqube/sonar-core
     steps:
