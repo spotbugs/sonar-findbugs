@@ -81,7 +81,7 @@ import java.util.regex.Pattern;
  */
 public class SmapParser {
 
-    private String javaFilename;
+    private final String javaFilename;
     private final Map<Integer, FileInfo> fileinfo = new HashMap<>();
     private final Map<Integer, int[]> java2jsp = new HashMap<>();
     private final String stratumName;

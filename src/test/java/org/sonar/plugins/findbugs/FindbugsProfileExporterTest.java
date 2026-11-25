@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class FindbugsProfileExporterTest extends FindbugsTests {
 
-  private FindbugsProfileExporter exporter = new FindbugsProfileExporter();
+  private final FindbugsProfileExporter exporter = new FindbugsProfileExporter();
 
   @Test
   void shouldAddHeaderToExportedXml() throws IOException, SAXException {

@@ -25,7 +25,7 @@ class FindSecBugsJspIT {
   private static final String SLING_PROJECT_KEY = "org.sonar.tests:jspc-sling";
   private static final String JETTY_PROJECT_KEY = "org.sonar.tests:jspc-jetty";
   
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
   void jspSlingAnalysis() throws Exception {

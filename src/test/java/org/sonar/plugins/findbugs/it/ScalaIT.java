@@ -36,7 +36,7 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class ScalaIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:scala";
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   private boolean hasScala;
 
   @BeforeEach

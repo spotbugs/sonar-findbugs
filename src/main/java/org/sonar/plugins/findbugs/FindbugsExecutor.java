@@ -74,13 +74,13 @@ public class FindbugsExecutor {
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
   public static final List<String> EXISTING_FINDBUGS_REPORT_PATHS = Arrays.asList("/target/findbugsXml.xml","/target/spotbugsXml.xml");
 
-  private FileSystem fs;
-  private Configuration config;
+  private final FileSystem fs;
+  private final Configuration config;
 
   /**
    * Map of priority level names to their numeric values.
    */
-  private static Map<String, Integer> priorityNameToValueMap = new HashMap<String, Integer>();
+  private static final Map<String, Integer> priorityNameToValueMap = new HashMap<String, Integer>();
 
   static {
     priorityNameToValueMap.put("high", Priorities.HIGH_PRIORITY);

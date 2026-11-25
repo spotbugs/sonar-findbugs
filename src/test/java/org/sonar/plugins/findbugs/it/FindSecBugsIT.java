@@ -20,7 +20,7 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class FindSecBugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @BeforeEach
   void setupProfile() {

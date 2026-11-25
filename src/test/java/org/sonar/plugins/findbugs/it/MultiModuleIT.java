@@ -29,7 +29,7 @@ class MultiModuleIT {
   private static final String MAVEN_PROJECT_KEY = "spotbugs:multi-module";
   private static final String GRADLE_PROJECT_KEY = "org.sonarqube:gradle-multimodule";
   
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
   void multiModuleMavenAnalysis() throws Exception {

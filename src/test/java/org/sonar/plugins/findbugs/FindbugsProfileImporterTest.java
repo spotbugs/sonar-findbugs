@@ -55,7 +55,7 @@ class FindbugsProfileImporterTest {
   @RegisterExtension
   public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
-	private	Context context = new Context();
+  private final Context context = new Context();
   private final FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithOnlyFindbugsRules());
 
   @Test

@@ -63,10 +63,10 @@ public class FindbugsSensor implements Sensor {
           FindSecurityBugsScalaRulesDefinition.REPOSITORY_KEY
   };
 
-  private List<String> repositories = new ArrayList<String>();
+  private final List<String> repositories = new ArrayList<String>();
 
-  private ActiveRules activeRules;
-  private FindbugsExecutor executor;
+  private final ActiveRules activeRules;
+  private final FindbugsExecutor executor;
   private final ClasspathLocator classpathLocator;
   private final ByteCodeResourceLocator byteCodeResourceLocator;
   private final FileSystem fs;

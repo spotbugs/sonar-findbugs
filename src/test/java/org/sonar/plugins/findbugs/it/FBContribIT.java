@@ -36,7 +36,7 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class FBContribIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:fb-contrib";
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
   void setupProfile() {
