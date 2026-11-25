@@ -76,7 +76,7 @@ class FindbugsSensorTest extends FindbugsTests {
   private ClasspathLocator classpathLocator;
 
   @BeforeEach
-  public void setUp() throws IOException {
+  void setUp() throws IOException {
     sensorContext = mock(SensorContext.class);
     byteCodeResourceLocator = mock(ByteCodeResourceLocator.class);
     executor = mock(FindbugsExecutor.class);

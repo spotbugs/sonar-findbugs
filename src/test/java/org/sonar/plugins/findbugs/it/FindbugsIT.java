@@ -43,12 +43,12 @@ class FindbugsIT {
   private static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
-  public void setupProfile() {
+  void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Findbugs Integration Tests", "findbugs-it", "java");
   }
   
   @AfterEach
-  public void deleteProject() {
+  void deleteProject() {
     FindbugsTestSuite.deleteProject(PROJECT_KEY);
   }
 

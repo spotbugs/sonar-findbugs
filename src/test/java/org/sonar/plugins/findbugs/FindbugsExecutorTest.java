@@ -57,7 +57,7 @@ class FindbugsExecutorTest {
   Configuration configEmpty;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     fsEmpty = mock(FileSystem.class);
     predicatesEmpty = mock(FilePredicates.class);
     when(fsEmpty.baseDir()).thenReturn(new File("./"));

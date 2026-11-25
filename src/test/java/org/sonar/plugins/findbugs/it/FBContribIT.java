@@ -39,12 +39,12 @@ class FBContribIT {
   public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
-  public void setupProfile() {
+  void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Findbugs Contrib Integration Tests", "IT", "java");
   }
   
   @AfterEach
-  public void deleteProject() {
+  void deleteProject() {
     FindbugsTestSuite.deleteProject(PROJECT_KEY);
   }
 

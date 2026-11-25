@@ -74,7 +74,7 @@ class FindbugsConfigurationTest {
   private ClasspathLocator classpathLocator;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     baseDir = new File(temp, "findbugs");
     workDir = new File(temp, "findbugs");
 

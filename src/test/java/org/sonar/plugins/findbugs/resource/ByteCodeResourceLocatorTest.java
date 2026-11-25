@@ -35,7 +35,7 @@ class ByteCodeResourceLocatorTest {
   FilePredicates predicatesEmpty;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
 
     //Not used for the moment
 //    fs = mock(FileSystem.class);

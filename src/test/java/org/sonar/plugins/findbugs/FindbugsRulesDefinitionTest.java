@@ -39,7 +39,7 @@ class FindbugsRulesDefinitionTest {
   private RulesDefinition.Repository repository;
   
   @BeforeEach
-  public void setupRepository() {
+  void setupRepository() {
     FindbugsRulesDefinition definition = new FindbugsRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     definition.define(context);
