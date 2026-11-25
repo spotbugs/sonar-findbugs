@@ -94,7 +94,7 @@ class MultiModuleIT {
     assertThat(issues.stream().filter(component(projectKey, "multi-module-fx/src/main/java/multimodule/fx/SampleFx.java"))).hasSize(3);
     // There's one native SQ issue for the Hello.scala sample: S1481 "Unused local variables should be removed" coming from Sonar way
     // SQ 26.10 introduced three native Quality Profiles, with "Sonar way core" being the default, which doesn't contain this rule
-    int expectedScalaIssues = sonarServerVersion.isGreaterThanOrEquals(26, 10) ? 1 : 2;
+    int expectedScalaIssues = FindbugsTestSuite.hasScala() ? sonarServerVersion.isGreaterThanOrEquals(26, 10) ? 1 : 2 : 0;
     assertThat(issues.stream().filter(component(projectKey, "multi-module-scala/src/main/scala/Hello.scala"))).hasSize(expectedScalaIssues);
     assertThat(issues.stream().filter(component(projectKey, "multi-module-kotlin/src/main/kotlin/com/bugs/KotlinSample.kt"))).hasSize(2);
     
