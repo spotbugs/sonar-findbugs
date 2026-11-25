@@ -76,7 +76,7 @@ class FindbugsSensorTest extends FindbugsTests {
   private ClasspathLocator classpathLocator;
 
   @BeforeEach
-  void setUp() throws IOException {
+  void setUp() {
     sensorContext = mock(SensorContext.class);
     byteCodeResourceLocator = mock(ByteCodeResourceLocator.class);
     executor = mock(FindbugsExecutor.class);
@@ -130,7 +130,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  void should_execute_findbugs() throws Exception {
+  void should_execute_findbugs() {
 
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
@@ -145,7 +145,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  void should_not_add_issue_if_resource_not_found() throws Exception {
+  void should_not_add_issue_if_resource_not_found() {
 
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 13, false);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
@@ -163,7 +163,7 @@ class FindbugsSensorTest extends FindbugsTests {
 
 
   @Test
-  void should_execute_findbugs_even_if_only_fbcontrib() throws Exception {
+  void should_execute_findbugs_even_if_only_fbcontrib() {
 
     BugInstance bugInstance = getBugInstance("ISB_INEFFICIENT_STRING_BUFFERING", 49, true);
     when(executor.execute(true, false)).thenReturn(new AnalysisResult(bugInstance));
@@ -178,7 +178,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  void should_execute_findbugs_even_if_only_findsecbug() throws Exception {
+  void should_execute_findbugs_even_if_only_findsecbug() {
 
     BugInstance bugInstance = getBugInstance("PREDICTABLE_RANDOM", 0, true);
     when(executor.execute(false, true)).thenReturn(new AnalysisResult(bugInstance));
@@ -193,7 +193,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  void should_execute_findbugs_but_not_find_violation() throws Exception {
+  void should_execute_findbugs_but_not_find_violation() {
 
     BugInstance bugInstance = getBugInstance("THIS_RULE_DOES_NOT_EXIST", 107, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
@@ -208,7 +208,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  void should_not_execute_findbugs_if_no_active() throws Exception {
+  void should_not_execute_findbugs_if_no_active() {
 
     ActiveRules activeRules = FakeActiveRules.createWithNoRules();
     FindbugsSensor sensor = new FindbugsSensor(activeRules, sensorContext, executor, classpathLocator, fs, byteCodeResourceLocator);
@@ -225,7 +225,7 @@ class FindbugsSensorTest extends FindbugsTests {
    * because it selects a profile for every language installed on the server (typically the default profile)
    */
   @Test
-  void should_not_execute_findbugs_if_only_jsp_rules_and_no_jsp_file() throws Exception {
+  void should_not_execute_findbugs_if_only_jsp_rules_and_no_jsp_file() {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml"));
     when(fs.languages()).thenReturn(languages);
 
@@ -242,7 +242,7 @@ class FindbugsSensorTest extends FindbugsTests {
    * Check that the Find Sec Bugs analysis still runs when there are some JSP rules and files
    */
   @Test
-  void should_execute_findbugs_if_only_jsp_rules_and_some_jsp_files() throws Exception {
+  void should_execute_findbugs_if_only_jsp_rules_and_some_jsp_files() {
     TreeSet<String> languages = new TreeSet<>(Arrays.asList("java", "xml", "jsp"));
     when(fs.languages()).thenReturn(languages);
     
@@ -258,7 +258,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
   
   @Test
-  void should_execute_findbugs_with_missing_smap_and_source() throws Exception {
+  void should_execute_findbugs_with_missing_smap_and_source() {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
     
@@ -277,7 +277,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
   
   @Test
-  void should_execute_findbugs_with_smap() throws Exception {
+  void should_execute_findbugs_with_smap() {
     BugInstance bugInstance = getBugInstance("AM_CREATES_EMPTY_ZIP_FILE_ENTRY", 6, true);
     when(executor.execute(false, false)).thenReturn(new AnalysisResult(bugInstance));
     
@@ -321,7 +321,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
 
   @Test
-  void shouldIgnoreNotActiveViolations() throws Exception {
+  void shouldIgnoreNotActiveViolations() {
     BugInstance bugInstance = new BugInstance("UNKNOWN", 2);
     String className = "org.sonar.commons.ZipUtils";
     String sourceFile = "org/sonar/commons/ZipUtils.java";
@@ -350,7 +350,7 @@ class FindbugsSensorTest extends FindbugsTests {
   }
   
   @Test
-  void shouldReportAnalysisError() throws Exception {
+  void shouldReportAnalysisError() {
     Collection<AnalysisError> analysisErrors = Arrays.asList(
         new AnalysisError("Only a message"),
         new AnalysisError("A message and an exception", new UnsupportedOperationException("Unsupported"))

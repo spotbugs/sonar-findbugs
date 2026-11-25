@@ -28,7 +28,7 @@ class FindSecBugsJspIT {
   public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
-  void jspSlingAnalysis() throws Exception {
+  void jspSlingAnalysis() {
     FindbugsTestSuite.setupProjectAndProfile(SLING_PROJECT_KEY, "Find Sec Bugs JSP Sling Integration Tests", "IT", "java");
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("jspc-sling"))
@@ -55,7 +55,7 @@ class FindSecBugsJspIT {
   }
 
   @Test
-  void jspJettyAnalysis() throws Exception {
+  void jspJettyAnalysis() {
     FindbugsTestSuite.setupProjectAndProfile(JETTY_PROJECT_KEY, "Find Sec Bugs JSP Jetty Integration Tests", "IT", "java");
     
     MavenBuild build = MavenBuild.create()

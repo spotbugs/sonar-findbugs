@@ -33,7 +33,7 @@ class FindSecBugsIT {
   }
 
   @Test
-  void noAnalysisWhenProfileDoesNotHaveSpotBugsRules() throws Exception {
+  void noAnalysisWhenProfileDoesNotHaveSpotBugsRules() {
     // Set an empty Java quality profile for the project
     AddProjectRequest addProjectRequest = new AddProjectRequest();
     addProjectRequest.setLanguage("java");

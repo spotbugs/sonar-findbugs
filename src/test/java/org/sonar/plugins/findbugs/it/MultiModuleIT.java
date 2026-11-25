@@ -32,7 +32,7 @@ class MultiModuleIT {
   public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
-  void multiModuleMavenAnalysis() throws Exception {
+  void multiModuleMavenAnalysis() throws IOException {
     FindbugsTestSuite.setupProjectAndProfile("spotbugs:multi-module", "Multi Module Maven Project", "FindBugs + FB-Contrib", "java");
 
     File projectDir = FindbugsTestSuite.projectPom("multi-module").getParentFile();

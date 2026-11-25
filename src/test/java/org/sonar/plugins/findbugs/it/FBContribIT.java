@@ -49,7 +49,7 @@ class FBContribIT {
   }
 
   @Test
-  void test() throws Exception {
+  void test() {
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("simple"))
       .setProperty("sonar.dynamicAnalysis", "false")

@@ -93,12 +93,12 @@ class FindbugsConfigurationTest {
   }
 
   @Test
-  void should_return_report_file() throws Exception {
+  void should_return_report_file() throws IOException {
     assertThat(conf.getTargetXMLReport().getCanonicalPath()).isEqualTo(new File(fs.workDir(), "findbugs-result.xml").getCanonicalPath());
   }
 
   @Test
-  void should_save_include_config() throws Exception {
+  void should_save_include_config() throws IOException {
     conf.saveIncludeConfigXml();
     File findbugsIncludeFile = new File(fs.workDir(), "findbugs-include.xml");
     assertThat(findbugsIncludeFile).exists();

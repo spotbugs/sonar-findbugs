@@ -55,7 +55,7 @@ class ScalaIT {
   }
 
   @Test
-  void test() throws Exception {
+  void test() {
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("scala"))
       .setProperty("sonar.dynamicAnalysis", "false")
