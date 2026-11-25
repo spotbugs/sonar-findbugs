@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -76,7 +75,7 @@ class FindSecBugsJspIT {
     
     // Check that there's an issue on page1.jsp
     List<Issue> issues = new ArrayList<>(issueClient.search(IssueQuery.create().components(indexKey)).getIssuesList());
-    Collections.sort(issues, Comparator.comparing(Issue::getRule));
+    issues.sort(Comparator.comparing(Issue::getRule));
     assertThat(issues).hasSize(2);
     assertThat(issues.get(0).getRule()).isEqualTo("findsecbugs-jsp:XSS_JSP_PRINT");
     assertThat(issues.get(0).getLine()).isEqualTo(11);
@@ -88,7 +87,7 @@ class FindSecBugsJspIT {
     indexKey = FindbugsTestSuite.keyForFile(JETTY_PROJECT_KEY, "src/main/webapp/WEB-INF/jsp/pages/page2/page2.jsp");
     
     issues = new ArrayList<>(issueClient.search(IssueQuery.create().components(indexKey)).getIssuesList());
-    Collections.sort(issues, Comparator.comparing(Issue::getRule));
+    issues.sort(Comparator.comparing(Issue::getRule));
     assertThat(issues).hasSize(2);
     assertThat(issues.get(0).getRule()).isEqualTo("findsecbugs-jsp:XSS_JSP_PRINT");
     assertThat(issues.get(0).getLine()).isEqualTo(11);
