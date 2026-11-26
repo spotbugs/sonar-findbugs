@@ -141,7 +141,6 @@ public class ByteCodeResourceLocator {
      */
     private InputFile buildInputFile(String fileName,FileSystem fs) {
         for(String sourceDir : SOURCE_DIRECTORIES) { //Quick lookup to skip manual iteration (see next loop)
-            //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
             Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
             for (InputFile f : files) {
                 return f;
