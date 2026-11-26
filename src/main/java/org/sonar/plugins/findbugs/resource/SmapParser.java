@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 /**
  * This class is a highly modified version of Michael Schierl's "SmapParser.java".
- * It was test with Jetty and WebLogic SMAP.
+ * It was tested with Jetty and WebLogic SMAP.
  *
  * =======
  *
