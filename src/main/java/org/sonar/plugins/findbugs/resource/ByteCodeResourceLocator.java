@@ -176,7 +176,7 @@ public class ByteCodeResourceLocator {
         } catch (IOException | ClassMetadataLoadingException e) {
             LOG.warn("An error occured while opening classfile : {}", classFile.getPath(), e);
         }
-        LOG.debug("No smap file found for the class: " + className);
+        LOG.debug("No smap file found for the class: {}", className);
 
         //Extract the SMAP (JSR45) from the separated smap file
         File smapFile = new File(classFile.getPath()+".smap");
