@@ -29,6 +29,8 @@ import java.nio.file.Files;
 import org.sonar.api.utils.Version;
 import org.sonarqube.ws.client.HttpConnector;
 import org.sonarqube.ws.client.issues.IssuesService;
+import org.sonarqube.ws.client.languages.LanguagesService;
+import org.sonarqube.ws.client.languages.ListRequest;
 import org.sonarqube.ws.client.projects.CreateRequest;
 import org.sonarqube.ws.client.projects.DeleteRequest;
 import org.sonarqube.ws.client.projects.ProjectsService;
@@ -122,6 +124,10 @@ public class FindbugsTestSuite {
     deleteRequest.setProject(projectKey);
     
     projectClient().delete(deleteRequest);
+  }
+
+  public static boolean hasScala() {
+    return (new LanguagesService(connector())).list(new ListRequest()).contains("scala");
   }
 
   public static String keyFor(String projectKey, String pkgDir, String cls) {

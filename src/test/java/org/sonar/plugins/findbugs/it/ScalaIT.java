@@ -18,6 +18,7 @@
 package org.sonar.plugins.findbugs.it;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import java.util.List;
 
@@ -36,16 +37,21 @@ class ScalaIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:scala";
   public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  private boolean hasScala;
   
   @BeforeEach
   public void setupProfile() {
+    hasScala = FindbugsTestSuite.hasScala();
+    assumeTrue(hasScala, "Scala language is not supported, skip test");
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Scala Integration Tests", "IT", "java");
     FindbugsTestSuite.setupProfile(PROJECT_KEY, FindbugsSecurityScalaProfile.FINDBUGS_SECURITY_SCALA_PROFILE_NAME, "scala");
   }
   
   @AfterEach
   public void deleteProject() {
-    FindbugsTestSuite.deleteProject(PROJECT_KEY);
+    if (hasScala) {
+      FindbugsTestSuite.deleteProject(PROJECT_KEY);
+    }
   }
 
   @Test
