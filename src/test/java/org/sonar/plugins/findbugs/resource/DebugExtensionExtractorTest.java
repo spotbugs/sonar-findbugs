@@ -33,7 +33,6 @@ class DebugExtensionExtractorTest {
     void loadDebugInfoFromWeblogicClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/jsp_classes/weblogic/__test.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
-        //System.out.println(debugInfo);
 
         SmapParser smap = new SmapParser(debugInfo);
         int[] jspLines = smap.getScriptLineNumber(282);
@@ -44,7 +43,6 @@ class DebugExtensionExtractorTest {
     void loadDebugInfoFromJettyClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/jsp_classes/jetty936/test_jsp.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
-        //System.out.println(debugInfo);
 
         SmapParser smap = new SmapParser(debugInfo);
         int[] jspLines = smap.getScriptLineNumber(260);
@@ -55,7 +53,6 @@ class DebugExtensionExtractorTest {
     void loadDebugInfoFromKotlinRtpPacketClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/kt_classes/RtpPacket.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
-        //System.out.println(debugInfo);
 
         SmapParser smap = new SmapParser(debugInfo);
         int[] kotlinLines = smap.getScriptLineNumber(374);
@@ -70,7 +67,6 @@ class DebugExtensionExtractorTest {
     void loadDebugInfoFromKotlinByteArrayExtensionsKtClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/kt_classes/ByteArrayExtensionsKt.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
-        //System.out.println(debugInfo);
 
         SmapParser smap = new SmapParser(debugInfo);
         int[] kotlinLines = smap.getScriptLineNumber(161);
@@ -84,7 +80,6 @@ class DebugExtensionExtractorTest {
     void loadDebugInfoFromKotlinTxtOutputReportClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/kt_classes/TxtOutputReport.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
-        //System.out.println(debugInfo);
 
         SmapParser smap = new SmapParser(debugInfo);
         int[] kotlinLines = smap.getScriptLineNumber(30);
@@ -98,7 +93,6 @@ class DebugExtensionExtractorTest {
     void loadDebugInfoFromKotlinTlsClientImplClass() throws IOException {
         InputStream in = getClass().getResourceAsStream("/kt_classes/TlsClientImpl.clazz");
         String debugInfo = new DebugExtensionExtractor().getDebugExtFromClass(in);
-        //System.out.println(debugInfo);
 
         SmapParser smap = new SmapParser(debugInfo);
         int[] kotlinLines = smap.getScriptLineNumber(204);

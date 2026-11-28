@@ -36,11 +36,11 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class ScalaIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:scala";
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   private boolean hasScala;
-  
+
   @BeforeEach
-  public void setupProfile() {
+  void setupProfile() {
     hasScala = FindbugsTestSuite.hasScala();
     assumeTrue(hasScala, "Scala language is not supported, skip test");
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Scala Integration Tests", "IT", "java");
@@ -48,14 +48,14 @@ class ScalaIT {
   }
   
   @AfterEach
-  public void deleteProject() {
+  void deleteProject() {
     if (hasScala) {
       FindbugsTestSuite.deleteProject(PROJECT_KEY);
     }
   }
 
   @Test
-  void test() throws Exception {
+  void test() {
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("scala"))
       .setProperty("sonar.dynamicAnalysis", "false")

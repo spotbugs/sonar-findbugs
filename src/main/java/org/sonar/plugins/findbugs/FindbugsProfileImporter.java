@@ -27,6 +27,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.ExtensionPoint;
 import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.rule.Severity;
@@ -37,8 +39,6 @@ import org.sonar.api.rules.RuleQuery;
 import org.sonar.api.server.ServerSide;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInActiveRule;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.NewBuiltInQualityProfile;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.findbugs.rules.FbContribRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsJspRulesDefinition;
 import org.sonar.plugins.findbugs.rules.FindSecurityBugsRulesDefinition;
@@ -54,7 +54,7 @@ import com.thoughtworks.xstream.XStream;
 public class FindbugsProfileImporter {
 
   private final RuleFinder ruleFinder;
-  private static final Logger LOGGER = Loggers.get(FindbugsProfileImporter.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(FindbugsProfileImporter.class);
 
   public FindbugsProfileImporter(RuleFinder ruleFinder) {
     this.ruleFinder = ruleFinder;
@@ -81,7 +81,7 @@ public class FindbugsProfileImporter {
       if (rule != null) {
         activateRule(profile, rule, patternLevel.getValue());
       } else {
-        LOGGER.warn("Unable to activate unknown rule : '" + patternLevel.getKey() + "'");
+        LOGGER.warn("Unable to activate unknown rule : '{}'", patternLevel.getKey());
       }
     }
   }
@@ -107,7 +107,7 @@ public class FindbugsProfileImporter {
         }
       }
       if (!someRulesHaveBeenActivated) {
-        LOGGER.warn("Unable to find any rules associated to code  : '" + codeLevel.getKey() + "'");
+        LOGGER.warn("Unable to find any rules associated to code  : '{}'", codeLevel.getKey());
       }
     }
   }
@@ -123,7 +123,7 @@ public class FindbugsProfileImporter {
         }
       }
       if (!someRulesHaveBeenActivated) {
-        LOGGER.warn("Unable to find any rules associated to category  : '" + categoryLevel.getKey() + "'");
+        LOGGER.warn("Unable to find any rules associated to category  : '{}'", categoryLevel.getKey());
       }
     }
   }

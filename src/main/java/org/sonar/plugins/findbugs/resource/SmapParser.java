@@ -23,16 +23,14 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * This class is a highly modified version of Michael Schierl's "SmapParser.java".
- * It was test with Jetty and WebLogic SMAP.
+ * It was tested with Jetty and WebLogic SMAP.
  *
  * =======
  *
@@ -81,7 +79,7 @@ import java.util.regex.Pattern;
  */
 public class SmapParser {
 
-    private String javaFilename;
+    private final String javaFilename;
     private final Map<Integer, FileInfo> fileinfo = new HashMap<>();
     private final Map<Integer, int[]> java2jsp = new HashMap<>();
     private final String stratumName;

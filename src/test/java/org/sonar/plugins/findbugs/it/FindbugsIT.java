@@ -40,15 +40,15 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class FindbugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
-  private static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  private static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
-  public void setupProfile() {
+  void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Findbugs Integration Tests", "findbugs-it", "java");
   }
   
   @AfterEach
-  public void deleteProject() {
+  void deleteProject() {
     FindbugsTestSuite.deleteProject(PROJECT_KEY);
   }
 
@@ -103,7 +103,7 @@ class FindbugsIT {
    * SONARJAVA-380
    */
   @Test
-  void should_always_use_english_locale() throws Exception {
+  void should_always_use_english_locale() {
     MavenBuild build = MavenBuild.create(FindbugsTestSuite.projectPom("findbugs"))
       .setCleanPackageSonarGoals()
       .setProperty("sonar.dynamicAnalysis", "false")
@@ -121,7 +121,7 @@ class FindbugsIT {
    * SONARJAVA-385
    */
   @Test
-  void inclusions_exclusions() throws Exception {
+  void inclusions_exclusions() {
     File projectDir = FindbugsTestSuite.projectPom("findbugs").getParentFile();
     // Compile
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
@@ -149,7 +149,7 @@ class FindbugsIT {
   }
 
   @Test
-  void multiple_directories_with_classes() throws Exception {
+  void multiple_directories_with_classes() {
     File projectDir = FindbugsTestSuite.projectPom("multiple-directories-with-classes").getParentFile();
     // Compile
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))
@@ -171,7 +171,7 @@ class FindbugsIT {
   }
 
   @Test
-  void only_analyze() throws Exception {
+  void only_analyze() {
     File projectDir = FindbugsTestSuite.projectPom("findbugs").getParentFile();
     
     MavenBuild build = MavenBuild.create(new File(projectDir, "pom.xml"))

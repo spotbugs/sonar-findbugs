@@ -35,7 +35,7 @@ class ByteCodeResourceLocatorTest {
   FilePredicates predicatesEmpty;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
 
     //Not used for the moment
 //    fs = mock(FileSystem.class);
@@ -107,7 +107,7 @@ class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  void findRegularSourceFile() throws Exception {
+  void findRegularSourceFile() {
     InputFile givenJavaFile = mock(InputFile.class);
     when(fsEmpty.inputFiles(any())).thenReturn(Collections.singletonList(givenJavaFile));
 
@@ -116,7 +116,7 @@ class ByteCodeResourceLocatorTest {
   }
 
   @Test
-  void findSourceFileFromScalaClassName() throws Exception {
+  void findSourceFileFromScalaClassName() {
     InputFile givenJavaFile = mock(InputFile.class);
     when(fsEmpty.inputFiles(any())).thenReturn(Collections.singletonList(givenJavaFile));
 

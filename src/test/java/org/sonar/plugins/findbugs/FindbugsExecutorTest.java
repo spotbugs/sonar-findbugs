@@ -33,6 +33,7 @@ import org.sonar.api.config.Configuration;
 import org.sonar.plugins.findbugs.configuration.SimpleConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +58,7 @@ class FindbugsExecutorTest {
   Configuration configEmpty;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     fsEmpty = mock(FileSystem.class);
     predicatesEmpty = mock(FilePredicates.class);
     when(fsEmpty.baseDir()).thenReturn(new File("./"));
@@ -70,7 +71,7 @@ class FindbugsExecutorTest {
   }
 
   @Test
-  void canGenerateXMLReport() throws Exception {
+  void canGenerateXMLReport() throws IOException {
     FindbugsConfiguration conf = mockConf();
 
     File reportFile = new File(temporaryFolder, "findbugs-report.xml");
@@ -91,7 +92,7 @@ class FindbugsExecutorTest {
   }
 
   @Test
-  void canGenerateXMLReportWithCustomConfidence() throws Exception {
+  void canGenerateXMLReportWithCustomConfidence() throws IOException {
     FindbugsConfiguration conf = mockConf();
     File reportFile = new File(temporaryFolder, "customized-findbugs-report.xml");
     when(conf.getTargetXMLReport()).thenReturn(reportFile);
@@ -111,7 +112,7 @@ class FindbugsExecutorTest {
     checkAnalysisResult(analysisResult);
   }
 
-  public void shouldTerminateAfterTimeout() throws Exception {
+  public void shouldTerminateAfterTimeout() throws IOException {
     FindbugsConfiguration conf = mockConf();
     when(conf.getTimeout()).thenReturn(1L);
 
@@ -121,7 +122,7 @@ class FindbugsExecutorTest {
     });
   }
 
-  public void shoulFailIfNoCompiledClasses() throws Exception {
+  public void shoulFailIfNoCompiledClasses() {
     FileSystem fs = mock(FileSystem.class);
     when(fs.baseDir()).thenReturn(new File("."));
     SimpleConfiguration configuration = new SimpleConfiguration();
@@ -134,7 +135,7 @@ class FindbugsExecutorTest {
     });
   }
 
-  private FindbugsConfiguration mockConf() throws Exception {
+  private FindbugsConfiguration mockConf() throws IOException {
     FindbugsConfiguration conf = mock(FindbugsConfiguration.class);
     doAnswer(invocation -> {
       Project project = invocation.getArgument(0);

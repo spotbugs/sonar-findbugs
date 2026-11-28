@@ -74,13 +74,13 @@ public class FindbugsExecutor {
   private static final Logger LOG = LoggerFactory.getLogger(FindbugsExecutor.class);
   public static final List<String> EXISTING_FINDBUGS_REPORT_PATHS = Arrays.asList("/target/findbugsXml.xml","/target/spotbugsXml.xml");
 
-  private FileSystem fs;
-  private Configuration config;
+  private final FileSystem fs;
+  private final Configuration config;
 
   /**
    * Map of priority level names to their numeric values.
    */
-  private static Map<String, Integer> priorityNameToValueMap = new HashMap<String, Integer>();
+  private static final Map<String, Integer> priorityNameToValueMap = new HashMap<String, Integer>();
 
   static {
     priorityNameToValueMap.put("high", Priorities.HIGH_PRIORITY);
@@ -280,16 +280,16 @@ public class FindbugsExecutor {
         Plugin plugin = Plugin.addCustomPlugin(new File(path).toURI(), contextClassLoader);
         if (plugin != null) {
           customPluginList.add(plugin);
-          LOG.info("Loading findbugs plugin: " + path);
+          LOG.info("Loading findbugs plugin: {}", path);
         }
       } catch (PluginException e) {
-        LOG.warn("Failed to load plugin for custom detector: " + path);
+        LOG.warn("Failed to load plugin for custom detector: {}", path);
         LOG.debug("Cause of failure", e);
       } catch (DuplicatePluginIdException e) {
         // FB Core plugin is always loaded, so we'll get an exception for it always
         if (!FINDBUGS_CORE_PLUGIN_ID.equals(e.getPluginId())) {
           // log only if it's not the FV Core plugin
-          LOG.debug("Plugin already loaded: exception ignored: " + e.getMessage(), e);
+          LOG.debug("Plugin already loaded: exception ignored: {}", e.getMessage(), e);
         }
       }
     }

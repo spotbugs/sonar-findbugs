@@ -20,20 +20,20 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class FindSecBugsIT {
 
   private static final String PROJECT_KEY = "com.sonarsource.it.samples:findbugs";
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @BeforeEach
-  public void setupProfile() {
+  void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Find Sec Bugs Integration Tests", "IT", "java");
   }
   
   @AfterEach
-  public void deleteProject() {
+  void deleteProject() {
     FindbugsTestSuite.deleteProject(PROJECT_KEY);
   }
 
   @Test
-  void noAnalysisWhenProfileDoesNotHaveSpotBugsRules() throws Exception {
+  void noAnalysisWhenProfileDoesNotHaveSpotBugsRules() {
     // Set an empty Java quality profile for the project
     AddProjectRequest addProjectRequest = new AddProjectRequest();
     addProjectRequest.setLanguage("java");

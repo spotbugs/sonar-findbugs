@@ -55,7 +55,7 @@ class FindbugsProfileImporterTest {
   @RegisterExtension
   public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
-	private	Context context = new Context();
+  private final Context context = new Context();
   private final FindbugsProfileImporter importer = new FindbugsProfileImporter(FakeRuleFinder.createWithOnlyFindbugsRules());
 
   @Test
@@ -165,10 +165,10 @@ class FindbugsProfileImporterTest {
   }
 
   @Test
-  void testImportingUncorrectXmlFile() {
+  void testImportingIncorrectXmlFile() {
   	NewBuiltInQualityProfile newProfile = context.createBuiltInQualityProfile(TEST_PROFILE, Java.KEY);
-    InputStream uncorrectFindbugsXml = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/uncorrectFindbugsXml.xml");
-    importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), newProfile);
+    InputStream incorrectFindbugsXml = getClass().getResourceAsStream("/org/sonar/plugins/findbugs/uncorrectFindbugsXml.xml");
+    importer.importProfile(new InputStreamReader(incorrectFindbugsXml), newProfile);
     
     newProfile.done();
     
@@ -186,8 +186,8 @@ class FindbugsProfileImporterTest {
       "/org/sonar/plugins/findbugs/findbugsXmlWithUnknownCode.xml,11"})
   void profileImport(String profilePath, int expectedSize) {
   	NewBuiltInQualityProfile newProfile = context.createBuiltInQualityProfile(TEST_PROFILE, Java.KEY);
-    InputStream uncorrectFindbugsXml = getClass().getResourceAsStream(profilePath);
-    importer.importProfile(new InputStreamReader(uncorrectFindbugsXml), newProfile);
+    InputStream incorrectFindbugsXml = getClass().getResourceAsStream(profilePath);
+    importer.importProfile(new InputStreamReader(incorrectFindbugsXml), newProfile);
     
     newProfile.done();
     

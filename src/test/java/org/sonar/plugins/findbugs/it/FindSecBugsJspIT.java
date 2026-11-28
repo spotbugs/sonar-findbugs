@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -25,10 +24,10 @@ class FindSecBugsJspIT {
   private static final String SLING_PROJECT_KEY = "org.sonar.tests:jspc-sling";
   private static final String JETTY_PROJECT_KEY = "org.sonar.tests:jspc-jetty";
   
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
 
   @Test
-  void jspSlingAnalysis() throws Exception {
+  void jspSlingAnalysis() {
     FindbugsTestSuite.setupProjectAndProfile(SLING_PROJECT_KEY, "Find Sec Bugs JSP Sling Integration Tests", "IT", "java");
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("jspc-sling"))
@@ -55,7 +54,7 @@ class FindSecBugsJspIT {
   }
 
   @Test
-  void jspJettyAnalysis() throws Exception {
+  void jspJettyAnalysis() {
     FindbugsTestSuite.setupProjectAndProfile(JETTY_PROJECT_KEY, "Find Sec Bugs JSP Jetty Integration Tests", "IT", "java");
     
     MavenBuild build = MavenBuild.create()
@@ -76,7 +75,7 @@ class FindSecBugsJspIT {
     
     // Check that there's an issue on page1.jsp
     List<Issue> issues = new ArrayList<>(issueClient.search(IssueQuery.create().components(indexKey)).getIssuesList());
-    Collections.sort(issues, Comparator.comparing(Issue::getRule));
+    issues.sort(Comparator.comparing(Issue::getRule));
     assertThat(issues).hasSize(2);
     assertThat(issues.get(0).getRule()).isEqualTo("findsecbugs-jsp:XSS_JSP_PRINT");
     assertThat(issues.get(0).getLine()).isEqualTo(11);
@@ -88,7 +87,7 @@ class FindSecBugsJspIT {
     indexKey = FindbugsTestSuite.keyForFile(JETTY_PROJECT_KEY, "src/main/webapp/WEB-INF/jsp/pages/page2/page2.jsp");
     
     issues = new ArrayList<>(issueClient.search(IssueQuery.create().components(indexKey)).getIssuesList());
-    Collections.sort(issues, Comparator.comparing(Issue::getRule));
+    issues.sort(Comparator.comparing(Issue::getRule));
     assertThat(issues).hasSize(2);
     assertThat(issues.get(0).getRule()).isEqualTo("findsecbugs-jsp:XSS_JSP_PRINT");
     assertThat(issues.get(0).getLine()).isEqualTo(11);

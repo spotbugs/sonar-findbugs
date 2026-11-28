@@ -36,20 +36,20 @@ import com.sonar.orchestrator.junit5.OrchestratorExtension;
 class FBContribIT {
 
   private static final String PROJECT_KEY = "org.sonar.tests:fb-contrib";
-  public static OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
+  public static final OrchestratorExtension orchestrator = FindbugsTestSuite.ORCHESTRATOR;
   
   @BeforeEach
-  public void setupProfile() {
+  void setupProfile() {
     FindbugsTestSuite.setupProjectAndProfile(PROJECT_KEY, "Findbugs Contrib Integration Tests", "IT", "java");
   }
   
   @AfterEach
-  public void deleteProject() {
+  void deleteProject() {
     FindbugsTestSuite.deleteProject(PROJECT_KEY);
   }
 
   @Test
-  void test() throws Exception {
+  void test() {
     MavenBuild build = MavenBuild.create()
       .setPom(FindbugsTestSuite.projectPom("simple"))
       .setProperty("sonar.dynamicAnalysis", "false")

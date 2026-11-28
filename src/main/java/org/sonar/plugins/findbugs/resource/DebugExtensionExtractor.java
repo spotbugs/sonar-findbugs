@@ -31,7 +31,7 @@ import java.io.InputStream;
 /**
  * Load <code>SourceDebugExtension</code> section from class file.
  *
- * <code>SourceDebugExtension</code> is use to store optionally the line of code mapping.
+ * <code>SourceDebugExtension</code> is used to store optionally the line of code mapping.
  * The code content if not empty is must likely format according to JSR45 (SMAP).
  */
 public class DebugExtensionExtractor {

@@ -29,8 +29,8 @@ import edu.umd.cs.findbugs.BugInstance;
  *
  */
 public class AnalysisResult {
-  private Collection<ReportedBug> reportedBugs;
-  private Collection<AnalysisError> analysisErrors;
+  private final Collection<ReportedBug> reportedBugs;
+  private final Collection<AnalysisError> analysisErrors;
   
   public AnalysisResult() {
     this(new ArrayList<>(), new ArrayList<>());

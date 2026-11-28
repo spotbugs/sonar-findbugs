@@ -141,7 +141,6 @@ public class ByteCodeResourceLocator {
      */
     private InputFile buildInputFile(String fileName,FileSystem fs) {
         for(String sourceDir : SOURCE_DIRECTORIES) { //Quick lookup to skip manual iteration (see next loop)
-            //System.out.println("Source file tested : "+sourceDir+"/"+fileName);
             Iterable<InputFile> files = fs.inputFiles(fs.predicates().hasRelativePath(sourceDir+"/"+fileName));
             for (InputFile f : files) {
                 return f;
@@ -177,7 +176,7 @@ public class ByteCodeResourceLocator {
         } catch (IOException | ClassMetadataLoadingException e) {
             LOG.warn("An error occured while opening classfile : {}", classFile.getPath(), e);
         }
-        LOG.debug("No smap file found for the class: " + className);
+        LOG.debug("No smap file found for the class: {}", className);
 
         //Extract the SMAP (JSR45) from the separated smap file
         File smapFile = new File(classFile.getPath()+".smap");

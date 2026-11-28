@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SimpleConfiguration implements Configuration {
-  private Map<String, String> values = new HashMap<>();
+  private final Map<String, String> values = new HashMap<>();
   
   @Override
   public Optional<String> get(String key) {
